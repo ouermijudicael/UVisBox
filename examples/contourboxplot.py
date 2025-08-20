@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from uvisbox.BandDepths.contour_boxplot import contour_boxplot
-
+from uvisbox.BandDepths import contour_boxplot
 
 def create_ensemble_scalarfield(image_res=256, n_ensembles=30, sigma_min=5, sigma_max=50):
     """
@@ -36,6 +35,9 @@ if __name__ == "__main__":
     ensemble = create_ensemble_scalarfield(sigma_min=30)
     binary_images = (ensemble > 0.5).astype(np.bool_)
     print(f"Ensemble shape: {binary_images.shape}")
-    fig, ax = plt.subplots()
-    ax = contour_boxplot(binary_images, ax=ax, show_median=True, show_iqr=True, show_non_outliers=True, show_outliers=True, show_firstquartile=True, outlier_percentile=95)
+
+    fig, ax = plt.subplots(2,1, figsize=(4, 8))
+    for i in range(binary_images.shape[0]):
+        ax[0].contour(binary_images[i], levels=[0.5], colors='gray', linewidths=0.5, alpha=0.5)
+    contour_boxplot(binary_images, ax=ax[1], show_median=True, show_iqr=True, show_non_outliers=True, show_outliers=True, show_firstquartile=True, outlier_percentile=95)
     plt.show()

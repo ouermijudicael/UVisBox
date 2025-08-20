@@ -16,9 +16,9 @@ def _find_percentile(sorted_images, percentile):
     return union_minus_intersection
 
 
-def contour_boxplot(binary_images, ax=None, eps=0, allow_portion=False, show_median=True, show_iqr=True, show_non_outliers=False, show_outliers=False, show_firstquartile=False, outlier_percentile=95):
-    depths = contour_banddepth(binary_images, eps=eps, allow_portion=allow_portion)
-    print("depth", depths)
+def contour_boxplot(binary_images, depths=None, ax=None, eps=0, allow_portion=False, show_median=True, show_iqr=True, show_non_outliers=False, show_outliers=False, show_firstquartile=False, outlier_percentile=95):
+    if depths is None:
+        depths = contour_banddepth(binary_images, eps=eps, allow_portion=allow_portion)
     # sort the contours by the depth. order them from deepest to shallowest
     sorted_indices = np.argsort(depths)[::-1]
     sorted_images = binary_images[sorted_indices]
@@ -49,7 +49,7 @@ def contour_boxplot(binary_images, ax=None, eps=0, allow_portion=False, show_med
         first_quartile = _find_percentile(sorted_images, 25)
         result_image[first_quartile] = 25
     
-    ax.imshow(result_image)
+    ax.imshow(result_image, origin='lower', cmap='gray')
 
     if show_outliers:
         for outlier in outliers:
