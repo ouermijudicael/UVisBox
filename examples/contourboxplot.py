@@ -32,12 +32,15 @@ def create_ensemble_scalarfield(image_res=256, n_ensembles=30, sigma_min=5, sigm
 
 if __name__ == "__main__":
     # Example usage
-    ensemble = create_ensemble_scalarfield(sigma_min=30)
-    binary_images = (ensemble > 0.5).astype(np.bool_)
+    ensemble = create_ensemble_scalarfield(image_res=512, n_ensembles=50, sigma_min=100, sigma_max=150) # create synthetic ensemble of gaussians
+    binary_images = (ensemble < 0.7).astype(np.bool_)    # extract contours at isovalue = 0.7
     print(f"Ensemble shape: {binary_images.shape}")
 
-    fig, ax = plt.subplots(2,1, figsize=(4, 8))
+    fig, ax = plt.subplots(2,1, figsize=(4, 8),sharex=True,sharey=True)
     for i in range(binary_images.shape[0]):
-        ax[0].contour(binary_images[i], levels=[0.5], colors='gray', linewidths=0.5, alpha=0.5)
+        ax[0].contour(binary_images[i], levels=[0.5], colors='black', linewidths=1, alpha=0.3) # contour at the middle of 0 and 1
+    ax[0].set_title("Ensemble Contours")
     contour_boxplot(binary_images, ax=ax[1], show_median=True, show_iqr=True, show_non_outliers=True, show_outliers=True, show_firstquartile=True, outlier_percentile=95)
+    ax[1].set_title("Contour Boxplot")
+    ax[0].set_aspect('equal', adjustable='box')
     plt.show()
