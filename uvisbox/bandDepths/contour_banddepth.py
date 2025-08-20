@@ -20,7 +20,7 @@ def get_combinations(n):
 def _epsilon_subset(A, B, eps):
     ### determine if two sets are epsilon-close (Order matters!)
     cardA = np.sum(A)
-    return cardA == 0 or np.sum(np.bitwise_and(A, np.logical_not(B))) / cardA < eps
+    return cardA == 0 or np.sum(np.bitwise_and(A, np.logical_not(B))) / cardA <= eps
 
 def _portion_subset(A, B):
     ### determine if two sets are partial-overlapping (Order matters!)

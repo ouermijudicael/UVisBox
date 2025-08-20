@@ -18,6 +18,7 @@ def _find_percentile(sorted_images, percentile):
 
 def contour_boxplot(binary_images, ax=None, eps=0, allow_portion=False, show_median=True, show_iqr=True, show_non_outliers=False, show_outliers=False, show_firstquartile=False, outlier_percentile=95):
     depths = contour_banddepth(binary_images, eps=eps, allow_portion=allow_portion)
+    print("depth", depths)
     # sort the contours by the depth. order them from deepest to shallowest
     sorted_indices = np.argsort(depths)[::-1]
     sorted_images = binary_images[sorted_indices]
@@ -29,7 +30,7 @@ def contour_boxplot(binary_images, ax=None, eps=0, allow_portion=False, show_med
     # background image
     # assuming the image is in y,x format, binary image is either [n,y,x,1] or [n,y,x]
     # create a background image
-    result_image = np.zeros_like(sorted_images[0],dtype=np.float32)
+    result_image = np.zeros_like(sorted_images[0],dtype=np.float32) + 100
     n_images = sorted_images.shape[0]
 
     ### build the image from bottom up
@@ -52,11 +53,11 @@ def contour_boxplot(binary_images, ax=None, eps=0, allow_portion=False, show_med
 
     if show_outliers:
         for outlier in outliers:
-            ax.contour(outlier, levels=[0.5], color='blue')
+            ax.contour(outlier, levels=[0.5], colors='blue',linewidths=1)
     
     if show_median:
         median = sorted_images[0]
-        ax.contour(median, levels=[0.5], color='red', linewidths=2)
+        ax.contour(median, levels=[0.5], colors='red', linewidths=2)
     
     return ax
 

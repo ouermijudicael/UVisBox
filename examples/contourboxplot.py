@@ -33,9 +33,9 @@ def create_ensemble_scalarfield(image_res=256, n_ensembles=30, sigma_min=5, sigm
 
 if __name__ == "__main__":
     # Example usage
-    ensemble = create_ensemble_scalarfield()
-    binary_images = (ensemble > 0).astype(np.bool_)
+    ensemble = create_ensemble_scalarfield(sigma_min=30)
+    binary_images = (ensemble > 0.5).astype(np.bool_)
     print(f"Ensemble shape: {binary_images.shape}")
     fig, ax = plt.subplots()
-    contour_boxplot(binary_images, ax=ax)
+    ax = contour_boxplot(binary_images, ax=ax, show_median=True, show_iqr=True, show_non_outliers=True, show_outliers=True, show_firstquartile=True, outlier_percentile=95)
     plt.show()
