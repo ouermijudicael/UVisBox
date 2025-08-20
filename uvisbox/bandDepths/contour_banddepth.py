@@ -72,10 +72,10 @@ def contour_banddepth(data, combination = None, allow_portion=False, eps = 0):
         except Exception as e:
             raise ValueError("Input data could not be converted to a boolean array.") from e
         
+    n_images = binary_data.shape[0]
     if combination is None:
         combination = get_combinations(n_images)
-
-    n_images = binary_data.shape[0]
+    
     depths = np.zeros([n_images])
     for tdx in np.arange(n_images):
         target = binary_data[tdx]

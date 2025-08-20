@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from contour_banddepth import contour_banddepth
+from .contour_banddepth import contour_banddepth
 
 def _find_percentile(sorted_images, percentile):
     n_images = sorted_images.shape[0]
@@ -29,7 +29,7 @@ def contour_boxplot(binary_images, ax=None, eps=0, allow_portion=False, show_med
     # background image
     # assuming the image is in y,x format, binary image is either [n,y,x,1] or [n,y,x]
     # create a background image
-    result_image = np.zeros_like(sorted_images[0])
+    result_image = np.zeros_like(sorted_images[0],dtype=np.float32)
     n_images = sorted_images.shape[0]
 
     ### build the image from bottom up
@@ -48,7 +48,7 @@ def contour_boxplot(binary_images, ax=None, eps=0, allow_portion=False, show_med
         first_quartile = _find_percentile(sorted_images, 25)
         result_image[first_quartile] = 25
     
-    ax.imshow(result_image, cmap='gray', interpolation='linear')
+    ax.imshow(result_image)
 
     if show_outliers:
         for outlier in outliers:
