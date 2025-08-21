@@ -32,7 +32,7 @@ def create_ensemble_scalarfield(image_res=256, n_ensembles=30, sigma_min=5, sigm
 
 if __name__ == "__main__":
     # Example usage
-    ensemble = create_ensemble_scalarfield(image_res=2, n_ensembles=50, sigma_min=100, sigma_max=150) # create synthetic ensemble of gaussians
+    ensemble = create_ensemble_scalarfield(image_res=256, n_ensembles=50, sigma_min=100, sigma_max=150) # create synthetic ensemble of gaussians
     binary_images = (ensemble < 0.7).astype(np.bool_)    # extract contours at isovalue = 0.7
     print(f"Ensemble shape: {binary_images.shape}")
 
