@@ -56,3 +56,6 @@ def modified_functional_banddepth(data, dtype=np.float64):
 
     ### return the band depths
     return (np.sum(_data, axis=1)/_d) + _n - 1 # band depth as probability
+
+fdb = functional_banddepth
+mdb = modified_functional_banddepth
