@@ -4,66 +4,6 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Wedge
 
 
-def pairwise_max_angles(vectors):
-    """
-    Calculate the angle (in degrees) between each pair of vectors in the input array.
-    Uses arctan2 for robust angle calculation.
-    vectors: numpy array of shape (n, 2)
-    Returns: numpy array of shape (n, n) with angles in degrees
-    """
-    in_first_quadrant = False
-    in_second_quadrant = False
-    in_third_quadrant = False
-    in_fourth_quadrant = False
-
-    for i in range(len(vectors)):
-        # Check if vector i is in the first quadrant (both components positive)
-        if in_first_quadrant == False:
-            in_first_quadrant = vectors[i, 0] > 0 and vectors[i, 1] > 0
-        # Check if vector i is in the second quadrant (x negative, y positive)
-        if in_second_quadrant == False:
-            in_second_quadrant = vectors[i, 0] < 0 and vectors[i, 1] > 0
-        # Check if vector i is in the third quadrant (both components negative)
-        if in_third_quadrant == False:
-            in_third_quadrant = vectors[i, 0] < 0 and vectors[i, 1] < 0
-        # Check if vector i is in the fourth quadrant (x positive, y negative)
-        if in_fourth_quadrant == False:
-            in_fourth_quadrant = vectors[i, 0] > 0 and vectors[i, 1] < 0
-
-    quadrant_count = sum([in_first_quadrant, in_second_quadrant, in_third_quadrant, in_fourth_quadrant])
-    opposite_1_3 = in_first_quadrant and in_third_quadrant
-    opposite_2_4 = in_second_quadrant and in_fourth_quadrant
-    if quadrant_count >= 3 or opposite_2_4 or opposite_1_3:
-        print("Vectors span at least 3 of the 4 quadrants.")
-
-    else:
-        print("Vectors do not span at least 3 quadrants.")
-
-    n = vectors.shape[0]
-    angles = np.zeros((n, n))
-    max_angle = -np.inf
-    max_pair = (None, None)
-    for i in range(n):
-        for j in range(n):
-            v1 = vectors[i]
-            v2 = vectors[j]
-            norm1 = np.linalg.norm(v1)
-            norm2 = np.linalg.norm(v2)
-            if norm1 == 0 or norm2 == 0:
-                angles[i, j] = np.nan
-            else:
-                # Compute the angle between v1 and v2 using arctan2 of the cross and dot product
-                cross = v1[0]*v2[1] - v1[1]*v2[0]
-                dot = np.dot(v1, v2)
-                theta = np.arctan2(np.abs(cross), dot)
-                angle_deg = np.degrees(theta)
-                angles[i, j] = angle_deg
-                if angle_deg > max_angle:
-                    max_angle = angle_deg
-                    max_pair = (i, j)
-    return max_angle, max_pair
-
-
 def angular_spread(vectors):
     """Calculate the angular spread and magnitude spread of a set of vectors.
     Input
@@ -207,6 +147,7 @@ def draw_wedges_with_arrow(ax, centers, theta1, theta2, mid_angle, r1, r2):
         )
         ax.add_patch(wedge)
         ax.add_patch(wedge2)
+
 
 def uncertainty_squid_glyphs(positions, ensemble_vectors, percentil1, percentil2, scale=0.2, ax=None):
     """Draws uncertainty squid glyphs for the given positions and ensemble vectors.
