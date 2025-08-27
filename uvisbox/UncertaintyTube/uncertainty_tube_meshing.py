@@ -1,4 +1,3 @@
-import re
 import numpy as np
 
 def compute_alignment_scores(reference, target, shifts):
@@ -96,13 +95,16 @@ def circular_align_min_twist(points_ref, points_target, stride=1):
     # Apply the alignment using the helper function
     return apply_circular_alignment(points_target, best_shift_full, best_is_reversed)
 
-def generate_tube_mesh_sequential(trajectories, ellipsoids):
+
+def generate_tube_mesh(trajectories, ellipsoids, n_jobs=1):
     """
-    Generate triangle mesh for uncertainty tubes with sequential alignment.
+    Generate triangle mesh for uncertainty tubes with sequential or parallel alignment.
     
     Args:
         trajectories (np.ndarray): Ensemble trajectories with shape (n_steps, n_seeds, n_samples, num_dims)
         ellipsoids (np.ndarray): Cross-section boundary points with shape (n_steps, n_seeds, resolution, num_dims)
+        n_jobs (int, optional): Number of parallel jobs to use. If n_jobs=1, uses sequential processing.
+            If joblib is not available, falls back to sequential processing. Defaults to 1.
         
     Returns:
         tuple:
@@ -116,24 +118,80 @@ def generate_tube_mesh_sequential(trajectories, ellipsoids):
     # Pre-allocate arrays based on mesh dimensions
     total_vertices, triangles_per_seed = calculate_mesh_dimensions(n_steps, n_seeds, resolution)
     vertices = np.empty((total_vertices, num_dims))
-    faces = np.empty((n_seeds, triangles_per_seed, num_dims), dtype=np.int32)
-
-    vertex_idx = 0
+    faces = np.empty((n_seeds, triangles_per_seed, 3), dtype=np.int32)
     
-    # Process each seed's tube separately
-    for seed_idx in range(n_seeds):
-        seed_vertex_start = vertex_idx
+    # Check if parallel processing is requested and available
+    use_parallel = n_jobs != 1
+    if use_parallel:
+        try:
+            import multiprocessing as mp
+            # Ensure 'fork' context is available
+            mp.get_context('fork')
+        except (ImportError, ValueError):
+            use_parallel = False
+            print("Warning: multiprocessing with 'fork' context not available. Using sequential processing instead.")
+    
+    if use_parallel:
+        # Process tubes in parallel using multiprocessing with 'fork' context
+        pool_context = mp.get_context('fork')
+        with pool_context.Pool(processes=n_jobs) as pool:
+            results = pool.starmap(
+                _process_single_seed,
+                [(ellipsoids, seed_idx, n_steps, resolution) for seed_idx in range(n_seeds)]
+            )
         
-        # Align and store all cross-sections for current seed
-        seed_ellipsoids = align_cross_sections(ellipsoids, seed_idx, n_steps, resolution)
-        
-        # Add vertices for this seed
-        vertex_idx = add_seed_vertices(vertices, seed_ellipsoids, vertex_idx, n_steps, resolution)
-        
-        # Generate faces between consecutive cross-sections
-        generate_seed_faces(faces, seed_idx, seed_vertex_start, n_steps, resolution)
+        # Combine results
+        vertex_idx = 0
+        for seed_idx, (seed_ellipsoids, seed_vertex_count) in enumerate(results):
+            seed_vertex_start = vertex_idx
+            
+            # Add vertices
+            vertices[vertex_idx:vertex_idx + seed_vertex_count] = seed_ellipsoids.reshape(-1, num_dims)
+            
+            # Generate faces
+            generate_seed_faces(faces, seed_idx, seed_vertex_start, n_steps, resolution)
+            
+            # Update vertex index
+            vertex_idx += seed_vertex_count
+    else:
+        # Sequential processing (original code)
+        vertex_idx = 0
+        for seed_idx in range(n_seeds):
+            seed_vertex_start = vertex_idx
+            
+            # Align and store all cross-sections for current seed
+            seed_ellipsoids = align_cross_sections(ellipsoids, seed_idx, n_steps, resolution)
+            
+            # Add vertices for this seed
+            vertex_idx = add_seed_vertices(vertices, seed_ellipsoids, vertex_idx, n_steps, resolution)
+            
+            # Generate faces between consecutive cross-sections
+            generate_seed_faces(faces, seed_idx, seed_vertex_start, n_steps, resolution)
     
     return vertices, faces, mean_trajectories
+
+
+
+def _process_single_seed(ellipsoids, seed_idx, n_steps, resolution):
+    """
+    Process a single seed's tube (used for parallel processing).
+    
+    Args:
+        ellipsoids (np.ndarray): All cross-sections
+        seed_idx (int): Current seed index
+        n_steps (int): Number of time steps
+        resolution (int): Number of points per cross-section
+        
+    Returns:
+        tuple:
+            - seed_ellipsoids (np.ndarray): Aligned cross-sections for this seed
+            - vertex_count (int): Number of vertices for this seed
+    """
+    # Align cross-sections
+    seed_ellipsoids = align_cross_sections(ellipsoids, seed_idx, n_steps, resolution)
+    vertex_count = n_steps * resolution
+    
+    return seed_ellipsoids, vertex_count
 
 
 def calculate_mesh_dimensions(n_steps, n_seeds, resolution):

@@ -2,7 +2,7 @@ import numpy as np
 
 from uvisbox.Datasets import flowmap_3d
 from uvisbox.Interpolations import linear_interpolate
-from uvisbox.UncertaintyTube import (calculate_uncertainty_path_3d,generate_tube_mesh_sequential)
+from uvisbox.UncertaintyTube import (generate_uncertainty_tube,generate_tube_mesh)
 from uvisbox.UncertaintyTube import plot_uncertainty_path_3d_from_mesh
 
 t0 = 0
@@ -16,7 +16,6 @@ xy_scale = np.ones(number_of_seeds)
 # change odd place of xy_scale to 0.1
 xy_scale[1::2] = 0.1  # Set every second element to 0.1
 
-
 # Generate random seed points in 3D in [-1,1]^3
 seed_3d = np.random.uniform(-1, 1, (number_of_seeds, 3))
 trajectories_3d = flowmap_3d(seed_3d, t0, t1, n_steps, scale=scale, xy_scale=xy_scale)
@@ -25,7 +24,7 @@ seeds = np.random.uniform(-1,1, (number_of_seeds, 3))
 
 trajectories = flowmap_3d(seeds, t0, t1, n_steps, scale=scale, xy_scale=xy_scale)
 
-cross_sections, eigen_values = calculate_uncertainty_path_3d(trajectories, None, 16, e_proj=0.5)
+cross_sections, eigen_values = generate_uncertainty_tube(trajectories, None, 16, e_proj=0.5)
 eigen_values = np.transpose(eigen_values, (1,0,2,3))
 eigen_values = eigen_values.reshape((-1,2)).astype(np.float32)
 
@@ -36,6 +35,6 @@ eigen_values_ratio = np.nan_to_num(eigen_values[:,1] / eigen_values[:,0] , nan=0
 
 uv_coords = np.stack([rescaled_max_eigen_values, eigen_values_ratio], axis=1)
 
-vertices, faces, mean_trajectories = generate_tube_mesh_sequential(trajectories, cross_sections)
+vertices, faces, mean_trajectories = generate_tube_mesh(trajectories, cross_sections)
 
 plot_uncertainty_path_3d_from_mesh(vertices, faces, mean_trajectories, uv_coords)

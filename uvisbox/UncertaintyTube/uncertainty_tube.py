@@ -123,7 +123,7 @@ def uncertainty_cross_section(point0, point1, points, resolution=16, e_proj=1, s
     eigen_values = np.tile(eigvals_proj[:2], (cross_section_3d.shape[0], 1))
     return cross_section_3d, eigen_values
 
-def calculate_uncertainty_path_3d(trajectories, major_trajectory=None, resolution=20, e_proj=1, sym=False):
+def generate_uncertainty_tube(trajectories, major_trajectory=None, resolution=20, e_proj=1, sym=False):
     """
     Compute 3D uncertainty cross-sections along trajectory paths.
 
