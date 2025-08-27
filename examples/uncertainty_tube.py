@@ -3,7 +3,7 @@ import numpy as np
 from uvisbox.Datasets import flowmap_3d
 from uvisbox.Interpolations import linear_interpolate
 from uvisbox.UncertaintyTube import (generate_uncertainty_tube,generate_tube_mesh)
-from uvisbox.UncertaintyTube import plot_uncertainty_path_3d_from_mesh
+from uvisbox.UncertaintyTube import plot_uncertainty_tube_from_mesh
 
 t0 = 0
 t1 = 5
@@ -37,4 +37,4 @@ uv_coords = np.stack([rescaled_max_eigen_values, eigen_values_ratio], axis=1)
 
 vertices, faces, mean_trajectories = generate_tube_mesh(trajectories, cross_sections, n_jobs=12)
 
-plot_uncertainty_path_3d_from_mesh(vertices, faces, mean_trajectories, uv_coords)
+plot_uncertainty_tube_from_mesh(vertices, faces, mean_trajectories, uv_coords)

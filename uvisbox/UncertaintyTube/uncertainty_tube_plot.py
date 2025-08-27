@@ -1,9 +1,10 @@
+from operator import inv
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from ..Colors.colortree import ColorTree
 
-def plot_uncertainty_path_3d_from_mesh(vertices, faces, mean_trajectories, uv_coords):
+def plot_uncertainty_tube_from_mesh(vertices, faces, mean_trajectories, uv_coords, axis=None):
     """
     Plot 3D uncertainty tubes from pre-generated mesh data.
 
@@ -11,11 +12,20 @@ def plot_uncertainty_path_3d_from_mesh(vertices, faces, mean_trajectories, uv_co
         vertices (np.ndarray): Global vertex array with shape (total_vertices, 3)
         faces (np.ndarray): Triangle face indices with shape (n_seeds, triangles_per_seed, 3)
         mean_trajectories (np.ndarray): Mean trajectory positions with shape (n_steps+1, n_seeds, 3)
+        uv_coords (np.ndarray): UV coordinates for coloring, shape matching vertices.
+        axis (matplotlib.axes.Axes, optional): 3D axis to plot on. If None, creates a new figure and axis.
     """
+    if axis is None:
+        fig = plt.figure(figsize=(10, 10))
+        ax = fig.add_subplot(111, projection='3d')
+        show_plot = True
+    else:
+        ax = axis
+        if not hasattr(ax, 'get_proj') or ax.get_proj().shape != (4, 4):
+            raise ValueError("The provided axis must be a 3D axis (projection='3d').")
+        show_plot = False
 
-    color_tree = ColorTree()
-    fig = plt.figure(figsize=(10, 10))
-    ax = fig.add_subplot(111, projection='3d')
+    color_tree = ColorTree(invert_u=True, depth=4, cmap="viridis")
     n_steps, n_seeds = mean_trajectories.shape[:2]
 
     # Plot mean trajectory lines
@@ -48,4 +58,6 @@ def plot_uncertainty_path_3d_from_mesh(vertices, faces, mean_trajectories, uv_co
     ax.set_zlabel('Z-axis')
     ax.set_title('3D Trajectories of Points with Uncertainty')
     plt.grid()
-    plt.show()
+
+    if show_plot:
+        plt.show()
