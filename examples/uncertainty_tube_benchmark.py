@@ -1,5 +1,3 @@
-from operator import mul
-from tracemalloc import start
 import numpy as np
 import time
 import matplotlib.pyplot as plt
