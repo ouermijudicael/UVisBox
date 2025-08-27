@@ -123,7 +123,7 @@ def uncertainty_cross_section(point0, point1, points, resolution=16, e_proj=1, s
     eigen_values = np.tile(eigvals_proj[:2], (cross_section_3d.shape[0], 1))
     return cross_section_3d, eigen_values
 
-def generate_uncertainty_tube(trajectories, major_trajectory=None, resolution=20, e_proj=1, sym=False):
+def generate_uncertainty_tube(trajectories, major_trajectory=None, resolution=20, e_proj=1, sym=False, n_jobs=1):
     """
     Compute 3D uncertainty cross-sections along trajectory paths.
 
@@ -144,6 +144,8 @@ def generate_uncertainty_tube(trajectories, major_trajectory=None, resolution=20
             Defaults to 1.
         sym (bool, optional): If True, forces the superellipse to be symmetric by
             setting both axes to the same length. Defaults to False.
+        n_jobs (int, optional): Number of parallel jobs to use. If n_jobs=1, uses sequential processing.
+            Defaults to 1.
 
     Returns:
         tuple:
@@ -171,17 +173,47 @@ def generate_uncertainty_tube(trajectories, major_trajectory=None, resolution=20
         for res_index in range(resolution):
             uncertainty_tube[0, location_index, res_index, :] = major_trajectory[0, location_index, :]
 
+    use_parallel = n_jobs != 1
+    if use_parallel:
+        try:
+            import multiprocessing as mp
+            mp.get_context('fork')
+        except (ImportError, ValueError):
+            use_parallel = False
+            print("Warning: multiprocessing with 'fork' context not available. Using sequential processing instead.")
+
     # Calculate uncertainty cross-sections for each time step and starting location
     for step_index in range(1, n_steps):
-        for location_index in range(n_starting_locations):
-            # Calculate cross-section boundary and eigenvalues
-            uncertainty_tube[step_index, location_index, :, :], eigen_values[step_index, location_index, :, :] = uncertainty_cross_section(
-                major_trajectory[step_index-1, location_index, :],  # previous major trajectory point
-                major_trajectory[step_index, location_index, :],    # current major trajectory point
-                trajectories[step_index, location_index, :, :],     # ensemble samples at current time
-                resolution=resolution,
-                e_proj=e_proj, 
-                sym=sym
-            )
+        if use_parallel:
+            pool_context = mp.get_context('fork')
+            with pool_context.Pool(processes=n_jobs) as pool:
+                results = pool.starmap(
+                    uncertainty_cross_section,
+                    [
+                        (
+                            major_trajectory[step_index-1, location_index, :],
+                            major_trajectory[step_index, location_index, :],
+                            trajectories[step_index, location_index, :, :],
+                            resolution,
+                            e_proj,
+                            sym
+                        ) for location_index in range(n_starting_locations)
+                    ]
+                )
+            # Unpack results
+            for location_index, (cs, ev) in enumerate(results):
+                uncertainty_tube[step_index, location_index, :, :] = cs
+                eigen_values[step_index, location_index, :, :] = ev
+        else:
+            for location_index in range(n_starting_locations):
+                # Calculate cross-section boundary and eigenvalues
+                uncertainty_tube[step_index, location_index, :, :], eigen_values[step_index, location_index, :, :] = uncertainty_cross_section(
+                    major_trajectory[step_index-1, location_index, :],  # previous major trajectory point
+                    major_trajectory[step_index, location_index, :],    # current major trajectory point
+                    trajectories[step_index, location_index, :, :],     # ensemble samples at current time
+                    resolution=resolution,
+                    e_proj=e_proj, 
+                    sym=sym
+                )
 
     return uncertainty_tube, eigen_values

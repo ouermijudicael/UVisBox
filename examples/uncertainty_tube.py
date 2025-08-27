@@ -24,7 +24,7 @@ seeds = np.random.uniform(-1,1, (number_of_seeds, 3))
 
 trajectories = flowmap_3d(seeds, t0, t1, n_steps, scale=scale, xy_scale=xy_scale)
 
-cross_sections, eigen_values = generate_uncertainty_tube(trajectories, None, 16, e_proj=0.5)
+cross_sections, eigen_values = generate_uncertainty_tube(trajectories, None, 16, e_proj=0.5, n_jobs=4)
 eigen_values = np.transpose(eigen_values, (1,0,2,3))
 eigen_values = eigen_values.reshape((-1,2)).astype(np.float32)
 
