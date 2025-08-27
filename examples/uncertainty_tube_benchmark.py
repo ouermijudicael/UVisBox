@@ -153,15 +153,15 @@ def plot_results(superellipse_results,meshing_results):
     plt.show()
 
 if __name__ == "__main__":
-    # Set parameters
-    n_seeds = 300  # More seeds means more work to parallelize
+    n_seeds = 300
     n_steps = 100
-    n_jobs_list = [1, 4, 8,multiprocessing.cpu_count()]  # Test with different n_jobs values
+    n_jobs_list = [1, 2, 4, multiprocessing.cpu_count()]
     repeats = 3
-    
+
     # Run benchmark
-    superellipse_results, meshing_results = benchmark_uncertainty_tube(n_seeds, n_steps, n_jobs_list, repeats)
-    
+    # Run benchmark with different parallel settings
+    superellipse_results, meshing_results = benchmark_uncertainty_tube(n_seeds=n_seeds, n_steps=n_steps, n_jobs_list=n_jobs_list, repeats=repeats)
+
     # Plot results
     plot_results(superellipse_results,meshing_results)
     

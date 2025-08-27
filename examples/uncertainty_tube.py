@@ -6,7 +6,7 @@ from uvisbox.UncertaintyTube import (generate_uncertainty_tube,generate_tube_mes
 from uvisbox.UncertaintyTube import plot_uncertainty_path_3d_from_mesh
 
 t0 = 0
-t1 = 3
+t1 = 5
 n_steps = 30
 number_of_seeds = 6  # Increased for better parallel demonstration
 
@@ -24,7 +24,7 @@ seeds = np.random.uniform(-1,1, (number_of_seeds, 3))
 
 trajectories = flowmap_3d(seeds, t0, t1, n_steps, scale=scale, xy_scale=xy_scale)
 
-cross_sections, eigen_values = generate_uncertainty_tube(trajectories, None, 16, e_proj=0.5, n_jobs=4)
+cross_sections, eigen_values = generate_uncertainty_tube(trajectories, None, 16, e_proj=0.5, n_jobs=2)
 eigen_values = np.transpose(eigen_values, (1,0,2,3))
 eigen_values = eigen_values.reshape((-1,2)).astype(np.float32)
 
@@ -35,6 +35,6 @@ eigen_values_ratio = np.nan_to_num(eigen_values[:,1] / eigen_values[:,0] , nan=0
 
 uv_coords = np.stack([rescaled_max_eigen_values, eigen_values_ratio], axis=1)
 
-vertices, faces, mean_trajectories = generate_tube_mesh(trajectories, cross_sections)
+vertices, faces, mean_trajectories = generate_tube_mesh(trajectories, cross_sections, n_jobs=12)
 
 plot_uncertainty_path_3d_from_mesh(vertices, faces, mean_trajectories, uv_coords)
