@@ -1,18 +1,17 @@
 # UVisBox
-UVisBox
-
 ## Project Overview
 
-This project, `uvisbox`, is a Python toolbox for visualizing scientific uncertainty data. It aims to provide a collection of methods for representing and exploring uncertainty in various scientific datasets.
+This project is a Python toolbox for visualizing scientific uncertainty data. It aims to provide a collection of methods for representing and exploring uncertainty in various scientific datasets.
 
 Currently implemented methods include:
 
-*   **Uncertainty Tube:** For visualizing uncertainty in trajectory data.
-*   **Contour Boxplot:** For summarizing isocontours.
+*   **Uncertainty Tube:** For visualizing uncertainty in trajectory data. [arxiv](https://www.arxiv.org/abs/2508.13505)
+*   **Contour Boxplot:** For summarizing isocontours. [doi](https://doi.org/10.1109/TVCG.2013.143)
+*   **VSUP:** A colormap designed for uncertain data. [link](https://medium.com/@uwdata/value-suppressing-uncertainty-palettes-426130122ce9)
 
 Work in progress:
 
-*   **Squid Glyph:** A new glyph for visualizing vector field uncertainty.
+*   **Squid Glyph:** A new glyph for visualizing vector field uncertainty. [doi](https://doi.ieeecomputersociety.org/10.1109/UncertaintyVisualization63963.2024.00014)
 
 Future plans include the implementation of:
 
