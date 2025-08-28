@@ -68,10 +68,8 @@ class ColorTree:
                     uncertainty_level = 1 - current_depth / (self.depth - 1)
                     # Value position within the current depth level
                     value_position = node_index / (2**current_depth - 1)
-
-                    # Always use the colormap, resampled for current depth
-                    resampled_colormap = mpl.colormaps[self.cmap].resampled(2**current_depth)
-                    base_color = list(resampled_colormap(value_position))[:-1]
+                    # Use the high-resolution colormap for consistency
+                    base_color = list(self.colormap(value_position))[:-1]
                     uncertainty_color = self.color_u
                     self.nodes[tree_index] = interpolate_lab(
                         base_color, uncertainty_color, uncertainty_level, 0, 1)
@@ -79,7 +77,7 @@ class ColorTree:
                     # Root node (depth 0) is set to uncertainty color
                     self.nodes[0] = self.color_u
 
-    def get_colors(self, image, show_uncertainty=True, discrete=False):
+    def get_colors(self, image, show_uncertainty=True, discrete=False, continuous_leaves=False):
         """
         Generates colors for an image array based on uncertainty (first channel) and value (second channel).
 
@@ -87,6 +85,7 @@ class ColorTree:
             image (np.ndarray): Input array with shape (..., 2), where last dim is [uncertainty, value].
             show_uncertainty (bool): If False, ignores uncertainty and uses colormap directly.
             discrete (bool): If True, treats as discrete levels using the tree.
+            continuous_leaves (bool): If True and discrete=True, uses colormap interpolation at leaf level instead of tree nodes.
 
         Returns:
             np.ndarray: RGB color array with shape (..., 3).
@@ -106,12 +105,17 @@ class ColorTree:
 
         if discrete:
             depths, idx = self._get_depth_and_index_vectorized(v_ratio, u_ratio)
-            # Handle depth 0 case
+            # Handle depth 0 (root) case
             color[depths == 0] = self.nodes[0]
-            # Compute indices for non-zero depths
-            mask = depths > 0
-            if np.any(mask):
-                color[mask] = self.nodes[idx[mask]]
+            # Handle non-zero depths
+            if continuous_leaves:
+                # Use colormap for leaf level, tree nodes for others
+                leaf_positions = (depths == self.depth - 1) & (depths > 0)
+                color[leaf_positions] = self.colormap(v_ratio[leaf_positions])[..., :3]
+                non_leaf_positions = (depths != self.depth - 1) & (depths > 0)
+                color[non_leaf_positions] = self.nodes[idx[non_leaf_positions]]
+            else:
+                color[depths > 0] = self.nodes[idx[depths > 0]]
         else:
             # For continuous (discrete=False), always interpolate colormap color with uncertainty color
             base_colors = self.colormap(v_ratio)[..., :3]
@@ -122,11 +126,11 @@ class ColorTree:
 
         return color
 
-    def __call__(self, value, show_uncertainty=True, discrete=False):
+    def __call__(self, value, show_uncertainty=True, discrete=False, continuous_leaves=False):
         """
         Alias for get_colors to support callable interface.
         """
-        return self.get_colors(value, show_uncertainty, discrete)
+        return self.get_colors(value, show_uncertainty, discrete, continuous_leaves)
 
     def _clip_and_normalize(self, value, uncertainty):
         """

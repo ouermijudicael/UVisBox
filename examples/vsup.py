@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from uvisbox.Colors.colortree import ColorTree
 
-fig, ax = plt.subplots(1,2, figsize=(12,6))
+fig, ax = plt.subplots(1,3, figsize=(12,6))
 # Create a sample image where x (columns) is value (0 to 1), y (rows) is uncertainty (0 to 1)
 height, width = 100, 100
 value_grid = np.linspace(0, 1, width)[None, :]  # Shape (1, 100)
@@ -31,6 +31,14 @@ ax[1].imshow(continuous_color, origin='lower', extent=(0, 1, 0, 1))
 ax[1].set_title("Continuous Color Map")
 ax[1].set_xlabel("Value")
 ax[1].set_ylabel("Uncertainty")
+
+continuous_leaves_color = colormap.get_colors(image, discrete=True, continuous_leaves=True)
+
+# Plot the continuous leaves color map
+ax[2].imshow(continuous_leaves_color, origin='lower', extent=(0, 1, 0, 1))
+ax[2].set_title("Continuous Leaves Color Map")
+ax[2].set_xlabel("Value")
+ax[2].set_ylabel("Uncertainty")
 
 # Show the plot
 plt.show()
