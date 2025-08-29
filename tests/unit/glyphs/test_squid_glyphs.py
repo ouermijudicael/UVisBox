@@ -43,7 +43,7 @@ ensemble_vectors = np.zeros((n_points, n_ensemble, 2))
 
 for i in range(n_points):
     for j in range(n_ensemble):
-        # Perturb magnitude and angle
+        # Perturb magnitude and anglels
         mag_perturbed = mag[i] + rng.normal(0, mag_noise_std)
         angle_perturbed = angle[i] + rng.normal(0, angle_noise_std)
 

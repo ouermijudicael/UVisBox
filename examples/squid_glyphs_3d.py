@@ -3,6 +3,9 @@ from mpl_toolkits.mplot3d import Axes3D
 from uvisbox.Glyphs.squid_glyph import cartesian_to_spherical, compute_vector_depths_3D, uncertainty_squid_glyphs_3D
 
 def generate_3d_grid_vectors():
+    """
+    Generate a 3D grid of vectors.
+    """
     grid_size = 10
     vectors = []
     for x in range(grid_size):

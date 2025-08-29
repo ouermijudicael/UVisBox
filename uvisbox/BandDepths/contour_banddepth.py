@@ -44,14 +44,17 @@ def contour_banddepth(data, combination = None, allow_portion=False, eps = 0):
         If True, uses a portion-based subset calculation for depth; otherwise, uses epsilon-based subset.
     eps : float, default 0
         Epsilon tolerance for subset checks when `allow_portion` is False.
+
     Returns
     -------
     depths : np.ndarray
         Array of band depth values for each image in the input data.
+
     Raises
     ------
     ValueError
         If the input data cannot be converted to a boolean array.
+        
     Notes
     -----
     - The function expects binary contour data, where each image is represented as a boolean array.

@@ -6,11 +6,18 @@ from sklearn.decomposition import PCA
 
 
 def cartesian_to_polar(vectors):
-    """Convert 2D Cartesian vectors to polar coordinates (magnitude, angle).
-    Input
-        vectors: numpy array of shape (n, 2)
-    Output
-        polar_coords: numpy array of shape (n, 2) with columns [magnitude, angle in radians]
+    """
+    Convert 2D Cartesian vectors to polar coordinates (magnitude, angle).
+
+    Parameters
+    ----------
+    vectors : numpy.ndarray
+        Array of shape (n, 2) representing 2D Cartesian vectors.
+
+    Returns
+    -------
+    polar_coords : numpy.ndarray
+        Array of shape (n, 2) with columns [magnitude, angle in radians].
     """
     magnitudes = np.linalg.norm(vectors, axis=1)
     angles_from_origin = np.arctan2(vectors[:, 1], vectors[:, 0])
@@ -23,11 +30,17 @@ def cartesian_to_polar(vectors):
 
 
 def cartesian_to_spherical(vectors):
-    """Convert 3D Cartesian vectors to spherical coordinates (magnitude, theta, phi).
-    Input
-        vectors: numpy array of shape (n, 3)
-    Output
-        spherical_coords: numpy array of shape (n, 3) with columns [magnitude, theta, phi]
+    """
+    Convert 3D Cartesian vectors to spherical coordinates (magnitude, theta, phi).
+    Parameters
+    ----------
+        vectors : numpy.ndarray
+            Array of shape (n, 3) representing 3D Cartesian vectors.
+    
+    Returns
+    -------
+        spherical_coords : numpy.ndarray
+            Array of shape (n, 3) with columns [magnitude, theta, phi].
     """
     magnitudes = np.linalg.norm(vectors, axis=1)
     valid_indices = magnitudes > 1.0e-8  # Filter vectors with norm greater than 1.0e-8
@@ -44,14 +57,24 @@ def cartesian_to_spherical(vectors):
     return spherical_coords
 
 def angular_spread(vectors):
-    """Calculate the angular spread and magnitude spread of a set of vectors.
-    Input
-        vectors: numpy array of shape (n, 2)
-    Output
-        angular_spread_deg: float, the angular spread in degrees
-        magnitude_spread: float, the magnitude spread
-        min_idx: int, index of the vector with the minimum angle
-        max_idx: int, index of the vector with the maximum angle
+    """
+    Calculate the angular spread and magnitude spread of a set of vectors.
+
+    Parameters
+    ----------
+        vectors : numpy.ndarray
+            Array of shape (n, 2) representing 2D Cartesian vectors.
+
+    Returns
+    -------
+        angular_spread_deg : float
+            The angular spread in degrees.
+        magnitude_spread : float
+            The magnitude spread.
+        min_idx : int
+            Index of the vector with the minimum angle.
+        max_idx : int
+            Index of the vector with the maximum angle.
     """
     # Calculate the angular spread (max-min angle from origin) and return indices
     angles_from_origin = np.arctan2(vectors[:, 1], vectors[:, 0])
@@ -64,13 +87,20 @@ def angular_spread(vectors):
 
 
 def magnitude_spread(vectors):
-    """Calculate the magnitude spread of a set of vectors.
-    Input
-        vectors: numpy array of shape (n, 2)
-    Output
-        magnitude_spread: float, the magnitude spread
-        min_mag_idx: int, index of the vector with the minimum magnitude
-        max_mag_idx: int, index of the vector with the maximum magnitude
+    """
+    Calculate the magnitude spread of a set of vectors.
+    Parameters
+    ----------
+        vectors : numpy.ndarray
+            Array of shape (n, 2) representing 2D Cartesian vectors.
+    Returns
+    -------
+        magnitude_spread : float
+            The magnitude spread.
+        min_mag_idx : int
+            Index of the vector with the minimum magnitude.
+        max_mag_idx : int
+            Index of the vector with the maximum magnitude.
     """
     # Calculate the magnitude spread (max-min magnitude) and return indices
     magnitudes = np.linalg.norm(vectors, axis=1)
@@ -81,11 +111,16 @@ def magnitude_spread(vectors):
 
 
 def compute_vector_depths(vectors):
-    """Compute the depth of each vector in the ensemble.
-    Input
-        vectors: numpy array of shape (n, 2)
-    Output
-        depths: numpy array of shape (n,), depth of each vector
+    """
+    Compute the depth of each vector in the ensemble.
+    Parameters
+    ----------
+        vectors : numpy.ndarray
+            Array of shape (n, 2) representing 2D Cartesian vectors.
+    Returns
+    -------
+        depths : numpy.ndarray
+            Array of shape (n,) with the depth of each vector.
     """
     n = vectors.shape[0]
     depths = np.zeros(n)
@@ -119,12 +154,17 @@ def compute_vector_depths(vectors):
 
 
 def compute_vector_depths_3D(vectors):
-    """Compute the depth of each vector in the ensemble in 3D. Assumes vectors are in 
+    """
+    Compute the depth of each vector in the ensemble in 3D. Assumes vectors are in
        spherical coordinates (magnitude, theta, phi).
-    Input
-        vectors: numpy array of shape (n, 3)
-    Output
-        depths: numpy array of shape (n,), depth of each vector
+    Parameters
+    ----------
+        vectors : numpy.ndarray
+            Array of shape (n, 3) representing 3D spherical coordinates.
+    Returns
+    -------
+        depths : numpy.ndarray
+            Array of shape (n,) with the depth of each vector.
     """
     n = vectors.shape[0]
     depths = np.zeros(n)
@@ -157,7 +197,44 @@ def compute_vector_depths_3D(vectors):
 
 
 def get_squid_glyph_info(vectors, vector_depths, percentile1=0.5, percentile2=0.9):
+    """
+    Get information about the squid glyph based on vector depths.
 
+    Parameters
+    ----------
+        vectors : numpy.ndarray
+            Array of shape (n, 2) representing 2D Cartesian vectors.
+        vector_depths : numpy.ndarray
+            Array of shape (n,) with the depth of each vector.
+        percentile1 : float
+            First percentile to consider for high depth vectors.
+        percentile2 : float
+            Second percentile to consider for low depth vectors.
+
+    Returns
+    -------
+        theta_high : numpy.ndarray
+            Array of shape (2, 1) with the angular range of high depth vectors.
+        r_high : float
+            Magnitude of the minimum high depth vector.
+        min_angle_high : float
+            Angle of the minimum high depth vector.
+        max_angle_high : float
+            Angle of the maximum high depth vector.
+        theta_low : numpy.ndarray
+            Array of shape (2, 1) with the angular range of low depth vectors.
+        r_low : float
+            Magnitude of the maximum low depth vector.
+        min_angle_low : float
+            Angle of the minimum low depth vector.
+        max_angle_low : float
+            Angle of the maximum low depth vector.
+        median_mag : float
+            Magnitude of the vector with maximum depth.
+        median_angle : float
+            Angle of the vector with maximum depth.
+
+    """
     # Find index of vector with maximum depth
     max_depth_idx = np.argmax(vector_depths)
     # Find all indices where vector_depth > 1.0-percentile1
@@ -200,12 +277,20 @@ def get_squid_glyph_info(vectors, vector_depths, percentile1=0.5, percentile2=0.
 def draw_wedges_with_arrow(ax, centers, theta1, theta2, mid_angle, r1, r2):
     """
     Draws multiple wedges with arrows.
-    centers: numpy array of shape (n, 2)
-    theta1: numpy array of shape (n, 2), each row [theta1_start, theta1_end] for the first wedge
-    theta2: numpy array of shape (n, 2), each row [theta2_start, theta2_end] for the second wedge (arrowhead)
-    mid_angle: iterable of length n, mid angle for arrow direction
-    r1: float or iterable of length n, radius for the first wedge
-    r2: float or iterable of length n, radius for the second wedge
+    Parameters
+    ----------
+    centers : numpy.ndarray
+        Array of shape (n, 2) representing the center positions of the wedges.
+    theta1 : numpy.ndarray
+        Array of shape (n, 2), each row [theta1_start, theta1_end] for the first wedge.
+    theta2 : numpy.ndarray
+        Array of shape (n, 2), each row [theta2_start, theta2_end] for the second wedge (arrowhead).
+    mid_angle : iterable
+        Iterable of length n, mid angle for arrow direction.
+    r1 : float or iterable
+        Radius for the first wedge.
+    r2 : float or iterable of length n
+        Radius for the second wedge.
     """
     n = centers.shape[0]
     # Support scalar or iterable for r1 and r2
@@ -228,26 +313,28 @@ def draw_wedges_with_arrow(ax, centers, theta1, theta2, mid_angle, r1, r2):
 
 
 def uncertainty_squid_glyphs(positions, ensemble_vectors, percentil1, percentil2, scale=0.2, ax=None):
-    """Draws uncertainty squid glyphs for the given positions and ensemble vectors.
-    Input
-    -----
-    positions: numpy array of shape (n, 2)
-        The positions of the squid glyphs.
-    ensemble_vectors: numpy array of shape (n, m, 2)
-        The ensemble vectors for each position.
-    percentil1: float
+    """
+    Draws uncertainty squid glyphs for the given positions and ensemble vectors.
+
+    Parameters
+    ----------
+    positions : numpy.ndarray
+        Array of shape (n, 2) representing the positions of the squid glyphs.
+    ensemble_vectors : numpy.ndarray
+        Array of shape (n, m, 2) representing the ensemble vectors for each position.
+    percentil1 : float
         The first percentile for depth filtering.
-    percentil2: float
+    percentil2 : float
         The second percentile for depth filtering.
-    scale: float
+    scale : float
         The scale factor for the glyphs.
-    ax: matplotlib axis
+    ax : matplotlib axis
         The axis to draw on. If None, a new figure and axis will be created.
 
 
-    Output
-    ------
-    ax: matplotlib axis
+    Returns
+    -------
+    ax : matplotlib axis
         The axis with the drawn squid glyphs.
     """
 
@@ -276,13 +363,20 @@ def uncertainty_squid_glyphs(positions, ensemble_vectors, percentil1, percentil2
     return ax
 
 def calculate_spread_3D(vectors, depths, percentil):
-    """Calculate the spread in 3D spherical coordinates.
-    Input
-        vectors: numpy array of shape (n, 3) in spherical coordinates (magnitude, theta, phi)
-        depths: numpy array of shape (n,), depth of each vector
-        percentil: float, the percentile for depth filtering
-    Output
-        indices of vectors with min/max magnitude, theta, phi among those with depth > 1.0-percentil
+    """
+    Calculate the spread in 3D spherical coordinates.
+    Parameters
+    ----------
+        vectors : numpy.ndarray
+            Array of shape (n, 3) in spherical coordinates (magnitude, theta, phi)
+        depths : numpy.ndarray
+            Array of shape (n,) representing the depth of each vector
+        percentil : float
+            The percentile for depth filtering
+    Returns
+    -------
+        tuple
+            Indices of vectors with min/max magnitude, theta, phi among those with depth > 1.0-percentil
     """
 
     indices = np.where(depths > 1.0-percentil)[0]
@@ -305,22 +399,27 @@ def calculate_spread_3D(vectors, depths, percentil):
 
 def getDirectionalVariations(vectors, depths, depth_threshold, min_vectors, median_vectors, max_vectors):
     """
-    purpose: compute the directional variation of the vectors
-    input:
-    positions: 2D array of shape (num_points, 3) where the last dimension contains the x, y, and z coordinates of the positions
-    vectors: 3D array of shape (num_points, num_ensemble_members, 3) where the last 
-            dimension contains the vector components
-    median_vectors: 3D array of shape (num_points, 3) where the last dimension contains 
-                    the median vector components
-    max_vectors: 3D array of shape (num_points, 3) where the last dimension contains
-                the max vector components
-    min_vectors: 3D array of shape (num_points, 3) where the last dimension contains
-                the min vector components
-    domain: 2D array of shape (3, 2) where the first dimension contains the x, y, and z domain limits
-    output:
-    directional_variation: 2D array of shape (num_points, 4, 2) where the 4 represents the
-                            (pca variance, pca firts component, pca second component, pca mean) and the 2 represents
-                            the x and y components of the pca components
+    Compute the directional variation of the vectors.
+    Parameters
+    ----------
+    positions : numpy.ndarray
+        Array of shape (num_points, 3) where the last dimension contains the x, y, and z coordinates of the positions.
+    vectors : numpy.ndarray
+        Array of shape (num_points, num_ensemble_members, 3) where the last dimension contains the vector components.
+    median_vectors : numpy.ndarray
+        Array of shape (num_points, 3) where the last dimension contains the median vector components.
+    max_vectors : numpy.ndarray
+        Array of shape (num_points, 3) where the last dimension contains the max vector components.
+    min_vectors : numpy.ndarray
+        Array of shape (num_points, 3) where the last dimension contains the min vector components.
+    domain : numpy.ndarray
+        Array of shape (3, 2) where the first dimension contains the x, y, and z domain limits.
+    Returns
+    -------
+    directional_variation : numpy.ndarray
+        Array of shape (num_points, 4, 2) where the 4 represents the
+        (pca variance, pca first component, pca second component, pca mean) and the 2 represents
+        the x and y components of the pca components.
     """
 
     num_points = vectors.shape[0]
@@ -445,24 +544,38 @@ def buildSuperElipticalSquidNP(directional_variations, positions, vectors, min_v
                                     median_vectors, max_vectors, glyph_markers, scale, resolution, num_of_glyphs):
     """
     Build superelliptical squid glyphs for 3D visualization. Assumes vectors are in spherical coordinates (magnitude, theta, phi).
-    Input
-    -----
-    directional_variations: numpy array of shape (n, 4, 2) where the 4 represents the
-                            (pca variance, pca firts component, pca second component, pca mean) and the 2 represents
-                            the x and y components of the pca components
-    positions: numpy array of shape (n, 3) The positions of the squid glyphs.
-    vectors: numpy array of shape (n, m, 3) The ensemble vectors in spherical coordinates.
-    min_vectors: numpy array of shape (n, 3) The minimum vectors in spherical coordinates.
-    median_vectors: numpy array of shape (n, 3) The median vectors in spherical coordinates.
-    max_vectors: numpy array of shape (n, 3) The maximum vectors in spherical coordinates.
-    glyph_markers: numpy array of shape (n,) with values 0 (no glyph), 1 (full glyph), 2 (arrow only)
-    scale: float The scale factor for the glyphs.
-    resolution: int The resolution of the base circle of the squid glyph.
-    num_of_glyphs: int The number of glyphs to be created.
-    Output
-    ------
-    points: numpy array of shape (m, 3) The points of the squid glyphs.
-    polygons: numpy array of shape (k,) The polygon connectivity for the glyphs.
+
+    Parameters
+    ----------
+    directional_variations : numpy.ndarray
+        Array of shape (n, 4, 2) where the 4 represents the
+        (pca variance, pca first component, pca second component, pca mean) and the 2 represents
+        the x and y components of the pca components.
+    positions : numpy.ndarray
+        Array of shape (n, 3) The positions of the squid glyphs.
+    vectors : numpy.ndarray
+        Array of shape (n, m, 3) The ensemble vectors in spherical coordinates.
+    min_vectors : numpy.ndarray
+        Array of shape (n, 3) The minimum vectors in spherical coordinates.
+    median_vectors : numpy.ndarray
+        Array of shape (n, 3) The median vectors in spherical coordinates.
+    max_vectors : numpy.ndarray
+        Array of shape (n, 3) The maximum vectors in spherical coordinates.
+    glyph_markers : numpy.ndarray
+        Array of shape (n,) with values 0 (no glyph), 1 (full glyph), 2 (arrow only)
+    scale : float
+        The scale factor for the glyphs.
+    resolution : int
+        The resolution of the base circle of the squid glyph.
+    num_of_glyphs : int
+        The number of glyphs to be created.
+
+    Returns
+    -------
+    points : numpy.ndarray
+        Array of shape (m, 3) The points of the squid glyphs.
+    polygons : numpy.ndarray
+        Array of shape (k,) The polygon connectivity for the glyphs.
     """
     
     num_points = positions.shape[0]
@@ -682,26 +795,28 @@ def buildSuperElipticalSquidNP(directional_variations, positions, vectors, min_v
 
 
 def uncertainty_squid_glyphs_3D(positions, ensemble_vectors, percentil, scale=0.5, ax=None):
-    """Draws uncertainty squid glyphs for the given positions and ensemble vectors in 3D.
-    Input
-    -----
-    positions: numpy array of shape (n, 3)
-        The positions of the squid glyphs.
-    ensemble_vectors: numpy array of shape (n, m, 3)
+    """
+    Draws uncertainty squid glyphs for the given positions and ensemble vectors in 3D.
+    Parameters
+    ----------
+    positions : numpy.ndarray
+        Array of shape (n, 3) The positions of the squid glyphs.
+    ensemble_vectors : numpy.ndarray
+        Array of shape (n, m, 3) The ensemble vectors in spherical coordinates.
         The ensemble vectors for each position in Cartesian coordinates.
-    percentil1: float
+    percentil1 : float
         The first percentile for depth filtering.
-    percentil2: float
+    percentil2 : float
         The second percentile for depth filtering.
-    scale: float
+    scale : float
         The scale factor for the glyphs.
-    ax: matplotlib 3D axis
+    ax : matplotlib 3D axis
         The axis to draw on. If None, a new figure and axis will be created.
 
 
-    Output
-    ------
-    ax: matplotlib 3D axis
+    Returns
+    -------
+    ax : matplotlib 3D axis
         The axis with the drawn squid glyphs.
     """
 
