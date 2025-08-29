@@ -24,16 +24,16 @@ jobs:
           pip install sphinx
           pip install sphinx-rtd-theme
 
-          - name: Build documentation
-            run: |
-              cd docs
-              make html
-    
-          - name: Upload built docs as artifact
-            uses: actions/upload-artifact@v4
-            with:
-              name: sphinx-html
-              path: docs/build/html
+      - name: Build documentation
+        run: |
+          cd docs
+          make html
+
+      - name: Upload built docs as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sphinx-html
+          path: docs/build/html
     
       deploy:
         needs: build-docs
