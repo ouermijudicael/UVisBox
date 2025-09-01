@@ -438,18 +438,6 @@ def getDirectionalVariations(vectors, depths, depth_threshold, min_vectors, medi
         phi = -phi
         theta = -theta
 
-        # ## get mean vector
-        # sp_mean_vector = np.mean(vectors[i_t][i_p], axis=0)
-        # r = sp_mean_vector[0]
-        # theta = sp_mean_vector[1]
-        # phi = sp_mean_vector[2]
-        # mean_vector = np.zeros(3)
-        # mean_vector[0] = r*np.sin(theta)*np.cos(phi)
-        # mean_vector[1] = r*np.sin(theta)*np.sin(phi)
-        # mean_vector[2] = r*np.cos(theta)
-        # phi = -phi
-        # theta = -theta
-
         Ry = np.array([[np.cos(theta), 0, np.sin(theta)], [0, 1, 0], [-np.sin(theta), 0, np.cos(theta)]])
         Rz = np.array([[np.cos(phi), -np.sin(phi), 0], [np.sin(phi), np.cos(phi), 0], [0, 0, 1]])
         ii_m = 0
@@ -460,81 +448,37 @@ def getDirectionalVariations(vectors, depths, depth_threshold, min_vectors, medi
                 vec[0] = tmp[0]*np.sin(tmp[1])*np.cos(tmp[2])
                 vec[1] = tmp[0]*np.sin(tmp[1])*np.sin(tmp[2])
                 vec[2] = tmp[0]*np.cos(tmp[1])
-                # # debugging
-                # if( i_t == 0 and i_p ==179):
-                #     print('sp_vec[', i_m, '] = ', tmp)
-                #     # print('phi = ', phi, 'theta = ', theta)
-                #     # print('median_vector = ', median_vectors[i_t][i_p])
-                #     # print('local_median_vector = ', local_median_vector)
-                #     print('vec: ', vec)
-                #     if( i_m == 20):
-                #         # get angle between median and vec
-                #         print('angle = ', np.arccos(np.dot(local_median_vector, vec)/(np.linalg.norm(local_median_vector)*np.linalg.norm(vec))))
-                        
-                # print("vec[", i_t, ", ", i_p, ", ", i_m, "] = ", vec)
                 vec = np.dot(Ry, np.dot(Rz, vec))
-                # Debugging
-                # if( i_t == 0 and i_p ==179):
-                #     print('vec1: ', vec)
                 vec =  vec * (max_vectors[i_p][0]/(np.absolute(vec[2]) + 1.0e-10))
-                # Deubugin
-                # if( i_t == 0 and i_p ==179):
-                #     print('vec2: ', vec)
-                #     if( i_m == 20):
-                #         ## angle between [0, 0, 1] and vec
-                #         print('angle1 = ', np.arccos(np.dot([0, 0, 1], vec)/(np.linalg.norm([0, 0, 1])*np.linalg.norm(vec))))
-                #     sp_vec = vf_utils.cartesian2Spherical(vec)
-                #     print('sp_vec2: ', sp_vec)
                 local_XX[ii_m][0] = vec[0]
                 local_XX[ii_m][1] = vec[1]
                 ii_m = ii_m + 1
         local_X = local_XX[0:ii_m]
+        n_local_points, n_local_features = local_X.shape
         pca = PCA(n_components=2)
-        pca.fit(local_X)
-        pca_components = pca.components_
-        # pca_local_X = pca.transform(local_X)
-        # mins = np.min(pca_local_X, axis=0)
-        # maxs = np.max(pca_local_X, axis=0)
-        # v0_scale = np.maximum(np.absolute(mins[0]), np.absolute(maxs[0]))
-        # v1_scale = np.maximum(np.absolute(mins[1]), np.absolute(maxs[1]))
-        pca_mean = pca.mean_
-        pca_variance = pca.explained_variance_
-        v0_scale = pca_variance[0]
-        v1_scale = pca_variance[1]
-        if(np.absolute(v0_scale) < 1.0e-20):
-        # if(ii_t == 0 and i_p == 14):
-            # print('v0_scale = ', v0_scale, 'v1_scale = ', v1_scale)
-            # print('local_X:', local_X)
-            # print('local_median_vector = ', local_median_vector)
-            # print('max_vectors = ', max_vectors[i_t][i_p])
+
+        if n_local_points > 2 and n_local_features > 2: # ensures that we have enough points and features for PCA
+            pca.fit(local_X)
+            pca_components = pca.components_
+            pca_mean = pca.mean_
+            pca_variance = pca.explained_variance_
+            v0_scale = pca_variance[0]
+            v1_scale = pca_variance[1]
+        else:
+            pca_components = np.zeros((2, 2))
             v0_scale = 1.0
             v1_scale = 1.0
 
-            # raise ValueError("Invalid v0_scale inside getDirectionalVariations")
-            # print('mins = ', mins, 'maxs = ', maxs)
+        if(np.absolute(v0_scale) < 1.0e-20): # ensure non-zero scale
+            v0_scale = 1.0
+            v1_scale = 1.0
+
         directional_variation[i_p][0][0] = v0_scale
         directional_variation[i_p][0][1] = np.maximum(v1_scale, 0.1*v0_scale)
         directional_variation[i_p][1][0] = pca_components[0][0]
         directional_variation[i_p][1][1] = pca_components[0][1]
         directional_variation[i_p][2][0] = pca_components[1][0]
         directional_variation[i_p][2][1] = pca_components[1][1]
-        # directional_variation[ii_t][i_p][3][0] = pca_mean[0]
-        # directional_variation[ii_t][i_p][3][1] = pca_mean[1]
-
-        # # Debugging
-        # if(v0_scale > 50 and  np.absolute(max_vectors[i_t][i_p][1]) < np.pi * 3*0.25):
-        #     print("i_t = ", i_t, "i_p = ", i_p)
-        #     print("v0_scale = ", v0_scale)
-        #     print("v1_scale = ", v1_scale)
-        #     print("pca_components = ", pca_components)
-        #     print("pca_mean = ", pca_mean)
-        #     print('pca variance = ', pca.explained_variance_)
-        #     print( 'min_vectors = ', min_vectors[i_t][i_p])
-        #     print( 'median_vectors = ', median_vectors[i_t][i_p])
-        #     print( 'max_vectors = ', max_vectors[i_t][i_p])
-        #     for i_m in range(num_ensemble_members):
-        #         print('local_X[', i_m, '] = ', local_X[i_m], 'pca_local_X[', i_m, '] = ', pca_local_X[i_m])
-        #     raise ValueError("Invalid scale")   
 
 
     return directional_variation
