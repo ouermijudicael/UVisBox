@@ -2,6 +2,7 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from uvisbox.Glyphs.squid_glyph import cartesian_to_spherical, compute_vector_depths_3D, uncertainty_squid_glyphs_3D
 import matplotlib.pyplot as plt
+import pyvista as pv
 
 # Generate a 3D grid of vectors. [vx,vy,vz]=[x,y,z]
 grid_size = 3
@@ -54,17 +55,16 @@ ax.set_title('Ensemble Vectors in 3D')
 #     ensemble_vectors : numpy.ndarray
 #         Array of shape (n, m, 3) The ensemble vectors in spherical coordinates.
 #         The ensemble vectors for each position in Cartesian coordinates.
-#     percentil1 : float
+#     percentil : float
 #         The first percentile for depth filtering.
-#     percentil2 : float
-#         The second percentile for depth filtering.
 #     scale : float
 #         The scale factor for the glyphs.
 #     ax : matplotlib 3D axis
 #         The axis to draw on. If None, a new figure and axis will be created.
 # 
-ax2 = uncertainty_squid_glyphs_3D(grid_points, ensemble_vectors, 0.5, 0.25, ax=ax2)
+# ax2 = uncertainty_squid_glyphs_3D(grid_points, ensemble_vectors, 0.5, 0.25, ax=ax2)
 
-ax2.set_title('Uncertainty Squid Glyphs in 3D')
-plt.savefig("3d_vector_field_with_squid_glyphs.png")
-plt.show()
+# ax2.set_title('Uncertainty Squid Glyphs in 3D')
+# plt.savefig("3d_vector_field_with_squid_glyphs.png")
+# plt.show()
+plotter, points, triangles = uncertainty_squid_glyphs_3D(grid_points, ensemble_vectors, 0.95, 0.1)

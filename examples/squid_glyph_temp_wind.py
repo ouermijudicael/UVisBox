@@ -1,12 +1,13 @@
 import xarray as xr
 import matplotlib.pyplot as plt 
-from uvisbox.Glyphs.squid_glyph import  uncertainty_squid_glyphs_3D
+from uvisbox.Glyphs.squid_glyph import  uncertainty_squid_glyphs_3D, uncertainty_squid_glyphs_3D_2
 import numpy as np
 import uvisbox.Datasets.temperature_and_wind_data as twd
+import pyvista as pv
 
 
 ds = twd.load_dataset()
-# print(ds)
+print(ds)
 ensemble_members = ds.coords["number"].values
 latitudes = ds.coords["latitude"].values
 longitudes = ds.coords["longitude"].values
@@ -20,19 +21,17 @@ temp = ds['t'].isel(valid_time=time_idx).values
 u = ds['u'].isel(valid_time=time_idx).values
 v = ds['v'].isel(valid_time=time_idx).values
 w = ds['w'].isel(valid_time=time_idx).values
-grid_points = np.zeros((5*5*len(pressure_levels), 3))
-ensemble_vectors = np.zeros((5*5*len(pressure_levels), len(ensemble_members), 3))
 
-# Plot ensemble vectors using arrows
-fig = plt.figure(figsize=(12, 6))
-ax = fig.add_subplot(121, projection='3d')
-ax2 = fig.add_subplot(122, projection='3d')
+
+grid_points = np.zeros((len(longitudes)*len(latitudes)*len(pressure_levels), 3))
+ensemble_vectors = np.zeros((len(longitudes)*len(latitudes)*len(pressure_levels), len(ensemble_members), 3))
+
 
 for i_ens in range(len(ensemble_members)):
-    for i_lon in range(5):#len(longitudes)):
-        for i_lat in range(5):#len(latitudes)):
+    for i_lon in range(len(longitudes)):
+        for i_lat in range(len(latitudes)):
             for i_plev in range(len(pressure_levels)):
-                g_idx = i_lon*5*len(pressure_levels) + i_lat*len(pressure_levels) + i_plev
+                g_idx = (i_lon * len(latitudes) * len(pressure_levels)) + (i_lat * len(pressure_levels)) + i_plev
                 if i_ens == 0:
                     grid_points[g_idx, 0] = longitudes[i_lon]
                     grid_points[g_idx, 1] = latitudes[i_lat]
@@ -42,10 +41,21 @@ for i_ens in range(len(ensemble_members)):
                 ensemble_vectors[g_idx, i_ens, 1] = v[i_ens, i_plev, i_lat, i_lon]
                 ensemble_vectors[g_idx, i_ens, 2] = w[i_ens, i_plev, i_lat, i_lon]
                 
-                ax.quiver(longitudes[i_lon], latitudes[i_lat], pressure_levels[i_plev],
-                           u[i_ens, i_plev, i_lat, i_lon], v[i_ens, i_plev, i_lat, i_lon], w[i_ens, i_plev, i_lat, i_lon],
-                           color='r', length=0.1)
-ax.set_title("3D Wind Vectors")
+# Create a PyVista plotter
+plotter = pv.Plotter()
 
-ax2 = uncertainty_squid_glyphs_3D(grid_points, ensemble_vectors, 0.5, 0.25, ax=ax2)
-plt.savefig("3d_wind_vectors.png")
+# Add the grid points to the plotter
+point_cloud = pv.PolyData(grid_points)
+
+# Add the vectors to the plotter
+for i_ens in range(len(ensemble_members)):
+    vectors = ensemble_vectors[:, i_ens, :]
+    arrows = pv.Arrow(start=grid_points, direction=vectors, scale=0.1)
+    plotter.add_mesh(arrows, color='red')
+
+plotter.add_axes()
+plotter.add_title("3D Wind Vectors")
+plotter.show()
+
+plotter2, points, triangles = uncertainty_squid_glyphs_3D(grid_points, ensemble_vectors, 0.95, 0.05)
+plotter2.show()
