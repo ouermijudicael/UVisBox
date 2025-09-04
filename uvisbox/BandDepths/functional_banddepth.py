@@ -7,18 +7,8 @@ def functional_banddepth(data, dtype=np.float64):
     # Data is a 2D array of shape (N, D)
 
     ### input validation
-    if isinstance(data, np.ndarray):
-        _data = data
-    elif isinstance(data, list):
-        _data = np.array(data, copy=True)
-    else:
-        raise TypeError("Input data must be a numpy ndarray or a 2D list.")
-    if _data.ndim != 2:
-        raise ValueError("Input data must be a 2D array of shape (N, D).")
-    _n, _d = _data.shape
-    if _n < 1 or _d < 1:
-        raise ValueError("Input data must have at least one sample and one feature.")
-    _data = _data.astype(dtype)  # cast data to the specified dtype
+    _data = _data_validation(data, dtype=dtype)
+    _n, _ = _data.shape
 
     ### functional band depth computation
     _data = np.argsort(_data, axis=0)     # compute the order
@@ -36,6 +26,18 @@ def modified_functional_banddepth(data, dtype=np.float64):
     # Data is a 2D array of shape (N, D)
 
     ### input validation
+    _data = _data_validation(data, dtype=dtype)
+    _n, _d = _data.shape
+
+    ### functional band depth computation
+    _data = np.argsort(_data, axis=0)     # compute the order
+    _data = np.argsort(_data, axis=0) + 1 # compute the rank
+    _data = (_n - _data) * (_data - 1)    # following Sun et al. (2012)
+
+    ### return the band depths
+    return (np.sum(_data, axis=1)/_d) + _n - 1 # band depth as probability
+
+def _data_validation(data, dtype=np.float64):
     if isinstance(data, np.ndarray):
         _data = data
     elif isinstance(data, list):
@@ -48,14 +50,7 @@ def modified_functional_banddepth(data, dtype=np.float64):
     if _n < 1 or _d < 1:
         raise ValueError("Input data must have at least one sample and one feature.")
     _data = _data.astype(dtype)  # cast data to the specified dtype
-
-    ### functional band depth computation
-    _data = np.argsort(_data, axis=0)     # compute the order
-    _data = np.argsort(_data, axis=0) + 1 # compute the rank
-    _data = (_n - _data) * (_data - 1)    # following Sun et al. (2012)
-
-    ### return the band depths
-    return (np.sum(_data, axis=1)/_d) + _n - 1 # band depth as probability
+    return _data
 
 fdb = functional_banddepth
 mdb = modified_functional_banddepth
