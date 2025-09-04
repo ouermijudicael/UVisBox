@@ -56,7 +56,7 @@ def plot_uncertainty_tube_from_mesh(vertices, faces, mean_trajectories, uv_coord
     ax.set_xlabel('X-axis')
     ax.set_ylabel('Y-axis')
     ax.set_zlabel('Z-axis')
-    ax.set_title('3D Trajectories of Points with Uncertainty')
+    ax.set_title('3D Trajectories with Uncertainty')
     plt.grid()
 
     if show_plot:
