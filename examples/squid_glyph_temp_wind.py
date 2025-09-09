@@ -50,8 +50,11 @@ point_cloud = pv.PolyData(grid_points)
 # Add the vectors to the plotter
 for i_ens in range(len(ensemble_members)):
     vectors = ensemble_vectors[:, i_ens, :]
-    arrows = pv.Arrow(start=grid_points, direction=vectors, scale=0.1)
-    plotter.add_mesh(arrows, color='red')
+    for i in range(len(grid_points)):
+        start = grid_points[i]
+        end = start + vectors[i] * 0.1
+        arrow = pv.Arrow(start, end)
+        plotter.add_mesh(arrow, color='green', opacity=0.1)
 
 plotter.add_axes()
 plotter.add_title("3D Wind Vectors")
