@@ -5,7 +5,7 @@ import multiprocessing
 
 from uvisbox.Datasets import flowmap_3d
 from uvisbox.Interpolations import linear_interpolate
-from uvisbox.UncertaintyTube import generate_uncertainty_tube, generate_tube_mesh
+from uvisbox.UncertaintyTube import generate_cross_sections, generate_tube_mesh
 
 def benchmark_uncertainty_tube(n_seeds=100, n_steps=100, n_jobs_list=[1, 4, 12], repeats=3):
     """
@@ -41,7 +41,7 @@ def benchmark_uncertainty_tube(n_seeds=100, n_steps=100, n_jobs_list=[1, 4, 12],
         times = []
         for i in range(repeats):
             start_time = time.perf_counter_ns()
-            _,_ = generate_uncertainty_tube(trajectories, None, 16, e_proj=0.5, n_jobs=n_jobs)
+            _,_ = generate_cross_sections(trajectories, None, 16, e_proj=0.5, n_jobs=n_jobs)
             end_time = time.perf_counter_ns()
             elapsed = (end_time - start_time) / 1e9  # Convert to seconds
             times.append(elapsed)
@@ -51,8 +51,8 @@ def benchmark_uncertainty_tube(n_seeds=100, n_steps=100, n_jobs_list=[1, 4, 12],
         print(f"n_jobs={n_jobs}: Mean time = {mean_time:.3f} ± {std_time:.3f} seconds")
         superellipse_results[n_jobs] = {'times': times, 'mean': mean_time, 'std': std_time}
 
-    cross_sections, _ = generate_uncertainty_tube(trajectories, None, 16, e_proj=0.5, n_jobs=12)
-    
+    cross_sections, _ = generate_cross_sections(trajectories, None, 16, e_proj=0.5, n_jobs=12)
+
     # Benchmark each n_jobs value
     meshing_results = {}
     

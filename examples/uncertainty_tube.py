@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from uvisbox.Datasets import flowmap_3d
 from uvisbox.Interpolations import linear_interpolate
-from uvisbox.UncertaintyTube import (generate_uncertainty_tube,generate_tube_mesh)
+from uvisbox.UncertaintyTube import (generate_cross_sections,generate_tube_mesh)
 from uvisbox.UncertaintyTube import plot_uncertainty_tube_from_mesh
 from uvisbox.Colors.colortree import ColorTree
 
@@ -28,8 +28,16 @@ seeds = np.random.uniform(-1,1, (number_of_seeds, 3))
 trajectories = flowmap_3d(seeds, t0, t1, n_steps, scale=scale, xy_scale=xy_scale)
 # trajectories are generated in [n_steps, n_seeds, n_samples, n_dims]
 
-cross_sections, eigen_values = generate_uncertainty_tube(trajectories, None, 16, e_proj=0.5, n_jobs=2)
 
+###
+### Key functions to generate uncertainty tubes
+###
+cross_sections, eigen_values = generate_cross_sections(trajectories, None, 16, e_proj=0.5, n_jobs=2)
+vertices, faces, mean_trajectories = generate_tube_mesh(trajectories, cross_sections, n_jobs=12)
+
+###
+### use eigen values to create texture coordinates
+###
 eigen_values = np.transpose(eigen_values, (1,0,2,3))
 eigen_values = eigen_values.reshape((-1,2)).astype(np.float32)
 
@@ -38,8 +46,6 @@ rescaled_max_eigen_values = linear_interpolate(max_eigen_values, max_eigen_value
 eigen_values_ratio = np.nan_to_num(eigen_values[:,1] / eigen_values[:,0] , nan=0.0, posinf=1.0, neginf=0.0) # the second axis
 
 uv_coords = np.stack([rescaled_max_eigen_values, eigen_values_ratio], axis=1)
-
-vertices, faces, mean_trajectories = generate_tube_mesh(trajectories, cross_sections, n_jobs=12)
 
 fig = plt.figure(figsize=(10,10))
 ax = fig.add_subplot(111, projection='3d')
