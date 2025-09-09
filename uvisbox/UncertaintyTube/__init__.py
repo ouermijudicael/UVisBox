@@ -1,4 +1,4 @@
-from .uncertainty_tube import generate_uncertainty_tube
+from .uncertainty_tube import generate_cross_sections
 from .uncertainty_tube_meshing import generate_tube_mesh
 from .uncertainty_tube_plot import plot_uncertainty_tube_from_mesh
 

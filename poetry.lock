@@ -1235,5 +1235,5 @@ web = ["wslink (>=1.0.4)"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.13"
-content-hash = "b682ef7d85129d128b8c6134036abff4b4a7685d2da4e6baba99855ddf7e61a6"
+python-versions = ">=3.11"
+content-hash = "51f991cf82b7602d52cf1cd1cca1ba65a0d9d294537182c612bbe447da7060e8"
