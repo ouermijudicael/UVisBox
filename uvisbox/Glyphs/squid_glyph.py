@@ -882,6 +882,59 @@ def uncertainty_squid_glyphs_3D(positions, ensemble_vectors, percentil, scale=0.
     return plotter, points, polygons
 
 
+def uncertainty_squid_glyphs_2D(positions, ensemble_vectors, percentil1, scale=0.2, ax=None):
+    """
+    Draws uncertainty squid glyphs for the given positions and ensemble vectors in 2D.
+
+    Parameters
+    ----------
+    positions : numpy.ndarray
+        Array of shape (n, 2) representing the positions of the squid glyphs.
+    ensemble_vectors : numpy.ndarray
+        Array of shape (n, m, 2) representing the ensemble vectors for each position.
+    percentil1 : float
+        The first percentile for depth filtering.
+    scale : float
+        The scale factor for the glyphs.
+    ax : matplotlib axis
+        The axis to draw on. If None, a new figure and axis will be created.
+
+    Returns
+    -------
+    ax : matplotlib axis
+        The axis with the drawn squid glyphs.
+    """
+    num_positions, num_ens_members =ensemble_vectors.shape[0], ensemble_vectors.shape[1]
+    
+    # Convert ensemble_vectors to spherical coordinates
+    ensemble_spherical_vectors = np.zeros_like(ensemble_vectors)
+    for i in range(num_positions):
+        ensemble_spherical_vectors[i] = cartesian_to_polar(ensemble_vectors[i])
+
+    # Ccalculate vector depths in spherical coordinates
+    depths = np.zeros((num_positions, num_ens_members))
+    for i in range(num_positions):
+        depths[i] = compute_vector_depths_2D(ensemble_spherical_vectors[i])
+
+    theta1 = np.zeros((num_positions, 2))
+    mid_angle = np.zeros(num_positions)
+    r1 = np.zeros(num_positions)
+
+    for i_pos in range(num_positions):
+        median_idx, min_mag, max_mag, min_angle, max_angle = calculate_spread_2D(ensemble_spherical_vectors[i_pos], depths[i_pos], percentil1)
+        median_vector = ensemble_spherical_vectors[i_pos][median_idx] if median_idx is not None else np.array([0,0])
+        theta1[i_pos] = np.degrees([min_angle, max_angle]) 
+       
+        mid_angle[i_pos] = np.degrees(median_vector[1]) if median_idx is not None else 0
+        r_arrow = median_vector[0] *scale if median_idx is not None else 0
+        r1[i_pos] = min_mag * scale 
+
+    # NOT READY
+
+    return ax
+
+
+
 def uncertainty_lobe_glyphs_2D(positions, ensemble_vectors, percentil1, percentil2=None, scale=0.2, ax=None):
     """
     Draws uncertainty lobe glyphs for the given positions and ensemble vectors.
@@ -940,4 +993,4 @@ def uncertainty_lobe_glyphs_2D(positions, ensemble_vectors, percentil1, percenti
 
     return ax
 
-   
+  
