@@ -1,64 +1,148 @@
 
-from uvisbox.Glyphs.squid_glyph import uncertainty_squid_glyphs
+from uvisbox.Glyphs.squid_glyph import uncertainty_lobe_glyphs_2D
 import numpy as np
 import matplotlib.pyplot as plt
-A = 0.1
-omega = np.pi
-epsilon = 0.25
-def double_gyre(x, y, t=0):
-    a = epsilon * np.sin(omega * t)
-    b = 1 - 2 * a
-    f = a * x**2 + b * x
-    df_dx = 2 * a * x + b
-    u = -np.pi * A * np.sin(np.pi * f) * np.cos(np.pi * y)
-    v = np.pi * A * np.cos(np.pi * f) * np.sin(np.pi * y) * df_dx
-    return u, v
+num_poitns = 15
 
-fig2, ax2 = plt.subplots(figsize=(20, 10))
-# Change domain to [0,2] x [0,1]
-X, Y = np.meshgrid(np.linspace(0, 2, 10), np.linspace(0, 1, 5))
-U, V = double_gyre(X, Y)
-# Create ensemble data by perturbing vector magnitude and direction with Gaussian noise
-n_ensemble = 20  # number of ensemble members
-rng = np.random.default_rng(seed=42)
+# cerate 5x3 grid points
+x = np.linspace(0, 4, 5)
+y = np.linspace(0, 2, 3)
+X, Y = np.meshgrid(x, y)
+grid_points = np.vstack((X.flatten(), Y.flatten())).T
 
-# Flatten the grid for easier perturbation
-X_flat = X.flatten()
-Y_flat = Y.flatten()
-U_flat = U.flatten()
-V_flat = V.flatten()
-n_points = X_flat.size
+np.random.seed(72)
+ensemble_size = 30
+ensemble_vectors = np.zeros((num_poitns, ensemble_size, 2))
+count = 0
+for i in range(num_poitns):
+    # add random random vectors with Gaussian noise in the first quadrant 0 to pi/2
+    if count == 0:
+        angles = np.random.uniform(0, np.pi / 2, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    elif count == 1:
+        angles = np.random.uniform(np.pi / 2, np.pi, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    elif count == 2:
+        angles = np.random.uniform(-np.pi, - np.pi / 2, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    elif count == 3:
+        angles = np.random.uniform(-np.pi / 2, 0, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    # place random vectors in the first and second quadrant
+    elif count == 4:
+        angles = np.random.uniform(0, np.pi, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    # place random vectors in the second and third quadrant
+    elif count == 5:
+        angles = np.random.uniform(np.pi / 2, 3*np.pi / 2, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    # place random vectors in the third and fourth quadrant
+    elif count == 6:
+        angles = np.random.uniform(np.pi, 2*np.pi, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    # place random vectors in the fourth and first quadrant
+    elif count == 7:
+        angles = np.random.uniform(-np.pi / 2, np.pi / 2, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    # place random vectors in first, second, and third quadrants
+    elif count == 8:
+        angles = np.random.uniform(0, -np.pi / 2, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    # place random vectors in second, third, and fourth quadrants
+    elif count == 9:
+        angles = np.random.uniform(np.pi / 2, -np.pi, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    # place random vectors in third, fourth, and first quadrants
+    elif count == 10:
+        angles = np.random.uniform(-np.pi, np.pi / 2, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    # place random vectors in fourth, first, and second quadrants
+    elif count == 11:
+        angles = np.random.uniform(-np.pi / 2, np.pi, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    # place vectors first and third quadrants
+    elif count == 12:
+        angles = np.random.uniform(-np.pi / 2, np.pi / 2, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    # place vectors in second and fourth quadrants
+    elif count == 13:
+        angles = np.random.uniform(np.pi / 2, -np.pi / 2, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    # place vectors in all four quadrants
+    elif count == 14:
+        angles = np.random.uniform(-np.pi, np.pi, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    else:
+        angles = np.random.uniform(0, 2 * np.pi, ensemble_size)
+        magnitudes = np.random.uniform(0.5, 1.5, ensemble_size)
+        ensemble_vectors[i, :, 0] = magnitudes * np.cos(angles)
+        ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
+    count += 1
 
-# Compute magnitude and angle
-mag = np.sqrt(U_flat**2 + V_flat**2)
-angle = np.arctan2(V_flat, U_flat)
-
-# Standard deviations for noise (tune as needed)
-mag_noise_std = 0.20 * mag.max()
-angle_noise_std = np.deg2rad(5)  # 5 degree std
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 30))
 
 
-n_ensemble = 20
-ensemble_vectors = np.zeros((n_points, n_ensemble, 2))
+# First subplot: Original Vector Field with Ensemble Members
+for i in range(num_poitns):
+    for j in range(ensemble_size):
+        u, v = ensemble_vectors[i, j]
+        x, y = grid_points[i]
+        ax1.arrow(x, y, u * 0.5, v * 0.5, head_width=0.03, head_length=0.06, fc='blue', ec='blue', alpha=1, length_includes_head=True)
+ax1.set_xlim(-1, 5)
+ax1.set_ylim(-1, 3)
+ax1.set_title("Original Vector Field with Ensemble Members")
+ax1.set_xlabel("X")
+ax1.set_ylabel("Y")
+ax1.grid()
 
-for i in range(n_points):
-    for j in range(n_ensemble):
-        # Perturb magnitude and anglels
-        mag_perturbed = mag[i] + rng.normal(0, mag_noise_std)
-        angle_perturbed = angle[i] + rng.normal(0, angle_noise_std)
+# Second subplot: Uncertainty Lobe Glyphs
+ax2 = uncertainty_lobe_glyphs_2D(grid_points, ensemble_vectors, 1.0, 0.5, scale=0.4, ax=ax2)
+ax2.set_title("Uncertainty Lobe Glyphs")
+ax2.set_xlim(-1, 5)
+ax2.set_ylim(-1, 3)
+ax2.set_xlabel("X")
+ax2.set_ylabel("Y")
+ax2.grid()
 
-        # Convert back to Cartesian coordinates
-        ensemble_vectors[i, j] = [
-            mag_perturbed * np.cos(angle_perturbed),
-            mag_perturbed * np.sin(angle_perturbed)
-        ]
-positions = np.vstack((X_flat, Y_flat)).T
-ax2 = uncertainty_squid_glyphs(positions, ensemble_vectors, 0.5, 0.95, ax=ax2)
+# Third subplot: Uncertainty Lobe Glyphs
+ax3 = uncertainty_lobe_glyphs_2D(grid_points, ensemble_vectors, 0.5, scale=0.4, ax=ax3)
+ax3.set_title("Uncertainty Lobe Glyphs")
+ax3.set_xlim(-1, 5)
+ax3.set_ylim(-1, 3)
+ax3.set_xlabel("X")
+ax3.set_ylabel("Y")
+ax3.grid()
 
-plt.title("Uncertainty Squid Glyphs for Double Gyre Flow")
-plt.xlim(0, 2)
-plt.ylim(0, 1)
-plt.xlabel("X")
-plt.ylabel("Y")
-plt.grid()
+plt.tight_layout()
+# plt.savefig("test_squid_glyphs.png", dpi=300)
 plt.show()

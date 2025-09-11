@@ -20,12 +20,12 @@ def cartesian_to_polar(vectors):
         Array of shape (n, 2) with columns [magnitude, angle in radians].
     """
     magnitudes = np.linalg.norm(vectors, axis=1)
-    angles_from_origin = np.arctan2(vectors[:, 1], vectors[:, 0])
-    angles =np.unwrap(angles_from_origin)
+    valid_indices = magnitudes > 1.0e-8  # Filter vectors with norm greater than 1.0e-8
+    angles = np.zeros_like(magnitudes)
+    angles[valid_indices] = np.arctan2(vectors[valid_indices, 1], vectors[valid_indices, 0])
+    angles = np.unwrap(angles)  # Unwrap to ensure continuity in angles
+    angles = (angles + np.pi) % (2 * np.pi) - np.pi  # Ensure angles are in the range [-pi, pi]
     polar_coords = np.column_stack((magnitudes, angles))
-    # if np.any(np.isnan(polar_coords)):
-    #     print("Invalid vectors detected:", vectors)
-    #     raise ValueError("NaN values found in polar coordinates conversion.")
     return polar_coords
 
 
@@ -55,6 +55,7 @@ def cartesian_to_spherical(vectors):
     #     print("Spherical coordinates:", spherical_coords)
     #     raise ValueError("NaN values found in spherical coordinates conversion.")
     return spherical_coords
+
 
 def angular_spread(vectors):
     """
@@ -110,7 +111,7 @@ def magnitude_spread(vectors):
     return magnitude_spread, min_mag_idx, max_mag_idx
 
 
-def compute_vector_depths(vectors):
+def compute_vector_depths_2D(vectors):
     """
     Compute the depth of each vector in the ensemble.
     Parameters
@@ -141,8 +142,8 @@ def compute_vector_depths(vectors):
             # print(f"angle_i: {angle_i}, angle_j: {angle_j}, angle_k: {angle_k}")
 
             # Check if vector i is between vectors j and k and magnitude is also between
-            if (angle_j < angle_i < angle_k or angle_k < angle_i < angle_j) and \
-               (min(mag_j, mag_k) < mag_i < max(mag_j, mag_k)):
+            if (angle_j <= angle_i <= angle_k or angle_k <= angle_i <= angle_j) and \
+               (min(mag_j, mag_k) <= mag_i <= max(mag_j, mag_k)):
                 depth += 1
 
         depths[i] = depth
@@ -274,7 +275,7 @@ def get_squid_glyph_info(vectors, vector_depths, percentile1=0.5, percentile2=0.
     return theta_high, r_high, min_angle_high, max_angle_high, theta_low, r_low, min_angle_low, max_angle_low, median_mag, median_angle
 
 
-def draw_wedges_with_arrow(ax, centers, theta1, theta2, mid_angle, r1, r2):
+def draw_wedges_with_arrow(ax, centers, theta1, theta2, mid_angle, r1, r2, r_arrow):
     """
     Draws multiple wedges with arrows.
     Parameters
@@ -294,22 +295,22 @@ def draw_wedges_with_arrow(ax, centers, theta1, theta2, mid_angle, r1, r2):
     """
     n = centers.shape[0]
     # Support scalar or iterable for r1 and r2
-    r1s = np.full(n, r1) if np.isscalar(r1) else np.asarray(r1)
-    r2s = np.full(n, r2) if np.isscalar(r2) else np.asarray(r2)
     for i in range(n):
         center = centers[i]
         t1_start, t1_end = theta1[i]
-        t2_start, t2_end = theta2[i]
-        wedge = Wedge(center=center, r=r1s[i], theta1=t1_start, theta2=t1_end, facecolor='skyblue', edgecolor='skyblue', alpha=0.3)
-        wedge2 = Wedge(center=center, r=r2s[i], theta1=t2_start, theta2=t2_end, facecolor='skyblue', edgecolor='skyblue', alpha=1.0)
+        wedge = Wedge(center=center, r=r1[i], theta1=t1_start, theta2=t1_end, facecolor='skyblue', edgecolor='skyblue', alpha=1.0)
+        if r2[i] > 0.0:
+            t2_start, t2_end = theta2[i]
+            wedge2 = Wedge(center=center, r=r2[i], theta1=t2_start, theta2=t2_end, facecolor='skyblue', edgecolor='skyblue', alpha=0.3)
         ax.annotate(
             '', 
-            xy=(center[0] + r2s[i] * np.cos(np.deg2rad(mid_angle[i])), center[1] + r2s[i] * np.sin(np.deg2rad(mid_angle[i]))),
+            xy=(center[0] + r_arrow * np.cos(np.deg2rad(mid_angle[i])), center[1] + r_arrow * np.sin(np.deg2rad(mid_angle[i]))),
             xytext=center,
             arrowprops=dict(facecolor='blue', edgecolor='blue', arrowstyle='->', lw=3, mutation_scale=20, alpha=0.8)
         )
         ax.add_patch(wedge)
-        ax.add_patch(wedge2)
+        if r2[i] > 0.0:
+            ax.add_patch(wedge2)
 
 
 def uncertainty_squid_glyphs(positions, ensemble_vectors, percentil1, percentil2, scale=0.2, ax=None):
@@ -349,7 +350,7 @@ def uncertainty_squid_glyphs(positions, ensemble_vectors, percentil1, percentil2
 
     for i_pos in range(num_positions):
         # computer vector depths for ensemble_vectors[i_pos]
-        depths = compute_vector_depths(ensemble_vectors[i_pos])
+        depths = compute_vector_depths_2D(ensemble_vectors[i_pos])
         # print(f"Depths for position {i_pos}: {depths}")
         theta_high, r_high, min_angle_high, max_angle_high, theta_low, r_low, min_angle_low, max_angle_low, median_mag, median_angle = get_squid_glyph_info(ensemble_vectors[i_pos], depths, percentil1, percentil2)
         theta1[i_pos] = np.degrees([min_angle_high, max_angle_high]) if min_angle_high is not None else [0, 0]
@@ -361,6 +362,7 @@ def uncertainty_squid_glyphs(positions, ensemble_vectors, percentil1, percentil2
     draw_wedges_with_arrow(ax, positions, theta1, theta2, mid_angle, r1, r2)
 
     return ax
+
 
 def calculate_spread_3D(vectors, depths, percentil):
     """
@@ -395,6 +397,58 @@ def calculate_spread_3D(vectors, depths, percentil):
         min_mag_idx, max_mag_idx = None, None
 
     return median_idx, min_mag_idx, max_mag_idx, min_theta_idx, max_theta_idx, min_phi_idx, max_phi_idx
+
+
+def calculate_spread_2D(vectors, depths, percentil):
+    """
+    Calculate the spread in 2D polar coordinates.
+    Parameters
+    ----------
+        vectors : numpy.ndarray
+            Array of shape (n, 2) in polar coordinates (magnitude, angle)
+        depths : numpy.ndarray
+            Array of shape (n,) representing the depth of each vector
+        percentil : float
+            The percentile for depth filtering
+    Returns
+    -------
+        tuple
+            Indices of vectors with min/max magnitude, angle among those with depth > 1.0-percentil
+    """
+
+    first_quadrant = False # Set to True if you want to restrict to first quadrant 0 to pi/2
+    second_quadrant = False # Set to True if you want to restrict to second quadrant pi/2 to pi
+    third_quadrant = False # Set to True if you want to restrict to third quadrant -pi to -pi/2
+    fourth_quadrant = False # Set to True if you want to restrict to fourth quadrant -pi/2 to 0
+    indices = np.where(depths >= 1.0-percentil)[0]
+    median_idx = np.argmax(depths)
+    if indices.size > 0:
+        filtered_vectors = vectors[indices]
+        # Check if any vector is in the first quadrant
+        first_quadrant = np.any((filtered_vectors[:, 1] >= 0) & (filtered_vectors[:, 1] <= np.pi/2)) 
+        second_quadrant = np.any((filtered_vectors[:, 1] > np.pi/2) & (filtered_vectors[:, 1] <= np.pi))
+        third_quadrant = np.any((filtered_vectors[:, 1] < -np.pi/2) & (filtered_vectors[:, 1] >= -np.pi))
+        fourth_quadrant = np.any((filtered_vectors[:, 1] < 0) & (filtered_vectors[:, 1] >= -np.pi/2))
+        if ((not first_quadrant and second_quadrant and third_quadrant and not fourth_quadrant ) or  
+           (not first_quadrant and second_quadrant and third_quadrant and fourth_quadrant ) or  
+              (first_quadrant and second_quadrant and third_quadrant and not fourth_quadrant )):
+            # find smallest positive angle and smallest negative angle
+            pos_angles = filtered_vectors[filtered_vectors[:, 1] >= 0]
+            neg_angles = filtered_vectors[filtered_vectors[:, 1] < 0]
+            min_angle = np.min(pos_angles[:, 1])
+            max_angle = np.max(neg_angles[:, 1])
+            min_mag = np.min(filtered_vectors[:, 0])
+            max_mag = np.max(filtered_vectors[:, 0])
+        else:           
+            min_angle = np.min(filtered_vectors[:, 1])
+            max_angle = np.max(filtered_vectors[:, 1])
+            min_mag = np.min(filtered_vectors[:, 0])
+            max_mag = np.max(filtered_vectors[:, 0])
+    else:
+        min_angle, max_angle = 0.0, 0.0
+        min_mag, max_mag = 0.0, 0.0
+
+    return median_idx, min_mag, max_mag, min_angle, max_angle
 
 
 def getDirectionalVariations(vectors, depths, depth_threshold, min_vectors, median_vectors, max_vectors):
@@ -737,88 +791,6 @@ def buildSuperElipticalSquidNP(directional_variations, positions, vectors, min_v
     return points, polygons
 
 
-
-def uncertainty_squid_glyphs_3D_2(positions, ensemble_vectors, percentil, scale=0.5, ax=None):
-    """
-    Draws uncertainty squid glyphs for the given positions and ensemble vectors in 3D.
-    Parameters
-    ----------
-    positions : numpy.ndarray
-        Array of shape (n, 3) The positions of the squid glyphs.
-    ensemble_vectors : numpy.ndarray
-        Array of shape (n, m, 3) The ensemble vectors in spherical coordinates.
-        The ensemble vectors for each position in Cartesian coordinates.
-    percentil : float
-        The first percentile for depth filtering.
-    scale : float
-        The scale factor for the glyphs.
-    ax : matplotlib 3D axis
-        The axis to draw on. If None, a new figure and axis will be created.
-
-
-    Returns
-    -------
-    ax : matplotlib 3D axis
-        The axis with the drawn squid glyphs.
-    """
-
-    if ax is None:
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-    num_positions, num_ens_members =ensemble_vectors.shape[0], ensemble_vectors.shape[1]
-    
-    # Convert ensemble_vectors to spherical coordinates
-    ensemble_spherical_vectors = np.zeros_like(ensemble_vectors)
-    for i in range(num_positions):
-        ensemble_spherical_vectors[i] = cartesian_to_spherical(ensemble_vectors[i])
-
-    # Ccalculate vector depths in spherical coordinates
-    depths = np.zeros((num_positions, num_ens_members))
-    for i in range(num_positions):
-        depths[i] = compute_vector_depths_3D(ensemble_spherical_vectors[i])
-
-    min_vectors = np.zeros((num_positions, 3))
-    max_vectors = np.zeros((num_positions, 3))
-    median_vectors = np.zeros((num_positions, 3))
-    glyph_markers = np.zeros((num_positions,), dtype=int)
-    numb_of_glyphs = 0
-    num_arrows = 0
-    for i_pos in range(num_positions):
-        # find indices where depth > 1.0-percentil
-        median_idx, min_mag_idx, max_mag_idx, min_theta_idx, max_theta_idx, min_phi_idx, max_phi_idx = calculate_spread_3D(ensemble_spherical_vectors[i_pos], depths[i_pos], percentil)
-        median_vectors[i_pos] = ensemble_spherical_vectors[i_pos][median_idx] if median_idx is not None else np.array([0,0,0])
-        min_mag_temp = ensemble_spherical_vectors[i_pos][min_mag_idx] if min_mag_idx is not None else np.array([0,0,0])
-        max_mag_temp = ensemble_spherical_vectors[i_pos][max_mag_idx] if max_mag_idx is not None else np.array([0,0,0])
-        min_phi = ensemble_spherical_vectors[i_pos][min_phi_idx][2] if min_phi_idx is not None else 0
-        max_phi = ensemble_spherical_vectors[i_pos][max_phi_idx][2] if max_phi_idx is not None else 0
-        min_theta = ensemble_spherical_vectors[i_pos][min_theta_idx][1] if min_theta_idx is not None else 0
-        max_theta = ensemble_spherical_vectors[i_pos][max_theta_idx][1] if max_theta_idx is not None else 0
-        min_vectors[i_pos] = np.array([min_mag_temp[0], min_theta, min_phi])
-        max_vectors[i_pos] = np.array([max_mag_temp[0], max_theta, max_phi])
-        if (np.absolute(max_vectors[i_pos][0]-min_vectors[i_pos][0]) > 1e-5) and \
-           (np.absolute(max_vectors[i_pos][1]-min_vectors[i_pos][1]) > 1e-5) and \
-           (np.absolute(max_vectors[i_pos][2]-min_vectors[i_pos][2]) > 1e-5):
-            glyph_markers[i_pos] = 1
-            numb_of_glyphs += 1
-        elif(max_vectors[i_pos][0] > 1e-3):
-            glyph_markers[i_pos] = 2
-            num_arrows += 1
-
-
-    # compute directional variations
-    depth_threshold = 1.0 - percentil
-    directional_variations = getDirectionalVariations(ensemble_vectors, depths, depth_threshold, min_vectors, median_vectors, max_vectors)
-    
-    # build squid glyphs
-    points, polygons = buildSuperElipticalSquidNP(directional_variations, positions, ensemble_spherical_vectors, min_vectors, median_vectors, max_vectors, glyph_markers, scale, resolution=10, num_of_glyphs=numb_of_glyphs)
-    
-    # Draw the glyphs using trisurf
-    ax.plot_trisurf(points[:,0], points[:,1], points[:,2], triangles=polygons, color='skyblue', alpha=0.75, edgecolor='grey')
-
-    return ax, points, polygons
-
-
-
 def uncertainty_squid_glyphs_3D(positions, ensemble_vectors, percentil, scale=0.5, 
                                 show_edges=True, glyph_color='lightblue'):
     """
@@ -908,3 +880,64 @@ def uncertainty_squid_glyphs_3D(positions, ensemble_vectors, percentil, scale=0.
     plotter.show(title="3D Uncertainty Squid Glyphs")
 
     return plotter, points, polygons
+
+
+def uncertainty_lobe_glyphs_2D(positions, ensemble_vectors, percentil1, percentil2=None, scale=0.2, ax=None):
+    """
+    Draws uncertainty lobe glyphs for the given positions and ensemble vectors.
+
+    Parameters
+    ----------
+    positions : numpy.ndarray
+        Array of shape (n, 2) representing the positions of the lobe glyphs.
+    ensemble_vectors : numpy.ndarray
+        Array of shape (n, m, 2) representing the ensemble vectors for each position.
+    percentil1 : float
+        The first percentile for depth filtering.
+    percentil2 : float, optional
+        The second percentile for depth filtering. If None, only one lobe is drawn.
+    scale : float
+        The scale factor for the glyphs.
+    ax : matplotlib axis
+        The axis to draw on. If None, a new figure and axis will be created.
+
+    Returns
+    -------
+    ax : matplotlib axis
+        The axis with the drawn lobe glyphs.
+    """
+    num_positions, num_ens_members =ensemble_vectors.shape[0], ensemble_vectors.shape[1]
+    
+    # Convert ensemble_vectors to spherical coordinates
+    ensemble_spherical_vectors = np.zeros_like(ensemble_vectors)
+    for i in range(num_positions):
+        ensemble_spherical_vectors[i] = cartesian_to_polar(ensemble_vectors[i])
+
+    # Ccalculate vector depths in spherical coordinates
+    depths = np.zeros((num_positions, num_ens_members))
+    for i in range(num_positions):
+        depths[i] = compute_vector_depths_2D(ensemble_spherical_vectors[i])
+
+    theta1 = np.zeros((num_positions, 2))
+    theta2 = np.zeros((num_positions, 2)) if percentil2 is not None else None
+    mid_angle = np.zeros(num_positions)
+    r1 = np.zeros(num_positions)
+    r2 = np.zeros(num_positions) 
+    for i_pos in range(num_positions):
+        median_idx, min_mag, max_mag, min_angle, max_angle = calculate_spread_2D(ensemble_spherical_vectors[i_pos], depths[i_pos], percentil1)
+        median_vector = ensemble_spherical_vectors[i_pos][median_idx] if median_idx is not None else np.array([0,0])
+        theta1[i_pos] = np.degrees([min_angle, max_angle]) 
+       
+        mid_angle[i_pos] = np.degrees(median_vector[1]) if median_idx is not None else 0
+        r_arrow = median_vector[0] *scale if median_idx is not None else 0
+        r1[i_pos] = min_mag * scale 
+
+        if percentil2 is not None:
+            r2[i_pos] = max_mag * scale
+            _, _, _, min_angle2, max_angle2 = calculate_spread_2D(ensemble_spherical_vectors[i_pos], depths[i_pos], percentil2)
+            theta2[i_pos] = np.degrees([min_angle2, max_angle2])
+    draw_wedges_with_arrow(ax, positions, theta1, theta2, mid_angle, r1, r2, r_arrow)
+
+    return ax
+
+   
