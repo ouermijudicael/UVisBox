@@ -43,4 +43,5 @@ if __name__ == "__main__":
     contour_boxplot(binary_images, ax=ax[1], show_median=True, show_iqr=True, show_non_outliers=True, show_outliers=True, show_firstquartile=True, outlier_percentile=95)
     ax[1].set_title("Contour Boxplot")
     ax[0].set_aspect('equal', adjustable='box')
+    plt.savefig("contour_boxplot.png", dpi=300)
     plt.show()

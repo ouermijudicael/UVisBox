@@ -72,4 +72,5 @@ plot_uncertainty_tube_from_mesh(vertices, faces, mean_trajectories, uv_coords, a
 # ax.set_ylabel("Uncertainty")
 # ax.set_xlabel("Symmetry")
 plt.tight_layout()
+plt.savefig("uncertainty_tube.png", dpi=300)
 plt.show()

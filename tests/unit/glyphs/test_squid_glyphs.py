@@ -144,5 +144,5 @@ ax3.set_ylabel("Y")
 ax3.grid()
 
 plt.tight_layout()
-# plt.savefig("test_squid_glyphs.png", dpi=300)
+plt.savefig("test_squid_glyphs.png", dpi=300)
 plt.show()
