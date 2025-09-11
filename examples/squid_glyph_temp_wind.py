@@ -1,6 +1,6 @@
 import xarray as xr
 import matplotlib.pyplot as plt 
-from uvisbox.Glyphs.squid_glyph import  uncertainty_squid_glyphs_3D, uncertainty_squid_glyphs_3D_2
+from uvisbox.Glyphs.squid_glyph import  uncertainty_squid_glyphs_3D
 import numpy as np
 import uvisbox.Datasets.temperature_and_wind_data as twd
 import pyvista as pv
@@ -50,15 +50,15 @@ point_cloud = pv.PolyData(grid_points)
 # Add the vectors to the plotter
 for i_ens in range(len(ensemble_members)):
     vectors = ensemble_vectors[:, i_ens, :]
-    for i in range(len(grid_points)):
-        start = grid_points[i]
-        end = start + vectors[i] * 0.1
-        arrow = pv.Arrow(start, end)
-        plotter.add_mesh(arrow, color='green', opacity=0.1)
+#     for i in range(len(grid_points)):
+#         start = grid_points[i]
+#         end = start + vectors[i] * 0.1
+#         arrow = pv.Arrow(start, end)
+#         plotter.add_mesh(arrow, color='green', opacity=0.1)
 
-plotter.add_axes()
-plotter.add_title("3D Wind Vectors")
-plotter.show()
+# plotter.add_axes()
+# plotter.add_title("3D Wind Vectors")
+# plotter.show()
 
 plotter2, points, triangles = uncertainty_squid_glyphs_3D(grid_points, ensemble_vectors, 0.95, 0.05)
 plotter2.show()

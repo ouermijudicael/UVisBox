@@ -5,7 +5,7 @@
 
 UVisBox (Still in Development)
 =====================
-This project is a Python toolbox for visualizing scientific uncertainty data. It aims to provide a collection of methods for representing and exploring uncertainty in various scientific datasets.
+UVisBox is an open-source Python based toolvbox for visulizazing uncertainty from scientific data.t provides a collection of methods for representing and exploring uncertainty in various scientific datasets.
 
 
 .. toctree::
