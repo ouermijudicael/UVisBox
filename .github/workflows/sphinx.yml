@@ -34,6 +34,8 @@ jobs:
       - name: Build Sphinx documentation
         run: |
           cd docs
+          cd source
+          sphinx-apidoc -o source/ ../../uvisbox
           make html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
