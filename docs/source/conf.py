@@ -9,7 +9,7 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../..'))
 
 project = 'UVisBox'
 copyright = '2025, Timbwaoga A. J. Ouermi and Jixian Li'
@@ -19,7 +19,12 @@ release = '0.0.1'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon", "sphinx.ext.viewcode"]
+extensions = ["sphinx.ext.autodoc", 
+              "sphinx.ext.napoleon", 
+              "sphinx_autodoc_typehints",
+              "sphinx_autosummary",
+              "shpinx_audocth_typehints",
+              "sphinx.ext.viewcode"]
 
 templates_path = ['_templates']
 exclude_patterns = []

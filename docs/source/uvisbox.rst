@@ -13,6 +13,8 @@ Subpackages
    uvisbox.Glyphs
    uvisbox.Interpolations
    uvisbox.UncertaintyTube
+   uvisbox.ProbabilisticMarchingSquares
+   uvisbox.ProbabilisticMarchingTriangles
 
 Module contents
 ---------------
