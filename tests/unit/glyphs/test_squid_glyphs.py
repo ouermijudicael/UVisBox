@@ -110,8 +110,7 @@ for i in range(num_poitns):
         ensemble_vectors[i, :, 1] = magnitudes * np.sin(angles)
     count += 1
 
-fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 30))
-
+fig1, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 30))
 
 # First subplot: Original Vector Field with Ensemble Members
 for i in range(num_poitns):
@@ -144,29 +143,31 @@ ax3.set_xlabel("X")
 ax3.set_ylabel("Y")
 ax3.grid()
 
-plt.tight_layout()
-plt.savefig("test_squid_glyphs.png", dpi=300)
-plt.show()
+# plt.tight_layout()
+# plt.savefig("test_squid_glyphs.png", dpi=300)
 
-fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 30))
+fig2, (ax4, ax5) = plt.subplots(2, 1, figsize=(8, 18))
 # First subplot: Original Vector Field with Ensemble Members
 for i in range(num_poitns):
     for j in range(ensemble_size):
         u, v = ensemble_vectors[i, j]
         x, y = grid_points[i]
-        ax1.arrow(x, y, u * 0.5, v * 0.5, head_width=0.03, head_length=0.06, fc='blue', ec='blue', alpha=1, length_includes_head=True)
-ax1.set_xlim(-1, 5)
-ax1.set_ylim(-1, 3)
-ax1.set_title("Original Vector Field with Ensemble Members")
-ax1.set_xlabel("X")
-ax1.set_ylabel("Y")
-ax1.grid()
+        ax4.arrow(x, y, u * 0.5, v * 0.5, head_width=0.03, head_length=0.06, fc='blue', ec='blue', alpha=1, length_includes_head=True)
+ax4.set_xlim(-1, 5)
+ax4.set_ylim(-1, 3)
+ax4.set_title("Original Vector Field with Ensemble Members")
+ax4.set_xlabel("X")
+ax4.set_ylabel("Y")
+ax4.grid()
 
 # Second subplot: Uncertainty Lobe Glyphs
-ax2 = uncertainty_squid_glyphs_2D(grid_points, ensemble_vectors, 1.0, scale=0.4, ax=ax2)
-ax2.set_title("Uncertainty Lobe Glyphs")
-ax2.set_xlim(-1, 5)
-ax2.set_ylim(-1, 3)
-ax2.set_xlabel("X")
-ax2.set_ylabel("Y")
-ax2.grid()
+ax5 = uncertainty_squid_glyphs_2D(grid_points, ensemble_vectors, 1.0, scale=0.4, ax=ax5)
+ax5.set_title("Uncertainty Lobe Glyphs")
+ax5.set_xlim(-1, 5)
+ax5.set_ylim(-1, 3)
+ax5.set_xlabel("X")
+ax5.set_ylabel("Y")
+ax5.grid()
+plt.tight_layout()
+plt.savefig("test_squid_glyphs_debug.png", dpi=300)
+plt.show()

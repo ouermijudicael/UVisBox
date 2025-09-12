@@ -920,15 +920,15 @@ def uncertainty_squid_glyphs_2D(positions, ensemble_vectors, percentil1, scale=0
     mid_angle = np.zeros(num_positions)
     r1 = np.zeros(num_positions)
 
-    glyphs_points = np.zeros((num_positions*4, 2))
-    glyphs_polygons = np.zeros((num_positions*2, 3), dtype=int)
+    glyphs_points = np.zeros((num_positions*11, 2))
+    glyphs_polygons = np.zeros((num_positions*5, 3), dtype=int)
     tri_idx = 0
     point_idx = 0
     for i_pos in range(num_positions):
 
         median_idx = np.argmax(depths[i_pos])
         median_vector = ensemble_polar_vectors[i_pos][median_idx] if median_idx is not None else np.array([0,0])
-        indices = np.where(depths[i_pos] > 1.0 - percentil1)[0]
+        indices = np.where(depths[i_pos] >= 1.0 - percentil1)[0]
         min_mag = np.min(ensemble_polar_vectors[i_pos][indices][:, 0]) if indices.size > 0 else 0
         max_mag = np.max(ensemble_polar_vectors[i_pos][indices][:, 0]) if indices.size > 0 else 0
         min_angle = np.min(ensemble_polar_vectors[i_pos][indices][:, 1]) if indices.size > 0 else 0
@@ -936,35 +936,37 @@ def uncertainty_squid_glyphs_2D(positions, ensemble_vectors, percentil1, scale=0
         
         # rotate all angles by 90-mid_angle so the median vector aligns with the y-axis
         #  and project all vectors onto the x-axis
-        x_projection = ensemble_polar_vectors[indices][:, 0] * np.cos(ensemble_polar_vectors[indices][:, 1] - np.radians(mid_angle[i_pos]))
-        base = np.max(x_projection)-np.min(x_projection)
+        # x_projection = ensemble_polar_vectors[i_pos][indices, 0] * np.cos(ensemble_polar_vectors[i_pos][indices, 1] - np.radians(mid_angle[i_pos]))
+    
         delta_h = max_mag -min_mag
         h = median_vector[0]
 
-        rad_angle = np.radians(median_vector[1])
+        rad_angle = (max_angle - min_angle)*0.5
+        rot_angle = median_vector[1]
+        base = 2* np.arctan(rad_angle)*max_mag
         # build 2D squid glyph triangulation
         if (base > 1e-5) and (delta_h > 1e-5):
             # base bottom left
             pt = np.array([- base * 0.5, 0]) * scale
-            pt = np.array([pt[0]*np.cos(rad_angle) - pt[1]*np.sin(rad_angle),
-                           pt[0]*np.sin(rad_angle) + pt[1]*np.cos(rad_angle)])
+            pt = np.array([pt[0]*np.cos(rot_angle) - pt[1]*np.sin(rot_angle),
+                           pt[0]*np.sin(rot_angle) + pt[1]*np.cos(rot_angle)])
             pt = pt + positions[i_pos]
             
             # base bottom right
             pt1 = np.array([base * 0.5, 0]) * scale
-            pt1 = np.array([pt1[0]*np.cos(rad_angle) - pt1[1]*np.sin(rad_angle),
-                            pt1[0]*np.sin(rad_angle) + pt1[1]*np.cos(rad_angle)])
+            pt1 = np.array([pt1[0]*np.cos(rot_angle) - pt1[1]*np.sin(rot_angle),
+                            pt1[0]*np.sin(rot_angle) + pt1[1]*np.cos(rot_angle)])
             pt1 = pt1 + positions[i_pos]
 
             # base top left
             pt2 = np.array([- base * 0.5, delta_h]) * scale
-            pt2 = np.array([pt2[0]*np.cos(rad_angle) - pt2[1]*np.sin(rad_angle),
-                            pt2[0]*np.sin(rad_angle) + pt2[1]*np.cos(rad_angle)])
+            pt2 = np.array([pt2[0]*np.cos(rot_angle) - pt2[1]*np.sin(rot_angle),
+                            pt2[0]*np.sin(rot_angle) + pt2[1]*np.cos(rot_angle)])
             pt2 = pt2 + positions[i_pos]
             # base top right
             pt3 = np.array([base * 0.5, delta_h]) * scale
-            pt3 = np.array([pt3[0]*np.cos(rad_angle) - pt3[1]*np.sin(rad_angle),
-                            pt3[0]*np.sin(rad_angle) + pt3[1]*np.cos(rad_angle)])
+            pt3 = np.array([pt3[0]*np.cos(rot_angle) - pt3[1]*np.sin(rot_angle),
+                            pt3[0]*np.sin(rot_angle) + pt3[1]*np.cos(rot_angle)])
             pt3 = pt3 + positions[i_pos]
             glyphs_points[point_idx] = pt
             glyphs_points[point_idx+1] = pt1
@@ -975,10 +977,62 @@ def uncertainty_squid_glyphs_2D(positions, ensemble_vectors, percentil1, scale=0
             tri_idx += 2
             point_idx += 4
 
+            # shaft bottom left
+            shaft_pt = np.array([- np.arctan(rad_angle)*h, delta_h]) * scale
+            shaft_pt = np.array([shaft_pt[0]*np.cos(rot_angle) - shaft_pt[1]*np.sin(rot_angle),
+                                 shaft_pt[0]*np.sin(rot_angle) + shaft_pt[1]*np.cos(rot_angle)])
+            shaft_pt = shaft_pt + positions[i_pos]
+            # shaft bottom right
+            shaft_pt1 = np.array([np.arctan(rad_angle)*h, delta_h]) * scale
+            shaft_pt1 = np.array([shaft_pt1[0]*np.cos(rot_angle) - shaft_pt1[1]*np.sin(rot_angle),
+                                  shaft_pt1[0]*np.sin(rot_angle) + shaft_pt1[1]*np.cos(rot_angle)])
+            shaft_pt1 = shaft_pt1 + positions[i_pos]
+            # shaft top left
+            shaft_pt2 = np.array([- np.arctan(rad_angle)*max_mag*0.2, max_mag*0.8]) * scale
+            shaft_pt2 = np.array([shaft_pt2[0]*np.cos(rot_angle) - shaft_pt2[1]*np.sin(rot_angle),
+                                  shaft_pt2[0]*np.sin(rot_angle) + shaft_pt2[1]*np.cos(rot_angle)])
+            shaft_pt2 = shaft_pt2 + positions[i_pos]
+            # shaft top right
+            shaft_pt3 = np.array([np.arctan(rad_angle)*max_mag*0.2, max_mag*0.8]) * scale
+            shaft_pt3 = np.array([shaft_pt3[0]*np.cos(rot_angle) - shaft_pt3[1]*np.sin(rot_angle),
+                                  shaft_pt3[0]*np.sin(rot_angle) + shaft_pt3[1]*np.cos(rot_angle)])
+            shaft_pt3 = shaft_pt3 + positions[i_pos]
+            glyphs_points[point_idx] = shaft_pt
+            glyphs_points[point_idx+1] = shaft_pt1
+            glyphs_points[point_idx+2] = shaft_pt2
+            glyphs_points[point_idx+3] = shaft_pt3      
+            glyphs_polygons[tri_idx] = [point_idx, point_idx+1, point_idx+2]
+            glyphs_polygons[tri_idx+1] = [point_idx+1, point_idx+3, point_idx+2]
+            tri_idx += 2
+            point_idx += 4
+
+            # head bottom left
+            head_pt = np.array([- base *0.5, max_mag*0.8]) * scale
+            head_pt = np.array([head_pt[0]*np.cos(rot_angle) - head_pt[1]*np.sin(rot_angle),
+                               head_pt[0]*np.sin(rot_angle) + head_pt[1]*np.cos(rot_angle)])
+            head_pt = head_pt + positions[i_pos]
+            # head bottom right
+            head_pt1 = np.array([base *0.5, max_mag*0.8]) * scale
+            head_pt1 = np.array([head_pt1[0]*np.cos(rot_angle) - head_pt1[1]*np.sin(rot_angle),
+                                 head_pt1[0]*np.sin(rot_angle) + head_pt1[1]*np.cos(rot_angle)])
+            head_pt1 = head_pt1 + positions[i_pos]
+            # head top (tip)
+            head_pt2 = np.array([0, max_mag]) * scale
+            head_pt2 = np.array([head_pt2[0]*np.cos(rot_angle) - head_pt2[1]*np.sin(rot_angle),
+                                 head_pt2[0]*np.sin(rot_angle) + head_pt2[1]*np.cos(rot_angle)])
+            head_pt2 = head_pt2 + positions[i_pos]
+            glyphs_points[point_idx] = head_pt
+            glyphs_points[point_idx+1] = head_pt1
+            glyphs_points[point_idx+2] = head_pt2
+            glyphs_polygons[tri_idx] = [point_idx, point_idx+1, point_idx+2]
+            tri_idx += 1
+            point_idx += 3  
+
     if ax is None:
-        fig, ax = plt.subplots(figsize=(8, 8))
-    ax.set_aspect('equal')
-    ax.triplot(glyphs_points[:, 0], glyphs_points[:, 1], glyphs_polygons, color='lightblue', alpha=0.6)
+        fig, ax = plt.subplots(figsize=(10, 8))
+
+    tri_colors = np.ones((glyphs_polygons.shape[0]))*0.8
+    ax.tripcolor(glyphs_points[:, 0], glyphs_points[:, 1], glyphs_polygons, facecolors=tri_colors, cmap='RdBu_r',)
 
     return ax
 
