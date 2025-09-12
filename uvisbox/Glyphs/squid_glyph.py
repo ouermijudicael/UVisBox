@@ -907,29 +907,78 @@ def uncertainty_squid_glyphs_2D(positions, ensemble_vectors, percentil1, scale=0
     num_positions, num_ens_members =ensemble_vectors.shape[0], ensemble_vectors.shape[1]
     
     # Convert ensemble_vectors to spherical coordinates
-    ensemble_spherical_vectors = np.zeros_like(ensemble_vectors)
+    ensemble_polar_vectors = np.zeros_like(ensemble_vectors)
     for i in range(num_positions):
-        ensemble_spherical_vectors[i] = cartesian_to_polar(ensemble_vectors[i])
+        ensemble_polar_vectors[i] = cartesian_to_polar(ensemble_vectors[i])
 
     # Ccalculate vector depths in spherical coordinates
     depths = np.zeros((num_positions, num_ens_members))
     for i in range(num_positions):
-        depths[i] = compute_vector_depths_2D(ensemble_spherical_vectors[i])
+        depths[i] = compute_vector_depths_2D(ensemble_polar_vectors[i])
 
     theta1 = np.zeros((num_positions, 2))
     mid_angle = np.zeros(num_positions)
     r1 = np.zeros(num_positions)
 
+    glyphs_points = np.zeros((num_positions*4, 2))
+    glyphs_polygons = np.zeros((num_positions*2, 3), dtype=int)
+    tri_idx = 0
+    point_idx = 0
     for i_pos in range(num_positions):
-        median_idx, min_mag, max_mag, min_angle, max_angle = calculate_spread_2D(ensemble_spherical_vectors[i_pos], depths[i_pos], percentil1)
-        median_vector = ensemble_spherical_vectors[i_pos][median_idx] if median_idx is not None else np.array([0,0])
-        theta1[i_pos] = np.degrees([min_angle, max_angle]) 
-       
-        mid_angle[i_pos] = np.degrees(median_vector[1]) if median_idx is not None else 0
-        r_arrow = median_vector[0] *scale if median_idx is not None else 0
-        r1[i_pos] = min_mag * scale 
 
-    # NOT READY
+        median_idx = np.argmax(depths[i_pos])
+        median_vector = ensemble_polar_vectors[i_pos][median_idx] if median_idx is not None else np.array([0,0])
+        indices = np.where(depths[i_pos] > 1.0 - percentil1)[0]
+        min_mag = np.min(ensemble_polar_vectors[i_pos][indices][:, 0]) if indices.size > 0 else 0
+        max_mag = np.max(ensemble_polar_vectors[i_pos][indices][:, 0]) if indices.size > 0 else 0
+        min_angle = np.min(ensemble_polar_vectors[i_pos][indices][:, 1]) if indices.size > 0 else 0
+        max_angle = np.max(ensemble_polar_vectors[i_pos][indices][:, 1]) if indices.size > 0 else 0
+        
+        # rotate all angles by 90-mid_angle so the median vector aligns with the y-axis
+        #  and project all vectors onto the x-axis
+        x_projection = ensemble_polar_vectors[indices][:, 0] * np.cos(ensemble_polar_vectors[indices][:, 1] - np.radians(mid_angle[i_pos]))
+        base = np.max(x_projection)-np.min(x_projection)
+        delta_h = max_mag -min_mag
+        h = median_vector[0]
+
+        rad_angle = np.radians(median_vector[1])
+        # build 2D squid glyph triangulation
+        if (base > 1e-5) and (delta_h > 1e-5):
+            # base bottom left
+            pt = np.array([- base * 0.5, 0]) * scale
+            pt = np.array([pt[0]*np.cos(rad_angle) - pt[1]*np.sin(rad_angle),
+                           pt[0]*np.sin(rad_angle) + pt[1]*np.cos(rad_angle)])
+            pt = pt + positions[i_pos]
+            
+            # base bottom right
+            pt1 = np.array([base * 0.5, 0]) * scale
+            pt1 = np.array([pt1[0]*np.cos(rad_angle) - pt1[1]*np.sin(rad_angle),
+                            pt1[0]*np.sin(rad_angle) + pt1[1]*np.cos(rad_angle)])
+            pt1 = pt1 + positions[i_pos]
+
+            # base top left
+            pt2 = np.array([- base * 0.5, delta_h]) * scale
+            pt2 = np.array([pt2[0]*np.cos(rad_angle) - pt2[1]*np.sin(rad_angle),
+                            pt2[0]*np.sin(rad_angle) + pt2[1]*np.cos(rad_angle)])
+            pt2 = pt2 + positions[i_pos]
+            # base top right
+            pt3 = np.array([base * 0.5, delta_h]) * scale
+            pt3 = np.array([pt3[0]*np.cos(rad_angle) - pt3[1]*np.sin(rad_angle),
+                            pt3[0]*np.sin(rad_angle) + pt3[1]*np.cos(rad_angle)])
+            pt3 = pt3 + positions[i_pos]
+            glyphs_points[point_idx] = pt
+            glyphs_points[point_idx+1] = pt1
+            glyphs_points[point_idx+2] = pt2
+            glyphs_points[point_idx+3] = pt3
+            glyphs_polygons[tri_idx] = [point_idx, point_idx+1, point_idx+2]
+            glyphs_polygons[tri_idx+1] = [point_idx+1, point_idx+3, point_idx+2]
+            tri_idx += 2
+            point_idx += 4
+
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(8, 8))
+    ax.set_aspect('equal')
+    ax.triplot(glyphs_points[:, 0], glyphs_points[:, 1], glyphs_polygons, color='lightblue', alpha=0.6)
 
     return ax
 

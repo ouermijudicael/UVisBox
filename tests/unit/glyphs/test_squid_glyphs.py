@@ -1,5 +1,6 @@
 
 from uvisbox.Glyphs.squid_glyph import uncertainty_lobe_glyphs_2D
+from uvisbox.Glyphs.squid_glyph import uncertainty_squid_glyphs_2D
 import numpy as np
 import matplotlib.pyplot as plt
 num_poitns = 15
@@ -146,3 +147,26 @@ ax3.grid()
 plt.tight_layout()
 plt.savefig("test_squid_glyphs.png", dpi=300)
 plt.show()
+
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 30))
+# First subplot: Original Vector Field with Ensemble Members
+for i in range(num_poitns):
+    for j in range(ensemble_size):
+        u, v = ensemble_vectors[i, j]
+        x, y = grid_points[i]
+        ax1.arrow(x, y, u * 0.5, v * 0.5, head_width=0.03, head_length=0.06, fc='blue', ec='blue', alpha=1, length_includes_head=True)
+ax1.set_xlim(-1, 5)
+ax1.set_ylim(-1, 3)
+ax1.set_title("Original Vector Field with Ensemble Members")
+ax1.set_xlabel("X")
+ax1.set_ylabel("Y")
+ax1.grid()
+
+# Second subplot: Uncertainty Lobe Glyphs
+ax2 = uncertainty_squid_glyphs_2D(grid_points, ensemble_vectors, 1.0, scale=0.4, ax=ax2)
+ax2.set_title("Uncertainty Lobe Glyphs")
+ax2.set_xlim(-1, 5)
+ax2.set_ylim(-1, 3)
+ax2.set_xlabel("X")
+ax2.set_ylabel("Y")
+ax2.grid()
