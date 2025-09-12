@@ -1,6 +1,6 @@
 import numpy as np
 
-def probabilistic_marching_squares(F, triangles, isovalue, num_samples=200):
+def probabilistic_marching_squares(F, tetrahedra, isovalue, num_samples=200):
     """
     Perform probabilistic marching squares on a 2D scalar field with uncertainty.
     Parameters:
@@ -8,7 +8,7 @@ def probabilistic_marching_squares(F, triangles, isovalue, num_samples=200):
         F : np.ndarray
             2D array of shape (n_points, n_ens) representing the scalar field with ensemble members.
         triangles : np.ndarray
-            2D array of shape (n_triangles, 3) representing the triangulation of the points.
+            2D array of shape (n_tetrahedra, 4) representing the triangulation of the points.
         isovalue : float
             The isovalue for which to compute the contour.  
         num_samples : int, optional
@@ -18,12 +18,12 @@ def probabilistic_marching_squares(F, triangles, isovalue, num_samples=200):
         prob_contour : np.ndarray
             1D array of shape (n_triangles,) with probabilities of contour presence in each triangle.
     """
-    n_triangles = triangles.shape[0]
-    prob_contour = np.zeros(n_triangles)
+    n_tetrahedra = tetrahedra.shape[0]
+    crossing_porb = np.zeros(n_tetrahedra)
 
-    for t in range(n_triangles):
-        vertex_indices = triangles[t]  # Indices of the triangle's vertices
-        F_cell = F[vertex_indices, :]  # Shape (3, n_ens)
+    for t in range(n_tetrahedra):
+        vertex_indices = tetrahedra[t]  # Indices of the triangle's vertices
+        F_cell = F[vertex_indices, :]  # Shape (4, n_ens)
         cov_mat = np.cov(F_cell)
         mean_vec = np.mean(F_cell, axis=1)
         samples = np.random.multivariate_normal(mean_vec, cov_mat, num_samples)  # Shape (num_samples, 3)
@@ -33,9 +33,9 @@ def probabilistic_marching_squares(F, triangles, isovalue, num_samples=200):
             max_sample = np.max(sample)
             if min_sample <= isovalue <= max_sample:
                 count += 1
-        prob_contour[t] = count / num_samples
+        crossing_porb[t] = count / num_samples
 
-    return prob_contour
+    return crossing_porb
 
 
     
