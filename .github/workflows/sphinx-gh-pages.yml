@@ -33,6 +33,7 @@ jobs:
 
       - name: Build HTML
         run: |
+          cd docs
           sphinx-build -b html source/ build/html   # adjust paths if needed
 
       - name: Upload artifact
