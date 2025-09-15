@@ -17,6 +17,9 @@ def _find_percentile(sorted_images, percentile):
 
 
 def contour_boxplot(binary_images, depths=None, ax=None, eps=0, allow_portion=False, show_median=True, show_iqr=True, show_non_outliers=False, show_outliers=False, show_firstquartile=False, outlier_percentile=95):
+    """
+    Create a contour boxplot for binary images based on their band depths.
+    """
     if depths is None:
         depths = contour_banddepth(binary_images, eps=eps, allow_portion=allow_portion)
     # sort the contours by the depth. order them from deepest to shallowest

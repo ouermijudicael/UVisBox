@@ -15,6 +15,8 @@ Subpackages
    uvisbox.UncertaintyTube
    uvisbox.ProbabilisticMarchingSquares
    uvisbox.ProbabilisticMarchingTriangles
+   uvisbox.ProbabilisticMarchingCubes
+   uvisbox.ProbabilisticMarchingTetrahedra
 
 Module contents
 ---------------

@@ -1,27 +1,30 @@
 import numpy as np
 
+
 def choose2(x):
     """
     Helper function to compute x choose 2
-    Parameters:
-    -----------
-        x : int
-    Returns:
-    -----------
-        [] : int
-            x choose 2  
-    """
 
+    Parameters:
+    ----------
+    x : int
+        number of elements
+    Returns:
+    -------
+    [] : int
+        x choose 2  
+    """
     return int(1/8 * (2 * x -1 ) ** 2 - 1/8)
     
 
 def get_combinations(n):
     """
-    returns (n_combination, 2) as list of pair of indices
-    for n elements, get all 2-subsets
+    returns (n_combination, 2) as list of pair of indices for n elements, get all 2-subsets
+
     Parameters:
     -----------
-        n : int
+    n : int
+        number of elements
     Returns:
     -----------
     combinations : np.ndarray
@@ -40,6 +43,7 @@ def get_combinations(n):
 def _epsilon_subset(A, B, eps):
     """ 
     determine if two sets are epsilon-close (Order matters!)
+
     Parameters:
     -----------
     A : np.ndarray
@@ -48,6 +52,7 @@ def _epsilon_subset(A, B, eps):
         binary array representing set B
     eps : float
         tolerance level
+
     Returns:
     -----------
     bool : True if A is an epsilon-subset of B, False otherwise
@@ -58,12 +63,14 @@ def _epsilon_subset(A, B, eps):
 def _portion_subset(A, B):
     """
     determine if two sets are partial-overlapping (Order matters!)
+
     Parameters:
     -----------
     A : np.ndarray
         binary array representing set A
     B : np.ndarray
         binary array representing set B
+    
     Returns:
     -----------
     float : portion of A not in B
@@ -75,21 +82,21 @@ def _portion_subset(A, B):
 
 def contour_banddepth(data, combination = None, allow_portion=False, eps = 0):
     """
-    Calculates the band depth of binary contour data using pairwise combinations.
+    Calculates the band depth of binary contour data using pairwise combinations. 
     R. T. Whitaker, M. Mirzargar and R. M. Kirby, "Contour Boxplots: A Method for Characterizing Uncertainty in Feature Sets from Simulation Ensembles," in IEEE Transactions on Visualization and Computer Graphics, vol. 19, no. 12, pp. 2713-2722, Dec. 2013, doi: 10.1109/TVCG.2013.143
-    Parameters
+    
+    Parameters:
     ----------
-    data : array-like or np.ndarray
+    data : np.ndarray
         Input data representing binary contours. Should be convertible to a boolean NumPy array.
-    combination : list of tuple, optional
-        List of index pairs (xdx, ydx) specifying which images to combine for band depth calculation.
-        If None, combinations are generated automatically.
+    combination : list of tuples, optional
+        List of index pairs (xdx, ydx) specifying which images to combine for band depth calculation. If None, combinations are generated automatically.
     allow_portion : bool, default False
         If True, uses a portion-based subset calculation for depth; otherwise, uses epsilon-based subset.
     eps : float, default 0
         Epsilon tolerance for subset checks when `allow_portion` is False.
 
-    Returns
+    Returns:
     -------
     depths : np.ndarray
         Array of band depth values for each image in the input data.

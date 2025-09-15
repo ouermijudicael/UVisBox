@@ -1,8 +1,8 @@
 import numpy as np
 
-def probabilistic_marching_squares(F, triangles, isovalue, num_samples=200):
+def probabilistic_marching_triangles(F, triangles, isovalue, num_samples=200):
     """
-    Perform probabilistic marching squares on a 2D scalar field with uncertainty.
+    Perform probabilistic marching triangles on a 2D scalar field with uncertainty.
     Parameters:
     -----------
         F : np.ndarray

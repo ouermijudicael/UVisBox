@@ -1,10 +1,11 @@
 import numpy as np
-from scipy import ConvexHull, Delaunay
+from scipy.spatial import ConvexHull, Delaunay
 
 def point_in_hull(point, hull_or_vertices, eps=1e-6):
     """
     Check if a point is inside a convex hull.
-    Parameters
+    
+    Parameters:
     ----------
     point : array-like
         The coordinates of the point to check. Should be a 1D array or list of length equal to the dimension of the hull.
@@ -13,14 +14,17 @@ def point_in_hull(point, hull_or_vertices, eps=1e-6):
         If vertices are provided, a ConvexHull object will be constructed internally.
     eps : float, optional
         Tolerance for numerical precision when checking if the point is inside the hull. Default is 1e-6.
-    Returns
+    
+    Returns:
     -------
     bool
         True if the point is inside the convex hull (within the specified tolerance), False otherwise.
+    
     Raises
     ------
     ValueError
         If `hull_or_vertices` is not a ConvexHull object, ndarray, or list of vertices.
+    
     Notes
     -----
     - The function uses the hull's half-space equations to determine if the point is inside.
@@ -42,10 +46,9 @@ def point_in_hull(point, hull_or_vertices, eps=1e-6):
 
 def curve_band_depths(curves, indices):
     """
-    Calculate band depth for curves based on how often each curve's points lie within
-    convex hulls formed by bands of other curves.
+    Calculate band depth for curves based on how often each curve's points lie within convex hulls formed by bands of other curves.
     
-    Parameters
+    Parameters:
     ----------
     curves : numpy.ndarray
         3D array of shape (n_curves, n_steps, n_dims) containing curve data
@@ -54,7 +57,7 @@ def curve_band_depths(curves, indices):
         indices can be created by itertools.combinations(range(n_curves), k) for some k
         recommended caching for indices
     
-    Returns
+    Returns:
     -------
     numpy.ndarray
         1D array of normalized depth scores for each curve
