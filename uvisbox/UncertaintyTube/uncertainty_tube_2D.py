@@ -23,7 +23,6 @@ def project_points_onto_line(point0, point1, points):
     line_dir = line_dir / np.linalg.norm(line_dir)  # Normalize direction
     perp_line_dir = np.array([-line_dir[1], line_dir[0]])  # Perpendicular direction
     # project points onto the line passing through point1 and perpendicular to line_dir
-    print("point1.shape:", point1.shape, "points.shape:", points.shape, "perp_line_dir.shape:", perp_line_dir.shape)
     projections = point1 + np.dot(points - point1, perp_line_dir)[:, np.newaxis] * perp_line_dir
 
     return projections
@@ -163,6 +162,7 @@ def plot_uncertainty_tube_2D(points, tube_mesh, mean_trajectories, axis=None):
         return fig, ax
     else:
         return ax
+
 
 def uncertainty_tube_2D(trajectories, axis=None):
     """

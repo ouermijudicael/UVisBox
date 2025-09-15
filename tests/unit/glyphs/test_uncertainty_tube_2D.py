@@ -32,7 +32,7 @@ def test_project_points_onto_line():
 def test_uncertainty_tube_2D():
     # Create synthetic trajectory data
     n_trajectories = 3
-    n_time_steps = 5
+    n_time_steps = 100
     n_ensemble_members = 10
 
     # random place 3 trajectories in the domain [0,2] x [0,1]
