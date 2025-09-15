@@ -33,12 +33,12 @@ jobs:
 
       - name: Build HTML
         run: |
-          sphinx-build -b html docs/ _build/html   # adjust paths if needed
+          sphinx-build -b html source/ build/html   # adjust paths if needed
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _build/html
+          path: build/html
 
   deploy:
     environment:
