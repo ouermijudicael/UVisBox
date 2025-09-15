@@ -33,13 +33,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install sphinx
           pip install sphinx-rtd-theme
-          pip install sphinx-autodoc-typehints  # For type hints in signatures
-          pip install sphinx-autoapi  # For better handling of submodules
 
       - name: Build Sphinx documentation
         run: |
           cd docs
-          sphinx-apidoc -o source/ ../uvisbox
+          # sphinx-apidoc -o source/ ../uvisbox
           sphinx-build -b html source build/html
 
       - name: Configure Git
