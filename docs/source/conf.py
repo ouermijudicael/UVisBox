@@ -9,7 +9,7 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('.'))
 
 project = 'UVisBox'
 copyright = '2025, Timbwaoga A. J. Ouermi and Jixian Li'
