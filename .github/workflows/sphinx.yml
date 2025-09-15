@@ -50,6 +50,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} # Deploy only on push to main
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/build/html # Directory containing the built HTML documentation
           publish_branch: gh-pages # Branch where GitHub Pages will be served from
