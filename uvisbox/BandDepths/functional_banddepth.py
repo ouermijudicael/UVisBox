@@ -1,5 +1,16 @@
 import numpy as np
 
+def calculate_band(sorted_curves, percentile):
+    n_curves = sorted_curves.shape[0]
+    index = int(np.ceil(n_curves * (percentile / 100)))
+
+    before = sorted_curves[:index]
+
+    top_curve = np.max(before, axis=0)
+    bottom_curve = np.min(before, axis=0)
+
+    return bottom_curve, top_curve
+
 def functional_banddepth(data, dtype=np.float64):
     """
     Compute the functional band depth of the input data. The band is assumed to be formed by 2-subsets
@@ -78,3 +89,4 @@ def _data_validation(data, dtype=np.float64):
 
 fdb = functional_banddepth
 mdb = modified_functional_banddepth
+
