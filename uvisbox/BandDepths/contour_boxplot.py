@@ -19,6 +19,34 @@ def _find_percentile(sorted_images, percentile):
 def contour_boxplot(binary_images, depths=None, ax=None, eps=0, allow_portion=False, show_median=True, show_iqr=True, show_non_outliers=False, show_outliers=False, show_firstquartile=False, outlier_percentile=95):
     """
     Create a contour boxplot for binary images based on their band depths.
+    Parameters:
+    ----------
+    binary_images : np.ndarray
+        3D array of shape (n_images, height, width) containing binary images (0s and 1s)
+    depths : np.ndarray, optional
+        1D array of precomputed depth scores for each image. If None, depths will be computed.
+    ax : matplotlib.axes.Axes, optional
+        Matplotlib Axes object to plot on. If None, a new figure and axes will be created.
+    eps : float, optional
+        Tolerance for numerical precision when computing band depths. Default is 0.
+    allow_portion : bool, optional
+        If True, allows partial inclusion of contours in depth calculation. Default is False.
+    show_median : bool, optional
+        If True, highlights the median contour in red. Default is True.
+    show_iqr : bool, optional
+        If True, highlights the interquartile range (IQR) in gray. Default is True.
+    show_non_outliers : bool, optional
+        If True, highlights non-outlier regions in light gray. Default is False.
+    show_outliers : bool, optional
+        If True, outlines outlier contours in blue. Default is False.
+    show_firstquartile : bool, optional
+        If True, highlights the first quartile region in a different shade of gray. Default is False.
+    outlier_percentile : float, optional
+        Percentile threshold to define outliers. Default is 95.
+    Returns:
+    -------
+    ax: matplotlib.axes.Axes
+        The Axes object with the contour boxplot.
     """
     if depths is None:
         depths = contour_banddepth(binary_images, eps=eps, allow_portion=allow_portion)
