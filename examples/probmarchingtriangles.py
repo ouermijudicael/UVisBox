@@ -1,7 +1,7 @@
 from matplotlib.tri import Triangulation
 import matplotlib.pyplot as plt
 import numpy as np  
-from uvisbox.ProbabilisticMarchingTriangles.probabilistic_marching_triangles import probabilistic_marching_squares
+from uvisbox.ProbabilisticContours.Stat.probabilistic_marching_triangles import probabilistic_marching_squares
 
 # Synthetic function: f(x, y) = sin(x) * cos(y)
 def synthetic_func(x, y):

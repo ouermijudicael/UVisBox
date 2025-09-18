@@ -12,11 +12,9 @@ Subpackages
    uvisbox.Datasets
    uvisbox.Glyphs
    uvisbox.Interpolations
+   uvisbox.ProbabilisticContours
+   uvisbox.ProbabilisticSurfaces
    uvisbox.UncertaintyTube
-   uvisbox.ProbabilisticMarchingSquares
-   uvisbox.ProbabilisticMarchingTriangles
-   uvisbox.ProbabilisticMarchingCubes
-   uvisbox.ProbabilisticMarchingTetrahedra
 
 Module contents
 ---------------

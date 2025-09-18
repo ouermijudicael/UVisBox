@@ -1,40 +1,15 @@
 uvisbox.BandDepths package
 ==========================
 
-Submodules
-----------
+Subpackages
+-----------
 
-uvisbox.BandDepths.contour\_banddepth module
---------------------------------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: uvisbox.BandDepths.contour_banddepth
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-uvisbox.BandDepths.contour\_boxplot module
-------------------------------------------
-
-.. automodule:: uvisbox.BandDepths.contour_boxplot
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-uvisbox.BandDepths.curve\_banddepth module
-------------------------------------------
-
-.. automodule:: uvisbox.BandDepths.curve_banddepth
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-uvisbox.BandDepths.functional\_banddepth module
------------------------------------------------
-
-.. automodule:: uvisbox.BandDepths.functional_banddepth
-   :members:
-   :show-inheritance:
-   :undoc-members:
+   uvisbox.BandDepths.Meshing
+   uvisbox.BandDepths.Stat
+   uvisbox.BandDepths.Vis
 
 Module contents
 ---------------

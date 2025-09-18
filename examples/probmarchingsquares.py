@@ -1,5 +1,5 @@
 import numpy as np
-from uvisbox.ProbabilisticMarchingSquares.probabilistic_marching_squares import probabilistic_marching_squares
+from uvisbox.ProbabilisticContours.Stat.probabilistic_marching_squares import probabilistic_marching_squares
 import matplotlib.pyplot as plt
 
 # Example usage

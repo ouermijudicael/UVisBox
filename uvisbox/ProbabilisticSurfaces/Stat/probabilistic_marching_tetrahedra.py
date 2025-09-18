@@ -1,6 +1,6 @@
 import numpy as np
 
-def probabilistic_marching_squares(F, tetrahedra, isovalue, num_samples=200):
+def probabilistic_marching_tetrahedra(F, tetrahedra, isovalue, num_samples=200):
     """
     Perform probabilistic marching squares on a 2D scalar field with uncertainty.
     Parameters:
@@ -18,6 +18,7 @@ def probabilistic_marching_squares(F, tetrahedra, isovalue, num_samples=200):
         prob_contour : np.ndarray
             1D array of shape (n_triangles,) with probabilities of contour presence in each triangle.
     """
+    
     n_tetrahedra = tetrahedra.shape[0]
     crossing_porb = np.zeros(n_tetrahedra)
 

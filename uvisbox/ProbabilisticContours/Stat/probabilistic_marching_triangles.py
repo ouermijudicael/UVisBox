@@ -18,6 +18,7 @@ def probabilistic_marching_triangles(F, triangles, isovalue, num_samples=200):
         prob_contour : np.ndarray
             1D array of shape (n_triangles,) with probabilities of contour presence in each triangle.
     """
+    
     n_triangles = triangles.shape[0]
     prob_contour = np.zeros(n_triangles)
 

@@ -16,6 +16,7 @@ def probabilistic_marching_squares(F, isovalue, num_samples=200):
         prob_contour : np.ndarray
             2D array of shape (n-1, m-1) with probabilities of contour presence in each cell.
     """
+    
     n, m, n_ens = F.shape
     prob_contour = np.zeros((n - 1, m - 1))
 
