@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from .functional_banddepth import functional_banddepth, calculate_band, modified_functional_banddepth
+from ..Stat.functional_banddepth import functional_banddepth, calculate_band, modified_functional_banddepth
 
 def functional_banddepth_plot(curves, curves_depths=None, percentil=100, scale=1.0, ax=None, 
                               show_median=True, band_alpha=0.5):

@@ -28,19 +28,25 @@ def create_ensemble_scalarfield(image_res=256, n_ensembles=30, sigma_min=5, sigm
         # Normalize to [-1, 1]
         pdf = 2 * (pdf - np.min(pdf)) / (np.max(pdf) - np.min(pdf)) - 1
         ensemble.append(pdf)
+
     return np.array(ensemble)
 
 if __name__ == "__main__":
-    # Example usage
+    # Generate synthetic ensemble of scalar fields
     ensemble = create_ensemble_scalarfield(image_res=128, n_ensembles=100, sigma_min=20, sigma_max=100) # create synthetic ensemble of gaussians
+    
     binary_images = (ensemble < 0.7).astype(np.bool_)    # extract contours at isovalue = 0.7
     print(f"Ensemble shape: {binary_images.shape}")
 
+    # Visualize the ensemble contours using spaghetti 
     fig, ax = plt.subplots(2,1, figsize=(4, 8),sharex=True,sharey=True)
     for i in range(binary_images.shape[0]):
         ax[0].contour(binary_images[i], levels=[0.5], colors='black', linewidths=1, alpha=0.3) # contour at the middle of 0 and 1
     ax[0].set_title("Ensemble Contours")
+
+    # Calculate and plot the contour boxplot
     contour_boxplot(binary_images, ax=ax[1], show_median=True, show_iqr=True, show_non_outliers=True, show_outliers=True, show_firstquartile=True, outlier_percentile=95)
+    
     ax[1].set_title("Contour Boxplot")
     ax[0].set_aspect('equal', adjustable='box')
     plt.savefig("contour_boxplot.png", dpi=300)

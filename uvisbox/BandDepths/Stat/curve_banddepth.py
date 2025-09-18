@@ -1,40 +1,7 @@
 import numpy as np
-from scipy.spatial import ConvexHull, Delaunay
-from itertools import combinations
+from scipy.spatial import ConvexHull
 
-def build_curve_band_mesh(sorted_curves, percentile=50):
 
-    num_curves = sorted_curves.shape[0]
-    index = int(np.ceil(num_curves * (percentile / 100)))
-    before = sorted_curves[:index]
-
-    final_points = []
-    final_triangles = []
-    num_time_steps = before.shape[1]
-    i_point = 0
-    i_triangle = 0    
-    if num_time_steps < 20:
-        stride = 1
-    else:
-        stride = num_time_steps // 20
-    for i_t in range(1, num_time_steps, stride):
-        print(f"Processing time step {i_t}/{num_time_steps} with stride {stride}")
-        i_t_start = np.maximum(i_t - stride, 0)
-        i_t_end = np.minimum( i_t, num_time_steps - 1)
-        points = before[:,i_t_start:i_t_end+1,:].reshape(-1, before.shape[2]) 
-        
-        try:
-            hull = ConvexHull(points)
-            delaunay = Delaunay(points[hull.vertices])
-        except:
-            continue    
-        final_points.append(points)
-        final_triangles.append(delaunay.simplices + i_point)
-        i_point += points.shape[0]
-        i_triangle += delaunay.simplices.shape[0]
-    final_points = np.vstack(final_points)
-    final_triangles = np.vstack(final_triangles)
-    return final_points, final_triangles
 
 def point_in_hull(point, hull_or_vertices, eps=1e-6):
     """
@@ -79,7 +46,7 @@ def point_in_hull(point, hull_or_vertices, eps=1e-6):
         hull = ConvexHull(vertices)
     return all((np.dot(eq[:-1], point) + eq[-1] < eps) for eq in hull.equations)
 
-def curve_band_depths(curves, indices):
+def curve_banddepths(curves, indices):
     """
     Calculate band depth for curves based on how often each curve's points lie within convex hulls formed by bands of other curves.
     
@@ -136,68 +103,4 @@ def curve_band_depths(curves, indices):
     return depths
 
 
-
-def curve_banddepth_plot(curves, depths=None, percentile=50, ax=None):
-    """
-    Create a curve band depth plot.
-    Parameters:
-    ----------
-    curves : numpy.ndarray
-        3D array of shape (n_curves, n_steps, n_dims) containing curve data
-    depths : numpy.ndarray, optional
-        1D array of precomputed band depths of shape (n_curves,). If None, band depths will be computed.
-    percentile : float, optional
-        Percentile for the band to be highlighted. Default is 50 (median band).
-    ax : matplotlib.axes.Axes, optional
-        Matplotlib Axes object to plot on. If None, a new figure and axes will be created.
-    Returns:
-    -------
-    ax: matplotlib.axes.Axes
-        The Axes object with the curve band depth plot.
-    """
-    if depths is None:
-        
-        n_curves = curves.shape[0]
-        indices = list(combinations(range(n_curves), 2))
-        print("Calculating curve band depths...")
-        depths = curve_band_depths(curves, indices)
-        print("Curve band depths calculated.")
-
-    curve_dim = curves.shape[2]
-    # sort the curves by the depth. order them from deepest to shallowest
-    sorted_indices = np.argsort(depths)[::-1]
-    sorted_curves = curves[sorted_indices]
-
-    # create figure if no ax is assigned
-    if ax is None:
-        import matplotlib.pyplot as plt
-        fig, ax = plt.subplots()
-
-    # build the band mesh for the specified percentile
-    print("Building curve band mesh...")
-    points, triangles = build_curve_band_mesh(sorted_curves, percentile=percentile)
-    print("Curve band mesh built.")
-    
-    # plot the band mesh using trisurf or tripcolor
-    if curve_dim == 2:
-        import matplotlib.pyplot as plt
-        if ax is None:
-            fig, ax = plt.subplots()
-        ax.triplot(points[:, 0], points[:, 1], triangles, color='gray', alpha=0.5)
-    elif curve_dim == 3:
-        import matplotlib.pyplot as plt
-        if ax is None:
-            fig = plt.figure()
-            ax = fig.add_subplot(111, projection='3d')
-            ax.plot_trisurf(points[:, 0], points[:, 1], points[:, 2], triangles=triangles, cmap='viridis', alpha=0.5)
-        else:
-            ax.plot_trisurf(points[:, 0], points[:, 1], points[:, 2], triangles=triangles, cmap='viridis', alpha=0.5)
-    else:
-        raise ValueError("curve_dim must be 2 or 3 for plotting.")    
-    
-    # highlight the median curve in red
-    median_curve = sorted_curves[0]
-    ax.plot(median_curve[:, 0], median_curve[:, 1], median_curve[:, 2], color='red', linewidth=2, label='Median Curve')
-
-    return ax
 

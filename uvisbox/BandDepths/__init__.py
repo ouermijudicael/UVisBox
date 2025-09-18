@@ -1,5 +1,7 @@
-from .contour_banddepth import *
-from .contour_boxplot import *
-from .functional_banddepth import functional_banddepth, modified_functional_banddepth, fdb, mdb
-from .functional_banddepth_plot import functional_banddepth_plot
-from .curve_banddepth import *
+from .Stat.contour_banddepth import *
+from .Vis.contour_boxplot import *
+from .Stat.functional_banddepth import *
+from .Vis.functional_banddepth_plot import *
+from .Stat.curve_banddepth import *
+from .Vis.curve_banddepth_plot import *
+from .Meshing.curve_banddepth_meshing import *
