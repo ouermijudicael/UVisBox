@@ -44,25 +44,27 @@ def curve_banddepth_plot(curves, depths=None, percentile=50, ax=None):
     print("Building curve band mesh...")
     points, triangles = curve_banddepth_meshing(sorted_curves, percentile=percentile)
     print("Curve band mesh built.")
-    
+     # highlight the median curve in red
+    median_curve = sorted_curves[0]
     # plot the band mesh using trisurf or tripcolor
     if curve_dim == 2:
         if ax is None:
             fig, ax = plt.subplots()
         ax.triplot(points[:, 0], points[:, 1], triangles, color='gray', alpha=0.5)
+        ax.plot(median_curve[:, 0], median_curve[:, 1], color='red', linewidth=2)
     elif curve_dim == 3:
         if ax is None:
             fig = plt.figure()
             ax = fig.add_subplot(111, projection='3d')
             ax.plot_trisurf(points[:, 0], points[:, 1], points[:, 2], triangles=triangles, cmap='viridis', alpha=0.5)
+            ax.plot(median_curve[:, 0], median_curve[:, 1], median_curve[:, 2], color='red', linewidth=2)
         else:
             ax.plot_trisurf(points[:, 0], points[:, 1], points[:, 2], triangles=triangles, cmap='viridis', alpha=0.5)
+            ax.plot(median_curve[:, 0], median_curve[:, 1], median_curve[:, 2], color='red', linewidth=2)
     else:
         raise ValueError("curve_dim must be 2 or 3 for plotting.")    
     
-    # highlight the median curve in red
-    median_curve = sorted_curves[0]
-    ax.plot(median_curve[:, 0], median_curve[:, 1], median_curve[:, 2], color='red', linewidth=2, label='Median Curve')
+   
 
     return ax
 

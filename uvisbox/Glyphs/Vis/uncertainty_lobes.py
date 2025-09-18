@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Wedge
-from .vector_depths import compute_vector_depths_2D, cartesian_to_polar, calculate_spread_2D
+from ...BandDepths.Stat.vector_depths import cartesian_to_polar, compute_vector_depths_2D
+from ..Stat.squid_glyphs import calculate_spread_2D
 
 
 

@@ -1,5 +1,5 @@
 
-from uvisbox.Glyphs.squid_glyph import uncertainty_squid_glyphs, uncertainty_lobe_glyphs_2D
+from uvisbox.Glyphs import uncertainty_lobe_glyphs_2D
 import numpy as np
 import matplotlib.pyplot as plt
 A = 0.1

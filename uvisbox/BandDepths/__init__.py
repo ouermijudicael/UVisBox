@@ -5,3 +5,4 @@ from .Vis.functional_banddepth_plot import *
 from .Stat.curve_banddepth import *
 from .Vis.curve_banddepth_plot import *
 from .Meshing.curve_banddepth_meshing import *
+from .Stat.vector_depths import *

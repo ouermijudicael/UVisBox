@@ -1,6 +1,7 @@
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
-from uvisbox.Glyphs.squid_glyph import cartesian_to_spherical, compute_vector_depths_3D, uncertainty_squid_glyphs_3D
+from uvisbox.BandDepths import cartesian_to_spherical
+from uvisbox.Glyphs import compute_vector_depths_3D, uncertainty_squid_glyphs_3D
 import matplotlib.pyplot as plt
 import pyvista as pv
 
