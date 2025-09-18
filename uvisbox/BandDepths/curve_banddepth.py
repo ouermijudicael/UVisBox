@@ -163,6 +163,7 @@ def curve_banddepth_plot(curves, depths=None, percentile=50, ax=None):
         depths = curve_band_depths(curves, indices)
         print("Curve band depths calculated.")
 
+    curve_dim = curves.shape[2]
     # sort the curves by the depth. order them from deepest to shallowest
     sorted_indices = np.argsort(depths)[::-1]
     sorted_curves = curves[sorted_indices]
@@ -178,11 +179,21 @@ def curve_banddepth_plot(curves, depths=None, percentile=50, ax=None):
     print("Curve band mesh built.")
     
     # plot the band mesh using trisurf or tripcolor
-    from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
-    ax = plt.axes(projection='3d') if ax.name != '3d' else ax
-
-    ax.plot_trisurf(points[:, 0], points[:, 1], points[:, 2], triangles=triangles, cmap='viridis', alpha=0.5)
-    
+    if curve_dim == 2:
+        import matplotlib.pyplot as plt
+        if ax is None:
+            fig, ax = plt.subplots()
+        ax.triplot(points[:, 0], points[:, 1], triangles, color='gray', alpha=0.5)
+    elif curve_dim == 3:
+        import matplotlib.pyplot as plt
+        if ax is None:
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection='3d')
+            ax.plot_trisurf(points[:, 0], points[:, 1], points[:, 2], triangles=triangles, cmap='viridis', alpha=0.5)
+        else:
+            ax.plot_trisurf(points[:, 0], points[:, 1], points[:, 2], triangles=triangles, cmap='viridis', alpha=0.5)
+    else:
+        raise ValueError("curve_dim must be 2 or 3 for plotting.")    
     
     # highlight the median curve in red
     median_curve = sorted_curves[0]
