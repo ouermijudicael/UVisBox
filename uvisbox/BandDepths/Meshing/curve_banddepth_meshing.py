@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.spatial import ConvexHull, Delaunay
+from mpl_toolkits.mplot3d import Axes3D
 
 def curve_banddepth_meshing(sorted_curves, percentile=50):
     """
@@ -27,21 +28,49 @@ def curve_banddepth_meshing(sorted_curves, percentile=50):
     num_time_steps = before.shape[1]
     i_point = 0
     i_triangle = 0    
-    if num_time_steps < 20:
+    if num_time_steps < 100:
         stride = 1
     else:
-        stride = num_time_steps // 20
+        stride = num_time_steps // 100
     for i_t in range(1, num_time_steps, stride):
-        print(f"Processing time step {i_t}/{num_time_steps} with stride {stride}")
         i_t_start = np.maximum(i_t - stride, 0)
         i_t_end = np.minimum( i_t, num_time_steps - 1)
         points = before[:,i_t_start:i_t_end+1,:].reshape(-1, before.shape[2]) 
         
-        try:
-            hull = ConvexHull(points)
-            delaunay = Delaunay(points[hull.vertices])
-        except:
-            continue    
+        hull = ConvexHull(points)
+        delaunay = Delaunay(points[hull.vertices])
+       
+        # import matplotlib.pyplot as plt
+        # if points.shape[1] == 2:
+        #     plt.figure()
+        #     plt.plot(points[:, 0], points[:, 1], 'o')
+        #     # Plot convex hull
+        #     simplex = hull.simplices[0]
+        #     plt.plot(points[simplex, 0], points[simplex, 1], 'k-')
+        #     # Plot Delaunay triangulation
+        #     for tri in delaunay.simplices:
+        #         print(tri)
+        #         index = np.append(tri, tri[0])  # close the triangle
+        #         plt.plot(points[index, 0], points[index, 1], 'r--', alpha=0.5)
+        #     plt.title(f'Convex Hull & Delaunay at time step {i_t}')
+        #     plt.savefig(f"curve_banddepth_meshing_t{str(i_t).zfill(3)}.png")
+        #     plt.show()
+        #     print(f"number of hull simplices: {len(hull.simplices)}, number of delaunay simplices: {len(delaunay.simplices)}")
+        # elif points.shape[1] == 3:
+        #     fig = plt.figure()
+        #     ax = fig.add_subplot(111, projection='3d')
+        #     ax.scatter(points[:, 0], points[:, 1], points[:, 2])
+        #     # Plot convex hull
+        #     for simplex in hull.simplices:
+        #         simplex = np.append(simplex, simplex[0])  # cycle back to the first point
+        #         ax.plot(points[simplex, 0], points[simplex, 1], points[simplex, 2], 'k-')
+        #         # Plot Delaunay triangulation
+        #         for tri in delaunay.simplices:
+        #             tri_points = np.append(tri, tri[0])  # close the triangle
+        #     ax.plot(points[tri_points, 0], points[tri_points, 1], points[tri_points, 2], 'r--', alpha=0.5)
+        #     plt.title(f'Convex Hull & Delaunay at time step {i_t}')
+        #     plt.show()
+
         final_points.append(points)
         final_triangles.append(delaunay.simplices + i_point)
         i_point += points.shape[0]

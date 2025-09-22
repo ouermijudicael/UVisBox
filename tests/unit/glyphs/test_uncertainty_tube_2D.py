@@ -1,5 +1,5 @@
 import numpy as np
-from uvisbox.UncertaintyTube.uncertainty_tube_2D import project_points_onto_line, uncertainty_tube_2D
+from uvisbox.UncertaintyTube.Stat.uncertainty_tube_2D import project_points_onto_line, uncertainty_tube_2D
 import matplotlib.pyplot as plt
 
 from uvisbox.Datasets.flow2d import double_gyre

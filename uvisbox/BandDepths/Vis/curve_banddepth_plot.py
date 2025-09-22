@@ -35,23 +35,26 @@ def curve_banddepth_plot(curves, depths=None, percentile=50, ax=None):
     # sort the curves by the depth. order them from deepest to shallowest
     sorted_indices = np.argsort(depths)[::-1]
     sorted_curves = curves[sorted_indices]
+    # sorted_curves = sorted_curves[:,:200,:]
 
     # create figure if no ax is assigned
     if ax is None:
         fig, ax = plt.subplots()
 
     # build the band mesh for the specified percentile
-    print("Building curve band mesh...")
     points, triangles = curve_banddepth_meshing(sorted_curves, percentile=percentile)
-    print("Curve band mesh built.")
      # highlight the median curve in red
     median_curve = sorted_curves[0]
     # plot the band mesh using trisurf or tripcolor
     if curve_dim == 2:
-        if ax is None:
+        if ax is None:  
             fig, ax = plt.subplots()
-        ax.triplot(points[:, 0], points[:, 1], triangles, color='gray', alpha=0.5)
+        # ax.triplot(points[:, 0], points[:, 1], triangles, color='gray', alpha=0.5)
+        ax.tripcolor(points[:, 0], points[:, 1], triangles, facecolors=np.ones(triangles.shape[0]), cmap='viridis', alpha=1.0)
         ax.plot(median_curve[:, 0], median_curve[:, 1], color='red', linewidth=2)
+        # plot 50% curves in light gray
+        # for curve in sorted_curves[:len(sorted_curves)//2]:
+            # ax.plot(curve[:, 0], curve[:, 1], color='lightgray', linewidth=1)
     elif curve_dim == 3:
         if ax is None:
             fig = plt.figure()
@@ -59,12 +62,11 @@ def curve_banddepth_plot(curves, depths=None, percentile=50, ax=None):
             ax.plot_trisurf(points[:, 0], points[:, 1], points[:, 2], triangles=triangles, cmap='viridis', alpha=0.5)
             ax.plot(median_curve[:, 0], median_curve[:, 1], median_curve[:, 2], color='red', linewidth=2)
         else:
-            ax.plot_trisurf(points[:, 0], points[:, 1], points[:, 2], triangles=triangles, cmap='viridis', alpha=0.5)
+            ax.plot_trisurf(points[:, 0], points[:, 1], points[:, 2], triangles=triangles, cmap='viridis', alpha=1.0)
             ax.plot(median_curve[:, 0], median_curve[:, 1], median_curve[:, 2], color='red', linewidth=2)
     else:
         raise ValueError("curve_dim must be 2 or 3 for plotting.")    
     
    
-
     return ax
 
