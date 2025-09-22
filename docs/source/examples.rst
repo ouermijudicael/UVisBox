@@ -4,21 +4,17 @@ examples package
 Submodules
 ----------
 
-.. examples.contour\_boxplot module
-.. --------------------------------
+examples.contour\_boxplot module
+--------------------------------
 
-.. .. automodule:: examples.contour_boxplot
-..    :members:
-..    :show-inheritance:
-..    :undoc-members:
+.. automodule:: examples.contour_boxplot
+   :undoc-members:
 
-.. examples.curve\_banddepth module
-.. --------------------------------
+examples.curve\_banddepth module
+--------------------------------
 
-.. .. automodule:: examples.curve_banddepth
-..    :members:
-..    :show-inheritance:
-..    :undoc-members:
+.. automodule:: examples.curve_banddepth
+   :undoc-members:
 
 examples.functional\_boxplot module
 -----------------------------------
@@ -26,45 +22,35 @@ examples.functional\_boxplot module
 .. automodule:: examples.functional_boxplot
    :undoc-members:
 
-.. examples.probabilistic\_isosurface module
-.. -----------------------------------------
+examples.prob\_marching\_squares module
+---------------------------------------
 
-.. .. automodule:: examples.probabilistic_isosurface
-..    :members:
-..    :show-inheritance:
-..    :undoc-members:
+.. automodule:: examples.prob_marching_squares
+   :undoc-members:
 
-.. examples.probabilistic\_isosurface\_tet module
-.. ----------------------------------------------
+examples.prob\_marching\_triangles module
+-----------------------------------------
 
-.. .. automodule:: examples.probabilistic_isosurface_tet
-..    :members:
-..    :show-inheritance:
-..    :undoc-members:
+.. automodule:: examples.prob_marching_triangles
+   :undoc-members:
 
-.. examples.probmarchingsquares module
-.. -----------------------------------
+examples.probabilistic\_isosurface module
+-----------------------------------------
 
-.. .. automodule:: examples.probmarchingsquares
-..    :members:
-..    :show-inheritance:
-..    :undoc-members:
+.. automodule:: examples.probabilistic_isosurface
+   :undoc-members:
 
-.. examples.probmarchingtriangles module
-.. -------------------------------------
+examples.probabilistic\_isosurface\_tet module
+----------------------------------------------
 
-.. .. automodule:: examples.probmarchingtriangles
-..    :members:
-..    :show-inheritance:
-..    :undoc-members:
+.. automodule:: examples.probabilistic_isosurface_tet
+   :undoc-members:
 
-.. examples.squid\_glyph\_temp\_wind module
-.. ----------------------------------------
+examples.squid\_glyph\_temp\_wind module
+----------------------------------------
 
-.. .. automodule:: examples.squid_glyph_temp_wind
-..    :members:
-..    :show-inheritance:
-..    :undoc-members:
+.. automodule:: examples.squid_glyph_temp_wind
+   :undoc-members:
 
 examples.squid\_glyphs\_2D module
 ---------------------------------
@@ -84,26 +70,20 @@ examples.uncertainty\_tube module
 .. automodule:: examples.uncertainty_tube
    :undoc-members:
 
-.. examples.uncertainty\_tube\_benchmark module
-.. --------------------------------------------
+examples.uncertainty\_tube\_benchmark module
+--------------------------------------------
 
-.. .. automodule:: examples.uncertainty_tube_benchmark
-..    :members:
-..    :show-inheritance:
-..    :undoc-members:
+.. automodule:: examples.uncertainty_tube_benchmark
+   :undoc-members:
 
 examples.vsup module
 --------------------
 
 .. automodule:: examples.vsup
-   :members:
-   :show-inheritance:
    :undoc-members:
 
 Module contents
 ---------------
 
 .. automodule:: examples
-   :members:
-   :show-inheritance:
    :undoc-members:
