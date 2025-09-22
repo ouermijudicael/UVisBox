@@ -23,7 +23,9 @@ grid.point_data["values"] = noise_less_F.flatten(order='F')
 isovalue = -0.001
 iso_surface = grid.contour([isovalue], scalars="values")
 
-plotter = pv.Plotter()
+plotter = pv.Plotter(shape=(1, 2))
+plotter.subplot(0, 0)
+plotter.add_text("Deterministic Isosurface", font_size=12)
 plotter.add_mesh(iso_surface, color='lightblue', opacity=0.5)
 plotter.show()
 
@@ -33,7 +35,8 @@ for e in range(n_ens):
     F[:, :, :, e] = noise_less_F + noise
 
 # Compute probabilistic marching cubes
-plotter = pmc(F, isovalue)
-
+plotter.subplot(0, 1)
+plotter = pmc(F, isovalue, plotter=plotter)
+plotter.add_text("Probabilistic Isosurface", font_size=12)
 
 plotter.show()

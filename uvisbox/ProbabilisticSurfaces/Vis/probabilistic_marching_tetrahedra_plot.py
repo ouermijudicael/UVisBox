@@ -5,7 +5,8 @@ from ..Stat.probabilistic_marching_tetrahedra import probabilistic_marching_tetr
 
 
 
-def probabilistic_marching_tetrahedra_plot(points, F, tetrahedra, isovalue, cross_prob=None, opacity='linear', cmap='viridis'):
+def probabilistic_marching_tetrahedra_plot(points, F, tetrahedra, isovalue, cross_prob=None, 
+                                           opacity='linear', cmap='viridis', plotter=None):
     """
     Visualize the probabilistic marching tetrahedra result using PyVista.
     Parameters:
@@ -35,10 +36,12 @@ def probabilistic_marching_tetrahedra_plot(points, F, tetrahedra, isovalue, cros
     n_cells = cross_prob.shape[0]
     n_points = F.shape[0]
     celltypes = np.full(n_cells, fill_value=CellType.TETRA, dtype=np.uint32)  
-    
+
+    if plotter is None:
+        plotter = pv.Plotter()
+            
     grid = pv.UnstructuredGrid(tetrahedra, celltypes, points)
     grid.cell_data["crossing_probability"] = cross_prob
-    plotter = pv.Plotter()
     plotter.add_mesh(grid, scalars="crossing_probability", opacity=opacity, cmap=cmap)
 
     return plotter

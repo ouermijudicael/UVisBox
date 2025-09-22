@@ -1,4 +1,4 @@
-from uvisbox.BandDepths.contour_banddepth import choose2
+from uvisbox.BandDepths.Stat.contour_banddepth import choose2
 import math
 import numpy as np
 

@@ -1,6 +1,6 @@
 
-from uvisbox.Glyphs.uncertainty_lobes import uncertainty_lobe_glyphs_2D
-from uvisbox.Glyphs.squid_glyphs import uncertainty_squid_glyphs_2D
+from uvisbox.Glyphs.Vis.uncertainty_lobes import uncertainty_lobe_glyphs_2D
+from uvisbox.Glyphs.Stat.squid_glyphs import uncertainty_squid_glyphs_2D
 import numpy as np
 import matplotlib.pyplot as plt
 num_poitns = 15

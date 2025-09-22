@@ -4,7 +4,8 @@ from ..Stat.probabilistic_marching_cubes import probabilistic_marching_cubes
 
 
 
-def probabilistic_marching_cubes_plot(F, isovalue, cross_prob=None, opacity='linear', cmap='viridis'):
+def probabilistic_marching_cubes_plot(F, isovalue, cross_prob=None, opacity='linear', cmap='viridis',   
+                                      plotter=None):
     """
     Visualize the probabilistic marching cubes result using PyVista.
     Parameters:
@@ -20,6 +21,8 @@ def probabilistic_marching_cubes_plot(F, isovalue, cross_prob=None, opacity='lin
             Opacity mapping for the volume rendering. Default is 'linear'.  
         cmap : str, optional
             Colormap for the volume rendering. Default is 'viridis'.
+        plotter : pyvista.Plotter, optional
+            An existing PyVista plotter to add the volume rendering to. If None, a new plotter is created.
     Returns:
     --------
         plotter : pyvista.Plotter
@@ -29,6 +32,9 @@ def probabilistic_marching_cubes_plot(F, isovalue, cross_prob=None, opacity='lin
     if cross_prob is None:
         cross_prob = probabilistic_marching_cubes(F, isovalue)
 
+    if plotter is None:
+        plotter = pv.Plotter()
+
     grid_dimensions = cross_prob.shape
     origin = (0, 0, 0)
     spacing = (1, 1, 1)
@@ -37,7 +43,6 @@ def probabilistic_marching_cubes_plot(F, isovalue, cross_prob=None, opacity='lin
     grid.point_data["cross_prob"] = cross_prob.flatten(order='F')
 
     # Volume rendering of the grid
-    plotter = pv.Plotter()
     plotter.add_volume(grid, scalars="cross_prob", opacity=opacity, cmap=cmap)
     plotter.add_axes()
 
