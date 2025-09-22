@@ -1,6 +1,6 @@
 import numpy as np
 from ..Meshing.uncertainty_tube_meshing_2D import generate_uncertainty_tube_mesh_2D
-from ..uncertainty_tube_plot_2D import plot_uncertainty_tube_2D
+from ..Vis.uncertainty_tube_plot_2D import plot_uncertainty_tube_2D
 
 def project_points_onto_line(point0, point1, points):
     """
