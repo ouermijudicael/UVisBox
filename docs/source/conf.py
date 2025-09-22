@@ -16,9 +16,18 @@ copyright = '2025, Timbwaoga A. J. Ouermi and Jixian Li'
 author = 'Timbwaoga A. J. Ouermi and Jixian Li'
 release = '0.0.1'
 
+
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
+html_theme = 'sphinx_rtd_theme' # Specify your theme
+html_static_path = ['_static'] # Path to static files
+html_logo = '_static/UVisBox-logo.png' # Path to your logo image
+
+html_theme_options = {
+'logo_only': True, # Display only the logo without the project name
+'display_version': False, # Hide version number
+}
 extensions = ["sphinx.ext.autodoc", 
               "sphinx.ext.napoleon", 
               "sphinx.ext.viewcode"]

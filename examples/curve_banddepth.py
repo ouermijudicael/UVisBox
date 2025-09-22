@@ -68,7 +68,7 @@ import numpy as np
 
 # Load the dataset
 lon_lat_coords = irma2017_perturbed_tracks.load_dataset()
-# lon_lat_coords = lon_lat_coords[:20, :, :2]  # Keep only longitude and latitude
+# lon_lat_coords = lon_lat_coords[:, :, :2]  # Keep only longitude and latitude
 # Create the curve band depth plot
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
 
@@ -100,5 +100,5 @@ ax2.set_title('Curve Band Depth Plot')
 ax2.set_xlabel('Longitude')
 ax2.set_ylabel('Latitude')
 plt.legend()
-# plt.savefig("curve_banddepth.png")
+plt.savefig("curve_banddepth.png")
 plt.show()

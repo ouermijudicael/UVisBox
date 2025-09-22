@@ -1,8 +1,5 @@
-examples package
-================
-
-Submodules
-----------
+Examples 
+=========
 
 examples.contour\_boxplot module
 --------------------------------
@@ -82,8 +79,3 @@ examples.vsup module
 .. automodule:: examples.vsup
    :undoc-members:
 
-Module contents
----------------
-
-.. automodule:: examples
-   :undoc-members:
