@@ -95,7 +95,6 @@ plotter = pv.Plotter(shape=(1, 2))
 plotter.subplot(0, 0)
 plotter.add_text("Deterministic Isosurface", font_size=12)
 plotter.add_mesh(iso_surface, color='lightblue', opacity=0.5)
-plotter.show()
 
 F = np.zeros((n_x, n_y, n_z, n_ens))
 for e in range(n_ens):
@@ -107,3 +106,4 @@ plotter.subplot(0, 1)
 plotter = pmc(F, isovalue, plotter=plotter)
 plotter.add_text("Probabilistic Isosurface", font_size=12)
 plotter.show()
+plotter.screenshot("probabilistic_marching_cubes_example.png")
