@@ -1,70 +1,70 @@
 Examples 
 =========
 
-examples.contour\_boxplot module
---------------------------------
-
-.. automodule:: examples.contour_boxplot
-   :undoc-members:
-
-examples.curve\_banddepth module
---------------------------------
-
-.. automodule:: examples.curve_banddepth
-   :undoc-members:
-
-examples.functional\_boxplot module
------------------------------------
-
-.. automodule:: examples.functional_boxplot
-   :undoc-members:
-
-examples.prob\_marching\_squares module
----------------------------------------
-
-.. automodule:: examples.prob_marching_squares
-   :undoc-members:
-
-examples.prob\_marching\_triangles module
+examples.contour\_boxplot\_example module
 -----------------------------------------
 
-.. automodule:: examples.prob_marching_triangles
+.. automodule:: examples.contour_boxplot_example
    :undoc-members:
 
-examples.probabilistic\_isosurface module
+examples.curve\_banddepth\_example module
 -----------------------------------------
 
-.. automodule:: examples.probabilistic_isosurface
+.. automodule:: examples.curve_banddepth_example
    :undoc-members:
 
-examples.probabilistic\_isosurface\_tet module
+examples.functional\_boxplot\_example module
+-----------------------------------------
+
+.. automodule:: examples.functional_boxplot_example
+   :undoc-members:
+
+examples.probabilistic\_marching\_squares\_example module
+---------------------------------------------------------
+
+.. automodule:: examples.probabilistic_marching_squares_example
+   :undoc-members:
+
+examples.probabilistic\_marching\_triangles\_example module
+-----------------------------------------
+
+.. automodule:: examples.probabilistic_marching_triangles_example
+   :undoc-members:
+
+examples.probabilistic\_marching\_cubes\_example module
+-----------------------------------------
+
+.. automodule:: examples.probabilistic_marching_cubes_example
+   :undoc-members:
+
+examples.probabilistic\_marching\_tet\_example module
 ----------------------------------------------
 
-.. automodule:: examples.probabilistic_isosurface_tet
+.. automodule:: examples.probabilistic_marching_tet_example
    :undoc-members:
 
-examples.squid\_glyph\_temp\_wind module
+examples.squid\_glyph\_temp\_wind\_example module
 ----------------------------------------
 
-.. automodule:: examples.squid_glyph_temp_wind
+.. automodule:: examples.squid_glyph_temp_wind_example
    :undoc-members:
 
-examples.squid\_glyphs\_2D module
+examples.squid\_glyphs\_2D\_example module
 ---------------------------------
 
 .. automodule:: examples.squid_glyphs_2D
    :undoc-members:
 
-examples.squid\_glyphs\_3d module
+examples.squid\_glyphs\_3d\_example module
 ---------------------------------
 
 .. automodule:: examples.squid_glyphs_3d
    :undoc-members:
 
-examples.uncertainty\_tube module
+examples.uncertainty\_tube\_example module
 ---------------------------------
 
-.. automodule:: examples.uncertainty_tube
+.. automodule:: examples.uncertainty_tube_example
    :undoc-members:
 
 examples.uncertainty\_tube\_benchmark module
@@ -73,7 +73,7 @@ examples.uncertainty\_tube\_benchmark module
 .. automodule:: examples.uncertainty_tube_benchmark
    :undoc-members:
 
-examples.vsup module
+examples.vsup\_example module
 --------------------
 
 .. automodule:: examples.vsup
