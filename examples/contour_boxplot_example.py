@@ -117,5 +117,5 @@ contour_boxplot(binary_images, ax=ax[1], show_median=True, show_iqr=True, show_n
 
 ax[1].set_title("Contour Boxplot")
 ax[0].set_aspect('equal', adjustable='box')
-plt.savefig("contour_boxplot.png", dpi=300)
+plt.savefig("contour_boxplot_example.png", dpi=300)
 plt.show()

@@ -16,7 +16,7 @@ def functional_depth_mesh(top_curve, bottom_curve, scale=1.0):
     vertices : np.ndarray
         2D array of shape (n_vertices, 2) representing the vertices of the mesh.
     """
-    if top_curve.shape != bottom_curve.shape or top_curve.shape != median_curve.shape:
+    if top_curve.shape != bottom_curve.shape:
         raise ValueError("All input curves must have the same shape.")
     
     # Create a grid of points between the curves

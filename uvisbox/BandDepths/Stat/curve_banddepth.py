@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.spatial import ConvexHull
+from itertools import combinations
 
 
 
@@ -46,7 +47,8 @@ def point_in_hull(point, hull_or_vertices, eps=1e-6):
         hull = ConvexHull(vertices)
     return all((np.dot(eq[:-1], point) + eq[-1] < eps) for eq in hull.equations)
 
-def curve_banddepths(curves, indices):
+
+def curve_banddepths(curves, indices =None):
     """
     Calculate band depth for curves based on how often each curve's points lie within convex hulls formed by bands of other curves.
     
@@ -64,8 +66,14 @@ def curve_banddepths(curves, indices):
     numpy.ndarray
         1D array of normalized depth scores for each curve
     """
+    
+
     # Extract dimensions: number of curves, time steps, and coordinate dimensions
     n_curves, n_steps, n_dims = curves.shape
+
+    if indices is None:
+        # Default to using all combinations of 2 curves if no indices provided
+        indices = list(combinations(range(n_curves), 2))
 
     # Initialize depth scores for each curve (starts at zero)
     depths = np.zeros(n_curves)
