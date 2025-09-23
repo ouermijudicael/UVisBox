@@ -37,9 +37,9 @@ def plot_uncertainty_squid_glyphs_3D(points, triangles, ax=None, show_edges=True
     ax.add_mesh(mesh, color=glyph_color, show_edges=show_edges)
     ax.add_axes()
     ax.set_background('white')
-    ax.show_grid()
-    ax.show_axes()
-    ax.show(title="3D Uncertainty Squid Glyphs")
+    # ax.show_grid()
+    # ax.show_axes()
+    # ax.show(title="3D Uncertainty Squid Glyphs")
 
     return ax
 
@@ -72,7 +72,7 @@ def plot_uncertainty_squid_glyphs_2D(glyphs_points, glyphs_polygons, ax=None):
 
 
 def uncertainty_squid_glyphs_3D(positions, ensemble_vectors, percentil, scale=0.5, 
-                                show_edges=True, glyph_color='lightblue'):
+                                show_edges=True, glyph_color='lightblue', ax=None):
     """
     Draws uncertainty squid glyphs for the given positions and ensemble vectors in 3D.
     Parameters:
@@ -90,6 +90,8 @@ def uncertainty_squid_glyphs_3D(positions, ensemble_vectors, percentil, scale=0.
         Whether to show edges of the glyphs. Default is True.
     glyph_color : str, optional
         The color of the glyphs. Default is 'lightblue'.
+    ax : pyvista.Plotter, optional
+        The pyvista plotter to use. If None, a new plotter will be created.
 
     Returns:
     -------
@@ -149,8 +151,8 @@ def uncertainty_squid_glyphs_3D(positions, ensemble_vectors, percentil, scale=0.
     points, polygons = squid_glyphs_meshing_3D(directional_variations, positions, ensemble_spherical_vectors, min_vectors, median_vectors, max_vectors, glyph_markers, scale, resolution=10, num_of_glyphs=numb_of_glyphs)
     
     # plot squid glyphs
-    plotter = plot_uncertainty_squid_glyphs_3D(points, polygons, None, show_edges, glyph_color)
-   
+    plotter = plot_uncertainty_squid_glyphs_3D(points, polygons, ax, show_edges, glyph_color)
+
     return plotter, points, polygons
 
 

@@ -23,22 +23,26 @@ def plot_uncertainty_lobes(ax, centers, theta1, theta2, mid_angle, r1, r2, r_arr
         Radius for the first wedge.
     r2 : float or iterable of length n
         Radius for the second wedge.
+    r_arrow : float or iterable of length n
+        Length of the arrow.
+    show_median : bool
+        Whether to show the median arrow.
     """
     n = centers.shape[0]
     # Support scalar or iterable for r1 and r2
     for i in range(n):
         center = centers[i]
         t1_start, t1_end = theta1[i]
-        wedge = Wedge(center=center, r=r1[i], theta1=t1_start, theta2=t1_end, facecolor='skyblue', edgecolor='skyblue', alpha=1.0)
+        wedge = Wedge(center=center, r=r1[i], theta1=t1_start, theta2=t1_end, facecolor='skyblue', edgecolor='skyblue', alpha=0.3)
         if r2[i] > 0.0:
             t2_start, t2_end = theta2[i]
-            wedge2 = Wedge(center=center, r=r2[i], theta1=t2_start, theta2=t2_end, facecolor='skyblue', edgecolor='skyblue', alpha=0.3)
+            wedge2 = Wedge(center=center, r=r2[i], theta1=t2_start, theta2=t2_end, facecolor='skyblue', edgecolor='skyblue', alpha=1.0)
         if show_median:
             ax.annotate(
                 '',
-                xy=(center[0] + r_arrow * np.cos(np.deg2rad(mid_angle[i])), center[1] + r_arrow * np.sin(np.deg2rad(mid_angle[i]))),
+                xy=(center[0] + r_arrow[i] * np.cos(np.deg2rad(mid_angle[i])), center[1] + r_arrow[i] * np.sin(np.deg2rad(mid_angle[i]))),
                 xytext=center,
-                arrowprops=dict(facecolor='blue', edgecolor='blue', arrowstyle='->', lw=3, mutation_scale=20, alpha=0.8)
+                arrowprops=dict(facecolor='blue', edgecolor='blue', arrowstyle='->', lw=3, mutation_scale=20, alpha=1.0)
             )
         ax.add_patch(wedge)
         if r2[i] > 0.0:
@@ -88,14 +92,15 @@ def uncertainty_lobe_glyphs_2D(positions, ensemble_vectors, percentil1, percenti
     mid_angle = np.zeros(num_positions)
     r1 = np.zeros(num_positions)
     r2 = np.zeros(num_positions) 
+    r_arrow = np.zeros(num_positions)
     for i_pos in range(num_positions):
         median_idx, min_mag, max_mag, min_angle, max_angle = calculate_spread_2D(ensemble_spherical_vectors[i_pos], depths[i_pos], percentil1)
         median_vector = ensemble_spherical_vectors[i_pos][median_idx] if median_idx is not None else np.array([0,0])
         theta1[i_pos] = np.degrees([min_angle, max_angle]) 
        
         mid_angle[i_pos] = np.degrees(median_vector[1]) if median_idx is not None else 0
-        r_arrow = median_vector[0] *scale if median_idx is not None else 0
-        r1[i_pos] = min_mag * scale 
+        r_arrow[i_pos] = median_vector[0] * scale if median_idx is not None else 0
+        r1[i_pos] = min_mag * scale
 
         if percentil2 is not None:
             r2[i_pos] = max_mag * scale
