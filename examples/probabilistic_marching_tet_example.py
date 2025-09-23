@@ -63,10 +63,15 @@ Compute probabilistic marching tetrahedra
     plotter.show()
     
 """
+# Import necessary libraries
 import numpy as np
 import pyvista as pv
 from uvisbox.ProbabilisticSurfaces import probabilistic_marching_tetrahedra_plot as pmt
 
+# Generate tetrahedral mesh over a 3D domain [-1, 1] and use the tear drop function
+# to create an ensemble of scalar fields with some noise
+
+# tear drop function
 def tear_drop(x, y, z):
     return 0.5*x**5 + 0.5*x**4 - y**2 - z**2
 
@@ -81,7 +86,6 @@ F = np.zeros((n_x, n_y, n_z, n_ens))
 noise_less_F = tear_drop(X, Y, Z)
 
 points = np.c_[X.ravel(), Y.ravel(), Z.ravel()]
-
 
 # create teterahedral mesh
 pv_points= pv.PolyData(points)

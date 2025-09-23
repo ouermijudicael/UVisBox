@@ -56,11 +56,13 @@ Visualize the probability map over the grid
 
 """
 
+# Import necessary libraries
 import numpy as np
 from uvisbox.ProbabilisticContours.Stat.probabilistic_marching_squares import probabilistic_marching_squares
 import matplotlib.pyplot as plt
 
-# Example usage
+# Generate a regular grid over a 2D domain [0, 4π], use function f(x, y) = sin(x) * cos(y)
+# and create an ensemble of scalar fields with some noise
 n, m, n_ens = 50, 50, 100
 x = np.linspace(0, 4 * np.pi, n)
 y = np.linspace(0, 4 * np.pi, m)
@@ -71,7 +73,11 @@ F = np.array([
     for _ in range(n_ens)
 ])
 F = np.transpose(F, (1, 2, 0))  # Shape (n, m, n_ens)
+
+# Set isovalue
 isovalue = 0.5
+
+# Run probabilistic marching squares
 prob_contour = probabilistic_marching_squares(F, isovalue)
 
 # Visualize result
@@ -80,5 +86,5 @@ plt.colorbar(label='Probability of Contour')
 plt.title('Probabilistic Marching Squares')
 plt.xlabel('x')
 plt.ylabel('y')
-plt.savefig("probabilistic_marching_squares.png")
+plt.savefig("probabilistic_marching_squares_example.png")
 plt.show()

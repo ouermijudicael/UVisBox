@@ -11,8 +11,7 @@ Import necessary libraries and modules.
     from matplotlib.tri import Triangulation
     import matplotlib.pyplot as plt
     import numpy as np  
-    from uvisbox.ProbabilisticContours.Stat.probabilistic_marching_triangles
-    import probabilistic_marching_squares
+    from uvisbox.ProbabilisticContours.Stat.probabilistic_marching_triangles import probabilistic_marching_squares
 
 Define a synthetic scalar field function (e.g., f(x, y) = sin(x) * cos(y)).
 .. code-block:: python
@@ -59,11 +58,14 @@ Visualize the probability map over the triangles
     plt.show()
 """
 
+# Import necessary libraries
 from matplotlib.tri import Triangulation
 import matplotlib.pyplot as plt
 import numpy as np  
-from uvisbox.ProbabilisticContours.Stat.probabilistic_marching_triangles 
-import probabilistic_marching_squares
+from uvisbox.ProbabilisticContours import probabilistic_marching_triangles
+
+# Generate a triangular mesh over a 2D domain [0, 2π], use function f(x, y) = sin(x) * cos(y)
+# and create an ensemble of scalar fields with some noise
 
 # Synthetic function: f(x, y) = sin(x) * cos(y)
 def synthetic_func(x, y):
@@ -90,7 +92,7 @@ F = np.array([
 isovalue = 0.5
 
 # Run probabilistic marching triangles
-prob_contour = probabilistic_marching_squares(F, triangles, isovalue, num_samples=200)
+prob_contour = probabilistic_marching_triangles(F, triangles, isovalue, num_samples=200)
 
 # Visualize probability map over triangles
 plt.figure(figsize=(8, 6))
@@ -100,5 +102,5 @@ plt.title('Probabilistic Marching Triangles Example')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.tight_layout()
-plt.savefig("probabilistic_marching_triangles.png")
+plt.savefig("probabilistic_marching_triangles_example.png")
 plt.show()

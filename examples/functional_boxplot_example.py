@@ -68,7 +68,6 @@ for i in range(X.shape[0]):
 ax1.set_title("Sea Surface Temperature Time Series")
 ax1.set_xlabel("Month")
 ax1.set_ylabel("Temperature")
-plt.savefig("sea_surface_temp_timeseries.png")
 
 # Compute functional band depth and plot
 ax2 = functional_banddepth_plot(X, percentil=50, scale=1.0, ax=ax2)
@@ -79,5 +78,5 @@ mfbd_depths = modified_functional_banddepth(X)
 # Plot modified functional band depth
 ax3 = modified_functional_banddepth_plot(X, curves_depths=mfbd_depths, percentil=10, scale=1.0, ax=ax3)
 
-plt.savefig("sea_surface_temp_functional_banddepth.png")
+plt.savefig("sea_surface_temp_functional_banddepth_example.png")
 plt.show()
