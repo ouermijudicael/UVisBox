@@ -1,1 +1,1 @@
-from .colortree import ColorTree
+from .colortree import *
