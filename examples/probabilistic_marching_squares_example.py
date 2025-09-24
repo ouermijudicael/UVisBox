@@ -16,6 +16,7 @@ Import necessary libraries and modules.
 Define a synthetic scalar field function (e.g., f(x, y) = sin(x) * cos(y)).
 
 .. code-block:: python
+
     def synthetic_func(x, y):
         return np.sin(x) * np.cos(y)
         

@@ -14,7 +14,9 @@ Import necessary libraries and modules.
     from uvisbox.ProbabilisticContours.Stat.probabilistic_marching_triangles import probabilistic_marching_squares
 
 Define a synthetic scalar field function (e.g., f(x, y) = sin(x) * cos(y)).
+
 .. code-block:: python
+
     def synthetic_func(x, y):
         return np.sin(x) * np.cos(y)
 

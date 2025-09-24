@@ -15,6 +15,7 @@ Import necessary libraries and modules.
 Load the hurricane track dataset.
 
 .. code-block:: python
+
     lon_lat_coords = irma2017_perturbed_tracks.load_dataset()
     # lon_lat_coords = lon_lat_coords[:20, :, :2]  # Keep only longitude and latitude
     # Create the curve band depth plot
@@ -23,6 +24,7 @@ Load the hurricane track dataset.
 Set up the Basemap
 
 .. code-block:: python
+
     m1 = Basemap(projection='merc',
                 llcrnrlat=np.min(lon_lat_coords[:, :, 1]) - 5, 
                 urcrnrlat=np.max(lon_lat_coords[:, :, 1]) + 5,
@@ -48,8 +50,8 @@ Plot all curves in light gray
 Plot the curve band depth
 
 .. code-block:: python
-    ax2 = curve_banddepth_plot(lon_lat_coords, ax=ax2, percentile=75)
 
+    ax2 = curve_banddepth_plot(lon_lat_coords, ax=ax2, percentile=75)
     ax2.set_title('Curve Band Depth Plot')
     ax2.set_xlabel('Longitude')
     ax2.set_ylabel('Latitude')
@@ -68,7 +70,7 @@ import numpy as np
 
 # Load the dataset
 lon_lat_coords = irma2017_perturbed_tracks.load_dataset()
-# lon_lat_coords = lon_lat_coords[:10, :10, :2]  # Keep only longitude and latitude
+lon_lat_coords = lon_lat_coords[:10, :10, :2]  # Keep only longitude and latitude
 
 
 # Create figure with 2 subplots and set up Basemaps for geographic map visualization 

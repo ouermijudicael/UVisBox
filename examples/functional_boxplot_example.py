@@ -19,6 +19,7 @@ Import necessary libraries
 Load the sea surface temperature dataset and prepare the data
 
 .. code-block:: python
+
     data = sea_surface_temp_data.load_dataset()
     X = data.T
     print(X.shape)

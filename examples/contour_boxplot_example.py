@@ -46,6 +46,7 @@ Define a function to create an ensemble of 2D scalar fields with Gaussian blobs 
 Generate a synthetic ensemble of scalar fields
 
 .. code-block:: python
+
     ensemble = create_ensemble_scalarfield(image_res=128, n_ensembles=100, sigma_min=20, sigma_max=100) # create synthetic ensemble of gaussians
 
     binary_images = (ensemble < 0.7).astype(np.bool_)    # extract contours at isovalue = 0.7
