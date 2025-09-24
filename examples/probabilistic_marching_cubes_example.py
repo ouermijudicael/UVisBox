@@ -55,6 +55,7 @@ Create an ensemble of scalar fields with some noise
 Compute probabilistic marching cubes
 
 .. code-block:: python
+
     plotter.subplot(0, 1)
     plotter = pmc(F, isovalue, plotter=plotter)
     plotter.add_text("Probabilistic Isosurface", font_size=12)
@@ -74,7 +75,7 @@ def tear_drop(x, y, z):
     return 0.5*x**5 + 0.5*x**4 - y**2 - z**2
 
 # Generate synthetic 4D data (n_x, n_y, n_z, n_ens)
-n_x, n_y, n_z, n_ens = 32, 32, 32, 10
+n_x, n_y, n_z, n_ens = 16, 16, 16, 10
 x = np.linspace(-1, 1, n_x)
 y = np.linspace(-1, 1, n_y)
 z = np.linspace(-1, 1, n_z)

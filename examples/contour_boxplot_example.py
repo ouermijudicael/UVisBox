@@ -101,7 +101,7 @@ def create_ensemble_scalarfield(image_res=256, n_ensembles=30, sigma_min=5, sigm
     return np.array(ensemble)
 
 # Generate synthetic ensemble of scalar fields
-ensemble = create_ensemble_scalarfield(image_res=128, n_ensembles=100, sigma_min=20, sigma_max=100) # create synthetic ensemble of gaussians
+ensemble = create_ensemble_scalarfield(image_res=64, n_ensembles=50, sigma_min=20, sigma_max=100) # create synthetic ensemble of gaussians
 
 binary_images = (ensemble < 0.7).astype(np.bool_)    # extract contours at isovalue = 0.7
 print(f"Ensemble shape: {binary_images.shape}")

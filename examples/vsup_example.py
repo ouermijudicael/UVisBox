@@ -67,7 +67,7 @@ Create a sample image where x (columns) is value (0 to 1), y (rows) is uncertain
     plt.show()
 
 """
-
+# import necessary libraries
 import numpy as np
 import matplotlib.pyplot as plt
 
