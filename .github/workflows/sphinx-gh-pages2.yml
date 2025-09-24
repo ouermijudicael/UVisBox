@@ -37,6 +37,7 @@ jobs:
           pip install scikit-learn
           pip install scikit-image
           pip install pyvista
+          pip install basemap
 
       - name: Build HTML
         run: |
