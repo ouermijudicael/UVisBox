@@ -5,8 +5,8 @@ def plot_uncertainty_tube_2D(points, tube_mesh, mean_trajectories, axis=None):
     """
     Plot 2D uncertainty tubes from pre-generated mesh data.
 
-    Parameters
-    ----------
+    Parameters:
+    -----------
     points : np.ndarray
         Array of shape (n_points, 2) representing the tube mesh vertices.
     tube_mesh : np.ndarray
@@ -16,8 +16,8 @@ def plot_uncertainty_tube_2D(points, tube_mesh, mean_trajectories, axis=None):
     axis : matplotlib.axes.Axes, optional
         Axis to plot on. If None, creates a new figure and axis.
 
-    Returns
-    -------
+    Returns:
+    --------
     None
     """
 

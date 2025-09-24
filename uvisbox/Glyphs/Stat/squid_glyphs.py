@@ -6,7 +6,8 @@ from sklearn.decomposition import PCA
 def calculate_spread_3D(vectors, depths, percentil):
     """
     Calculate the spread in 3D spherical coordinates.
-    Parameters
+
+    Parameters:
     ----------
         vectors : numpy.ndarray
             Array of shape (n, 3) in spherical coordinates (magnitude, theta, phi)
@@ -14,7 +15,8 @@ def calculate_spread_3D(vectors, depths, percentil):
             Array of shape (n,) representing the depth of each vector
         percentil : float
             The percentile for depth filtering
-    Returns
+    
+    Returns:
     -------
         tuple
             Indices of vectors with min/max magnitude, theta, phi among those with depth > 1.0-percentil
@@ -41,7 +43,8 @@ def calculate_spread_3D(vectors, depths, percentil):
 def calculate_spread_2D(vectors, depths, percentil):
     """
     Calculate the spread in 2D polar coordinates.
-    Parameters
+    
+    Parameters:
     ----------
         vectors : numpy.ndarray
             Array of shape (n, 2) in polar coordinates (magnitude, angle)
@@ -49,7 +52,8 @@ def calculate_spread_2D(vectors, depths, percentil):
             Array of shape (n,) representing the depth of each vector
         percentil : float
             The percentile for depth filtering
-    Returns
+    
+    Returns:
     -------
         tuple
             Indices of vectors with min/max magnitude, angle among those with depth > 1.0-percentil
@@ -93,7 +97,8 @@ def calculate_spread_2D(vectors, depths, percentil):
 def getDirectionalVariations(vectors, depths, depth_threshold, min_vectors, median_vectors, max_vectors):
     """
     Compute the directional variation of the vectors.
-    Parameters
+    
+    Parameters:
     ----------
     positions : numpy.ndarray
         Array of shape (num_points, 3) where the last dimension contains the x, y, and z coordinates of the positions.
@@ -107,7 +112,8 @@ def getDirectionalVariations(vectors, depths, depth_threshold, min_vectors, medi
         Array of shape (num_points, 3) where the last dimension contains the min vector components.
     domain : numpy.ndarray
         Array of shape (3, 2) where the first dimension contains the x, y, and z domain limits.
-    Returns
+    
+    Returns:
     -------
     directional_variation : numpy.ndarray
         Array of shape (num_points, 4, 2) where the 4 represents the

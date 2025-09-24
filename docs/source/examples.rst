@@ -61,11 +61,11 @@ examples.probabilistic\_marching\_triangles\_example module
 .. .. automodule:: examples.squid_glyphs_3D_example
 ..    :undoc-members:
 
-.. examples.uncertainty\_tube\_example module
-.. ------------------------------------------
+examples.uncertainty\_tube\_example module
+------------------------------------------
 
-.. .. automodule:: examples.uncertainty_tube_example
-..    :undoc-members:
+.. automodule:: examples.uncertainty_tube_example
+   :undoc-members:
 
 .. examples.uncertainty\_tube\_benchmark module
 .. --------------------------------------------

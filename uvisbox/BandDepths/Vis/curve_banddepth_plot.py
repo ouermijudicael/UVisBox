@@ -7,6 +7,7 @@ from ..Stat.curve_banddepth import curve_banddepths
 def curve_banddepth_plot(curves, depths=None, percentile=50, ax=None):
     """
     Create a curve band depth plot.
+    
     Parameters:
     ----------
     curves : numpy.ndarray
@@ -17,6 +18,7 @@ def curve_banddepth_plot(curves, depths=None, percentile=50, ax=None):
         Percentile for the band to be highlighted. Default is 50 (median band).
     ax : matplotlib.axes.Axes, optional
         Matplotlib Axes object to plot on. If None, a new figure and axes will be created.
+    
     Returns:
     -------
     ax: matplotlib.axes.Axes

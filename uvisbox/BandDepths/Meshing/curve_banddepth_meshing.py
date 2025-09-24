@@ -5,14 +5,16 @@ from mpl_toolkits.mplot3d import Axes3D
 def curve_banddepth_meshing(sorted_curves, percentile=50):
     """
     Build a mesh for the curve band depth plot.
+
     Parameters:
-    ----------
+    -----------
     sorted_curves : numpy.ndarray
         3D array of shape (n_curves, n_steps, n_dims) containing curve data sorted by depth (deepest first)
     percentile : float, optional
         Percentile for the band to be highlighted. Default is 50 (median band).
+    
     Returns:
-    -------
+    --------
     points : numpy.ndarray
         2D array of shape (n_points, n_dims) containing the points of the mesh.
     triangles : numpy.ndarray

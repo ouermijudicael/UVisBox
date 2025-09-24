@@ -2,18 +2,28 @@ from operator import inv
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from ...Colors.colortree import ColorTree
+from uvisbox.Colors.colortree import ColorTree
 
 def plot_uncertainty_tube_from_mesh(vertices, faces, mean_trajectories, uv_coords, axis=None):
     """
     Plot 3D uncertainty tubes from pre-generated mesh data.
 
-    Args:
-        vertices (np.ndarray): Global vertex array with shape (total_vertices, 3)
-        faces (np.ndarray): Triangle face indices with shape (n_seeds, triangles_per_seed, 3)
-        mean_trajectories (np.ndarray): Mean trajectory positions with shape (n_steps+1, n_seeds, 3)
-        uv_coords (np.ndarray): UV coordinates for coloring, shape matching vertices.
-        axis (matplotlib.axes.Axes, optional): 3D axis to plot on. If None, creates a new figure and axis.
+    Parameters:
+    -----------
+    vertices (np.ndarray): 
+        Global vertex array with shape (total_vertices, 3)
+    faces (np.ndarray): 
+        Triangle face indices with shape (n_seeds, triangles_per_seed, 3)
+    mean_trajectories (np.ndarray): 
+        Mean trajectory positions with shape (n_steps+1, n_seeds, 3)
+    uv_coords (np.ndarray): 
+        UV coordinates for coloring, shape matching vertices.
+    axis (matplotlib.axes.Axes, optional): 
+        3D axis to plot on. If None, creates a new figure and axis.
+
+    Returns:
+    --------
+    None
     """
     if axis is None:
         fig = plt.figure(figsize=(10, 10))

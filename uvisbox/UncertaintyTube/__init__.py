@@ -1,4 +1,6 @@
-from .Stat.uncertainty_tube import generate_cross_sections
-from .Meshing.uncertainty_tube_meshing import generate_tube_mesh
-from .Vis.uncertainty_tube_plot import plot_uncertainty_tube_from_mesh
+from .Stat.uncertainty_tube import *
+from .Stat.uncertainty_tube_2D import *
+from .Meshing.uncertainty_tube_meshing import *
+from .Vis.uncertainty_tube_plot import *
+from .Vis.uncertainty_tube_plot_2D import *
 

@@ -9,6 +9,7 @@ def choose2(x):
     ----------
     x : int
         number of elements
+    
     Returns:
     -------
     [] : int
@@ -25,6 +26,7 @@ def get_combinations(n):
     -----------
     n : int
         number of elements
+    
     Returns:
     -----------
     combinations : np.ndarray
@@ -86,7 +88,7 @@ def contour_banddepth(data, combination = None, allow_portion=False, eps = 0):
     R. T. Whitaker, M. Mirzargar and R. M. Kirby, "Contour Boxplots: A Method for Characterizing Uncertainty in Feature Sets from Simulation Ensembles," in IEEE Transactions on Visualization and Computer Graphics, vol. 19, no. 12, pp. 2713-2722, Dec. 2013, doi: 10.1109/TVCG.2013.143
     
     Parameters:
-    ----------
+    -----------
     data : np.ndarray
         Input data representing binary contours. Should be convertible to a boolean NumPy array.
     combination : list of tuples, optional
@@ -97,7 +99,7 @@ def contour_banddepth(data, combination = None, allow_portion=False, eps = 0):
         Epsilon tolerance for subset checks when `allow_portion` is False.
 
     Returns:
-    -------
+    --------
     depths : np.ndarray
         Array of band depth values for each image in the input data.
 

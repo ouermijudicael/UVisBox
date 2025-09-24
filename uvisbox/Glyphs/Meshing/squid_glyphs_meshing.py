@@ -6,7 +6,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
     """
     Build superelliptical squid glyphs for 3D visualization. Assumes vectors are in spherical coordinates (magnitude, theta, phi).
 
-    Parameters
+    Parameters:
     ----------
     directional_variations : numpy.ndarray
         Array of shape (n, 4, 2) where the 4 represents the
@@ -31,7 +31,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
     num_of_glyphs : int
         The number of glyphs to be created.
 
-    Returns
+    Returns:
     -------
     points : numpy.ndarray
         Array of shape (m, 3) The points of the squid glyphs.
@@ -259,6 +259,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
 def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths,percentil1, scale=0.2):
     """
     Build squid glyphs for 2D visualization. Assumes vectors are in polar coordinates (magnitude, angle).
+    
     Parameters:
     ----------
     positions : numpy.ndarray
@@ -271,6 +272,7 @@ def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths,per
         The first percentile for depth filtering.
     scale : float
         The scale factor for the glyphs.
+    
     Returns:
     -------
     glyphs_points : numpy.ndarray

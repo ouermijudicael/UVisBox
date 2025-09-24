@@ -6,6 +6,7 @@ def functional_banddepth_plot(curves, curves_depths=None, percentil=100, scale=1
                               show_median=True, band_alpha=0.5):
     """
     Plot the functional band depth area between the top and bottom curves along with the median curve.
+    
     Parameters:
     -----------
     curves : np.ndarray
@@ -22,6 +23,7 @@ def functional_banddepth_plot(curves, curves_depths=None, percentil=100, scale=1
         Whether to plot the median curve. Default is True.
     band_alpha : float, optional
         Alpha value for the band depth area. Default is 0.5.    
+    
     Returns:
     --------
     ax : matplotlib.axes.Axes

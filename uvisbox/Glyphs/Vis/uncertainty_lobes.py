@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Wedge
-from ...BandDepths.Stat.vector_depths import cartesian_to_polar, compute_vector_depths_2D
+from uvisbox.BandDepths.Stat.vector_depths import cartesian_to_polar, compute_vector_depths_2D
 from ..Stat.squid_glyphs import calculate_spread_2D
 
 
@@ -9,8 +9,8 @@ from ..Stat.squid_glyphs import calculate_spread_2D
 def plot_uncertainty_lobes(ax, centers, theta1, theta2, mid_angle, r1, r2, r_arrow, show_median):
     """
     Draws multiple wedges with arrows.
-    Parameters
-    ----------
+    Parameters:
+    -----------
     centers : numpy.ndarray
         Array of shape (n, 2) representing the center positions of the wedges.
     theta1 : numpy.ndarray
@@ -55,8 +55,8 @@ def uncertainty_lobe_glyphs_2D(positions, ensemble_vectors, percentil1, percenti
     """
     Draws uncertainty lobe glyphs for the given positions and ensemble vectors.
 
-    Parameters
-    ----------
+    Parameters:
+    -----------
     positions : numpy.ndarray
         Array of shape (n, 2) representing the positions of the lobe glyphs.
     ensemble_vectors : numpy.ndarray
@@ -70,8 +70,8 @@ def uncertainty_lobe_glyphs_2D(positions, ensemble_vectors, percentil1, percenti
     ax : matplotlib axis
         The axis to draw on. If None, a new figure and axis will be created.
 
-    Returns
-    -------
+    Returns:
+    --------
     ax : matplotlib axis
         The axis with the drawn lobe glyphs.
     """

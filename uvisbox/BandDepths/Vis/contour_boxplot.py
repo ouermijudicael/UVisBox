@@ -19,6 +19,7 @@ def _find_percentile(sorted_images, percentile):
 def contour_boxplot(binary_images, depths=None, ax=None, eps=0, allow_portion=False, show_median=True, show_iqr=True, show_non_outliers=False, show_outliers=False, show_firstquartile=False, outlier_percentile=95):
     """
     Create a contour boxplot for binary images based on their band depths.
+    
     Parameters:
     ----------
     binary_images : np.ndarray
@@ -43,6 +44,7 @@ def contour_boxplot(binary_images, depths=None, ax=None, eps=0, allow_portion=Fa
         If True, highlights the first quartile region in a different shade of gray. Default is False.
     outlier_percentile : float, optional
         Percentile threshold to define outliers. Default is 95.
+    
     Returns:
     -------
     ax: matplotlib.axes.Axes

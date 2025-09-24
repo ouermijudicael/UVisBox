@@ -5,14 +5,15 @@ import matplotlib.pyplot as plt
 import pyvista as pv
 from ..Meshing.squid_glyphs_meshing import squid_glyphs_meshing_3D, squid_glyphs_meshing_2D
 from ..Stat.squid_glyphs import calculate_spread_3D, getDirectionalVariations 
-from ...BandDepths.Stat.vector_depths import compute_vector_depths_3D, compute_vector_depths_2D, cartesian_to_spherical, cartesian_to_polar
+from uvisbox.BandDepths.Stat.vector_depths import compute_vector_depths_3D, compute_vector_depths_2D, cartesian_to_spherical, cartesian_to_polar
 
 
 def plot_uncertainty_squid_glyphs_3D(points, triangles, ax=None, show_edges=True, glyph_color='lightblue'):
     """
     Plots the 3D squid glyphs using pyvista.
+    
     Parameters:
-    ----------
+    -----------
     points : numpy.ndarray
         Array of shape (m, 3) The points of the squid glyphs.
     triangles : numpy.ndarray
@@ -25,7 +26,7 @@ def plot_uncertainty_squid_glyphs_3D(points, triangles, ax=None, show_edges=True
         The color of the glyphs. Default is 'lightblue'.
 
     Returns:
-    -------
+    --------
     ax : pyvista.Plotter
         The pyvista plotter with the drawn squid glyphs.
     """
@@ -48,7 +49,8 @@ def plot_uncertainty_squid_glyphs_3D(points, triangles, ax=None, show_edges=True
 def plot_uncertainty_squid_glyphs_2D(glyphs_points, glyphs_polygons, ax=None):
     """
     Plots the squid glyphs in 2D using matplotlib.
-    Parameters
+    
+    Parameters:
     ----------
     glyphs_points : numpy.ndarray
         Array of shape (k, 2) The points of the squid glyphs.
@@ -56,7 +58,8 @@ def plot_uncertainty_squid_glyphs_2D(glyphs_points, glyphs_polygons, ax=None):
         Array of shape (m, 3) The polygons of the squid glyphs.
     ax : matplotlib axis
         The axis to draw on. If None, a new figure and axis will be created.
-    Returns
+    
+    Returns:
     -------
     ax : matplotlib axis
         The axis with the drawn squid glyphs.
@@ -75,8 +78,9 @@ def uncertainty_squid_glyphs_3D(positions, ensemble_vectors, percentil, scale=0.
                                 show_edges=True, glyph_color='lightblue', ax=None):
     """
     Draws uncertainty squid glyphs for the given positions and ensemble vectors in 3D.
+   
     Parameters:
-    ----------
+    -----------
     positions : numpy.ndarray
         Array of shape (n, 3) The positions of the squid glyphs.
     ensemble_vectors : numpy.ndarray
@@ -94,13 +98,14 @@ def uncertainty_squid_glyphs_3D(positions, ensemble_vectors, percentil, scale=0.
         The pyvista plotter to use. If None, a new plotter will be created.
 
     Returns:
-    -------
+    --------
     plotter : pyvista.Plotter
         The pyvista plotter with the drawn squid glyphs.
     points : numpy.ndarray
         The points of the squid glyphs.
     polygons : numpy.ndarray
         The polygon connectivity for the glyphs.
+
     """
 
     num_positions, num_ens_members =ensemble_vectors.shape[0], ensemble_vectors.shape[1]
@@ -160,8 +165,8 @@ def uncertainty_squid_glyphs_2D(positions, ensemble_vectors, percentil1, scale=0
     """
     Draws uncertainty squid glyphs for the given positions and ensemble vectors in 2D.
 
-    Parameters
-    ----------
+    Parameters:
+    -----------
     positions : numpy.ndarray
         Array of shape (n, 2) representing the positions of the squid glyphs.
     ensemble_vectors : numpy.ndarray
@@ -173,10 +178,11 @@ def uncertainty_squid_glyphs_2D(positions, ensemble_vectors, percentil1, scale=0
     ax : matplotlib axis
         The axis to draw on. If None, a new figure and axis will be created.
 
-    Returns
-    -------
+    Returns:
+    --------
     ax : matplotlib axis
         The axis with the drawn squid glyphs.
+
     """
     num_positions, num_ens_members =ensemble_vectors.shape[0], ensemble_vectors.shape[1]
     

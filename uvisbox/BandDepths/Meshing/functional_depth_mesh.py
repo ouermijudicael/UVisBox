@@ -3,6 +3,7 @@ import numpy as np
 def functional_depth_mesh(top_curve, bottom_curve, scale=1.0):
     """
     Create a 2D triangular mesh representing the functional depth area between the top and bottom curves.
+    
     Parameters:
     -----------
     top_curve : np.ndarray
@@ -11,6 +12,7 @@ def functional_depth_mesh(top_curve, bottom_curve, scale=1.0):
         1D array representing the bottom curve.
     scale : float, optional
         Scale factor for the depth area. Default is 1.0.
+    
     Returns:
     -----------
     vertices : np.ndarray
