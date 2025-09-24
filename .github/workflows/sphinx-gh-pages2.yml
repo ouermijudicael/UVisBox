@@ -31,6 +31,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e .
           pip install sphinx sphinx-rtd-theme  # add other extensions if needed
+          pip install scipy
+          pip install numpy
+          pip install matplotlib
+          pip install scikit-learn
+          pip install scikit-image
+          pip install pyvista
 
       - name: Build HTML
         run: |
