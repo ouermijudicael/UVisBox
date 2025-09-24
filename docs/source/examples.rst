@@ -52,13 +52,13 @@ examples.squid\_glyph\_temp\_wind\_example module
 examples.squid\_glyphs\_2D\_example module
 ---------------------------------
 
-.. automodule:: examples.squid_glyphs_2D
+.. automodule:: examples.squid_glyphs_2D_example
    :undoc-members:
 
 examples.squid\_glyphs\_3d\_example module
 ---------------------------------
 
-.. automodule:: examples.squid_glyphs_3d
+.. automodule:: examples.squid_glyphs_3d_example
    :undoc-members:
 
 examples.uncertainty\_tube\_example module
@@ -74,8 +74,8 @@ examples.uncertainty\_tube\_benchmark module
    :undoc-members:
 
 examples.vsup\_example module
---------------------
+-----------------------------
 
-.. automodule:: examples.vsup
+.. automodule:: examples.vsup_example
    :undoc-members:
 
