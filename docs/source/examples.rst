@@ -10,26 +10,26 @@ examples.contour\_boxplot\_example module
 examples.curve\_banddepth\_example module
 -----------------------------------------
 
-.. automodule:: examples.curve_banddepth_example
-   :undoc-members:
+.. .. automodule:: examples.curve_banddepth_example
+..    :undoc-members:
 
-examples.functional\_boxplot\_example module
----------------------------------------------
+.. examples.functional\_boxplot\_example module
+.. ---------------------------------------------
 
-.. automodule:: examples.functional_boxplot_example
-   :undoc-members:
+.. .. automodule:: examples.functional_boxplot_example
+..    :undoc-members:
 
-examples.probabilistic\_marching\_squares\_example module
-----------------------------------------------------------
+.. examples.probabilistic\_marching\_squares\_example module
+.. ----------------------------------------------------------
 
-.. automodule:: examples.probabilistic_marching_squares_example
-   :undoc-members:
+.. .. automodule:: examples.probabilistic_marching_squares_example
+..    :undoc-members:
 
-examples.probabilistic\_marching\_triangles\_example module
-------------------------------------------------------------
+.. examples.probabilistic\_marching\_triangles\_example module
+.. ------------------------------------------------------------
 
-.. automodule:: examples.probabilistic_marching_triangles_example
-   :undoc-members:
+.. .. automodule:: examples.probabilistic_marching_triangles_example
+..    :undoc-members:
 
 .. examples.probabilistic\_marching\_cubes\_example module
 .. --------------------------------------------------------
