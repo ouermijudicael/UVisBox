@@ -104,7 +104,7 @@ from mpl_toolkits.basemap import Basemap
 import numpy as np
 
 lon_lat_coords = irma2017_perturbed_tracks.load_dataset()
-# lon_lat_coords = lon_lat_coords[:10, :10, :2]  # Keep only longitude and latitude
+lon_lat_coords = lon_lat_coords[:10, :10, :2]  # Keep only longitude and latitude
 
 
 # Create figure with 2 subplots and set up Basemaps for geographic map visualization. In addition, 

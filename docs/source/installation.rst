@@ -9,32 +9,25 @@ To install **UVisBox**, follow the steps below:
 
     .. code-block:: bash
 
-        git clone https://github.com/yourusername/UVisBox.git
+        git clone https://github.com/ouermijudicael/UVisBox.git
         cd UVisBox
 
-2. **Create a Virtual Environment (Optional but Recommended)**
+
+2. **Installation**
+    This project uses use `poetry` for dependency management. If you don't have poetry installed, 
+    you can install it by following the instructions at https://python-poetry.org/docs/#installation.
 
     .. code-block:: bash
 
-        python3 -m venv venv
-        source venv/bin/activate
+        pip install poetry
+        poetry install
 
-3. **Install Dependencies**
 
+5. **Runing Examples**
+    The `examples` directory contains several Python scripts that demonstrate how to use 
+    the `uvisbox` library. To run an example, use `poetry run`:
     .. code-block:: bash
 
-        pip install -r requirements.txt
+        poetry run python examples/uncertainty_tube.py
 
-4. **Install UVisBox**
-
-    .. code-block:: bash
-
-        pip install .
-
-5. **Verify Installation**
-
-    .. code-block:: bash
-
-        uvisbox --help
-
-If you encounter any issues, please refer to the `README.md` or open an issue on the project's GitHub page.
+If you encounter any issues, please open an issue on the project's GitHub page.

@@ -56,6 +56,7 @@ Generate random seed points and compute their trajectories in a 3D flow field
     uv_coords = np.stack([rescaled_max_eigen_values, eigen_values_ratio], axis=1)
 
 .. code-block:: python
+
     #  create figure and axis with two subplots
     fig , (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 7), subplot_kw={'projection': '3d'})
 
