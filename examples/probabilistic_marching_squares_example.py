@@ -39,6 +39,7 @@ Set isovalue, run probabilistic marching squares, and visualize result
     prob_contour = probabilistic_marching_squares(F, isovalue)
 
     # Visualize result
+    fig = plt.figure(figsize=(8, 6))
     plt.imshow(prob_contour, origin='lower', extent=(x.min(), x.max(), y.min(), y.max()), cmap='viridis')
     plt.colorbar(label='Probability of Contour')
     plt.title('Probabilistic Marching Squares')
@@ -81,6 +82,7 @@ isovalue = 0.5
 prob_contour = probabilistic_marching_squares(F, isovalue)
 
 # Visualize result
+fig = plt.figure(figsize=(8, 6))
 plt.imshow(prob_contour, origin='lower', extent=(x.min(), x.max(), y.min(), y.max()), cmap='viridis')
 plt.colorbar(label='Probability of Contour')
 plt.title('Probabilistic Marching Squares')

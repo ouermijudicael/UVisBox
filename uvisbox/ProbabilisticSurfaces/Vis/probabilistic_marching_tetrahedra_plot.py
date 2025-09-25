@@ -9,6 +9,7 @@ def probabilistic_marching_tetrahedra_plot(points, F, tetrahedra, isovalue, cros
                                            opacity='linear', cmap='viridis', plotter=None):
     """
     Visualize the probabilistic marching tetrahedra result using PyVista.
+
     Parameters:
     -----------
         F : np.ndarray
@@ -24,6 +25,7 @@ def probabilistic_marching_tetrahedra_plot(points, F, tetrahedra, isovalue, cros
             Opacity mapping for the volume rendering. Default is 'linear'.
         cmap : str, optional
             Colormap for the volume rendering. Default is 'viridis'.
+            
     Returns:
     --------
         plotter : pyvista.Plotter
@@ -41,8 +43,9 @@ def probabilistic_marching_tetrahedra_plot(points, F, tetrahedra, isovalue, cros
         plotter = pv.Plotter()
             
     grid = pv.UnstructuredGrid(tetrahedra, celltypes, points)
-    grid.cell_data["crossing_probability"] = cross_prob
-    plotter.add_mesh(grid, scalars="crossing_probability", opacity=opacity, cmap=cmap)
+    grid.cell_data["crossing_probability"] = cross_prob.flatten(order='F')
+
+    plotter.add_volume(grid, scalars="crossing_probability", opacity=opacity, cmap=cmap)
 
     return plotter
 

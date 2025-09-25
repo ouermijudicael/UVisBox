@@ -8,6 +8,7 @@ def probabilistic_marching_cubes_plot(F, isovalue, cross_prob=None, opacity='lin
                                       plotter=None):
     """
     Visualize the probabilistic marching cubes result using PyVista.
+
     Parameters:
     -----------
         F : np.ndarray
@@ -23,6 +24,7 @@ def probabilistic_marching_cubes_plot(F, isovalue, cross_prob=None, opacity='lin
             Colormap for the volume rendering. Default is 'viridis'.
         plotter : pyvista.Plotter, optional
             An existing PyVista plotter to add the volume rendering to. If None, a new plotter is created.
+            
     Returns:
     --------
         plotter : pyvista.Plotter

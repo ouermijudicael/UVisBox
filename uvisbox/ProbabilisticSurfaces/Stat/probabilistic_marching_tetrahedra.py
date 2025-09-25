@@ -19,12 +19,12 @@ def probabilistic_marching_tetrahedra(F, tetrahedra, isovalue, num_samples=200):
             1D array of shape (n_triangles,) with probabilities of contour presence in each triangle.
     """
     
-    n_tetrahedra = tetrahedra.shape[0]
+    n_tetrahedra, n_ens = tetrahedra.shape
     crossing_porb = np.zeros(n_tetrahedra)
 
     for t in range(n_tetrahedra):
         vertex_indices = tetrahedra[t]  # Indices of the triangle's vertices
-        F_cell = F[vertex_indices, :]  # Shape (4, n_ens)
+        F_cell = F[vertex_indices, :].reshape(-1, n_ens)  # Shape (4, n_ens)
         cov_mat = np.cov(F_cell)
         mean_vec = np.mean(F_cell, axis=1)
         samples = np.random.multivariate_normal(mean_vec, cov_mat, num_samples)  # Shape (num_samples, 3)

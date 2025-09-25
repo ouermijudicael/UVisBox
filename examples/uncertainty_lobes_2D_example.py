@@ -88,6 +88,10 @@ Plot the original vector field and the uncertainty squid glyphs
     ax2.set_ylabel("Y")
     ax2.grid()
     plt.show()
+
+.. image:: ../uncertainty_lobes_2D_example.png
+    :alt: Uncertainty Lobes 2D Example
+    :align: center
 """
 # Import necessary libraries
 from uvisbox.Glyphs import uncertainty_lobe_glyphs_2D
@@ -167,7 +171,7 @@ ax1.grid()
 
 # Plot uncertainty squid glyphs
 ax2 = uncertainty_lobe_glyphs_2D(positions, ensemble_vectors, 1.0, 0.5, scale=0.4, ax=ax2)
-ax2.set_title("Uncertainty Squid Glyphs for Double Gyre Flow")
+ax2.set_title("Uncertainty Lobes for Double Gyre Flow")
 ax2.set_xlim(-0.25, 2.25)
 ax2.set_ylim(-0.25, 1.25)
 ax2.set_xlabel("X")
@@ -175,5 +179,5 @@ ax2.set_ylabel("Y")
 ax2.grid()
 
 plt.tight_layout()
-plt.savefig("squid_lobes_2D_example.png", dpi=300)
+plt.savefig("uncertainty_lobes_2D_example.png", dpi=300)
 plt.show()
