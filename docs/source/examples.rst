@@ -31,17 +31,17 @@ examples.probabilistic\_marching\_triangles\_example module
 .. automodule:: examples.probabilistic_marching_triangles_example
    :undoc-members:
 
-examples.probabilistic\_marching\_cubes\_example module
---------------------------------------------------------
+.. examples.probabilistic\_marching\_cubes\_example module
+.. --------------------------------------------------------
 
-.. automodule:: examples.probabilistic_marching_cubes_example
-   :undoc-members:
+.. .. automodule:: examples.probabilistic_marching_cubes_example
+..    :undoc-members:
 
-examples.probabilistic\_marching\_tet\_example module
------------------------------------------------------
+.. examples.probabilistic\_marching\_tet\_example module
+.. -----------------------------------------------------
 
-.. automodule:: examples.probabilistic_marching_tet_example
-   :undoc-members:
+.. .. automodule:: examples.probabilistic_marching_tet_example
+..    :undoc-members:
 
 .. .. examples.squid\_glyph\_temp\_wind\_example module
 .. .. --------------------------------------------------
