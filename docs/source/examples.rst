@@ -50,7 +50,7 @@ examples.probabilistic\_marching\_tet\_example module
 ..    :undoc-members:
 
 examples.uncertainty\_lobes\_2D\_example module
--------------------------------------------
+-----------------------------------------------
 
 .. automodule:: examples.uncertainty_lobes_2D_example
    :undoc-members:
