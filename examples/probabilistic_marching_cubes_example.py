@@ -120,7 +120,7 @@ for e in range(n_ens):
 
 # Compute probabilistic marching cubes
 plotter.subplot(0, 1)
-# plotter = pmc(F, isovalue, plotter=plotter)
+plotter = pmc(F, isovalue, plotter=plotter)
 # plotter.add_text("Probabilistic Isosurface", font_size=12)
 # plotter.show()
 # plotter.screenshot("probabilistic_marching_cubes_example.png")
