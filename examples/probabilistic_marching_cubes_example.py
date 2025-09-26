@@ -66,7 +66,7 @@ using probabilistic marching cubes
     # plotter.show()
     plotter.screenshot("probabilistic_marching_cubes_example.png")
 
-.. image:: ../probabilistic_marching_cubes_example.svg
+.. image:: _static/probabilistic_marching_cubes_example.png
    :alt: Probabilistic Marching Cubes Example
    :align: center
 
@@ -123,4 +123,4 @@ plotter.subplot(0, 1)
 plotter = pmc(F, isovalue, plotter=plotter)
 plotter.add_text("Probabilistic Isosurface", font_size=12)
 # plotter.show()
-plotter.screenshot("probabilistic_marching_cubes_example.png")
+# plotter.screenshot("probabilistic_marching_cubes_example.png")

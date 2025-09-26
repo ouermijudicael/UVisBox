@@ -89,7 +89,7 @@ Plot the original vector field and the uncertainty squid glyphs
     ax2.grid()
     plt.show()
 
-.. image:: ../uncertainty_lobes_2D_example.png
+.. image:: _static/uncertainty_lobes_2D_example.png
     :alt: Uncertainty Lobes 2D Example
     :align: center
 """

@@ -66,6 +66,10 @@ Create a sample image where x (columns) is value (0 to 1), y (rows) is uncertain
     # Display the plot
     plt.show()
 
+.. image:: _static/colortree_example.png
+    :alt: ColorTree Example
+    :align: center
+
 """
 # import necessary libraries
 import numpy as np

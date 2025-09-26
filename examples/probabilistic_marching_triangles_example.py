@@ -60,7 +60,7 @@ Set isovalue, run probabilistic marching triangles, and visualize result
     plt.savefig("probabilistic_marching_triangles_example.png")
     plt.show()
 
-.. image:: ../probabilistic_marching_triangles_example.png
+.. image:: _static/probabilistic_marching_triangles_example.png
    :alt: Probabilistic Marching Triangles Example
    :align: center
 
@@ -112,5 +112,5 @@ plt.title('Probabilistic Marching Triangles Example')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.tight_layout()
-plt.savefig("probabilistic_marching_triangles_example.png")
+# plt.savefig("probabilistic_marching_triangles_example.png")
 plt.show()

@@ -67,8 +67,8 @@ to create an ensemble of scalar fields with some noise
     plotter.add_text("Probabilistic Isosurface", font_size=12)
     plotter.show()
     plotter.screenshot("probabilistic_marching_tetrahedra_example.png")
-    
-.. image:: ../probabilistic_marching_tetrahedra_example.png
+
+.. image:: _static/probabilistic_marching_tetrahedra_example.png
    :alt: Probabilistic Marching Tetrahedra Example
    :align: center
     
@@ -131,4 +131,4 @@ plotter.subplot(0, 1)
 plotter = pmt(points, F_reshaped, tetrahedra, isovalue, plotter=plotter)
 plotter.add_text("Probabilistic Isosurface", font_size=12)
 plotter.show()
-plotter.screenshot("probabilistic_marching_tetrahedra_example.png")
+# plotter.screenshot("probabilistic_marching_tetrahedra_example.png")

@@ -74,7 +74,7 @@ filtering and scale vector lengths by 0.1
     plotter.show()
     plotter.screenshot("squid_glyphs_example_3D.png")
 
-.. image:: ../squid_glyphs_example_3D.png
+.. image:: _static/squid_glyphs_example_3D.png
    :alt: Squid Glyphs Example 3D
    :align: center
 

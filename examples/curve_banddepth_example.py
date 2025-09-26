@@ -90,7 +90,7 @@ the mesh and median curve.
     plt.savefig("curve_banddepth_example.png")
     plt.show()
 
-.. image:: ../curve_banddepth_example.png
+.. image:: _static/curve_banddepth_example.png
    :alt: Curve Band Depth Example
    :align: center
 
@@ -175,5 +175,5 @@ ax2.plot(x, y, color='red', label='Median Curve', linewidth=2)
 ax2.set_title('Curve Band Depth Plot')
 ax2.set_xlabel('Longitude')
 ax2.set_ylabel('Latitude')
-plt.savefig("curve_banddepth_example.png")
+# plt.savefig("curve_banddepth_example.png")
 plt.show()

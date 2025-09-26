@@ -48,7 +48,7 @@ Set isovalue, run probabilistic marching squares, and visualize result
     plt.savefig("probabilistic_marching_squares_example.png")
     plt.show()
 
-.. image:: ../probabilistic_marching_squares_example.png
+.. image:: _static/probabilistic_marching_squares_example.png
    :alt: Probabilistic Marching Squares Example
    :align: center
 
@@ -88,5 +88,5 @@ plt.colorbar(label='Probability of Contour')
 plt.title('Probabilistic Marching Squares')
 plt.xlabel('x')
 plt.ylabel('y')
-plt.savefig("probabilistic_marching_squares_example.png")
+# plt.savefig("probabilistic_marching_squares_example.png")
 plt.show()

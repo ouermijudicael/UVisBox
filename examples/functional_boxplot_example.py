@@ -49,7 +49,7 @@ percentile bands in the second and third subplots, respectively.
     plt.savefig("sea_surface_temp_functional_banddepth_example.png")
     plt.show()
 
-.. image:: ../sea_surface_temp_functional_banddepth_example.png
+.. image:: _static/sea_surface_temp_functional_banddepth_example.png
     :alt: Sea Surface Temperature Functional Band Depth Example
     :align: center
     
@@ -86,5 +86,5 @@ mfbd_depths = modified_functional_banddepth(X)
 # Plot modified functional band depth
 ax3 = modified_functional_banddepth_plot(X, curves_depths=mfbd_depths, percentil=10, scale=1.0, ax=ax3)
 
-plt.savefig("sea_surface_temp_functional_banddepth_example.png")
+# plt.savefig("sea_surface_temp_functional_banddepth_example.png")
 plt.show()
