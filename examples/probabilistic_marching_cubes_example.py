@@ -118,8 +118,8 @@ for e in range(n_ens):
     noise = np.random.normal(0, 0.01, (n_x, n_y, n_z))
     F[:, :, :, e] = noise_less_F + noise
 
-# # Compute probabilistic marching cubes
-# plotter.subplot(0, 1)
+# Compute probabilistic marching cubes
+plotter.subplot(0, 1)
 # plotter = pmc(F, isovalue, plotter=plotter)
 # plotter.add_text("Probabilistic Isosurface", font_size=12)
 # plotter.show()
