@@ -109,14 +109,14 @@ plotter.subplot(0, 0)
 plotter.add_text("Deterministic Isosurface", font_size=12)
 plotter.add_mesh(iso_surface, color='lightblue', opacity=0.5)
 
-# # Generate ensemble data with noise and calculate probabilistic isosurface 
-# # using probabilistic marching cubes
+# Generate ensemble data with noise and calculate probabilistic isosurface 
+# using probabilistic marching cubes
 
-# # Generate ensemble data with noise
-# F = np.zeros((n_x, n_y, n_z, n_ens))
-# for e in range(n_ens):
-#     noise = np.random.normal(0, 0.01, (n_x, n_y, n_z))
-#     F[:, :, :, e] = noise_less_F + noise
+# Generate ensemble data with noise
+F = np.zeros((n_x, n_y, n_z, n_ens))
+for e in range(n_ens):
+    noise = np.random.normal(0, 0.01, (n_x, n_y, n_z))
+    F[:, :, :, e] = noise_less_F + noise
 
 # # Compute probabilistic marching cubes
 # plotter.subplot(0, 1)
