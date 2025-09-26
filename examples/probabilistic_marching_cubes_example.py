@@ -42,7 +42,7 @@ Set isovalue and compute deterministic isosurface
     isovalue = -0.001
     iso_surface = grid.contour([isovalue], scalars="values")
     # Set up the plotter with two subplots
-    plotter = pv.Plotter(shape=(1, 2))
+    plotter = pv.Plotter(shape=(1, 2), off_screen=True)
     # Plot deterministic isosurface
     plotter.subplot(0, 0)
     plotter.add_text("Deterministic Isosurface", font_size=12)
@@ -63,10 +63,10 @@ using probabilistic marching cubes
     plotter.subplot(0, 1)
     plotter = pmc(F, isovalue, plotter=plotter)
     plotter.add_text("Probabilistic Isosurface", font_size=12)
-    plotter.show()
+    # plotter.show()
     plotter.screenshot("probabilistic_marching_cubes_example.png")
 
-.. image:: ../probabilistic_marching_cubes_example.png
+.. image:: ../probabilistic_marching_cubes_example.svg
    :alt: Probabilistic Marching Cubes Example
    :align: center
 
@@ -103,7 +103,7 @@ grid.point_data["values"] = noise_less_F.flatten(order='F')
 isovalue = -0.001
 iso_surface = grid.contour([isovalue], scalars="values")
 # Set up the plotter with two subplots
-plotter = pv.Plotter(shape=(1, 2))
+plotter = pv.Plotter(shape=(1, 2), off_screen=True)
 # Plot deterministic isosurface
 plotter.subplot(0, 0)
 plotter.add_text("Deterministic Isosurface", font_size=12)
@@ -121,6 +121,6 @@ for e in range(n_ens):
 # Compute probabilistic marching cubes
 plotter.subplot(0, 1)
 plotter = pmc(F, isovalue, plotter=plotter)
-# plotter.add_text("Probabilistic Isosurface", font_size=12)
+plotter.add_text("Probabilistic Isosurface", font_size=12)
 # plotter.show()
-# plotter.screenshot("probabilistic_marching_cubes_example.png")
+plotter.screenshot("probabilistic_marching_cubes_example.png")
