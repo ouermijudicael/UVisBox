@@ -79,7 +79,7 @@ Generate random seed points and compute their trajectories in a 3D flow field
     plt.savefig("uncertainty_tube.png")
     plt.show()
     
-.. image:: ../uncertainty_tube.png
+.. image:: _static/uncertainty_tube.png
     :alt: Uncertainty Tube Example
     :align: center
     
@@ -148,5 +148,5 @@ ax1.set_zlabel("Z")
 # eigen_values are used for the interpolating the colormap ('viridis'), 
 # blue means high asymmetry, yellow means symmetry.
 plot_uncertainty_tube_from_mesh(vertices, faces, mean_trajectories, uv_coords, axis=ax2)
-plt.savefig("uncertainty_tube.png")
+# plt.savefig("uncertainty_tube.png")
 plt.show()

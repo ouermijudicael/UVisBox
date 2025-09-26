@@ -117,6 +117,7 @@ ax[2].imshow(continuous_leaves_color, origin='lower', extent=(0, 1, 0, 1))
 ax[2].set_title("Continuous Leaves Color Map")
 ax[2].set_xlabel("Value")
 ax[2].set_ylabel("Uncertainty")
+plt.savefig("colortree_example.png")
 
 # Display the plot
 plt.show()
