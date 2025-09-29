@@ -41,7 +41,7 @@ to create an ensemble of scalar fields with some noise
     # extract the tetrahedra
     tetrahedra = grid.cells.reshape(-1, 5)[:, 1:]   
     edges = grid.extract_all_edges()
-    edges.plot(line_width=1, color='k')
+    # edges.plot(line_width=1, color='k')
     cell_types = np.full(tetrahedra.shape[0], pv.CellType.TETRA)
     tetrahedra = np.hstack((np.full((tetrahedra.shape[0], 1), 4), tetrahedra))
 
@@ -107,7 +107,7 @@ grid = pv_points.delaunay_3d(offset=0.1)
 # extract the tetrahedra
 tetrahedra = grid.cells.reshape(-1, 5)[:, 1:]   
 edges = grid.extract_all_edges()
-edges.plot(line_width=1, color='k')
+# edges.plot(line_width=1, color='k')
 cell_types = np.full(tetrahedra.shape[0], pv.CellType.TETRA)
 tetrahedra = np.hstack((np.full((tetrahedra.shape[0], 1), 4), tetrahedra))
 
