@@ -77,8 +77,11 @@ def plot_uncertainty_squid_glyphs_2D(glyphs_points, glyphs_polygons, ax=None):
 def uncertainty_squid_glyphs_3D(positions, ensemble_vectors, percentil, scale=0.5, 
                                 show_edges=True, glyph_color='lightblue', ax=None):
     """
-    Draws uncertainty squid glyphs for the given positions and ensemble vectors in 3D.
-   
+    Draws uncertainty squid glyphs for the given positions and ensemble vectors in 3D. this implementation is based on
+    T. A. J. Ouermi, J. Li, Z. Morrow, B. Van Bloemen Waanders and C. R. Johnson, "Glyph-Based Uncertainty Visualization
+    and Analysis of Time-Varying Vector Fields," 2024 IEEE Workshop on Uncertainty Visualization: Applications,
+    Techniques, Software, and Decision Frameworks, St Pete Beach, FL, USA, 2024, pp. 73-77, doi: 10.1109/UncertaintyVisualization63963.2024.00014.
+
     Parameters:
     -----------
     positions : numpy.ndarray
@@ -163,7 +166,11 @@ def uncertainty_squid_glyphs_3D(positions, ensemble_vectors, percentil, scale=0.
 
 def uncertainty_squid_glyphs_2D(positions, ensemble_vectors, percentil1, scale=0.2, ax=None):
     """
-    Draws uncertainty squid glyphs for the given positions and ensemble vectors in 2D.
+    Draws uncertainty squid glyphs for the given positions and ensemble vectors in 2D. This a 2D version
+    of the 3D uncertainty squid glyphs in T. A. J. Ouermi, J. Li, Z. Morrow, B. Van Bloemen Waanders and 
+    C. R. Johnson, "Glyph-Based Uncertainty Visualization and Analysis of Time-Varying Vector Fields," 
+    2024 IEEE Workshop on Uncertainty Visualization: Applications, Techniques, Software, and Decision Frameworks, 
+    St Pete Beach, FL, USA, 2024, pp. 73-77, doi: 10.1109/UncertaintyVisualization63963.2024.00014.
 
     Parameters:
     -----------

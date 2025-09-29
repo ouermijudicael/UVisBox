@@ -53,7 +53,12 @@ def plot_uncertainty_lobes(ax, centers, theta1, theta2, mid_angle, r1, r2, r_arr
 def uncertainty_lobe_glyphs_2D(positions, ensemble_vectors, percentil1, percentil2=None, 
                                scale=0.2, ax=None, show_median=True):
     """
-    Draws uncertainty lobe glyphs for the given positions and ensemble vectors.
+    Draws uncertainty lobe glyphs for the given positions and ensemble vectors. This implemantation is inspired by
+    M. Jarema, I. Demir, J. Kehrer and R. Westermann, "Comparative visual analysis of vector field ensembles," 2015 
+    IEEE Conference on Visual Analytics Science and Technology (VAST), Chicago, IL, USA, 2015, pp. 81-88, 
+    doi: 10.1109/VAST.2015.7347634. This implementation uses vector depth and doesn't fit ensemble to a 
+    Gaussian Mixture Model as in the original paper. In addition, this implementation doesn't perform clustering
+    of the vectors, instead it draws lobes for all vectors at each position.
 
     Parameters:
     -----------

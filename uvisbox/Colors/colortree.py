@@ -14,7 +14,8 @@ class ColorTree:
     inspired by VSUP (Value-Suppressing Uncertainty Palettes). It generates colors based on value
     and uncertainty levels using a colormap and uncertainty color, supporting both continuous and discrete modes.
 
-    Attributes:
+    Parameters:
+    -----------
         depth (int): The depth of the color tree.
         color_u (np.ndarray): RGB color for uncertainty.
         cmap (str): Matplotlib colormap name for leaf nodes (required).
@@ -81,14 +82,21 @@ class ColorTree:
         """
         Generates colors for an image array based on uncertainty (first channel) and value (second channel).
 
-        Args:
-            image (np.ndarray): Input array with shape (..., 2), where last dim is [uncertainty, value].
-            show_uncertainty (bool): If False, ignores uncertainty and uses colormap directly.
-            discrete (bool): If True, treats as discrete levels using the tree.
-            continuous_leaves (bool): If True and discrete=True, uses colormap interpolation at leaf level instead of tree nodes.
+        Parameters:
+        -----------
+        image (np.ndarray): 
+            Input array with shape (..., 2), where last dim is [uncertainty, value].
+        show_uncertainty (bool): 
+            If False, ignores uncertainty and uses colormap directly.
+        discrete (bool): 
+            If True, treats as discrete levels using the tree.
+        continuous_leaves (bool): 
+            If True and discrete=True, uses colormap interpolation at leaf level instead of tree nodes.
 
         Returns:
-            np.ndarray: RGB color array with shape (..., 3).
+        --------
+        np.ndarray: 
+            RGB color array with shape (..., 3).
         """
         v = image[..., 1]
         u = image[..., 0]
@@ -175,13 +183,16 @@ class ColorTree:
         """
         Retrieve the color for a given value and uncertainty based on the color tree.
 
-        Args:
+        Parameters:
+        -----------
             value (float): The primary value (e.g., data point value).
             uncertainty (float): The uncertainty level.
             debug_print (bool): If True, print debug information.
 
         Returns:
-            np.ndarray: RGB color array.
+        --------
+        np.ndarray: 
+            RGB color array.
         """
         value_ratio, uncertainty_ratio = self._clip_and_normalize(value, uncertainty)
         depth, node_index = self._get_depth_and_index(value_ratio, uncertainty_ratio)
