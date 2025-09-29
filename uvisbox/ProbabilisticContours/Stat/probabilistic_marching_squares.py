@@ -2,7 +2,12 @@ import numpy as np
 
 def probabilistic_marching_squares(F, isovalue, num_samples=200):
     """
-    Perform probabilistic marching squares on a 2D scalar field with uncertainty.
+    Perform probabilistic marching squares on a 2D scalar field with uncertainty. This function calculates
+    the probability of the isocontour passing through each cell in the grid based on an ensemble of scalar fields.
+    The method is based on the paper: K. Pothkow and H. -C. Hege, "Positional Uncertainty of Isocontours: 
+    Condition Analysis and Probabilistic Measures," in IEEE Transactions on Visualization and Computer Graphics, 
+    vol. 17, no. 10, pp. 1393-1406, Oct. 2011, doi: 10.1109/TVCG.2010.247
+
     Parameters:
     -----------
         F : np.ndarray
@@ -11,6 +16,7 @@ def probabilistic_marching_squares(F, isovalue, num_samples=200):
             The isovalue for which to compute the contour.
         num_samples : int, optional
             Number of samples to draw for estimating the probability of contour presence in each cell.
+            
     Returns:
     --------
         prob_contour : np.ndarray

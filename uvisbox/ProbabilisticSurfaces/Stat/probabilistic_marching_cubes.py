@@ -6,7 +6,11 @@ def tear_drop(x, y, z):
 
 def probabilistic_marching_cubes(F, isovalue, num_samples=200):
     """
-    Perform probabilistic marching squares on a 2D scalar field with uncertainty.
+    Perform probabilistic marching squares on a 2D scalar field with uncertainty. This function calculates
+    the probability of the isocontour passing through each cell in the grid based on an ensemble of scalar fields.
+    The method is based on the paper: Pöthkow, K., Weber, B. and Hege, H.-C. (2011), Probabilistic Marching Cubes. Computer 
+    Graphics Forum, 30: 931-940. https://doi.org/10.1111/j.1467-8659.2011.01942.x
+    
     Parameters:
     -----------
         F : np.ndarray
@@ -15,6 +19,7 @@ def probabilistic_marching_cubes(F, isovalue, num_samples=200):
             The isovalue for which to compute the isosurface.
         num_samples : int, optional
             Number of samples to draw for estimating the probability of contour presence in each cell.
+    
     Returns:
     --------
         prob_contour : np.ndarray

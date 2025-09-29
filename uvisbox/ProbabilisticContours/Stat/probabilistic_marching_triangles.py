@@ -2,7 +2,9 @@ import numpy as np
 
 def probabilistic_marching_triangles(F, triangles, isovalue, num_samples=200):
     """
-    Perform probabilistic marching triangles on a 2D scalar field with uncertainty.
+    Perform probabilistic marching triangles on a 2D scalar field with uncertainty. This function calculates
+    the probability of the isocontour passing through each triangle in the triangulated mesh based on an ensemble of scalar fields.
+ 
     Parameters:
     -----------
         F : np.ndarray

@@ -2,25 +2,28 @@ import numpy as np
 
 def probabilistic_marching_tetrahedra(F, tetrahedra, isovalue, num_samples=200):
     """
-    Perform probabilistic marching squares on a 2D scalar field with uncertainty.
+    Perform probabilistic marching squares on a 2D scalar field with uncertainty. This function calculates
+    the probability of the isocontour passing through each triangle in the triangulated mesh based on an ensemble of scalar fields.
+
     Parameters:
     -----------
         F : np.ndarray
             2D array of shape (n_points, n_ens) representing the scalar field with ensemble members.
-        triangles : np.ndarray
+    tetrahedra : np.ndarray
             2D array of shape (n_tetrahedra, 4) representing the triangulation of the points.
         isovalue : float
             The isovalue for which to compute the contour.  
         num_samples : int, optional
             Number of samples to draw for estimating the probability of contour presence in each cell.
+
     Returns:
-    --------
+    --------    
         prob_contour : np.ndarray
-            1D array of shape (n_triangles,) with probabilities of contour presence in each triangle.
+            1D array of shape (n_tetrahedra,) with probabilities of contour presence in each tetrahedron.
     """
     
     n_tetrahedra, n_ens = tetrahedra.shape
-    crossing_porb = np.zeros(n_tetrahedra)
+    crossing_prob = np.zeros(n_tetrahedra)
 
     for t in range(n_tetrahedra):
         vertex_indices = tetrahedra[t]  # Indices of the triangle's vertices
@@ -34,9 +37,8 @@ def probabilistic_marching_tetrahedra(F, tetrahedra, isovalue, num_samples=200):
             max_sample = np.max(sample)
             if min_sample <= isovalue <= max_sample:
                 count += 1
-        crossing_porb[t] = count / num_samples
+        crossing_prob[t] = count / num_samples
 
-    return crossing_porb
-
+    return crossing_prob
 
     
