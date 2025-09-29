@@ -85,7 +85,9 @@ def _portion_subset(A, B):
 def contour_banddepth(data, combination = None, allow_portion=False, eps = 0):
     """
     Calculates the band depth of binary contour data using pairwise combinations. 
-    R. T. Whitaker, M. Mirzargar and R. M. Kirby, "Contour Boxplots: A Method for Characterizing Uncertainty in Feature Sets from Simulation Ensembles," in IEEE Transactions on Visualization and Computer Graphics, vol. 19, no. 12, pp. 2713-2722, Dec. 2013, doi: 10.1109/TVCG.2013.143
+    R. T. Whitaker, M. Mirzargar and R. M. Kirby, "Contour Boxplots: A Method for 
+    Characterizing Uncertainty in Feature Sets from Simulation Ensembles," in IEEE Transactions 
+    on Visualization and Computer Graphics, vol. 19, no. 12, pp. 2713-2722, Dec. 2013, doi: 10.1109/TVCG.2013.143
     
     Parameters:
     -----------

@@ -50,7 +50,10 @@ def point_in_hull(point, hull_or_vertices, eps=1e-6):
 
 def curve_banddepths(curves, indices =None):
     """
-    Calculate band depth for curves based on how often each curve's points lie within convex hulls formed by bands of other curves.
+    Calculate band depth for curves based on how often each curve's points lie within convex hulls 
+    formed by bands of other curves. M. Mirzargar, R. T. Whitaker and R. M. Kirby, "Curve Boxplot: 
+    Generalization of Boxplot for Ensembles of Curves," in IEEE Transactions on Visualization and 
+    Computer Graphics, vol. 20, no. 12, pp. 2654-2663, 31 Dec. 2014, doi: 10.1109/TVCG.2014.2346455.
     
     Parameters:
     ----------
