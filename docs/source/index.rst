@@ -33,8 +33,10 @@ The project is built using ``poetry`` for dependency management and relies on se
 * **matplotlib:** For plotting and visualization.
 * **scikit-learn:** For machine learning algorithms.
 * **scikit-image:** For image processing.
+* **pyvista:** For 3D visualization and mesh handling.
+* **basemap:** For geographical plotting. Just required for examples not needed for core functionality.
 
-The codebase is organized into modules, each handling a specific aspect of the visualization process:
+The codebase is organized into modules, each handling a specific uncertainty visualization technique.:
 
 * ``BandDepths``: For calculating band depths.
 * ``Colors``: For color mapping and interpolation.
@@ -42,6 +44,8 @@ The codebase is organized into modules, each handling a specific aspect of the v
 * ``Glyphs``: For creating glyphs.
 * ``Interpolations``: For interpolation methods.
 * ``UncertaintyTube``: For generating and visualizing uncertainty tubes.
+* ``ProbabilisticContours``: For probabilistic contouring methods.
+* ``ProbabilisticSurfaces``: For probabilistic surface methods.
 
 .. toctree::
    :maxdepth: 2
