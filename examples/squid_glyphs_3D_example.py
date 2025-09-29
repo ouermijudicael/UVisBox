@@ -127,7 +127,7 @@ for i, vec in enumerate(spherical_vectors):
 plot_points = np.array(plot_points)
 plot_directions = np.array(plot_directions)
 # Set up a pyvista plotter with two subplots
-plotter = pv.Plotter(shape=(1, 2))
+plotter = pv.Plotter(shape=(1, 2), off_screen=True)
 # Plot ensemble vectors using arrows in the first subplot
 plotter.subplot(0, 0)
 plotter.add_arrows(plot_points, plot_directions, color='green', mag=0.1, opacity=0.5)
@@ -140,5 +140,5 @@ plotter.add_text('Ensemble Vectors in 3D', font_size=12)
 plotter.subplot(0, 1)
 plotter, points, triangles = uncertainty_squid_glyphs_3D(grid_points, ensemble_vectors, 0.5, 0.1, ax=plotter)
 plotter.add_text('Uncertainty Squid Glyphs in 3D', font_size=12)
-# plotter.show()
-# plotter.screenshot("squid_glyphs_example_3D.png")
+plotter.show()
+plotter.screenshot("squid_glyphs_example_3D.png")
