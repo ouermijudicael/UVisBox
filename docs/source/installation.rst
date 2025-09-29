@@ -26,6 +26,7 @@ To install **UVisBox**, follow the steps below:
 5. **Runing Examples**
     The `examples` directory contains several Python scripts that demonstrate how to use 
     the `uvisbox` library. To run an example, use `poetry run`:
+    
     .. code-block:: bash
 
         poetry run python examples/uncertainty_tube.py
