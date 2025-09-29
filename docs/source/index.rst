@@ -17,7 +17,7 @@ Currently implemented methods include:
 * **Squid Glyph:** A new glyph for visualizing vector field uncertainty. `doi <https://doi.ieeecomputersociety.org/10.1109/UncertaintyVisualization63963.2024.00014>`__
 * **Uncertainty Lobes:** A glyph for visualizing uncertainty in 2D vector fields. `doi <https://doi.org/10.1109/VAST.2015.7347634>`__
 * **Probabilistic Marching Squares:** For visualizing uncertainty in 2D scalar fields. `doi <https://doi.org/10.1109/TVCG.2010.247>`__
-* **Probabilistic Marching Triangles:** For visualizing uncertainty in 2D scalar fields on triangulated meshes. 
+* **Probabilistic Marching Triangles:** For visualizing uncertainty in 2D scalar fields on triangulated meshes. `doi <https://doi.org/10.1615/Int.J.UncertaintyQuantification.2012003958>`__
 * **Probabilistic Marching cubes:** For visualizing uncertainty in 3D scalar fields. `doi <https://doi.org/10.1111/j.1467-8659.2011.01942.x>`__
 * **Probabilistic Marching Tetrahedra:** For visualizing uncertainty in 3D scalar fields on tetrahedral meshes.
 * **Uncertainty Tube:** For visualizing uncertainty in trajectory data. `arxiv <https://www.arxiv.org/abs/2508.13505>`__
