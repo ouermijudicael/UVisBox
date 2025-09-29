@@ -11,16 +11,19 @@ Currently implemented methods include:
 
 * **Uncertainty Tube:** For visualizing uncertainty in trajectory data. `arxiv <https://www.arxiv.org/abs/2508.13505>`__
 * **Contour Boxplot:** For summarizing isocontours. `doi <https://doi.org/10.1109/TVCG.2013.143>`__
+* **Curve Boxplot:** For summarizing 2D curves. `doi <https://doi.org/10.1109/TVCG.2014.2346455>`__
+* **Functional Band Depth:** For summarizing functional data. `doi <https://doi.org/10.1002/sta4.8>`__
 * **VSUP:** A colormap designed for uncertain data. `link <https://medium.com/@uwdata/value-suppressing-uncertainty-palettes-426130122ce9>`__
-
-Work in progress:
-
 * **Squid Glyph:** A new glyph for visualizing vector field uncertainty. `doi <https://doi.ieeecomputersociety.org/10.1109/UncertaintyVisualization63963.2024.00014>`__
+* **Uncertainty Lobes:** A glyph for visualizing uncertainty in 2D vector fields. `doi <https://doi.org/10.1109/VAST.2015.7347634>`__
+* **Probabilistic Marching Squares:** For visualizing uncertainty in 2D scalar fields. `doi <https://doi.org/10.1109/TVCG.2010.247>`__
+* **Probabilistic Marching Triangles:** For visualizing uncertainty in 2D scalar fields on triangulated meshes. 
+* **Probabilistic Marching cubes:** For visualizing uncertainty in 3D scalar fields. `doi <https://doi.org/10.1111/j.1467-8659.2011.01942.x>`__
+* **Probabilistic Marching Tetrahedra:** For visualizing uncertainty in 3D scalar fields on tetrahedral meshes.
+* **Uncertainty Tube:** For visualizing uncertainty in trajectory data. `arxiv <https://www.arxiv.org/abs/2508.13505>`__
 
 Future plans include the implementation of:
 
-* Curve band depth and curve boxplots
-* Probabilistic marching cubes
 * Other novel uncertainty visualization methods
 
 The project is built using ``poetry`` for dependency management and relies on several scientific Python libraries:
