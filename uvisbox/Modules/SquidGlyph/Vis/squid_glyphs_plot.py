@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pyvista as pv
 from ..Meshing.squid_glyphs_meshing import squid_glyphs_meshing_3D, squid_glyphs_meshing_2D
-from ..Stat.squid_glyphs import calculate_spread_3D, getDirectionalVariations 
-from uvisbox.BandDepths.Stat.vector_depths import compute_vector_depths_3D, compute_vector_depths_2D, cartesian_to_spherical, cartesian_to_polar
+from ..Stats.squid_glyphs import calculate_spread_3D, getDirectionalVariations 
+from ....Core.BandDepths.vector_depths import compute_vector_depths_3D, compute_vector_depths_2D, cartesian_to_spherical, cartesian_to_polar
 
 
 def plot_uncertainty_squid_glyphs_3D(points, triangles, ax=None, show_edges=True, glyph_color='lightblue'):

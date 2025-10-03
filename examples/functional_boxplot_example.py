@@ -56,9 +56,10 @@ percentile bands in the second and third subplots, respectively.
 """
 # import necessary libraries and load dataset
 from uvisbox.Datasets import sea_surface_temp_data
-from uvisbox.BandDepths import functional_banddepth_plot
-from uvisbox.BandDepths import modified_functional_banddepth, modified_functional_banddepth_plot
+# from uvisbox.BandDepths import functional_banddepth_plot
+# from uvisbox.BandDepths import modified_functional_banddepth, modified_functional_banddepth_plot
 import matplotlib.pyplot as plt
+from uvisbox.Modules.FunctionalBoxplot.plot import plot as functional_boxplot
 
 data = sea_surface_temp_data.load_dataset()
 X = data.T
@@ -77,14 +78,17 @@ ax1.set_ylabel("Temperature")
 # Calculate and plot the functional band depth for the time series data with 50th and 10th 
 # percentile bands in the second and third subplots, respectively.
 
-# Compute functional band depth and plot
-ax2 = functional_banddepth_plot(X, percentil=50, scale=1.0, ax=ax2)
+# # Compute functional band depth and plot
+# ax2 = functional_banddepth_plot(X, percentil=50, scale=1.0, ax=ax2)
 
-# Compute modified functional band depth 
-mfbd_depths = modified_functional_banddepth(X)
+# # Compute modified functional band depth 
+# mfbd_depths = modified_functional_banddepth(X)
 
-# Plot modified functional band depth
-ax3 = modified_functional_banddepth_plot(X, curves_depths=mfbd_depths, percentil=10, scale=1.0, ax=ax3)
+# # Plot modified functional band depth
+# ax3 = modified_functional_banddepth_plot(X, curves_depths=mfbd_depths, percentil=10, scale=1.0, ax=ax3)
 
-# plt.savefig("sea_surface_temp_functional_banddepth_example.png")
+ax2 = functional_boxplot(X, percentil=50, scale=1.0, ax=ax2)
+ax3 = functional_boxplot(X, method='modified_bd', percentil=10, scale=1.0, ax=ax3)
+
+plt.savefig("sea_surface_temp_functional_banddepth_example.png")
 plt.show()

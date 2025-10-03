@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ..Stat.functional_banddepth import functional_banddepth, calculate_band, modified_functional_banddepth
+# from ....Core.BandDepths.functional_banddepth import functional_banddepth, calculate_band, modified_functional_banddepth
+from ..Stats.stats import functional_banddepth, calculate_band, modified_functional_banddepth
 
-def functional_banddepth_plot(curves, curves_depths=None, percentil=100, scale=1.0, ax=None, 
+def functional_boxplot(curves, curves_depths=None, percentil=100, scale=1.0, ax=None, 
                               show_median=True, band_alpha=0.5):
     """
     Plot the functional band depth area between the top and bottom curves along with the median curve.

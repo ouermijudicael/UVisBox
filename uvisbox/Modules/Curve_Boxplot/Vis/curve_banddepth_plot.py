@@ -1,8 +1,8 @@
 from itertools import combinations
 import matplotlib.pyplot as plt
 import numpy as np
-from ..Meshing.curve_banddepth_meshing import curve_banddepth_meshing
-from ..Stat.curve_banddepth import curve_banddepths
+from ..Mesh.curve_banddepth_meshing import curve_banddepth_meshing
+from ....Core.BandDepths.curve_banddepth import curve_banddepths
 
 def curve_banddepth_plot(curves, depths=None, percentile=50, ax=None):
     """

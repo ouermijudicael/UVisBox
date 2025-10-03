@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ..Stat.contour_banddepth import contour_banddepth
+from ....Core.BandDepths.contour_banddepth import contour_banddepth
 
 def _find_percentile(sorted_images, percentile):
     n_images = sorted_images.shape[0]

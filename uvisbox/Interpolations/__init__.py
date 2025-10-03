@@ -1,1 +1,2 @@
-from .linear_interpolation import linear_interpolate
+# Import from Core (moved in restructuring)
+from ..Core.Interpolations.linear_interpolation import linear_interpolate

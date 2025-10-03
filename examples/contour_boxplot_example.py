@@ -81,7 +81,7 @@ Calculate and plot the contour boxplot
 # import necessary libraries
 import numpy as np
 import matplotlib.pyplot as plt
-from uvisbox.BandDepths import contour_boxplot
+from uvisbox.Modules.ContourBoxplot.plot import plot as contour_boxplot
 from PIL import Image
 
 def create_ensemble_scalarfield(image_res=256, n_ensembles=30, sigma_min=5, sigma_max=50):
@@ -130,9 +130,10 @@ ax[0].set_title("Ensemble Contours")
 
 # Calculate and plot the contour boxplot
 
-contour_boxplot(binary_images, ax=ax[1], show_median=True, show_iqr=True, 
-                show_non_outliers=True, show_outliers=True, show_firstquartile=True, outlier_percentile=95)
+# contour_boxplot(binary_images, ax=ax[1], show_median=True, show_iqr=True, 
+#                 show_non_outliers=True, show_outliers=True, show_firstquartile=True, outlier_percentile=95)
+ax[1] = contour_boxplot(binary_images, percentil=95, ax=ax[1], show_median=True, show_outliers=True)
 ax[1].set_title("Contour Boxplot")
 ax[0].set_aspect('equal', adjustable='box')
-# plt.savefig("contour_boxplot_example.png", dpi=300)
+plt.savefig("contour_boxplot_example.png", dpi=300)
 plt.show()
