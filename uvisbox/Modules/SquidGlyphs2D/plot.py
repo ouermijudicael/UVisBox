@@ -1,4 +1,4 @@
-from uvisbox.Core.CoordinateSystems import cartesian_to_polar
+from uvisbox.Core.BandDepths.vector_depths import cartesian_to_polar
 import numpy as np
 from .Stats.vector_stats import compute_vector_depths_2D
 from .Vis.matplotlib_vis import uncertainty_squid_glyphs_2D_plot
@@ -42,6 +42,9 @@ def plot(positions, ensemble_vectors, percentil1, scale=0.2, ax=None):
     depths = np.zeros((num_positions, num_ens_members))
     for i in range(num_positions):
         depths[i] = compute_vector_depths_2D(ensemble_polar_vectors[i])
+        if i == 0:
+            print(f"max depth at position {i}: {depths[i].max()} with index {np.argmax(depths[i])}")
+            print(f" and vector {ensemble_polar_vectors[i][np.argmax(depths[i])]}")
 
     # build squid glyphs
     glyphs_points, glyphs_polygons = squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, depths, percentil1, scale)

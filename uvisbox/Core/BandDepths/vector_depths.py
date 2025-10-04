@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Wedge
 from sklearn.decomposition import PCA
 
+
 def cartesian_to_polar(vectors):
     """
     Convert 2D Cartesian vectors to polar coordinates (magnitude, angle).
@@ -31,13 +32,14 @@ def cartesian_to_polar(vectors):
 def cartesian_to_spherical(vectors):
     """
     Convert 3D Cartesian vectors to spherical coordinates (magnitude, theta, phi).
-    Parameters
-    ----------
+
+    Parameters:
+    -----------
         vectors : numpy.ndarray
             Array of shape (n, 3) representing 3D Cartesian vectors.
     
-    Returns
-    -------
+    Returns:
+    --------
         spherical_coords : numpy.ndarray
             Array of shape (n, 3) with columns [magnitude, theta, phi].
     """

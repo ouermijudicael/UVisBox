@@ -7,7 +7,7 @@ def calculate_spread_2D(vectors, depths, percentil):
     Calculate the spread in 2D polar coordinates.
     
     Parameters:
-    ----------
+    -----------
         vectors : numpy.ndarray
             Array of shape (n, 2) in polar coordinates (magnitude, angle)
         depths : numpy.ndarray
@@ -16,7 +16,7 @@ def calculate_spread_2D(vectors, depths, percentil):
             The percentile for depth filtering
     
     Returns:
-    -------
+    --------
         tuple
             Indices of vectors with min/max magnitude, angle among those with depth > 1.0-percentil
     """

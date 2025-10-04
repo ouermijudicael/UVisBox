@@ -42,6 +42,10 @@ def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, pe
         min_angle = np.min(ensemble_polar_vectors[i_pos][indices][:, 1]) if indices.size > 0 else 0
         max_angle = np.max(ensemble_polar_vectors[i_pos][indices][:, 1]) if indices.size > 0 else 0
         
+        if i_pos == 0:
+            print(f"position {i_pos} with {indices.size} vectors above depth threshold {1.0 - percentil1}")
+            print(f" min_mag: {min_mag}, max_mag: {max_mag}, min_angle: {min_angle}, max_angle: {max_angle}")
+            print(f" median vector (mag, angle): {median_vector}")
         # rotate all angles by 90-mid_angle so the median vector aligns with the y-axis
         #  and project all vectors onto the x-axis
         # x_projection = ensemble_polar_vectors[i_pos][indices, 0] * np.cos(ensemble_polar_vectors[i_pos][indices, 1] - np.radians(mid_angle[i_pos]))
@@ -50,7 +54,7 @@ def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, pe
         h = median_vector[0]
 
         rad_angle = (max_angle - min_angle)*0.5
-        rot_angle = median_vector[1]
+        rot_angle = median_vector[1]- np.pi*0.5 # rotate median vector to y-axis
         base = 2* np.arctan(rad_angle)*max_mag
         # build 2D squid glyph triangulation
         if (base > 1e-5) and (delta_h > 1e-5):
@@ -71,6 +75,7 @@ def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, pe
             pt2 = np.array([pt2[0]*np.cos(rot_angle) - pt2[1]*np.sin(rot_angle),
                             pt2[0]*np.sin(rot_angle) + pt2[1]*np.cos(rot_angle)])
             pt2 = pt2 + positions[i_pos]
+
             # base top right
             pt3 = np.array([base * 0.5, delta_h]) * scale
             pt3 = np.array([pt3[0]*np.cos(rot_angle) - pt3[1]*np.sin(rot_angle),
