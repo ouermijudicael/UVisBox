@@ -6,7 +6,7 @@ This module provides contour-based boxplot functionality for uncertainty visuali
 
 # Import visualization functionality
 try:
-    from .Vis.contour_boxplot import *
+    from .Vis.vis import *
     from .Mesh.mesh import *
     from .Stats.stats import *
     from plot import *

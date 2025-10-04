@@ -19,7 +19,7 @@ Available Modules:
 
 # Import all specialized modules
 from .ContourBoxplot import *
-from .Curve_Boxplot import *
+from .CurveBoxplot import *
 from .FunctionalBoxplot import *
 from .ProbabilisticMarchingCubes import *
 from .ProbabilisticMarchingSquares import *

@@ -98,13 +98,16 @@ the mesh and median curve.
 
 # Import necessary libraries and load dataset
 from uvisbox.Datasets import irma2017_perturbed_tracks
-from uvisbox.BandDepths import curve_banddepth_plot, curve_banddepth_meshing, curve_banddepths
+# from uvisbox.BandDepths import curve_banddepth_plot, curve_banddepth_meshing, curve_banddepths
+from uvisbox.Modules.CurveBoxplot.Vis.vis import vis
+from uvisbox.Modules.CurveBoxplot.Mesh.mesh import mesh as curve_banddepth_meshing
+from uvisbox.Modules.CurveBoxplot.Stats.stats import curve_banddepths
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 import numpy as np
 
 lon_lat_coords = irma2017_perturbed_tracks.load_dataset()
-# lon_lat_coords = lon_lat_coords[:10, :10, :2]  # Keep only longitude and latitude
+lon_lat_coords = lon_lat_coords[:10, :10, :2]  # Keep only longitude and latitude
 
 
 # Create figure with 2 subplots and set up Basemaps for geographic map visualization. In addition, 
@@ -175,5 +178,5 @@ ax2.plot(x, y, color='red', label='Median Curve', linewidth=2)
 ax2.set_title('Curve Band Depth Plot')
 ax2.set_xlabel('Longitude')
 ax2.set_ylabel('Latitude')
-# plt.savefig("curve_banddepth_example.png")
+plt.savefig("curve_banddepth_example.png")
 plt.show()

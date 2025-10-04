@@ -4,10 +4,12 @@ Curve_Boxplot Module
 This module provides curve-based boxplot functionality for uncertainty visualization.
 """
 
-# Import meshing and visualization functionality
+# Import functionality
 try:
-    from .Mesh.curve_banddepth_meshing import *
-    from .Vis.curve_banddepth_plot import *
+    from .Vis.vis import *
+    from .Mesh.mesh import *
+    from .Stats.stats import *
+    from plot import *
 except ImportError:
     pass
 

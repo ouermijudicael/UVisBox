@@ -8,7 +8,7 @@ This module provides functional boxplot functionality for uncertainty visualizat
 try:
     from .Mesh.functional_depth_mesh import *
     from .Vis.vis import *
-    from .Stats.functional_banddepth import *
+    from .Stats.stats import *
     from plot import *
 except ImportError:
     pass
