@@ -1,6 +1,10 @@
 
 import numpy as np
 
+def mesh():
+    pass
+
+
 def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vectors, 
                                     median_vectors, max_vectors, glyph_markers, scale, resolution, num_of_glyphs):
     """
