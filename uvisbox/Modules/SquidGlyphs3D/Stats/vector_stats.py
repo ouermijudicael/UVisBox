@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.decomposition import PCA
+from uvisbox.Core.BandDepths.vector_depths import *
 
 
 
