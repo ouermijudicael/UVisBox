@@ -1,7 +1,7 @@
 
-from .Stats.vector_stats import compute_vector_depths_3D, getDirectionalVariations, calculate_spread_3D
-from .Mesh.squid_glyphs_meshing_3D import squid_glyphs_meshing_3D
-from .Vis.pyvista_plot import uncertainty_squid_glyphs_3D_plot
+from .vector_stats import compute_vector_depths_3D, getDirectionalVariations, calculate_spread_3D
+from .squid_glyphs_meshing_3D import squid_glyphs_meshing_3D
+from .pyvista_plot import uncertainty_squid_glyphs_3D_plot
 from uvisbox.Core.BandDepths.vector_depths import cartesian_to_spherical
 import numpy as np
 

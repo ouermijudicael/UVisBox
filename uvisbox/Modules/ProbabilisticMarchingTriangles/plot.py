@@ -1,6 +1,6 @@
 import numpy as np
-from .Stats.crossing_prob_triangles_mc import crossing_prob_triangles_mc
-from .Vis.probabilistic_marching_triangles_plot import matplotlib_probabilistic_marching_triangles_vis
+from .crossing_prob_triangles_mc import crossing_prob_triangles_mc
+from .probabilistic_marching_triangles_plot import matplotlib_probabilistic_marching_triangles_vis
 
 def plot(F, points, triangles, isovalue, prob_contour=None, cmap='viridis', ax=None):
     """

@@ -1,7 +1,7 @@
 
-from .Stats.uncertainty_tube_2D import generate_cross_sections_2D
-from .Mesh.uncertainty_tube_meshing_2D import generate_uncertainty_tube_mesh_2D
-from .Vis.uncertainty_tube_plot_2D import plot_uncertainty_tube_2D
+from .uncertainty_tube_2D import generate_cross_sections_2D
+from .uncertainty_tube_meshing_2D import generate_uncertainty_tube_mesh_2D
+from .uncertainty_tube_plot_2D import plot_uncertainty_tube_2D
 
 
 def plot(trajectories, axis=None):

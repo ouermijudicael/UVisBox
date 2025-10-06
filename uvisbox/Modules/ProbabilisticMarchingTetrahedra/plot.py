@@ -1,6 +1,6 @@
 import numpy as np
-from .Stats.crossing_prob_tetrahedra_mc import crossing_prob_tetrahedra_mc
-from .Vis.probabilistic_marching_tetrahedra_plot import pyvista_probabilistic_marching_tetrahedra_vis
+from .crossing_prob_tetrahedra_mc import crossing_prob_tetrahedra_mc
+from .probabilistic_marching_tetrahedra_plot import pyvista_probabilistic_marching_tetrahedra_vis
 
 
 def plot(points, F, tetrahedra, isovalue, cross_prob=None, 

@@ -4,5 +4,5 @@ This module provides functionality for visualizing uncertainty lobes in 2D and 3
 It includes methods for calculating statistical measures of uncertainty and rendering the lobes using matplotlib and pyvista.
 """ 
 
-from .Stats import *
-from .Vis import *
+from .uncertainty_lobes_stats import *
+from .lobes_matplotlib_vis import *

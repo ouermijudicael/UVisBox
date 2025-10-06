@@ -1,8 +1,8 @@
 from uvisbox.Core.BandDepths.vector_depths import cartesian_to_polar
 import numpy as np
-from .Stats.vector_stats import compute_vector_depths_2D
-from .Vis.matplotlib_vis import uncertainty_squid_glyphs_2D_plot
-from .Mesh.squid_glyphs_meshing_2D import squid_glyphs_meshing_2D
+from .vector_stats import compute_vector_depths_2D
+from .matplotlib_vis import uncertainty_squid_glyphs_2D_plot
+from .squid_glyphs_meshing_2D import squid_glyphs_meshing_2D
 
 def plot(positions, ensemble_vectors, percentil1, scale=0.2, ax=None):
     """

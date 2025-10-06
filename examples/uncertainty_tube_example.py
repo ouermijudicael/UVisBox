@@ -91,9 +91,9 @@ import matplotlib.pyplot as plt
 
 from uvisbox.Datasets import flowmap_3d
 from uvisbox.Core.Interpolations import linear_interpolate
-from uvisbox.Modules.UncertaintyTube.Stats.uncertainty_tube import generate_cross_sections
-from uvisbox.Modules.UncertaintyTube.Mesh.uncertainty_tube_meshing import generate_tube_mesh
-from uvisbox.Modules.UncertaintyTube.Vis.uncertainty_tube_plot import plot_uncertainty_tube_from_mesh
+from uvisbox.Modules.UncertaintyTube.uncertainty_tube import generate_cross_sections
+from uvisbox.Modules.UncertaintyTube.uncertainty_tube_meshing import generate_tube_mesh
+from uvisbox.Modules.UncertaintyTube.uncertainty_tube_plot import plot_uncertainty_tube_from_mesh
 from uvisbox.Core.Colors.colortree import ColorTree
 
 # Generate random seed points and compute their trajectories in a 3D flow field

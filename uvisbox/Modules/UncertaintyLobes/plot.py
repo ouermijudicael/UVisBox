@@ -1,7 +1,7 @@
 import numpy as np
 from uvisbox.Core.BandDepths.vector_depths import cartesian_to_polar, compute_vector_depths_2D
-from .Stats.uncertainty_lobes_stats import calculate_spread_2D
-from .Vis.lobes_matplotlib_vis import lobes_matplotlib_vis
+from .uncertainty_lobes_stats import calculate_spread_2D
+from .lobes_matplotlib_vis import lobes_matplotlib_vis
 
 
 def plot(positions, ensemble_vectors, percentil1, percentil2=None, 
