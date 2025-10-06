@@ -94,7 +94,7 @@ Plot the original vector field and the uncertainty squid glyphs
     :align: center
 """
 # Import necessary libraries
-from uvisbox.Glyphs import uncertainty_lobe_glyphs_2D
+from uvisbox.Modules.UncertaintyLobes.plot import plot as uncertainty_lobe_glyphs_2D
 import numpy as np
 import matplotlib.pyplot as plt
 
