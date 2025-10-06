@@ -56,7 +56,7 @@ Set isovalue, run probabilistic marching squares, and visualize result
 
 # Import necessary libraries
 import numpy as np
-from uvisbox.ProbabilisticContours.Stat.probabilistic_marching_squares import probabilistic_marching_squares
+from uvisbox.Modules.ProbabilisticMarchingSquares.plot import plot as probabilistic_marching_squares
 import matplotlib.pyplot as plt
 
 # Generate a regular grid over a 2D domain [0, 4π], use function f(x, y) = sin(x) * cos(y)
@@ -78,15 +78,17 @@ F = np.transpose(F, (1, 2, 0))  # Shape (n, m, n_ens)
 # Set isovalue
 isovalue = 0.5
 
-# Run probabilistic marching squares
-prob_contour = probabilistic_marching_squares(F, isovalue)
+# # Run probabilistic marching squares
+# prob_contour = probabilistic_marching_squares(F, isovalue)
 
-# Visualize result
-fig = plt.figure(figsize=(8, 6))
-plt.imshow(prob_contour, origin='lower', extent=(x.min(), x.max(), y.min(), y.max()), cmap='viridis')
-plt.colorbar(label='Probability of Contour')
-plt.title('Probabilistic Marching Squares')
-plt.xlabel('x')
-plt.ylabel('y')
-# plt.savefig("probabilistic_marching_squares_example.png")
+# # Visualize result
+# fig = plt.figure(figsize=(8, 6))
+# plt.imshow(prob_contour, origin='lower', extent=(x.min(), x.max(), y.min(), y.max()), cmap='viridis')
+# plt.colorbar(label='Probability of Contour')
+# plt.title('Probabilistic Marching Squares')
+# plt.xlabel('x')
+# plt.ylabel('y')
+fig, ax = plt.subplots(figsize=(8, 6))
+ax = probabilistic_marching_squares(F, isovalue, ax=ax)
+plt.savefig("probabilistic_marching_squares_example.png")
 plt.show()

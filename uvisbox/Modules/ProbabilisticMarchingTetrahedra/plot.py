@@ -1,11 +1,9 @@
-import pyvista as pv
-from pyvista import CellType
 import numpy as np
-from ..Stat.probabilistic_marching_tetrahedra import probabilistic_marching_tetrahedra
+from .Stats.crossing_prob_tetrahedra_mc import crossing_prob_tetrahedra_mc
+from .Vis.probabilistic_marching_tetrahedra_plot import pyvista_probabilistic_marching_tetrahedra_vis
 
 
-
-def probabilistic_marching_tetrahedra_plot(points, F, tetrahedra, isovalue, cross_prob=None, 
+def plot(points, F, tetrahedra, isovalue, cross_prob=None, 
                                            opacity='linear', cmap='viridis', plotter=None):
     """
     Visualize the probabilistic marching tetrahedra result using PyVista.
@@ -33,19 +31,9 @@ def probabilistic_marching_tetrahedra_plot(points, F, tetrahedra, isovalue, cros
     """
 
     if cross_prob is None:
-        cross_prob = probabilistic_marching_tetrahedra(F, tetrahedra, isovalue)
+        cross_prob = crossing_prob_tetrahedra_mc(F, tetrahedra, isovalue)
 
-    n_cells = cross_prob.shape[0]
-    n_points = F.shape[0]
-    celltypes = np.full(n_cells, fill_value=CellType.TETRA, dtype=np.uint32)  
-
-    if plotter is None:
-        plotter = pv.Plotter()
-            
-    grid = pv.UnstructuredGrid(tetrahedra, celltypes, points)
-    grid.cell_data["crossing_probability"] = cross_prob.flatten(order='F')
-
-    plotter.add_volume(grid, scalars="crossing_probability", opacity=opacity, cmap=cmap)
-
+    plotter = pyvista_probabilistic_marching_tetrahedra_vis(points, tetrahedra, isovalue, cross_prob, 
+                                           opacity=opacity, cmap=cmap, plotter=plotter) 
+    
     return plotter
-

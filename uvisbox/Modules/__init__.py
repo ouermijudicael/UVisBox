@@ -24,8 +24,8 @@ from .CurveBoxplot import *
 from .FunctionalBoxplot import *
 from .ProbabilisticMarchingCubes import *
 from .ProbabilisticMarchingSquares import *
-from .ProbabiliticMarchingTetrahedra import *
-from .ProbabiliticMarchingTriangles import *
+from .ProbabilisticMarchingTetrahedra import *
+from .ProbabilisticMarchingTriangles import *
 from .SquidGlyphs2D import *
 from .SquidGlyphs3D import *
 from .UncertaintyLobes import *

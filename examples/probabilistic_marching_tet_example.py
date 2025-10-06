@@ -77,7 +77,7 @@ to create an ensemble of scalar fields with some noise
 # Import necessary libraries
 import numpy as np
 import pyvista as pv
-from uvisbox.ProbabilisticSurfaces import probabilistic_marching_tetrahedra_plot as pmt
+from uvisbox.Modules.ProbabilisticMarchingTetrahedra.plot import plot as pmt
 
 # Generate tetrahedral mesh over a 3D domain [-1, 1] and use the tear drop function
 # to create an ensemble of scalar fields with some noise
@@ -130,5 +130,5 @@ F_reshaped = F.reshape(-1, n_ens)
 plotter.subplot(0, 1)
 plotter = pmt(points, F_reshaped, tetrahedra, isovalue, plotter=plotter)
 plotter.add_text("Probabilistic Isosurface", font_size=12)
-# plotter.show()
-# plotter.screenshot("probabilistic_marching_tetrahedra_example.png")
+plotter.show()
+plotter.screenshot("probabilistic_marching_tetrahedra_example.png")
