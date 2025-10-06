@@ -1,44 +1,8 @@
+ 
 import numpy as np
 from sklearn.decomposition import PCA
 from uvisbox.Core.BandDepths.vector_depths import *
-
-
-
-def calculate_spread_3D(vectors, depths, percentil):
-    """
-    Calculate the spread in 3D spherical coordinates.
-
-    Parameters:
-    ----------
-        vectors : numpy.ndarray
-            Array of shape (n, 3) in spherical coordinates (magnitude, theta, phi)
-        depths : numpy.ndarray
-            Array of shape (n,) representing the depth of each vector
-        percentil : float
-            The percentile for depth filtering
-    
-    Returns:
-    -------
-        tuple
-            Indices of vectors with min/max magnitude, theta, phi among those with depth > 1.0-percentil
-    """
-
-    indices = np.where(depths > 1.0-percentil)[0]
-    median_idx = np.argmax(depths)
-    if indices.size > 0:
-        filtered_vectors = vectors[indices]
-        min_phi_idx = np.argmin(filtered_vectors[:, 2])
-        max_phi_idx = np.argmax(filtered_vectors[:, 2])
-        min_theta_idx = np.argmin(filtered_vectors[:, 1])
-        max_theta_idx = np.argmax(filtered_vectors[:, 1])
-        min_mag_idx = np.argmin(filtered_vectors[:, 0])
-        max_mag_idx = np.argmax(filtered_vectors[:, 0])
-    else:
-        min_phi_idx, max_phi_idx = None, None
-        min_theta_idx, max_theta_idx = None, None
-        min_mag_idx, max_mag_idx = None, None
-
-    return median_idx, min_mag_idx, max_mag_idx, min_theta_idx, max_theta_idx, min_phi_idx, max_phi_idx
+# from uvisbox.Core.BandDepths.vector_depths import calculate_spread_3D
 
 
 

@@ -18,6 +18,7 @@ Available Modules:
 """
 
 # Import all specialized modules
+
 from .ContourBoxplot import *
 from .CurveBoxplot import *
 from .FunctionalBoxplot import *
@@ -25,6 +26,7 @@ from .ProbabilisticMarchingCubes import *
 from .ProbabilisticMarchingSquares import *
 from .ProbabiliticMarchingTetrahedra import *
 from .ProbabiliticMarchingTriangles import *
-from .SquidGlyph import *
+from .SquidGlyphs2D import *
+from .SquidGlyphs3D import *
 from .UncertaintyLobes import *
 from .UncertaintyTube import *
