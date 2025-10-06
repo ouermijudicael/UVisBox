@@ -2,7 +2,7 @@ from operator import inv
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from uvisbox.Colors.colortree import ColorTree
+from uvisbox.Core.Colors.colortree import ColorTree
 
 def plot_uncertainty_tube_from_mesh(vertices, faces, mean_trajectories, uv_coords, axis=None):
     """
