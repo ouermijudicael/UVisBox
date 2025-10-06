@@ -1,6 +1,7 @@
 import numpy as np
 
-def probabilistic_marching_tetrahedra(F, tetrahedra, isovalue, num_samples=200):
+
+def crossing_prob_tetrahedra_mc(F, tetrahedra, isovalue, num_samples=200):
     """
     Perform probabilistic marching squares on a 2D scalar field with uncertainty. This function calculates
     the probability of the isocontour passing through each triangle in the triangulated mesh based on an ensemble of scalar fields.
@@ -40,5 +41,6 @@ def probabilistic_marching_tetrahedra(F, tetrahedra, isovalue, num_samples=200):
         crossing_prob[t] = count / num_samples
 
     return crossing_prob
+
 
     

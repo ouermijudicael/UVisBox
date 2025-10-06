@@ -75,7 +75,7 @@ using probabilistic marching cubes
 # Import necessary libraries
 import numpy as np
 import pyvista as pv
-from uvisbox.ProbabilisticSurfaces import probabilistic_marching_cubes_plot as pmc
+from uvisbox.Modules.ProbabilisticMarchingCubes.plot import plot as pmc
 
 # Generate a regular grid over a 3D domain [-1, 1] and use the tear drop function
 # to create an ensemble of scalar fields with some noise
@@ -122,5 +122,5 @@ for e in range(n_ens):
 plotter.subplot(0, 1)
 plotter = pmc(F, isovalue, plotter=plotter)
 plotter.add_text("Probabilistic Isosurface", font_size=12)
-# plotter.show()
-# plotter.screenshot("probabilistic_marching_cubes_example.png")
+plotter.show()
+plotter.screenshot("probabilistic_marching_cubes_example.png")

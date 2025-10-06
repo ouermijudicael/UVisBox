@@ -1,8 +1,8 @@
-import pyvista as pv
+import numpy as np
+from .Stats.crossing_prob_cubes_mc import crossing_prob_cubes_mc
+from .Vis.probabilistic_marching_cubes_plot import pyvista_probabilistic_marching_cubes_vis
 
-
-
-def pyvista_probabilistic_marching_cubes_vis(cross_prob, opacity='linear', cmap='viridis',   
+def plot(F, isovalue, cross_prob=None, opacity='linear', cmap='viridis',   
                                       plotter=None):
     """
     Visualize the probabilistic marching cubes result using PyVista.
@@ -29,19 +29,10 @@ def pyvista_probabilistic_marching_cubes_vis(cross_prob, opacity='linear', cmap=
             The pyvista plotter with the visualized probabilistic isosurface.
     """
 
+    if cross_prob is None:
+        cross_prob = crossing_prob_cubes_mc(F, isovalue)
 
-    if plotter is None:
-        plotter = pv.Plotter()
-
-    grid_dimensions = cross_prob.shape
-    origin = (0, 0, 0)
-    spacing = (1, 1, 1)
-    grid = pv.ImageData(dimensions=grid_dimensions, origin=origin, spacing=spacing)
-    # Add the cross probability to the cell data
-    grid.point_data["cross_prob"] = cross_prob.flatten(order='F')
-
-    # Volume rendering of the grid
-    plotter.add_volume(grid, scalars="cross_prob", opacity=opacity, cmap=cmap)
-    plotter.add_axes()
+    plotter = pyvista_probabilistic_marching_cubes_vis(cross_prob, opacity, cmap, plotter)
+   
 
     return plotter

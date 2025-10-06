@@ -14,6 +14,6 @@ The Core module is organized into the following submodules:
 
 # Import all core functionality
 from .BandDepths import *
-from .CellCrossingProb import *
+from .CellsCrossingProb import *
 from .Colors import *
 from .Interpolations import *
