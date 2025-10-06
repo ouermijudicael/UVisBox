@@ -9,6 +9,7 @@
 import sys
 import os
 
+# sys.path.insert(0, os.path.abspath('../..'))  # Adjust the path as needed
 sys.path.insert(0, os.path.abspath('../../uvisbox'))  # Adjust the path as needed
 
 project = 'UVisBox'

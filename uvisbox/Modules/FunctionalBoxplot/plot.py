@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from .Stats.stats import functional_banddepth, calculate_band, modified_functional_banddepth
-from .Vis.vis import vis
+from .stats import functional_banddepth, modified_functional_banddepth, calculate_band
+from .vis import vis
+
 
 def plot(curves, method='functional_bd', curves_depths=None, percentil=100, scale=1.0, ax=None, 
          show_median=True, band_alpha=0.5):

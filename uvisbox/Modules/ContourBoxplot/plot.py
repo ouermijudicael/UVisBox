@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from .Stats.stats import contour_banddepth
-from .Vis.vis import vis
-from .Mesh.mesh import mesh
+from .stats import contour_banddepth
+from .vis import vis
+from .mesh import mesh
 
 def plot(binary_images, method='contour_bd', binary_images_depths=None, percentil=95, ax=None,
             show_median=True, show_outliers=True):

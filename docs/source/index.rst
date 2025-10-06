@@ -38,14 +38,26 @@ The project is built using ``poetry`` for dependency management and relies on se
 
 The codebase is organized into modules, each handling a specific uncertainty visualization technique.:
 
-* ``BandDepths``: For calculating band depths.
-* ``Colors``: For color mapping and interpolation.
-* ``Datasets``: For loading and handling datasets.
-* ``Glyphs``: For creating glyphs.
-* ``Interpolations``: For interpolation methods.
-* ``UncertaintyTube``: For generating and visualizing uncertainty tubes.
-* ``ProbabilisticContours``: For probabilistic contouring methods.
-* ``ProbabilisticSurfaces``: For probabilistic surface methods.
+Project Folder Structure:
+
+.. code-block:: markdown
+
+   UVisBox/
+   ├── Core/
+   │   ├── Band_Depths/           # For Calculating Band Depths
+   │   ├── Cells_Crossing_Prob/   # For Computing Cell Crossing Probabilities
+   │   └── Interpolation/         # For Interpolation Methods
+   |
+   ├── Modules/
+   │   ├── Contour_Boxplot/               # For Summarizing Isocontours
+   │   ├── Curve_Boxplot/                 # For Summarizing 2D Curves
+   │   ├── Squid_Glyphs_2D/               #  2D Vector Field Uncertainty
+   │   ├── Squid_Glyphs_3D/               # 3D Vector Field Uncertainty
+   │   ├── Uncertainty_Lobes/             # 2D Vector Uncertainty Lobes
+   │   ├── Probabilistic_Marching_Cubes/          # Uncertainty in 3D Scalar Fields
+   │   ├── Probabilistic_Marching_Tetrahedra/     # Uncertainty in 3D Scalar Fields on Tetrahedral Meshes
+   │   ├── Probabilistic_Marching_Squares/        # Uncertainty in 2D Scalar Fields
+   │   └── Probabilistic_Marching_Triangles/      # Uncertainty in 2D Scalar Fields on Triangulated Meshes
 
 .. toctree::
    :maxdepth: 2
@@ -54,3 +66,5 @@ The codebase is organized into modules, each handling a specific uncertainty vis
    installation
    examples
    modules
+   tests
+

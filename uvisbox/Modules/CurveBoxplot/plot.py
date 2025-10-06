@@ -1,6 +1,6 @@
 import .Stats.stats.functional_banddepth as functional_banddepth
-import .Mesh.mesh as mesh
-import .Vis.vis as vis
+import uvisbox.Modules.CurveBoxplot.mesh as mesh
+import uvisbox.Modules.CurveBoxplot.vis as vis
 import numpy as np
 
 def plot(curves, curve_depths=None, percentile=50, ax=None, color_map='viridis', median_color='red', alpha=1.0):

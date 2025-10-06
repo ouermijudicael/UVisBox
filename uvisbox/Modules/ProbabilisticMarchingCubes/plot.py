@@ -1,6 +1,6 @@
 import numpy as np
-from .Stats.crossing_prob_cubes_mc import crossing_prob_cubes_mc
-from .Vis.probabilistic_marching_cubes_plot import pyvista_probabilistic_marching_cubes_vis
+from .crossing_prob_cubes_mc import crossing_prob_cubes_mc
+from .probabilistic_marching_cubes_plot import pyvista_probabilistic_marching_cubes_vis
 
 def plot(F, isovalue, cross_prob=None, opacity='linear', cmap='viridis',   
                                       plotter=None):

@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-# from ....Core.BandDepths.functional_banddepth import functional_banddepth, calculate_band, modified_functional_banddepth
-from ..Stats.stats import functional_banddepth, calculate_band, modified_functional_banddepth
+from .stats import functional_banddepth, modified_functional_banddepth
+from .functional_depth_mesh import functional_depth_mesh as calculate_band
+from .vis import vis as functional_banddepth_plot
 
 def functional_boxplot(curves, curves_depths=None, percentil=100, scale=1.0, ax=None, 
                               show_median=True, band_alpha=0.5):
@@ -102,6 +103,6 @@ def modified_functional_banddepth_plot(curves, curves_depths=None, percentil=100
     ax.legend()
 
     return ax
-        
+
 fbd_plot = functional_banddepth_plot
 mfbd_plot = modified_functional_banddepth_plot

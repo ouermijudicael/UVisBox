@@ -1,4 +1,4 @@
-from ..Stats.stats import find_percentile as _find_percentile
+from .stats import find_percentile as _find_percentile
 import numpy as np
 
 def mesh(binary_images, depths, outlier_percentile=95,

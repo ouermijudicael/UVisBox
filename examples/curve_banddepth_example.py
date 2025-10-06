@@ -99,9 +99,9 @@ the mesh and median curve.
 # Import necessary libraries and load dataset
 from uvisbox.Datasets import irma2017_perturbed_tracks
 # from uvisbox.BandDepths import curve_banddepth_plot, curve_banddepth_meshing, curve_banddepths
-from uvisbox.Modules.CurveBoxplot.Vis.vis import vis
-from uvisbox.Modules.CurveBoxplot.Mesh.mesh import mesh as curve_banddepth_meshing
-from uvisbox.Modules.CurveBoxplot.Stats.stats import curve_banddepths
+from uvisbox.Modules.CurveBoxplot.vis import vis
+from uvisbox.Modules.CurveBoxplot.mesh import mesh as curve_banddepth_meshing
+from uvisbox.Modules.CurveBoxplot.stats import curve_banddepths
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 import numpy as np
