@@ -4,7 +4,9 @@ using the marching cubes algorithm on a synthetic 4D dataset.
 It compares a deterministic isosurface with a probabilistic isosurface derived from an ensemble of scalar fields.
 
 Import necessary libraries
+
 .. code-block:: python
+
     import numpy as np
     import pyvista as pv
     from uvisbox.Modules.ProbabilisticMarchingCubes.probabilistic_marching_cubes import probabilistic_marching_cubes as pmc
@@ -116,5 +118,5 @@ for e in range(n_ens):
 plotter.subplot(0, 1)
 plotter = pmc(F, isovalue, plotter=plotter)
 plotter.add_text("Probabilistic Isosurface", font_size=12)
-plotter.show()
-plotter.screenshot("probabilistic_marching_cubes_example.png")
+# plotter.show()
+# plotter.screenshot("probabilistic_marching_cubes_example.png")

@@ -188,5 +188,5 @@ ax2.set_ylabel("Y")
 ax2.grid()
 
 plt.tight_layout()
-plt.savefig("squid_glyphs_2D_example.png")
+# plt.savefig("squid_glyphs_2D_example.png")
 plt.show()

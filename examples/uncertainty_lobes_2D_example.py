@@ -188,5 +188,5 @@ ax2.set_ylabel("Y")
 ax2.grid()
 
 plt.tight_layout()
-plt.savefig("uncertainty_lobes_2D_example.png", dpi=300)
+# plt.savefig("uncertainty_lobes_2D_example.png", dpi=300)
 plt.show()
