@@ -50,9 +50,9 @@ Project Folder Structure:
    |
    ├── Modules/
    │   ├── Contour_Boxplot/               # For Summarizing Isocontours
-   │   ├── Curve_Boxplot/                 # For Summarizing 2D Curves
-   │   ├── Squid_Glyphs_2D/               #  2D Vector Field Uncertainty
-   │   ├── Squid_Glyphs_3D/               # 3D Vector Field Uncertainty
+   │   ├── Curve_Boxplot/                 # For Summarizing Curves
+   │   ├── Functional_Boxplot/            # For Summarizing Curves
+   │   ├── Squid_Glyphs/                  # 2D and 3D Vector Field Uncertainty
    │   ├── Uncertainty_Lobes/             # 2D Vector Uncertainty Lobes
    │   ├── Probabilistic_Marching_Cubes/          # Uncertainty in 3D Scalar Fields
    │   ├── Probabilistic_Marching_Tetrahedra/     # Uncertainty in 3D Scalar Fields on Tetrahedral Meshes

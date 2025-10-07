@@ -1,141 +1,100 @@
-examples package
-================
+Examples
+=========
 
-Submodules
-----------
 
-examples.contour\_boxplot\_example module
+contour\_boxplot\_example
 -----------------------------------------
 
 .. automodule:: examples.contour_boxplot_example
-   :members:
-   :show-inheritance:
    :undoc-members:
 
-examples.curve\_boxplot\_example module
+curve\_boxplot\_example 
 -----------------------------------------
 
 .. automodule:: examples.curve_boxplot_example
-   :members:
-   :show-inheritance:
    :undoc-members:
 
-examples.functional\_boxplot\_example module
+functional\_boxplot\_example
 --------------------------------------------
 
 .. automodule:: examples.functional_boxplot_example
-   :members:
-   :show-inheritance:
    :undoc-members:
 
-examples.neural\_UQ\_example module
------------------------------------
+.. neural\_UQ\_example
+.. -----------------------------------
 
-.. automodule:: examples.neural_UQ_example
-   :members:
-   :show-inheritance:
-   :undoc-members:
+.. .. automodule:: examples.neural_UQ_example
+..    :undoc-members:
 
-examples.probabilistic\_marching\_cubes\_example module
+probabilistic\_marching\_cubes\_example 
 -------------------------------------------------------
 
 .. automodule:: examples.probabilistic_marching_cubes_example
-   :members:
-   :show-inheritance:
    :undoc-members:
 
-examples.probabilistic\_marching\_squares\_example module
+probabilistic\_marching\_squares\_example
 ---------------------------------------------------------
 
 .. automodule:: examples.probabilistic_marching_squares_example
-   :members:
-   :show-inheritance:
    :undoc-members:
 
-examples.probabilistic\_marching\_tet\_example module
+probabilistic\_marching\_tet\_example
 -----------------------------------------------------
 
 .. automodule:: examples.probabilistic_marching_tet_example
-   :members:
-   :show-inheritance:
    :undoc-members:
 
-examples.probabilistic\_marching\_triangles\_example module
+probabilistic\_marching\_triangles\_example
 -----------------------------------------------------------
 
 .. automodule:: examples.probabilistic_marching_triangles_example
-   :members:
-   :show-inheritance:
    :undoc-members:
 
-examples.squid\_glyph\_temp\_wind\_example module
--------------------------------------------------
+.. squid\_glyph\_temp\_wind\_example module  
+.. -------------------------------------------------
 
-.. automodule:: examples.squid_glyph_temp_wind_example
-   :members:
-   :show-inheritance:
-   :undoc-members:
+.. .. automodule:: examples.squid_glyph_temp_wind_example
+..    :undoc-members:
 
-examples.squid\_glyphs\_2d\_example module
+squid\_glyphs\_2d\_example    
 ------------------------------------------
 
 .. automodule:: examples.squid_glyphs_2d_example
-   :members:
-   :show-inheritance:
    :undoc-members:
 
-examples.squid\_glyphs\_3D\_example module
+squid\_glyphs\_3D\_example
 ------------------------------------------
 
 .. automodule:: examples.squid_glyphs_3D_example
-   :members:
-   :show-inheritance:
    :undoc-members:
 
-examples.uncertainty\_lobes\_2D\_example module
+uncertainty\_lobes\_2D\_example
 -----------------------------------------------
 
 .. automodule:: examples.uncertainty_lobes_2D_example
-   :members:
-   :show-inheritance:
    :undoc-members:
 
-examples.uncertainty\_tube\_benchmark module
---------------------------------------------
+.. uncertainty\_tube\_benchmark 
+.. --------------------------------------------
 
-.. automodule:: examples.uncertainty_tube_benchmark
-   :members:
-   :show-inheritance:
-   :undoc-members:
+.. .. automodule:: examples.uncertainty_tube_benchmark
+..    :undoc-members:
 
-examples.uncertainty\_tube\_example module
+uncertainty\_tube\_example
 ------------------------------------------
 
 .. automodule:: examples.uncertainty_tube_example
-   :members:
-   :show-inheritance:
    :undoc-members:
 
-examples.vsup\_example module
+vsup\_example
 -----------------------------
 
 .. automodule:: examples.vsup_example
-   :members:
-   :show-inheritance:
    :undoc-members:
 
-examples.wind\_ensemble\_example module
----------------------------------------
+.. wind\_ensemble\_example
+.. ---------------------------------------
 
-.. automodule:: examples.wind_ensemble_example
-   :members:
-   :show-inheritance:
-   :undoc-members:
+.. .. automodule:: examples.wind_ensemble_example
+..    :undoc-members:
 
-Module contents
----------------
-
-.. automodule:: examples
-   :members:
-   :show-inheritance:
-   :undoc-members:
