@@ -1,4 +1,4 @@
-uvisbox
+API
 =======
 
 .. toctree::
