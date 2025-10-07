@@ -1,7 +1,7 @@
 
 # from uvisbox.Glyphs.Vis.uncertainty_lobes import uncertainty_lobe_glyphs_2D
 # from uvisbox.Glyphs.Stat.squid_glyphs import uncertainty_squid_glyphs_2D
-from uvisbox.Modules.SquidGlyphs2D.plot import plot as uncertainty_squid_glyphs_2D
+from uvisbox.Modules.SquidGlyphs.squid_glyphs import squid_glyph_2D
 import numpy as np
 import matplotlib.pyplot as plt
 num_points = 15
@@ -162,7 +162,7 @@ ax4.set_ylabel("Y")
 ax4.grid()
 
 # Second subplot: Uncertainty Lobe Glyphs
-ax5 = uncertainty_squid_glyphs_2D(grid_points, ensemble_vectors, 1.0, scale=0.4, ax=ax5)
+ax5 = squid_glyph_2D(grid_points, ensemble_vectors, 1.0, scale=0.4, ax=ax5)
 ax5.set_title("Uncertainty Lobe Glyphs")
 ax5.set_xlim(-1, 5)
 ax5.set_ylim(-1, 3)

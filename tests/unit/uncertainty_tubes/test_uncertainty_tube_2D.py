@@ -1,7 +1,6 @@
 import numpy as np
-from uvisbox.UncertaintyTube.Stat.uncertainty_tube_2D import project_points_onto_line, uncertainty_tube_2D
-import matplotlib.pyplot as plt
-
+from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_stats import project_points_onto_line
+from uvisbox.Modules.UncertaintyTube.uncertainty_tubes import uncertainty_tubes_2D
 from uvisbox.Datasets.flow2d import double_gyre
 
 def test_project_points_onto_line():
@@ -48,7 +47,7 @@ def test_uncertainty_tube_2D():
                 u, v = double_gyre(trajectories[i, t-1, j, 0], trajectories[i, t-1, j, 1], t*0.1)
                 trajectories[i, t, j] = trajectories[i, t-1, j] + np.array([u, v]) * 0.1 + np.random.normal(0, 0.01, size=2)
 
-    fig, ax = uncertainty_tube_2D(trajectories)
+    ax = uncertainty_tubes_2D(trajectories)
 
 if __name__ == "__main__":
     test_project_points_onto_line()
