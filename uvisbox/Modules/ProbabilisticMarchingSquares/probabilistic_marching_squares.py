@@ -1,6 +1,7 @@
 from .probabilistic_marching_squares_stats import crossing_prob_squares_mc
 from .probabilistic_marching_squares_vis import matplotlib_probabilistic_marching_squares_vis
-def plot(F, isovalue, prob_contour=None, cmap='viridis', ax=None):
+
+def probabilistic_marching_squares(F, isovalue, prob_contour=None, cmap='viridis', ax=None):
     """
     Visualize the probabilistic marching squares result using matplotlib.
 
@@ -14,9 +15,10 @@ def plot(F, isovalue, prob_contour=None, cmap='viridis', ax=None):
             2D array of shape (n-1, m-1) with probabilities of contour presence in each cell.
             If None, it will be computed using probabilistic_marching_squares function.
         cmap : str, optional
-            Colormap for the probability map. Default is 'viridis'.
+            Colormap for the visualization. Default is 'viridis'.
         ax : matplotlib axis, optional
             The axis to draw on. If None, a new figure and axis will be created.
+    
     Returns:
     --------
         ax : matplotlib axis
@@ -24,5 +26,7 @@ def plot(F, isovalue, prob_contour=None, cmap='viridis', ax=None):
     """
     if prob_contour is None:
         prob_contour = crossing_prob_squares_mc(F, isovalue)
+
     ax = matplotlib_probabilistic_marching_squares_vis(prob_contour, cmap, ax)
+
     return ax

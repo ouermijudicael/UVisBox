@@ -26,7 +26,6 @@ from .ProbabilisticMarchingCubes import *
 from .ProbabilisticMarchingSquares import *
 from .ProbabilisticMarchingTetrahedra import *
 from .ProbabilisticMarchingTriangles import *
-from .SquidGlyphs2D import *
-from .SquidGlyphs3D import *
+from .SquidGlyphs import *
 from .UncertaintyLobes import *
 from .UncertaintyTube import *

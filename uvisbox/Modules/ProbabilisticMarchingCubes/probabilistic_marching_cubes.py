@@ -1,4 +1,3 @@
-import numpy as np
 from .probabilistic_marching_cubes_stats import crossing_prob_cubes_mc
 from .probabilistic_marching_cubes_vis import pyvista_probabilistic_marching_cubes_vis
 

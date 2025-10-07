@@ -91,9 +91,9 @@ import matplotlib.pyplot as plt
 
 from uvisbox.Datasets import flowmap_3d
 from uvisbox.Core.Interpolations import linear_interpolate
-from uvisbox.Modules.UncertaintyTube.uncertainty_tube import generate_cross_sections
-from uvisbox.Modules.UncertaintyTube.uncertainty_tube_meshing import generate_tube_mesh
-from uvisbox.Modules.UncertaintyTube.uncertainty_tube_plot import plot_uncertainty_tube_from_mesh
+from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_stats import generate_cross_sections
+from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_mesh import generate_tube_mesh
+from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_vis import matplotlib_uncertainty_tube_vis
 from uvisbox.Core.Colors.colortree import ColorTree
 
 # Generate random seed points and compute their trajectories in a 3D flow field
@@ -148,6 +148,6 @@ ax1.set_zlabel("Z")
 # gray color represents low uncertainty (smaller size).
 # eigen_values are used for the interpolating the colormap ('viridis'), 
 # blue means high asymmetry, yellow means symmetry.
-plot_uncertainty_tube_from_mesh(vertices, faces, mean_trajectories, uv_coords, axis=ax2)
+ax2 = matplotlib_uncertainty_tube_vis(vertices, faces, mean_trajectories, uv_coords, axis=ax2)
 plt.savefig("uncertainty_tube.png")
 plt.show()

@@ -83,7 +83,7 @@ filtering and scale vector lengths by 0.1
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from uvisbox.Core.BandDepths.vector_depths import cartesian_to_spherical
-from uvisbox.Modules.SquidGlyphs3D.plot import plot as uncertainty_squid_glyphs_3D
+from uvisbox.Modules.SquidGlyphs.squid_glyphs import squid_glyph_3D
 import pyvista as pv
 
 
@@ -138,7 +138,7 @@ plotter.add_text('Ensemble Vectors in 3D', font_size=12)
 # filtering and scale vector lengths by 0.1
 
 plotter.subplot(0, 1)
-plotter, points, triangles = uncertainty_squid_glyphs_3D(grid_points, ensemble_vectors, 0.5, 0.1, ax=plotter)
+plotter, points, triangles = squid_glyph_3D(grid_points, ensemble_vectors, 0.5, 0.1, ax=plotter)
 plotter.add_text('Uncertainty Squid Glyphs in 3D', font_size=12)
 plotter.show()
 plotter.screenshot("squid_glyphs_example_3D.png")

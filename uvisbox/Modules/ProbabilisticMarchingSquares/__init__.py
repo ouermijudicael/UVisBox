@@ -5,6 +5,6 @@ This module provides functionality for performing probabilistic marching squares
 It includes methods for calculating cell crossing probabilities and visualizing the results using matplotlib.
 """
 
-from .crossing_prob_squares_mc import *
-from .probabilistic_marching_squares_plot import *
-from .plot import *
+from .probabilistic_marching_squares_stats import *
+from .probabilistic_marching_squares_vis import *
+from .probabilistic_marching_squares import *

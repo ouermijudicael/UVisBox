@@ -94,7 +94,7 @@ Plot the original vector field and the uncertainty squid glyphs
     :align: center
 """
 # Import necessary libraries
-from uvisbox.Modules.SquidGlyphs2D.plot import plot as uncertainty_squid_glyphs_2D
+from uvisbox.Modules.SquidGlyphs.squid_glyphs import squid_glyph_2D
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -170,7 +170,7 @@ ax1.set_ylabel("Y")
 ax1.grid()
 
 # Plot uncertainty squid glyphs
-ax2 = uncertainty_squid_glyphs_2D(positions, ensemble_vectors, 1.0, scale=0.4, ax=ax2)
+ax2 = squid_glyph_2D(positions, ensemble_vectors, 1.0, scale=0.4, ax=ax2)
 ax2.set_title("Uncertainty Squid Glyphs for Double Gyre Flow")
 ax2.set_xlim(-0.25, 2.25)
 ax2.set_ylim(-0.25, 1.25)

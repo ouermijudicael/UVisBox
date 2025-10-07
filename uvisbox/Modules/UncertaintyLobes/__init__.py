@@ -5,4 +5,5 @@ It includes methods for calculating statistical measures of uncertainty and rend
 """ 
 
 from .uncertainty_lobes_stats import *
-from .lobes_matplotlib_vis import *
+from .uncertainty_lobes_vis import *
+from .uncertainty_lobes import *

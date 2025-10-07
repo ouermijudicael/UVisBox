@@ -70,7 +70,7 @@ Set isovalue, run probabilistic marching triangles, and visualize result
 from matplotlib.tri import Triangulation
 import matplotlib.pyplot as plt
 import numpy as np  
-from uvisbox.Modules.ProbabilisticMarchingTriangles.plot import plot as probabilistic_marching_triangles
+from uvisbox.Modules.ProbabilisticMarchingTriangles.probabilistic_marching_triangles import probabilistic_marching_triangles
 
 # Generate a triangular mesh over a 2D domain [0, 2π], use function f(x, y) = sin(x) * cos(y)
 # and create an ensemble of scalar fields with some noise

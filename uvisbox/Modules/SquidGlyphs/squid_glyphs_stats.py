@@ -1,8 +1,8 @@
  
 import numpy as np
 from sklearn.decomposition import PCA
-from uvisbox.Core.BandDepths.vector_depths import *
-# from uvisbox.Core.BandDepths.vector_depths import calculate_spread_3D
+from uvisbox.Core.BandDepths.vector_depths import calculate_spread_2D, compute_vector_depths_2D
+from uvisbox.Core.BandDepths.vector_depths import calculate_spread_3D, compute_vector_depths_3D
 
 
 

@@ -1,10 +1,10 @@
 import numpy as np
 from uvisbox.Core.BandDepths.vector_depths import cartesian_to_polar, compute_vector_depths_2D
 from .uncertainty_lobes_stats import calculate_spread_2D
-from .lobes_matplotlib_vis import lobes_matplotlib_vis
+from .uncertainty_lobes_vis import matplotlib_uncertainty_lobes_vis
 
 
-def plot(positions, ensemble_vectors, percentil1, percentil2=None, 
+def uncertainty_lobes(positions, ensemble_vectors, percentil1, percentil2=None, 
                                scale=0.2, ax=None, show_median=True):
     """
     Draws uncertainty lobe glyphs for the given positions and ensemble vectors. This implemantation is inspired by
@@ -65,7 +65,7 @@ def plot(positions, ensemble_vectors, percentil1, percentil2=None,
             r2[i_pos] = max_mag * scale
             _, _, _, min_angle2, max_angle2 = calculate_spread_2D(ensemble_spherical_vectors[i_pos], depths[i_pos], percentil2)
             theta2[i_pos] = np.degrees([min_angle2, max_angle2])
-    ax =lobes_matplotlib_vis(ax, positions, theta1, theta2, mid_angle, r1, r2, r_arrow, show_median)
+    ax =matplotlib_uncertainty_lobes_vis(ax, positions, theta1, theta2, mid_angle, r1, r2, r_arrow, show_median)
 
     return ax
 

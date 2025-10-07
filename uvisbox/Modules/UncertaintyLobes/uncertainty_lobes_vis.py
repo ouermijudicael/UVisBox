@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib.patches import Wedge
 
 
-def lobes_matplotlib_vis(ax, centers, theta1, theta2, mid_angle, r1, r2, r_arrow, show_median):
+def matplotlib_uncertainty_lobes_vis(ax, centers, theta1, theta2, mid_angle, r1, r2, r_arrow, show_median):
     """
     Draws multiple wedges with arrows.
     Parameters:
