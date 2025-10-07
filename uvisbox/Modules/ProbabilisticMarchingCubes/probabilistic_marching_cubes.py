@@ -1,8 +1,8 @@
 import numpy as np
-from .crossing_prob_cubes_mc import crossing_prob_cubes_mc
-from .probabilistic_marching_cubes_plot import pyvista_probabilistic_marching_cubes_vis
+from .probabilistic_marching_cubes_stats import crossing_prob_cubes_mc
+from .probabilistic_marching_cubes_vis import pyvista_probabilistic_marching_cubes_vis
 
-def plot(F, isovalue, cross_prob=None, opacity='linear', cmap='viridis',   
+def probabilistic_marching_cubes(F, isovalue, cross_prob=None, opacity='linear', cmap='viridis',   
                                       plotter=None):
     """
     Visualize the probabilistic marching cubes result using PyVista.

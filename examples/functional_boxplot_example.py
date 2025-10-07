@@ -59,7 +59,7 @@ from uvisbox.Datasets import sea_surface_temp_data
 # from uvisbox.BandDepths import functional_banddepth_plot
 # from uvisbox.BandDepths import modified_functional_banddepth, modified_functional_banddepth_plot
 import matplotlib.pyplot as plt
-from uvisbox.Modules.FunctionalBoxplot.plot import plot as functional_boxplot
+from uvisbox.Modules.FunctionalBoxplot.functional_boxplot import functional_boxplot
 
 data = sea_surface_temp_data.load_dataset()
 X = data.T

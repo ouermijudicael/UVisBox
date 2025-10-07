@@ -2,7 +2,7 @@ import numpy as np
 from scipy.spatial import ConvexHull, Delaunay
 from mpl_toolkits.mplot3d import Axes3D
 
-def mesh(sorted_curves, percentile=50):
+def curves_band_mesh(sorted_curves, percentile=50):
     """
     Build a mesh for the curve band depth plot.
 

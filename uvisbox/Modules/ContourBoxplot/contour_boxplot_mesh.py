@@ -1,7 +1,7 @@
-from .stats import find_percentile as _find_percentile
+from .contour_boxplot_stats import find_percentile as _find_percentile
 import numpy as np
 
-def mesh(binary_images, depths, outlier_percentile=95,
+def countour_binary_image(binary_images, depths, outlier_percentile=95,
          show_non_outliers=True, show_iqr=True, show_firstquartile=True):
     """
     Create a contour boxplot mesh from binary images and their depths.

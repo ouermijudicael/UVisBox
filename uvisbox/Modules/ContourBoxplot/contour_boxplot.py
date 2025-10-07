@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from .stats import contour_banddepth
-from .vis import vis
-from .mesh import mesh
+from .contour_boxplot_stats import contour_banddepth
+from .contour_boxplot_vis import matplotlib_contour_vis
+from .contour_boxplot_mesh import countour_binary_image 
 
-def plot(binary_images, method='contour_bd', binary_images_depths=None, percentil=95, ax=None,
+def contour_boxplot(binary_images, method='contour_bd', binary_images_depths=None, percentil=95, ax=None,
             show_median=True, show_outliers=True):
         """
         Plot the contour boxplot including the band depth area between the top and bottom contours along with the median contour.
@@ -40,10 +40,10 @@ def plot(binary_images, method='contour_bd', binary_images_depths=None, percenti
         if binary_images_depths is None:
             binary_images_depths = contour_banddepth(binary_images)
 
-        # construct resulting image using mesh function
-        result_image, median_image, outliers = mesh(binary_images, binary_images_depths, outlier_percentile=percentil)
+        # construct resulting image using contour function
+        result_image, median_image, outliers = countour_binary_image(binary_images, binary_images_depths, outlier_percentile=percentil)
 
         # visualize the resulting image
-        ax = vis(result_image, median=median_image, outliers=outliers, ax=ax)
+        ax = matplotlib_contour_vis(result_image, median=median_image, outliers=outliers, ax=ax)
 
         return ax

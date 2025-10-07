@@ -75,7 +75,7 @@ using probabilistic marching cubes
 # Import necessary libraries
 import numpy as np
 import pyvista as pv
-from uvisbox.Modules.ProbabilisticMarchingCubes.plot import plot as pmc
+from uvisbox.Modules.ProbabilisticMarchingCubes.probabilistic_marching_cubes import probabilistic_marching_cubes as pmc
 
 # Generate a regular grid over a 3D domain [-1, 1] and use the tear drop function
 # to create an ensemble of scalar fields with some noise

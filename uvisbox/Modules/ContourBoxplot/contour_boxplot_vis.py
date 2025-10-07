@@ -1,5 +1,5 @@
 
-def vis(result_image, median= None, outliers=None, ax=None):
+def matplotlib_contour_vis(result_image, median= None, outliers=None, ax=None):
     """
     Plot the contour boxplot with median and outliers.
     

@@ -6,10 +6,10 @@ This module provides curve-based boxplot functionality for uncertainty visualiza
 
 # Import functionality
 try:
-    from .vis import *
-    from .mesh import *
-    from .stats import *
-    from plot import *
+    from .cuve_boxplot_vis import *
+    from .curve_boxplot_mesh import *
+    from .curve_boxplot_stats import *
+    from uvisbox.Modules.CurveBoxplot.curve_boxplot import *
 except ImportError:
     pass
 

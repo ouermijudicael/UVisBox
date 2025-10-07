@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def vis(points, triangles, median_curve, curve_dim, ax=None, color_map='viridis', median_color='red', alpha=1.0):
+def matplotlib_curve_boxplot_vis(points, triangles, median_curve, curve_dim, ax=None, color_map='viridis', median_color='red', alpha=1.0):
     if curve_dim == 2:
         if ax is None:  
             fig, ax = plt.subplots()

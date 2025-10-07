@@ -1,9 +1,9 @@
-import .Stats.stats.functional_banddepth as functional_banddepth
-import uvisbox.Modules.CurveBoxplot.mesh as mesh
-import uvisbox.Modules.CurveBoxplot.vis as vis
+from .curve_boxplot_stats import curve_banddepths
+from .curve_boxplot_mesh import curves_band_mesh
+from .cuve_boxplot_vis import matplotlib_curve_boxplot_vis
 import numpy as np
 
-def plot(curves, curve_depths=None, percentile=50, ax=None, color_map='viridis', median_color='red', alpha=1.0):
+def curve_boxplot(curves, curve_depths=None, percentile=50, ax=None, color_map='viridis', median_color='red', alpha=1.0):
     """
     Create a curve band depth plot using the provided curves and their depths.
 
@@ -31,7 +31,7 @@ def plot(curves, curve_depths=None, percentile=50, ax=None, color_map='viridis',
     """
 
     if curve_depths is None:
-        curve_depths = functional_banddepth(curves)
+        curve_depths = curve_banddepths(curves)
 
     # sort the curves by the depth. order them from deepest to shallowest
     sorted_indices = np.argsort(curve_depths)[::-1]
@@ -39,13 +39,13 @@ def plot(curves, curve_depths=None, percentile=50, ax=None, color_map='viridis',
     curve_dim = curves.shape[2]
     
     # build the band mesh for the specified percentile
-    points, triangles = mesh(sorted_curves, percentile=percentile)
+    points, triangles = curves_band_mesh(sorted_curves, percentile=percentile)
     
     # highlight the median curve in red
     median_curve = sorted_curves[0]
 
     # plot the band mesh using trisurf or tripcolor
-    ax = vis(points, triangles, median_curve, curve_dim, ax=ax, 
+    ax = matplotlib_curve_boxplot_vis(points, triangles, median_curve, curve_dim, ax=ax, 
              color_map=color_map, median_color=median_color, alpha=alpha)
     
     return ax

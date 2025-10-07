@@ -99,9 +99,9 @@ the mesh and median curve.
 # Import necessary libraries and load dataset
 from uvisbox.Datasets import irma2017_perturbed_tracks
 # from uvisbox.BandDepths import curve_banddepth_plot, curve_banddepth_meshing, curve_banddepths
-from uvisbox.Modules.CurveBoxplot.vis import vis
-from uvisbox.Modules.CurveBoxplot.mesh import mesh as curve_banddepth_meshing
-from uvisbox.Modules.CurveBoxplot.stats import curve_banddepths
+from uvisbox.Modules.CurveBoxplot.cuve_boxplot_vis import matplotlib_curve_boxplot_vis
+from uvisbox.Modules.CurveBoxplot.curve_boxplot_mesh import curves_band_mesh
+from uvisbox.Modules.CurveBoxplot.curve_boxplot_stats import curve_banddepths
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 import numpy as np
@@ -163,7 +163,7 @@ sorted_indices = np.argsort(-cur_depths)
 sorted_curves = lon_lat_coords[sorted_indices]
 
 # get mesh for the 75th percentile band depth
-points, triangles = curve_banddepth_meshing(sorted_curves, percentile=75)
+points, triangles = curves_band_mesh(sorted_curves, percentile=75)
 
 # plot the mesh
 x, y = m2(points[:, 0], points[:, 1])
@@ -178,5 +178,5 @@ ax2.plot(x, y, color='red', label='Median Curve', linewidth=2)
 ax2.set_title('Curve Band Depth Plot')
 ax2.set_xlabel('Longitude')
 ax2.set_ylabel('Latitude')
-plt.savefig("curve_banddepth_example.png")
+plt.savefig("curve_boxplot_example.png")
 plt.show()
