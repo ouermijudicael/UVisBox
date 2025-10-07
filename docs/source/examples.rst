@@ -12,10 +12,10 @@ examples.contour\_boxplot\_example module
    :show-inheritance:
    :undoc-members:
 
-examples.curve\_banddepth\_example module
+examples.curve\_boxplot\_example module
 -----------------------------------------
 
-.. automodule:: examples.curve_banddepth_example
+.. automodule:: examples.curve_boxplot_example
    :members:
    :show-inheritance:
    :undoc-members:

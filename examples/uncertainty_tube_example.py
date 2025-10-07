@@ -12,10 +12,11 @@ Import necessary libraries
     import matplotlib.pyplot as plt
 
     from uvisbox.Datasets import flowmap_3d
-    from uvisbox.Interpolations import linear_interpolate
-    from uvisbox.UncertaintyTube import (generate_cross_sections,generate_tube_mesh)
-    from uvisbox.UncertaintyTube import plot_uncertainty_tube_from_mesh
-    from uvisbox.Colors.colortree import ColorTree
+    from uvisbox.Core.Interpolations import linear_interpolate
+    from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_stats import generate_cross_sections
+    from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_mesh import generate_tube_mesh
+    from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_vis import matplotlib_uncertainty_tube_vis
+    from uvisbox.Core.Colors.colortree import ColorTree
 
 Generate random seed points and compute their trajectories in a 3D flow field
 
@@ -38,13 +39,13 @@ Generate random seed points and compute their trajectories in a 3D flow field
     trajectories = flowmap_3d(seeds, t0, t1, n_steps, scale=scale, xy_scale=xy_scale)
 
 
-.. code-block:: python
-
     # Key functions to generate uncertainty tubes
     cross_sections, eigen_values = generate_cross_sections(trajectories, None, 16, e_proj=0.5, n_jobs=2)
     vertices, faces, mean_trajectories = generate_tube_mesh(trajectories, cross_sections, n_jobs=12)
 
-    # use eigen values to create texture coordinates
+use eigen values to create texture coordinates
+
+.. code-block:: python
 
     eigen_values = np.transpose(eigen_values, (1,0,2,3))
     eigen_values = eigen_values.reshape((-1,2)).astype(np.float32)
@@ -54,8 +55,6 @@ Generate random seed points and compute their trajectories in a 3D flow field
     eigen_values_ratio = np.nan_to_num(eigen_values[:,1] / eigen_values[:,0] , nan=0.0, posinf=1.0, neginf=0.0) # the second axis
 
     uv_coords = np.stack([rescaled_max_eigen_values, eigen_values_ratio], axis=1)
-
-.. code-block:: python
 
     #  create figure and axis with two subplots
     fig , (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 7), subplot_kw={'projection': '3d'})
@@ -75,8 +74,7 @@ Generate random seed points and compute their trajectories in a 3D flow field
     # gray color represents low uncertainty (smaller size).
     # eigen_values are used for the interpolating the colormap ('viridis'), 
     # blue means high asymmetry, yellow means symmetry.
-    plot_uncertainty_tube_from_mesh(vertices, faces, mean_trajectories, uv_coords, axis=ax2)
-    plt.savefig("uncertainty_tube.png")
+    ax2 = matplotlib_uncertainty_tube_vis(vertices, faces, mean_trajectories, uv_coords, axis=ax2)
     plt.show()
     
 .. image:: _static/uncertainty_tube.png

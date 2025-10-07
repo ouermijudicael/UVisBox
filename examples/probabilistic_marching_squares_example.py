@@ -4,12 +4,13 @@ and visualize probabilistic isocontours from an ensemble of scalar fields define
 using the marching squares algorithm.
 It visualizes the probability of the isocontour passing through each cell in the grid.
 
+
 Import necessary libraries
 
 .. code-block:: python
 
     import numpy as np
-    from uvisbox.ProbabilisticContours.Stat.probabilistic_marching_squares import probabilistic_marching_squares
+    from uvisbox.Modules.ProbabilisticMarchingSquares.probabilistic_marching_squares import probabilistic_marching_squares
     import matplotlib.pyplot as plt
 
 Generate a regular grid over a 2D domain [0, 4π], use function f(x, y) = sin(x) * cos(y)
@@ -35,18 +36,13 @@ Set isovalue, run probabilistic marching squares, and visualize result
     # Set isovalue
     isovalue = 0.5
 
-    # Run probabilistic marching squares
-    prob_contour = probabilistic_marching_squares(F, isovalue)
+    # # Run probabilistic marching squares
+    # prob_contour = probabilistic_marching_squares(F, isovalue)
 
-    # Visualize result
-    fig = plt.figure(figsize=(8, 6))
-    plt.imshow(prob_contour, origin='lower', extent=(x.min(), x.max(), y.min(), y.max()), cmap='viridis')
-    plt.colorbar(label='Probability of Contour')
-    plt.title('Probabilistic Marching Squares')
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.savefig("probabilistic_marching_squares_example.png")
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax = probabilistic_marching_squares(F, isovalue, ax=ax)
     plt.show()
+
 
 .. image:: _static/probabilistic_marching_squares_example.png
    :alt: Probabilistic Marching Squares Example
@@ -81,13 +77,6 @@ isovalue = 0.5
 # # Run probabilistic marching squares
 # prob_contour = probabilistic_marching_squares(F, isovalue)
 
-# # Visualize result
-# fig = plt.figure(figsize=(8, 6))
-# plt.imshow(prob_contour, origin='lower', extent=(x.min(), x.max(), y.min(), y.max()), cmap='viridis')
-# plt.colorbar(label='Probability of Contour')
-# plt.title('Probabilistic Marching Squares')
-# plt.xlabel('x')
-# plt.ylabel('y')
 fig, ax = plt.subplots(figsize=(8, 6))
 ax = probabilistic_marching_squares(F, isovalue, ax=ax)
 plt.savefig("probabilistic_marching_squares_example.png")

@@ -7,13 +7,13 @@ Import necessary libraries and load dataset
 .. code-block:: python
 
     from uvisbox.Datasets import irma2017_perturbed_tracks
-    from uvisbox.BandDepths import curve_banddepth_plot, curve_banddepth_meshing, curve_banddepths
+    from uvisbox.Modules.CurveBoxplot.curve_boxplot_mesh import curves_band_mesh
+    from uvisbox.Modules.CurveBoxplot.curve_boxplot_stats import curve_banddepths
     import matplotlib.pyplot as plt
     from mpl_toolkits.basemap import Basemap
     import numpy as np
 
     lon_lat_coords = irma2017_perturbed_tracks.load_dataset()
-    lon_lat_coords = lon_lat_coords[:10, :10, :2]  # Keep only longitude and latitude
 
 
 Create figure with 2 subplots and set up Basemaps for geographic map visualization. In addition, 
@@ -55,8 +55,6 @@ plot all hurricane tracks for each ensemble member in light gray on the left sub
     ax1.set_xlabel('Longitude')
     ax1.set_ylabel('Latitude')
 
-    # plot the curve band depth
-    # ax2 = curve_banddepth_plot(lon_lat_coords, ax=ax2, percentile=75)
 
 Calculate curve band depths, sort the curves in descending order,
 generate the mesh for the 75th percentile band depth, and plot 
@@ -72,7 +70,7 @@ the mesh and median curve.
     sorted_curves = lon_lat_coords[sorted_indices]
 
     # get mesh for the 75th percentile band depth
-    points, triangles = curve_banddepth_meshing(sorted_curves, percentile=75)
+    points, triangles = curves_band_mesh(sorted_curves, percentile=75)
 
     # plot the mesh
     x, y = m2(points[:, 0], points[:, 1])
@@ -87,19 +85,16 @@ the mesh and median curve.
     ax2.set_title('Curve Band Depth Plot')
     ax2.set_xlabel('Longitude')
     ax2.set_ylabel('Latitude')
-    plt.savefig("curve_banddepth_example.png")
     plt.show()
 
-.. image:: _static/curve_banddepth_example.png
-   :alt: Curve Band Depth Example
+.. image:: _static/curve_boxplot_example.png
+   :alt: Curve Boxplot Example
    :align: center
 
 """
 
 # Import necessary libraries and load dataset
 from uvisbox.Datasets import irma2017_perturbed_tracks
-# from uvisbox.BandDepths import curve_banddepth_plot, curve_banddepth_meshing, curve_banddepths
-from uvisbox.Modules.CurveBoxplot.cuve_boxplot_vis import matplotlib_curve_boxplot_vis
 from uvisbox.Modules.CurveBoxplot.curve_boxplot_mesh import curves_band_mesh
 from uvisbox.Modules.CurveBoxplot.curve_boxplot_stats import curve_banddepths
 import matplotlib.pyplot as plt
@@ -148,8 +143,6 @@ ax1.set_title('Hurricane Tracks')
 ax1.set_xlabel('Longitude')
 ax1.set_ylabel('Latitude')
 
-# plot the curve band depth
-# ax2 = curve_banddepth_plot(lon_lat_coords, ax=ax2, percentile=75)
 
 # Calculate curve band depths, sort the curves in descending order,
 # generate the mesh for the 75th percentile band depth, and plot 

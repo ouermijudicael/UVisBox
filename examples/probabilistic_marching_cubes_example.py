@@ -4,12 +4,10 @@ using the marching cubes algorithm on a synthetic 4D dataset.
 It compares a deterministic isosurface with a probabilistic isosurface derived from an ensemble of scalar fields.
 
 Import necessary libraries
-
 .. code-block:: python
-
     import numpy as np
     import pyvista as pv
-    from uvisbox.ProbabilisticSurfaces import probabilistic_marching_cubes_plot as pmc
+    from uvisbox.Modules.ProbabilisticMarchingCubes.probabilistic_marching_cubes import probabilistic_marching_cubes as pmc
 
 Generate a regular grid over a 3D domain [-1, 1] and use the tear drop function
 to create an ensemble of scalar fields with some noise
@@ -35,10 +33,7 @@ to create an ensemble of scalar fields with some noise
     # Add some data to the cell data (e.g., a 4D NumPy array)
     grid.point_data["values"] = noise_less_F.flatten(order='F')
 
-Set isovalue and compute deterministic isosurface
-
-.. code-block:: python
-
+    # Set isovalue and compute deterministic isosurface
     isovalue = -0.001
     iso_surface = grid.contour([isovalue], scalars="values")
     # Set up the plotter with two subplots
@@ -63,8 +58,7 @@ using probabilistic marching cubes
     plotter.subplot(0, 1)
     plotter = pmc(F, isovalue, plotter=plotter)
     plotter.add_text("Probabilistic Isosurface", font_size=12)
-    # plotter.show()
-    plotter.screenshot("probabilistic_marching_cubes_example.png")
+    plotter.show()
 
 .. image:: _static/probabilistic_marching_cubes_example.png
    :alt: Probabilistic Marching Cubes Example

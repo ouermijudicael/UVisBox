@@ -2,17 +2,17 @@
 This example demonstrates how to visualize 3D vector fields and their uncertainty using squid glyphs with the ``uvisbox`` library.
 The example generates a 3D grid of vectors, creates an ensemble by adding Gaussian noise, and then visualizes the ensemble using squid glyphs to represent uncertainty.
 
-import necessary libraries
+Import necessary libraries
 
 .. code-block:: python
 
     import numpy as np
     from mpl_toolkits.mplot3d import Axes3D
-    from uvisbox.BandDepths import cartesian_to_spherical
-    from uvisbox.Glyphs import  uncertainty_squid_glyphs_3D
-    import matplotlib.pyplot as plt
+    from uvisbox.Core.BandDepths.vector_depths import cartesian_to_spherical
+    from uvisbox.Modules.SquidGlyphs.squid_glyphs import squid_glyph_3D
     import pyvista as pv
 
+.. code-block:: python
 
     # Generate a 3D grid of vectors. [vx,vy,vz]=[x,y,z]
     grid_size = 3
@@ -69,10 +69,9 @@ filtering and scale vector lengths by 0.1
 .. code-block:: python
 
     plotter.subplot(0, 1)
-    plotter, points, triangles = uncertainty_squid_glyphs_3D(grid_points, ensemble_vectors, 0.5, 0.1, ax=plotter)
+    plotter, points, triangles = squid_glyph_3D(grid_points, ensemble_vectors, 0.5, 0.1, ax=plotter)
     plotter.add_text('Uncertainty Squid Glyphs in 3D', font_size=12)
     plotter.show()
-    # plotter.screenshot("squid_glyphs_example_3D.png")
 
 .. image:: _static/squid_glyphs_example_3D.png
    :alt: Squid Glyphs Example 3D

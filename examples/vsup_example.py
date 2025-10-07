@@ -19,7 +19,7 @@ Important necessary libraries
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from uvisbox.Colors.colortree import ColorTree
+    from uvisbox.Core.Colors.colortree import ColorTree
 
 Set up the figure with three subplots
 
@@ -75,7 +75,7 @@ Create a sample image where x (columns) is value (0 to 1), y (rows) is uncertain
 import numpy as np
 import matplotlib.pyplot as plt
 
-from uvisbox.Colors.colortree import ColorTree
+from uvisbox.Core.Colors.colortree import ColorTree
 
 # Set up the figure with three subplots
 fig, ax = plt.subplots(1, 3, figsize=(12, 6))
