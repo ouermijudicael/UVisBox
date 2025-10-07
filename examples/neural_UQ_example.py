@@ -35,7 +35,7 @@ plt.pcolormesh(x1, x2, u_test.reshape(N, N), shading='auto', cmap='jet')
 plt.title('u_test')
 plt.colorbar()
 
-plt.savefig('darcy_flow_u_mean_vs_u_test.png', dpi=300)
+# plt.savefig('darcy_flow_u_mean_vs_u_test.png', dpi=300)
 
 plt.figure(figsize=(12,5))
 plt.subplot(1, 2, 1)

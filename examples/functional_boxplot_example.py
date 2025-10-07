@@ -72,5 +72,5 @@ ax1.set_ylabel("Temperature")
 ax2 = functional_boxplot(X, percentil=50, scale=1.0, ax=ax2)
 ax3 = functional_boxplot(X, method='modified_bd', percentil=10, scale=1.0, ax=ax3)
 
-plt.savefig("sea_surface_temp_functional_banddepth_example.png")
+# plt.savefig("sea_surface_temp_functional_banddepth_example.png")
 plt.show()

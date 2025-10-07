@@ -102,4 +102,4 @@ isovalue = 0.5
 fig, ax = plt.subplots(figsize=(8, 6))
 ax = probabilistic_marching_triangles(F, points, triangles, isovalue, ax=ax)
 # plt.savefig("probabilistic_marching_triangles_example.png")
-plt.show()
+# plt.show()
