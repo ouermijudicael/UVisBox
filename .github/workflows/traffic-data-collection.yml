@@ -1,0 +1,326 @@
+# =============================================================================
+# Repository Traffic Data Collection Workflow
+# =============================================================================
+# Purpose: Automatically collect GitHub repository traffic analytics data
+# Schedule: Runs daily at midnight UTC
+# Output: Saves data to dedicated 'traffic_data' branch (keeps main branch clean)
+# =============================================================================
+
+name: Repository Traffic Data Collection
+
+on:
+  schedule:
+    # Run daily at midnight UTC to collect previous day's traffic data
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual triggering for testing and immediate collection
+
+jobs:
+  collect-traffic-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to push to the traffic_data branch
+    
+    steps:
+    # -------------------------------------------------------------------------
+    # STEP 1: Checkout the repository with full history
+    # -------------------------------------------------------------------------
+    # - Uses Personal Access Token (PAT) if available for better permissions
+    # - Falls back to default GITHUB_TOKEN if PAT not configured
+    # - fetch-depth: 0 ensures we get full git history for branch operations
+    # -------------------------------------------------------------------------
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{secrets.UVisBox_TRAFFIC_TOKEN || secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    # -------------------------------------------------------------------------
+    # STEP 2: Set up Python environment
+    # -------------------------------------------------------------------------
+    # - Uses Python 3.9 for stability and compatibility
+    # - Required for running the traffic data collection script
+    # -------------------------------------------------------------------------
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    # -------------------------------------------------------------------------
+    # STEP 3: Install required Python packages
+    # -------------------------------------------------------------------------
+    # - requests: For making HTTP API calls to GitHub
+    # - PyGithub: Official GitHub API library for Python
+    # -------------------------------------------------------------------------
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests PyGithub
+
+    # -------------------------------------------------------------------------
+    # STEP 4: Create temporary traffic_data directory
+    # -------------------------------------------------------------------------
+    # - Creates directory in main branch (temporarily)
+    # - Will be moved to traffic_data branch and cleaned up from main later
+    # -------------------------------------------------------------------------
+    - name: Create traffic_data directory
+      run: mkdir -p traffic_data
+
+    # -------------------------------------------------------------------------
+    # STEP 5: Collect repository traffic data using GitHub API
+    # -------------------------------------------------------------------------
+    # - Collects 4 types of data: views, clones, referrers, popular paths
+    # - Uses Personal Access Token for elevated permissions (traffic data requires repo scope)
+    # - Handles API errors gracefully and logs them in the output files
+    # - Creates both daily snapshot and rolling summary files
+    # -------------------------------------------------------------------------
+    - name: Collect repository traffic data
+      env:
+        GITHUB_TOKEN: ${{secrets.UVisBox_TRAFFIC_TOKEN || secrets.GITHUB_TOKEN }}
+        REPOSITORY: ${{ github.repository }}
+      run: |
+        python << 'EOF'
+        import os
+        import json
+        import requests
+        from datetime import datetime, timezone
+        from github import Github
+
+        # Initialize GitHub API client
+        token = os.environ['GITHUB_TOKEN']
+        repo_name = os.environ['REPOSITORY']
+        
+        # Token validation: Traffic data APIs require Personal Access Token with 'repo' scope
+        # Default GITHUB_TOKEN (ghs_*) lacks permissions for traffic data
+        if token.startswith('ghs_'):
+            print("⚠️  Using default GITHUB_TOKEN - this may not have traffic data permissions")
+            print("   Consider setting up a Personal Access Token with 'repo' scope as UVisBox_TRAFFIC_TOKEN secret")
+        else:
+            print("✅ Using Personal Access Token for traffic data access")
+        
+        g = Github(token)
+        repo = g.get_repo(repo_name)
+
+        # Generate timestamps for data organization
+        timestamp = datetime.now(timezone.utc).isoformat()
+        date_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+
+        # Initialize traffic data structure
+        traffic_data = {
+            'timestamp': timestamp,
+            'date': date_str,
+            'repository': repo_name,
+            'data': {}
+        }
+
+        # =====================================================================
+        # DATA COLLECTION: Views (Repository page views - past 14 days)
+        # =====================================================================
+        try:
+            views = repo.get_views_traffic(per='day')
+            traffic_data['data']['views'] = {
+                'count': views.count,        # Total views in the period
+                'uniques': views.uniques,    # Unique visitors
+                'views': [{'timestamp': view.timestamp.isoformat(), 'count': view.count, 'uniques': view.uniques} for view in views.views]
+            }
+            print(f"✅ Views data collected: {views.count} total views, {views.uniques} unique visitors")
+        except Exception as e:
+            print(f"❌ Error collecting views data: {e}")
+            traffic_data['data']['views'] = {'error': str(e)}
+
+        # =====================================================================
+        # DATA COLLECTION: Clones (Repository clones - past 14 days) 
+        # =====================================================================
+        try:
+            clones = repo.get_clones_traffic(per='day')
+            traffic_data['data']['clones'] = {
+                'count': clones.count,       # Total clones in the period
+                'uniques': clones.uniques,   # Unique cloners
+                'clones': [{'timestamp': clone.timestamp.isoformat(), 'count': clone.count, 'uniques': clone.uniques} for clone in clones.clones]
+            }
+            print(f"✅ Clones data collected: {clones.count} total clones, {clones.uniques} unique cloners")
+        except Exception as e:
+            print(f"❌ Error collecting clones data: {e}")
+            traffic_data['data']['clones'] = {'error': str(e)}
+
+        # =====================================================================
+        # DATA COLLECTION: Referrers (Top traffic sources)
+        # =====================================================================
+        try:
+            referrers = repo.get_top_referrers()
+            traffic_data['data']['referrers'] = [
+                {
+                    'referrer': ref.referrer,  # Source website/domain
+                    'count': ref.count,        # Total visits from this source
+                    'uniques': ref.uniques     # Unique visitors from this source
+                } for ref in referrers
+            ]
+            print(f"✅ Referrers data collected: {len(referrers)} referral sources")
+        except Exception as e:
+            print(f"❌ Error collecting referrers data: {e}")
+            traffic_data['data']['referrers'] = {'error': str(e)}
+
+        # =====================================================================
+        # DATA COLLECTION: Popular Paths (Most visited repository paths)
+        # =====================================================================
+        try:
+            paths = repo.get_top_paths()
+            traffic_data['data']['popular_paths'] = [
+                {
+                    'path': path.path,         # Repository path (e.g., /README.md)
+                    'title': path.title,       # Page title
+                    'count': path.count,       # Total visits to this path
+                    'uniques': path.uniques    # Unique visitors to this path
+                } for path in paths
+            ]
+            print(f"✅ Popular paths data collected: {len(paths)} paths tracked")
+        except Exception as e:
+            print(f"❌ Error collecting popular paths data: {e}")
+            traffic_data['data']['popular_paths'] = {'error': str(e)}
+
+        # =====================================================================
+        # FILE GENERATION: Daily snapshot file
+        # =====================================================================
+        # Create timestamped file with complete traffic data for this collection
+        filename = f"traffic_data/traffic_{date_str}.json"
+        with open(filename, 'w') as f:
+            json.dump(traffic_data, f, indent=2, default=str)
+        print(f"📄 Daily traffic data saved to {filename}")
+
+        # =====================================================================
+        # FILE GENERATION: Rolling summary file  
+        # =====================================================================
+        # Create/update summary file with latest data for quick access
+        summary_file = "traffic_data/last_90_days_summary.json"
+        summary_data = {
+            'last_updated': timestamp,           # When this summary was last updated
+            'repository': repo_name,             # Repository identifier
+            'latest_data': traffic_data['data']  # Most recent traffic data snapshot
+        }
+        
+        with open(summary_file, 'w') as f:
+            json.dump(summary_data, f, indent=2, default=str)
+        print(f"📄 Rolling summary saved to {summary_file}")
+        EOF
+
+    # -------------------------------------------------------------------------
+    # STEP 6: Commit and push traffic data to dedicated branch
+    # -------------------------------------------------------------------------
+    # - Creates or switches to 'traffic_data' branch (separate from main)
+    # - Commits collected data files to keep main branch clean
+    # - Cleans up temporary files from main branch after transfer
+    # -------------------------------------------------------------------------
+    - name: Commit and push traffic data to traffic_data branch
+      run: |
+        # Configure git identity for automated commits
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # =================================================================
+        # BRANCH MANAGEMENT: Switch to or create traffic_data branch
+        # =================================================================
+        if git ls-remote --heads origin traffic_data | grep -q traffic_data; then
+          echo "🔄 Existing traffic_data branch found, checking it out..."
+          git fetch origin traffic_data
+          git checkout traffic_data
+        else
+          echo "🆕 Creating new traffic_data branch (orphan - no history from main)..."
+          git checkout --orphan traffic_data
+          # Clean up all main branch files for dedicated data branch
+          git rm -rf . 2>/dev/null || true
+          
+          # Create documentation for the traffic_data branch
+          echo "# Traffic Data Branch" > README.md
+          echo "" >> README.md
+          echo "This branch contains automated traffic data collection for the UVisBox repository." >> README.md
+          echo "" >> README.md
+          echo "## Data Structure" >> README.md
+          echo "- \`traffic_data/traffic_YYYY-MM-DD.json\`: Daily traffic data files" >> README.md
+          echo "- \`traffic_data/last_90_days_summary.json\`: Rolling 90-day traffic summary" >> README.md
+          echo "" >> README.md
+          echo "Data is automatically updated daily at midnight UTC via GitHub Actions." >> README.md
+          git add README.md
+        fi
+        
+        # =================================================================
+        # DATA COMMIT: Add and commit traffic data files
+        # =================================================================
+        git add traffic_data/
+        
+        if git diff --staged --quiet; then
+          echo "ℹ️  No new traffic data to commit"
+        else
+          git commit -m "📈 Update traffic data - $(date -u +%Y-%m-%d)"
+          git push origin traffic_data
+          echo "✅ Traffic data committed and pushed to traffic_data branch"
+        fi
+        
+        # =================================================================
+        # CLEANUP: Remove traffic_data directory from main branch
+        # =================================================================
+        git checkout main
+        if [ -d "traffic_data" ]; then
+          rm -rf traffic_data
+          echo "🧹 Cleaned up traffic_data directory from main branch"
+        fi
+
+    # -------------------------------------------------------------------------
+    # STEP 7: Generate workflow summary for GitHub Actions UI
+    # -------------------------------------------------------------------------
+    # - Creates a formatted summary visible in the GitHub Actions interface
+    # - Shows key metrics from the collected traffic data
+    # - Only runs if summary file exists (after successful data collection)
+    # -------------------------------------------------------------------------
+    - name: Create traffic data summary
+      run: |
+        # Check if summary file was created successfully
+        if [ -f "traffic_data/last_90_days_summary.json" ]; then
+          echo "## Repository Traffic Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Traffic data collected on $(date -u +%Y-%m-%d)" >> $GITHUB_STEP_SUMMARY
+          
+          # Parse and format summary data for display
+          python << 'EOF'
+        import json
+        import os
+        
+        try:
+            # Load the summary data
+            with open('traffic_data/last_90_days_summary.json', 'r') as f:
+                data = json.load(f)
+            
+            summary_lines = []
+            
+            # Format views data (if available and no errors)
+            if 'views' in data['latest_data'] and 'error' not in data['latest_data']['views']:
+                views = data['latest_data']['views']
+                summary_lines.append(f"- **Views**: {views['count']} total ({views['uniques']} unique)")
+            
+            # Format clones data (if available and no errors)
+            if 'clones' in data['latest_data'] and 'error' not in data['latest_data']['clones']:
+                clones = data['latest_data']['clones']
+                summary_lines.append(f"- **Clones**: {clones['count']} total ({clones['uniques']} unique)")
+            
+            # Format referrers data (if available and no errors)
+            if 'referrers' in data['latest_data'] and 'error' not in data['latest_data']['referrers']:
+                referrers = data['latest_data']['referrers']
+                summary_lines.append(f"- **Top Referrers**: {len(referrers)} sources")
+            
+            # Format popular paths data (if available and no errors)
+            if 'popular_paths' in data['latest_data'] and 'error' not in data['latest_data']['popular_paths']:
+                paths = data['latest_data']['popular_paths']
+                summary_lines.append(f"- **Popular Paths**: {len(paths)} paths tracked")
+            
+            # Write summary to GitHub Actions summary
+            if summary_lines:
+                with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+                    f.write('\n'.join(summary_lines) + '\n')
+                    f.write(f"\nData updated: {data['last_updated']}\n")
+                    f.write(f"\n**Note**: Data is stored in the `traffic_data` branch to keep main branch clean.\n")
+            else:
+                print("⚠️  No traffic data available to summarize")
+                
+        except Exception as e:
+            print(f"❌ Error creating workflow summary: {e}")
+        EOF
+        else
+          echo "⚠️  Summary file not found - traffic data collection may have failed"
+        fi
