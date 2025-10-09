@@ -1,0 +1,590 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Core.BandDepths package &mdash; UVisBox 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Core.CellsCrossingProb package" href="Core.CellsCrossingProb.html" />
+    <link rel="prev" title="Core package" href="Core.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/UVisBox-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">uvisbox</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="Core.html">Core package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="Core.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Core.BandDepths package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Core.CellsCrossingProb.html">Core.CellsCrossingProb package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Core.Colors.html">Core.Colors package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Core.Interpolations.html">Core.Interpolations package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Core.html#module-Core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Datasets.html">Datasets package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Modules.html">Modules package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">UVisBox</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">uvisbox</a></li>
+          <li class="breadcrumb-item"><a href="Core.html">Core package</a></li>
+      <li class="breadcrumb-item active">Core.BandDepths package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Core.BandDepths.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="core-banddepths-package">
+<h1>Core.BandDepths package<a class="headerlink" href="#core-banddepths-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-Core.BandDepths.contour_banddepth">
+<span id="core-banddepths-contour-banddepth-module"></span><h2>Core.BandDepths.contour_banddepth module<a class="headerlink" href="#module-Core.BandDepths.contour_banddepth" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.contour_banddepth.choose2">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.contour_banddepth.</span></span><span class="sig-name descname"><span class="pre">choose2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/contour_banddepth.html#choose2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.contour_banddepth.choose2" title="Link to this definition"></a></dt>
+<dd><p>Helper function to compute x choose 2</p>
+<section id="parameters">
+<h3>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>x<span class="classifier">int</span></dt><dd><p>number of elements</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>[]<span class="classifier">int</span></dt><dd><p>x choose 2</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.contour_banddepth.contour_banddepth">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.contour_banddepth.</span></span><span class="sig-name descname"><span class="pre">contour_banddepth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combination</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_portion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/contour_banddepth.html#contour_banddepth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.contour_banddepth.contour_banddepth" title="Link to this definition"></a></dt>
+<dd><p>Calculates the band depth of binary contour data using pairwise combinations.
+R. T. Whitaker, M. Mirzargar and R. M. Kirby, “Contour Boxplots: A Method for
+Characterizing Uncertainty in Feature Sets from Simulation Ensembles,” in IEEE Transactions
+on Visualization and Computer Graphics, vol. 19, no. 12, pp. 2713-2722, Dec. 2013, doi: 10.1109/TVCG.2013.143</p>
+<section id="id1">
+<h3>Parameters:<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>Input data representing binary contours. Should be convertible to a boolean NumPy array.</p>
+</dd>
+<dt>combination<span class="classifier">list of tuples, optional</span></dt><dd><p>List of index pairs (xdx, ydx) specifying which images to combine for band depth calculation. If None, combinations are generated automatically.</p>
+</dd>
+<dt>allow_portion<span class="classifier">bool, default False</span></dt><dd><p>If True, uses a portion-based subset calculation for depth; otherwise, uses epsilon-based subset.</p>
+</dd>
+<dt>eps<span class="classifier">float, default 0</span></dt><dd><p>Epsilon tolerance for subset checks when <cite>allow_portion</cite> is False.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Returns:<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>depths<span class="classifier">np.ndarray</span></dt><dd><p>Array of band depth values for each image in the input data.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">raises ValueError:<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If the input data cannot be converted to a boolean array.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The function expects binary contour data, where each image is represented as a boolean array.</p></li>
+<li><p>Depth is computed by evaluating how each image fits within the intersection and union of pairs of images.</p></li>
+<li><p>Helper functions <cite>_portion_subset</cite> and <cite>_epsilon_subset</cite> are used for subset checks.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.contour_banddepth.get_combinations">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.contour_banddepth.</span></span><span class="sig-name descname"><span class="pre">get_combinations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/contour_banddepth.html#get_combinations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.contour_banddepth.get_combinations" title="Link to this definition"></a></dt>
+<dd><p>returns (n_combination, 2) as list of pair of indices for n elements, get all 2-subsets</p>
+<section id="id3">
+<h3>Parameters:<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>n<span class="classifier">int</span></dt><dd><p>number of elements</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h3>Returns:<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>combinations<span class="classifier">np.ndarray</span></dt><dd><p>array of shape (n_choose_2, 2)</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-Core.BandDepths.curve_banddepth">
+<span id="core-banddepths-curve-banddepth-module"></span><h2>Core.BandDepths.curve_banddepth module<a class="headerlink" href="#module-Core.BandDepths.curve_banddepth" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.curve_banddepth.curve_banddepths">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.curve_banddepth.</span></span><span class="sig-name descname"><span class="pre">curve_banddepths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curves</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/curve_banddepth.html#curve_banddepths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.curve_banddepth.curve_banddepths" title="Link to this definition"></a></dt>
+<dd><p>Calculate band depth for curves based on how often each curve’s points lie within convex hulls
+formed by bands of other curves. M. Mirzargar, R. T. Whitaker and R. M. Kirby, “Curve Boxplot:
+Generalization of Boxplot for Ensembles of Curves,” in IEEE Transactions on Visualization and
+Computer Graphics, vol. 20, no. 12, pp. 2654-2663, 31 Dec. 2014, doi: 10.1109/TVCG.2014.2346455.</p>
+<section id="id5">
+<h3>Parameters:<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>curves<span class="classifier">numpy.ndarray</span></dt><dd><p>3D array of shape (n_curves, n_steps, n_dims) containing curve data</p>
+</dd>
+<dt>indices<span class="classifier">list of lists</span></dt><dd><p>Each inner list contains indices of curves that form a band
+indices can be created by itertools.combinations(range(n_curves), k) for some k
+recommended caching for indices</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h3>Returns:<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>1D array of normalized depth scores for each curve</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.curve_banddepth.point_in_hull">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.curve_banddepth.</span></span><span class="sig-name descname"><span class="pre">point_in_hull</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hull_or_vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/curve_banddepth.html#point_in_hull"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.curve_banddepth.point_in_hull" title="Link to this definition"></a></dt>
+<dd><p>Check if a point is inside a convex hull.</p>
+<section id="id7">
+<h3>Parameters:<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>point<span class="classifier">array-like</span></dt><dd><p>The coordinates of the point to check. Should be a 1D array or list of length equal to the dimension of the hull.</p>
+</dd>
+<dt>hull_or_vertices<span class="classifier">scipy.spatial.ConvexHull or array-like</span></dt><dd><p>Either a SciPy ConvexHull object, or an array/list of vertices that define the convex hull.
+If vertices are provided, a ConvexHull object will be constructed internally.</p>
+</dd>
+<dt>eps<span class="classifier">float, optional</span></dt><dd><p>Tolerance for numerical precision when checking if the point is inside the hull. Default is 1e-6.</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h3>Returns:<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>bool</dt><dd><p>True if the point is inside the convex hull (within the specified tolerance), False otherwise.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">raises ValueError<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If <cite>hull_or_vertices</cite> is not a ConvexHull object, ndarray, or list of vertices.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The function uses the hull’s half-space equations to determine if the point is inside.</p></li>
+<li><p>Points on the boundary (within <cite>eps</cite> tolerance) are considered inside.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-Core.BandDepths.functional_banddepth">
+<span id="core-banddepths-functional-banddepth-module"></span><h2>Core.BandDepths.functional_banddepth module<a class="headerlink" href="#module-Core.BandDepths.functional_banddepth" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.functional_banddepth.calculate_band">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.functional_banddepth.</span></span><span class="sig-name descname"><span class="pre">calculate_band</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sorted_curves</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/functional_banddepth.html#calculate_band"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.functional_banddepth.calculate_band" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.functional_banddepth.fdb">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.functional_banddepth.</span></span><span class="sig-name descname"><span class="pre">fdb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Core.BandDepths.functional_banddepth.fdb" title="Link to this definition"></a></dt>
+<dd><p>Compute the functional band depth of the input data. The band is assumed to be formed by 2-subsets
+This implements Sun, Y., Genton, M.G. and Nychka, D.W. (2012), Exact fast computation of band depth for large functional datasets: How quickly can one million curves be ranked?. Stat, 1: 68-74. <a class="reference external" href="https://doi.org/10.1002/sta4.8">https://doi.org/10.1002/sta4.8</a>
+Data is a 2D array of shape (N, D)</p>
+<section id="id9">
+<h3>Parameters:<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>2D array of shape (N, D) where N is the number of samples and D is the number of features</p>
+</dd>
+<dt>dtype<span class="classifier">data-type, optional</span></dt><dd><p>Desired data-type for the computation (default is np.float64)</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h3>Returns:<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>band_depths<span class="classifier">np.ndarray</span></dt><dd><p>1D array of band depths of shape (N,)</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.functional_banddepth.functional_banddepth">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.functional_banddepth.</span></span><span class="sig-name descname"><span class="pre">functional_banddepth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/functional_banddepth.html#functional_banddepth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.functional_banddepth.functional_banddepth" title="Link to this definition"></a></dt>
+<dd><p>Compute the functional band depth of the input data. The band is assumed to be formed by 2-subsets
+This implements Sun, Y., Genton, M.G. and Nychka, D.W. (2012), Exact fast computation of band depth for large functional datasets: How quickly can one million curves be ranked?. Stat, 1: 68-74. <a class="reference external" href="https://doi.org/10.1002/sta4.8">https://doi.org/10.1002/sta4.8</a>
+Data is a 2D array of shape (N, D)</p>
+<section id="id11">
+<h3>Parameters:<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>2D array of shape (N, D) where N is the number of samples and D is the number of features</p>
+</dd>
+<dt>dtype<span class="classifier">data-type, optional</span></dt><dd><p>Desired data-type for the computation (default is np.float64)</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h3>Returns:<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>band_depths<span class="classifier">np.ndarray</span></dt><dd><p>1D array of band depths of shape (N,)</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.functional_banddepth.mdb">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.functional_banddepth.</span></span><span class="sig-name descname"><span class="pre">mdb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Core.BandDepths.functional_banddepth.mdb" title="Link to this definition"></a></dt>
+<dd><p>Compute the modified functional band depth of the input data
+The band is assumed to be formed by 2-subsets
+This implements Sun, Y., Genton, M.G. and Nychka, D.W. (2012), Exact fast computation of band depth for large functional datasets: How quickly can one million curves be ranked?. Stat, 1: 68-74. <a class="reference external" href="https://doi.org/10.1002/sta4.8">https://doi.org/10.1002/sta4.8</a>
+Data is a 2D array of shape (N, D)
+Parameters:
+———–
+data : np.ndarray</p>
+<blockquote>
+<div><p>2D array of shape (N, D) where N is the number of samples and D is the number of features</p>
+</div></blockquote>
+<dl class="simple">
+<dt>dtype<span class="classifier">data-type, optional</span></dt><dd><p>Desired data-type for the computation (default is np.float64)</p>
+</dd>
+</dl>
+<section id="id13">
+<h3>Returns:<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>band_depths<span class="classifier">np.ndarray</span></dt><dd><p>1D array of band depths of shape (N,)</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.functional_banddepth.modified_functional_banddepth">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.functional_banddepth.</span></span><span class="sig-name descname"><span class="pre">modified_functional_banddepth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/functional_banddepth.html#modified_functional_banddepth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.functional_banddepth.modified_functional_banddepth" title="Link to this definition"></a></dt>
+<dd><p>Compute the modified functional band depth of the input data
+The band is assumed to be formed by 2-subsets
+This implements Sun, Y., Genton, M.G. and Nychka, D.W. (2012), Exact fast computation of band depth for large functional datasets: How quickly can one million curves be ranked?. Stat, 1: 68-74. <a class="reference external" href="https://doi.org/10.1002/sta4.8">https://doi.org/10.1002/sta4.8</a>
+Data is a 2D array of shape (N, D)
+Parameters:
+———–
+data : np.ndarray</p>
+<blockquote>
+<div><p>2D array of shape (N, D) where N is the number of samples and D is the number of features</p>
+</div></blockquote>
+<dl class="simple">
+<dt>dtype<span class="classifier">data-type, optional</span></dt><dd><p>Desired data-type for the computation (default is np.float64)</p>
+</dd>
+</dl>
+<section id="id14">
+<h3>Returns:<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>band_depths<span class="classifier">np.ndarray</span></dt><dd><p>1D array of band depths of shape (N,)</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-Core.BandDepths.vector_depths">
+<span id="core-banddepths-vector-depths-module"></span><h2>Core.BandDepths.vector_depths module<a class="headerlink" href="#module-Core.BandDepths.vector_depths" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.vector_depths.angular_spread">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.vector_depths.</span></span><span class="sig-name descname"><span class="pre">angular_spread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/vector_depths.html#angular_spread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.vector_depths.angular_spread" title="Link to this definition"></a></dt>
+<dd><p>Calculate the angular spread and magnitude spread of a set of vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vectors</strong> (<em>numpy.ndarray</em>) – Array of shape (n, 2) representing 2D Cartesian vectors.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>angular_spread_deg</strong> (<em>float</em>) – The angular spread in degrees.</p></li>
+<li><p><strong>magnitude_spread</strong> (<em>float</em>) – The magnitude spread.</p></li>
+<li><p><strong>min_idx</strong> (<em>int</em>) – Index of the vector with the minimum angle.</p></li>
+<li><p><strong>max_idx</strong> (<em>int</em>) – Index of the vector with the maximum angle.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.vector_depths.calculate_spread_2D">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.vector_depths.</span></span><span class="sig-name descname"><span class="pre">calculate_spread_2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentil</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/vector_depths.html#calculate_spread_2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.vector_depths.calculate_spread_2D" title="Link to this definition"></a></dt>
+<dd><p>Calculate the spread in 2D polar coordinates.
+Parameters:
+———–</p>
+<blockquote>
+<div><dl class="simple">
+<dt>vectors<span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (n, 2) in polar coordinates (magnitude, angle)</p>
+</dd>
+<dt>depths<span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (n,) representing the depth of each vector</p>
+</dd>
+<dt>percentil<span class="classifier">float</span></dt><dd><p>The percentile for depth filtering</p>
+</dd>
+</dl>
+</div></blockquote>
+<section id="id15">
+<h3>Returns:<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>tuple</dt><dd><p>Indices of vectors with min/max magnitude, angle among those with depth &gt; 1.0-percentil</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.vector_depths.calculate_spread_3D">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.vector_depths.</span></span><span class="sig-name descname"><span class="pre">calculate_spread_3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentil</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/vector_depths.html#calculate_spread_3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.vector_depths.calculate_spread_3D" title="Link to this definition"></a></dt>
+<dd><p>Calculate the spread in 3D spherical coordinates.
+Parameters:
+———-</p>
+<blockquote>
+<div><dl class="simple">
+<dt>vectors<span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (n, 3) in spherical coordinates (magnitude, theta, phi)</p>
+</dd>
+<dt>depths<span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (n,) representing the depth of each vector</p>
+</dd>
+<dt>percentil<span class="classifier">float</span></dt><dd><p>The percentile for depth filtering</p>
+</dd>
+</dl>
+</div></blockquote>
+<section id="id16">
+<h3>Returns:<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>tuple</dt><dd><p>Indices of vectors with min/max magnitude, theta, phi among those with depth &gt; 1.0-percentil</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.vector_depths.cartesian_to_polar">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.vector_depths.</span></span><span class="sig-name descname"><span class="pre">cartesian_to_polar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/vector_depths.html#cartesian_to_polar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.vector_depths.cartesian_to_polar" title="Link to this definition"></a></dt>
+<dd><p>Convert 2D Cartesian vectors to polar coordinates (magnitude, angle).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vectors</strong> (<em>numpy.ndarray</em>) – Array of shape (n, 2) representing 2D Cartesian vectors.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>polar_coords</strong> – Array of shape (n, 2) with columns [magnitude, angle in radians].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.vector_depths.cartesian_to_spherical">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.vector_depths.</span></span><span class="sig-name descname"><span class="pre">cartesian_to_spherical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/vector_depths.html#cartesian_to_spherical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.vector_depths.cartesian_to_spherical" title="Link to this definition"></a></dt>
+<dd><p>Convert 3D Cartesian vectors to spherical coordinates (magnitude, theta, phi).</p>
+<section id="id17">
+<h3>Parameters:<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>vectors<span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (n, 3) representing 3D Cartesian vectors.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id18">
+<h3>Returns:<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>spherical_coords<span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (n, 3) with columns [magnitude, theta, phi].</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.vector_depths.compute_vector_depths_2D">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.vector_depths.</span></span><span class="sig-name descname"><span class="pre">compute_vector_depths_2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/vector_depths.html#compute_vector_depths_2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.vector_depths.compute_vector_depths_2D" title="Link to this definition"></a></dt>
+<dd><p>Compute the depth of each vector in the ensemble. The vector depth calculation is based on
+T. A. J. Ouermi, J. Li, Z. Morrow, B. Van Bloemen Waanders and C. R. Johnson,
+“Glyph-Based Uncertainty Visualization and Analysis of Time-Varying Vector Fields,”
+2024 IEEE Workshop on Uncertainty Visualization: Applications, Techniques, Software,
+and Decision Frameworks, St Pete Beach, FL, USA, 2024, pp. 73-77,
+doi: 10.1109/UncertaintyVisualization63963.2024.00014.</p>
+<section id="id19">
+<h3>Parameters:<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>vectors<span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (n, 2) representing 2D Cartesian vectors.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id20">
+<h3>Returns:<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>depths<span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (n,) with the depth of each vector.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.vector_depths.compute_vector_depths_3D">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.vector_depths.</span></span><span class="sig-name descname"><span class="pre">compute_vector_depths_3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/vector_depths.html#compute_vector_depths_3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.vector_depths.compute_vector_depths_3D" title="Link to this definition"></a></dt>
+<dd><p>Compute the depth of each vector in the ensemble in 3D. Assumes vectors are in
+spherical coordinates (magnitude, theta, phi). The vector depth calculation is based on
+T. A. J. Ouermi, J. Li, Z. Morrow, B. Van Bloemen Waanders and C. R. Johnson,
+“Glyph-Based Uncertainty Visualization and Analysis of Time-Varying Vector Fields,”
+2024 IEEE Workshop on Uncertainty Visualization: Applications, Techniques, Software,
+and Decision Frameworks, St Pete Beach, FL, USA, 2024, pp. 73-77,
+doi: 10.1109/UncertaintyVisualization63963.2024.00014.</p>
+<section id="id21">
+<h3>Parameters:<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>vectors<span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (n, 3) representing 3D spherical coordinates.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id22">
+<h3>Returns:<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>depths<span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (n,) with the depth of each vector.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Core.BandDepths.vector_depths.magnitude_spread">
+<span class="sig-prename descclassname"><span class="pre">Core.BandDepths.vector_depths.</span></span><span class="sig-name descname"><span class="pre">magnitude_spread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Core/BandDepths/vector_depths.html#magnitude_spread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Core.BandDepths.vector_depths.magnitude_spread" title="Link to this definition"></a></dt>
+<dd><p>Calculate the magnitude spread of a set of vectors.
+:param vectors: Array of shape (n, 2) representing 2D Cartesian vectors.
+:type vectors: numpy.ndarray</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>magnitude_spread</strong> (<em>float</em>) – The magnitude spread.</p></li>
+<li><p><strong>min_mag_idx</strong> (<em>int</em>) – Index of the vector with the minimum magnitude.</p></li>
+<li><p><strong>max_mag_idx</strong> (<em>int</em>) – Index of the vector with the maximum magnitude.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-Core.BandDepths">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-Core.BandDepths" title="Link to this heading"></a></h2>
+<p>Core BandDepths Module</p>
+<p>This module contains core statistical methods for band depth calculations.
+These are fundamental algorithms used across the UVisBox package.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Core.html" class="btn btn-neutral float-left" title="Core package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Core.CellsCrossingProb.html" class="btn btn-neutral float-right" title="Core.CellsCrossingProb package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Timbwaoga A. J. Ouermi and Jixian Li.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

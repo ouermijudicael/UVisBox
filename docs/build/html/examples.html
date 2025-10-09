@@ -1,0 +1,925 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples &mdash; UVisBox 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="uvisbox" href="modules.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/UVisBox-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.contour_boxplot_example">contour_boxplot_example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.curve_boxplot_example">curve_boxplot_example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.functional_boxplot_example">functional_boxplot_example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.probabilistic_marching_cubes_example">probabilistic_marching_cubes_example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.probabilistic_marching_squares_example">probabilistic_marching_squares_example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.probabilistic_marching_tet_example">probabilistic_marching_tet_example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.probabilistic_marching_triangles_example">probabilistic_marching_triangles_example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.squid_glyphs_2d_example">squid_glyphs_2d_example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.squid_glyphs_3D_example">squid_glyphs_3D_example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.uncertainty_lobes_2D_example">uncertainty_lobes_2D_example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.uncertainty_tube_example">uncertainty_tube_example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.vsup_example">vsup_example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">uvisbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">UVisBox</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
+<section id="module-examples.contour_boxplot_example">
+<span id="contour-boxplot-example"></span><h2>contour_boxplot_example<a class="headerlink" href="#module-examples.contour_boxplot_example" title="Link to this heading"></a></h2>
+<p>This example demonstrates the use of contour boxplots to visualize the variability in an ensemble of 2D scalar fields.
+It generates a synthetic ensemble of scalar fields with Gaussian blobs and visualizes the ensemble contours
+using spaghetti plots and contour boxplots.</p>
+<p>import necessary libraries</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.ContourBoxplot.contour_boxplot</span><span class="w"> </span><span class="kn">import</span> <span class="n">contour_boxplot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_ensemble_scalarfield</span><span class="p">(</span><span class="n">image_res</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">n_ensembles</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sigma_max</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+    <span class="c1"># Create an ensemble of 2D scalar fields with Gaussian blobs in the center.</span>
+    <span class="c1"># Args:</span>
+    <span class="c1">#     image_res (int): Resolution of the image (image_res x image_res).</span>
+    <span class="c1">#     n_ensembles (int): Number of ensemble members.</span>
+    <span class="c1">#     sigma_min (float): Minimum sigma for Gaussian.</span>
+    <span class="c1">#     sigma_max (float): Maximum sigma for Gaussian.</span>
+    <span class="c1"># Returns:</span>
+    <span class="c1">#     np.ndarray: Array of shape (n_ensembles, image_res, image_res).</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">image_res</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">image_res</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">image_res</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">image_res</span><span class="p">)</span>
+    <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ensemble</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ensembles</span><span class="p">):</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">sigma_min</span><span class="p">,</span> <span class="n">sigma_max</span><span class="p">)</span>
+        <span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">]])</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">image_res</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">image_res</span><span class="o">/</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">inv_cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">grid</span> <span class="o">-</span> <span class="n">mu</span>
+        <span class="n">pdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">diff</span> <span class="o">@</span> <span class="n">inv_cov</span> <span class="o">*</span> <span class="n">diff</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Normalize to [-1, 1]</span>
+        <span class="n">pdf</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">pdf</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">pdf</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">pdf</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">ensemble</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ensemble</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Generate a synthetic ensemble of scalar fields and visualize using spaghetti</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate synthetic ensemble of scalar fields</span>
+<span class="n">ensemble</span> <span class="o">=</span> <span class="n">create_ensemble_scalarfield</span><span class="p">(</span><span class="n">image_res</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_ensembles</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">sigma_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="c1"># extract contours at isovalue = 0.7</span>
+<span class="n">binary_images</span> <span class="o">=</span> <span class="p">(</span><span class="n">ensemble</span> <span class="o">&lt;</span> <span class="mf">0.7</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">)</span>
+
+<span class="c1"># Visualize the ensemble contours using spaghetti</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">binary_images</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="c1"># contour at the middle of 0 and 1</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">binary_images</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Ensemble Contours&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Calculate and plot the contour boxplot</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># contour_boxplot(binary_images, ax=ax[1], show_median=True, show_iqr=True,</span>
+<span class="c1">#                 show_non_outliers=True, show_outliers=True, show_firstquartile=True, outlier_percentile=95)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">contour_boxplot</span><span class="p">(</span><span class="n">binary_images</span><span class="p">,</span> <span class="n">percentil</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">show_median</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_outliers</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Contour Boxplot&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="n">adjustable</span><span class="o">=</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Contour Boxplot Example" class="align-center" src="_images/contour_boxplot_example.png" />
+</section>
+<section id="module-examples.curve_boxplot_example">
+<span id="curve-boxplot-example"></span><h2>curve_boxplot_example<a class="headerlink" href="#module-examples.curve_boxplot_example" title="Link to this heading"></a></h2>
+<p>This example demonstrates how to create a curve band depth plot using hurricane track data.
+It visualizes the tracks on a map and highlights the most central tracks based on band depth.</p>
+<p>Import necessary libraries and load dataset</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">irma2017_perturbed_tracks</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.CurveBoxplot.curve_boxplot_mesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">curves_band_mesh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.CurveBoxplot.curve_boxplot_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">curve_banddepths</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.basemap</span><span class="w"> </span><span class="kn">import</span> <span class="n">Basemap</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">lon_lat_coords</span> <span class="o">=</span> <span class="n">irma2017_perturbed_tracks</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Create figure with 2 subplots and set up Basemaps for geographic map visualization. In addition,
+plot all hurricane tracks for each ensemble member in light gray on the left subplot.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a figure with 2 subplots</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="c1"># set up Basemaps for geographic map visualization on left subplot</span>
+<span class="n">m1</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;merc&#39;</span><span class="p">,</span>
+            <span class="n">llcrnrlat</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">lon_lat_coords</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="n">urcrnrlat</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">lon_lat_coords</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="n">llcrnrlon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">lon_lat_coords</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="n">urcrnrlon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">lon_lat_coords</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="n">m1</span><span class="o">.</span><span class="n">drawcoastlines</span><span class="p">()</span>
+<span class="n">m1</span><span class="o">.</span><span class="n">drawcountries</span><span class="p">()</span>
+<span class="n">m1</span><span class="o">.</span><span class="n">drawparallels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">90.</span><span class="p">,</span> <span class="mf">91.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">m1</span><span class="o">.</span><span class="n">drawmeridians</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">180.</span><span class="p">,</span> <span class="mf">181.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># set up Basemaps for geographic map visualization on right subplot</span>
+<span class="n">m2</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;merc&#39;</span><span class="p">,</span>
+            <span class="n">llcrnrlat</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">lon_lat_coords</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="n">urcrnrlat</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">lon_lat_coords</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="n">llcrnrlon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">lon_lat_coords</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="n">urcrnrlon</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">lon_lat_coords</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
+<span class="n">m2</span><span class="o">.</span><span class="n">drawcoastlines</span><span class="p">()</span>
+<span class="n">m2</span><span class="o">.</span><span class="n">drawcountries</span><span class="p">()</span>
+<span class="n">m2</span><span class="o">.</span><span class="n">drawparallels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">90.</span><span class="p">,</span> <span class="mf">91.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">m2</span><span class="o">.</span><span class="n">drawmeridians</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">180.</span><span class="p">,</span> <span class="mf">181.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># plot all curves in light gray</span>
+<span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="n">lon_lat_coords</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">m1</span><span class="p">(</span><span class="n">curve</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">curve</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Hurricane Tracks&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Longitude&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Latitude&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Calculate curve band depths, sort the curves in descending order,
+generate the mesh for the 75th percentile band depth, and plot
+the mesh and median curve.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate curve band depths for all curves</span>
+<span class="n">cur_depths</span> <span class="o">=</span> <span class="n">curve_banddepths</span><span class="p">(</span><span class="n">lon_lat_coords</span><span class="p">)</span>
+
+<span class="c1"># sort curves by depth in descending order</span>
+<span class="n">sorted_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">cur_depths</span><span class="p">)</span>
+<span class="n">sorted_curves</span> <span class="o">=</span> <span class="n">lon_lat_coords</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+
+<span class="c1"># get mesh for the 75th percentile band depth</span>
+<span class="n">points</span><span class="p">,</span> <span class="n">triangles</span> <span class="o">=</span> <span class="n">curves_band_mesh</span><span class="p">(</span><span class="n">sorted_curves</span><span class="p">,</span> <span class="n">percentile</span><span class="o">=</span><span class="mi">75</span><span class="p">)</span>
+
+<span class="c1"># plot the mesh</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">m2</span><span class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">f_colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">triangles</span><span class="p">))</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">tripcolor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">triangles</span><span class="p">,</span> <span class="n">facecolors</span><span class="o">=</span><span class="n">f_colors</span><span class="p">)</span>
+
+<span class="c1"># plot median curve</span>
+<span class="n">median_curve</span> <span class="o">=</span> <span class="n">sorted_curves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">m2</span><span class="p">(</span><span class="n">median_curve</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">median_curve</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Median Curve&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Curve Band Depth Plot&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Longitude&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Latitude&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Curve Boxplot Example" class="align-center" src="_images/curve_boxplot_example.png" />
+</section>
+<section id="module-examples.functional_boxplot_example">
+<span id="functional-boxplot-example"></span><h2>functional_boxplot_example<a class="headerlink" href="#module-examples.functional_boxplot_example" title="Link to this heading"></a></h2>
+<p>This example demonstrates how to create functional boxplots using the <code class="docutils literal notranslate"><span class="pre">uvisbox</span></code> library.
+It uses the sea surface temperature dataset from  Sun, Y., &amp; Genton, M. G. (2011).
+Functional Boxplots. Journal of Computational and Graphical Statistics, 20(2), 316–334.
+<a class="reference external" href="https://doi.org/10.1198/jcgs.2011.09224">https://doi.org/10.1198/jcgs.2011.09224</a> and computes both the functional band depth and
+modified functional band depth to visualize the centrality and variability of the time series data.
+The data consist of monthly sea surface temperatures (SST) measured in degrees Celsius over
+the east-central tropical Paciﬁc Ocean in degrees Celsius from January 1951 to December 2007.</p>
+<p>import necessary libraries and load dataset</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">sea_surface_temp_data</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.FunctionalBoxplot.functional_boxplot</span><span class="w"> </span><span class="kn">import</span> <span class="n">functional_boxplot</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">sea_surface_temp_data</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+<p>Create figure with three subplots and plot the original sea surface temperature time series</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a figure with 3 subplots</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="c1"># plot the original time series in the first subplot</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Sea Surface Temperature Time Series&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Month&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Temperature&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Calculate and plot the functional band depth for the time series data with 50th and 10th
+percentile bands in the second and third subplots, respectively.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax2</span> <span class="o">=</span> <span class="n">functional_boxplot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">percentil</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
+<span class="n">ax3</span> <span class="o">=</span> <span class="n">functional_boxplot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;modified_bd&#39;</span><span class="p">,</span> <span class="n">percentil</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Sea Surface Temperature Functional Band Depth Example" class="align-center" src="_images/sea_surface_temp_functional_banddepth_example.png" />
+</section>
+<section id="module-examples.probabilistic_marching_cubes_example">
+<span id="probabilistic-marching-cubes-example"></span><h2>probabilistic_marching_cubes_example<a class="headerlink" href="#module-examples.probabilistic_marching_cubes_example" title="Link to this heading"></a></h2>
+<p>This example demonstrates how to compute and visualize probabilistic isosurfaces
+using the marching cubes algorithm on a synthetic 4D dataset.
+It compares a deterministic isosurface with a probabilistic isosurface derived from an ensemble of scalar fields.</p>
+<p>Import necessary libraries</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyvista</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.ProbabilisticMarchingCubes.probabilistic_marching_cubes</span><span class="w"> </span><span class="kn">import</span> <span class="n">probabilistic_marching_cubes</span> <span class="k">as</span> <span class="n">pmc</span>
+</pre></div>
+</div>
+<p>Generate a regular grid over a 3D domain [-1, 1] and use the tear drop function
+to create an ensemble of scalar fields with some noise</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># tear drop function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tear_drop</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">5</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">4</span> <span class="o">-</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">z</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="c1"># Generate synthetic 4D data (n_x, n_y, n_z, n_ens)</span>
+<span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="n">n_z</span><span class="p">,</span> <span class="n">n_ens</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">10</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_y</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_z</span><span class="p">)</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+<span class="c1"># Create an ensemble of scalar fields with some noise</span>
+<span class="n">noise_less_F</span> <span class="o">=</span> <span class="n">tear_drop</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+<span class="n">origin</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">spacing</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">grid_dimensions</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="n">n_z</span><span class="p">)</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">ImageData</span><span class="p">(</span><span class="n">dimensions</span><span class="o">=</span><span class="n">grid_dimensions</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="n">spacing</span><span class="p">)</span>
+<span class="c1"># Add some data to the cell data (e.g., a 4D NumPy array)</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">noise_less_F</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+
+<span class="c1"># Set isovalue and compute deterministic isosurface</span>
+<span class="n">isovalue</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.001</span>
+<span class="n">iso_surface</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">contour</span><span class="p">([</span><span class="n">isovalue</span><span class="p">],</span> <span class="n">scalars</span><span class="o">=</span><span class="s2">&quot;values&quot;</span><span class="p">)</span>
+<span class="c1"># Set up the plotter with two subplots</span>
+<span class="n">plotter</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">off_screen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Plot deterministic isosurface</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="s2">&quot;Deterministic Isosurface&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">iso_surface</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Generate ensemble data with noise and calculate probabilistic isosurface
+using probabilistic marching cubes</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate ensemble data with noise</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="n">n_z</span><span class="p">,</span> <span class="n">n_ens</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ens</span><span class="p">):</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="p">(</span><span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="n">n_z</span><span class="p">))</span>
+    <span class="n">F</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">e</span><span class="p">]</span> <span class="o">=</span> <span class="n">noise_less_F</span> <span class="o">+</span> <span class="n">noise</span>
+
+<span class="c1"># Compute probabilistic marching cubes</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plotter</span> <span class="o">=</span> <span class="n">pmc</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">isovalue</span><span class="p">,</span> <span class="n">plotter</span><span class="o">=</span><span class="n">plotter</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="s2">&quot;Probabilistic Isosurface&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Probabilistic Marching Cubes Example" class="align-center" src="_images/probabilistic_marching_cubes_example.png" />
+</section>
+<section id="module-examples.probabilistic_marching_squares_example">
+<span id="probabilistic-marching-squares-example"></span><h2>probabilistic_marching_squares_example<a class="headerlink" href="#module-examples.probabilistic_marching_squares_example" title="Link to this heading"></a></h2>
+<p>This example demonstrates the use of the <cite>probabilistic_marching_squares</cite> function from the <cite>uvisbox</cite> library to compute
+and visualize probabilistic isocontours from an ensemble of scalar fields defined on a regular grid
+using the marching squares algorithm.
+It visualizes the probability of the isocontour passing through each cell in the grid.</p>
+<p>Import necessary libraries</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.ProbabilisticMarchingSquares.probabilistic_marching_squares</span><span class="w"> </span><span class="kn">import</span> <span class="n">probabilistic_marching_squares</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</pre></div>
+</div>
+<p>Generate a regular grid over a 2D domain [0, 4π], use function f(x, y) = sin(x) * cos(y)
+and create an ensemble of scalar fields with some noise</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n_ens</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+<span class="c1"># Create ensemble with noise</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ens</span><span class="p">)</span>
+<span class="p">])</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  <span class="c1"># Shape (n, m, n_ens)</span>
+</pre></div>
+</div>
+<p>Set isovalue, run probabilistic marching squares, and visualize result</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set isovalue</span>
+<span class="n">isovalue</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="c1"># # Run probabilistic marching squares</span>
+<span class="c1"># prob_contour = probabilistic_marching_squares(F, isovalue)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">probabilistic_marching_squares</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">isovalue</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Probabilistic Marching Squares Example" class="align-center" src="_images/probabilistic_marching_squares_example.png" />
+</section>
+<section id="module-examples.probabilistic_marching_tet_example">
+<span id="probabilistic-marching-tet-example"></span><h2>probabilistic_marching_tet_example<a class="headerlink" href="#module-examples.probabilistic_marching_tet_example" title="Link to this heading"></a></h2>
+<p>This example demonstrates the use of probabilistic marching tetrahedra to compute and visualize
+probabilistic isosurfaces from an ensemble of scalar fields defined on a tetrahedral mesh.
+It compares a deterministic isosurface with a probabilistic isosurface derived from the ensemble.</p>
+<p>Import necessary libraries</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyvista</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.ProbabilisticMarchingTetrahedra.probabilistic_marching_tetrahedra</span><span class="w"> </span><span class="kn">import</span> <span class="n">probabilistic_marching_tetrahedra</span> <span class="k">as</span> <span class="n">pmt</span>
+</pre></div>
+</div>
+<p>Generate tetrahedral mesh over a 3D domain [-1, 1] and use the tear drop function
+to create an ensemble of scalar fields with some noise</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># tear drop function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tear_drop</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">5</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">4</span> <span class="o">-</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">z</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="c1"># Generate synthetic 4D data (n_x, n_y, n_z, n_ens)</span>
+<span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="n">n_z</span><span class="p">,</span> <span class="n">n_ens</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">10</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_y</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_z</span><span class="p">)</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="n">n_z</span><span class="p">,</span> <span class="n">n_ens</span><span class="p">))</span>
+<span class="n">noise_less_F</span> <span class="o">=</span> <span class="n">tear_drop</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+<span class="c1"># Create an ensemble of scalar fields with some noise</span>
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ens</span><span class="p">):</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="p">(</span><span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="n">n_z</span><span class="p">))</span>
+    <span class="n">F</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">e</span><span class="p">]</span> <span class="o">=</span> <span class="n">noise_less_F</span> <span class="o">+</span> <span class="n">noise</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">Y</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">Z</span><span class="o">.</span><span class="n">ravel</span><span class="p">()]</span>
+
+<span class="c1"># create teterahedral mesh</span>
+<span class="n">pv_points</span><span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">pv_points</span><span class="o">.</span><span class="n">delaunay_3d</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="c1"># extract the tetrahedra</span>
+<span class="n">tetrahedra</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">cells</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">:]</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">extract_all_edges</span><span class="p">()</span>
+<span class="c1"># edges.plot(line_width=1, color=&#39;k&#39;)</span>
+<span class="n">cell_types</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">tetrahedra</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pv</span><span class="o">.</span><span class="n">CellType</span><span class="o">.</span><span class="n">TETRA</span><span class="p">)</span>
+<span class="n">tetrahedra</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">tetrahedra</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span> <span class="n">tetrahedra</span><span class="p">))</span>
+
+<span class="n">new_grid</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">UnstructuredGrid</span><span class="p">(</span><span class="n">tetrahedra</span><span class="p">,</span> <span class="n">cell_types</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span>
+<span class="n">new_grid</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">noise_less_F</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+<span class="n">isovalue</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.001</span>
+<span class="c1"># Compute deterministic isosurface</span>
+<span class="n">iso_surface</span> <span class="o">=</span> <span class="n">new_grid</span><span class="o">.</span><span class="n">contour</span><span class="p">([</span><span class="n">isovalue</span><span class="p">],</span> <span class="n">scalars</span><span class="o">=</span><span class="s2">&quot;values&quot;</span><span class="p">)</span>
+
+<span class="c1"># Set up the plotter with two subplots</span>
+<span class="n">plotter</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="c1"># Plot deterministic isosurface</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="s2">&quot;Deterministic Isosurface&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">iso_surface</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+
+<span class="n">F_reshaped</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_ens</span><span class="p">)</span>
+<span class="c1"># Compute probabilistic marching tetrahedra</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plotter</span> <span class="o">=</span> <span class="n">pmt</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">F_reshaped</span><span class="p">,</span> <span class="n">tetrahedra</span><span class="p">,</span> <span class="n">isovalue</span><span class="p">,</span> <span class="n">plotter</span><span class="o">=</span><span class="n">plotter</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="s2">&quot;Probabilistic Isosurface&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Probabilistic Marching Tetrahedra Example" class="align-center" src="_images/probabilistic_marching_tetrahedra_example.png" />
+</section>
+<section id="module-examples.probabilistic_marching_triangles_example">
+<span id="probabilistic-marching-triangles-example"></span><h2>probabilistic_marching_triangles_example<a class="headerlink" href="#module-examples.probabilistic_marching_triangles_example" title="Link to this heading"></a></h2>
+<p>This example demonstrates the use of the probabilistic marching triangles algorithm
+to compute and visualize probabilistic isocontours from an ensemble of scalar fields defined on a
+triangular mesh.
+It visualizes the probability of the isocontour passing through each triangle in the mesh.</p>
+<p>Import necessary libraries</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.tri</span><span class="w"> </span><span class="kn">import</span> <span class="n">Triangulation</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.ProbabilisticMarchingTriangles.probabilistic_marching_triangles</span><span class="w"> </span><span class="kn">import</span> <span class="n">probabilistic_marching_triangles</span>
+</pre></div>
+</div>
+<p>Generate a triangular mesh over a 2D domain [0, 2π], use function f(x, y) = sin(x) * cos(y)
+and create an ensemble of scalar fields with some noise</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Synthetic function: f(x, y) = sin(x) * cos(y)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">synthetic_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Domain setup</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">xv</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yv</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+
+<span class="c1"># Triangulate the domain</span>
+<span class="n">tri</span> <span class="o">=</span> <span class="n">Triangulation</span><span class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">triangles</span> <span class="o">=</span> <span class="n">tri</span><span class="o">.</span><span class="n">triangles</span>
+
+<span class="c1"># Generate ensemble samples with noise</span>
+<span class="n">n_ens</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="n">synthetic_func</span><span class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ens</span><span class="p">)</span>
+<span class="p">])</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># Shape (n_points, n_ens)</span>
+</pre></div>
+</div>
+<p>Set isovalue, run probabilistic marching triangles, and visualize result</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set isovalue</span>
+<span class="n">isovalue</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="c1"># # Run probabilistic marching triangles</span>
+<span class="c1"># prob_contour = probabilistic_marching_triangles(F, triangles, isovalue, num_samples=200)</span>
+
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">probabilistic_marching_triangles</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">triangles</span><span class="p">,</span> <span class="n">isovalue</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Probabilistic Marching Triangles Example" class="align-center" src="_images/probabilistic_marching_triangles_example.png" />
+</section>
+<section id="module-examples.squid_glyphs_2d_example">
+<span id="squid-glyphs-2d-example"></span><h2>squid_glyphs_2d_example<a class="headerlink" href="#module-examples.squid_glyphs_2d_example" title="Link to this heading"></a></h2>
+<p>This example demonstrates how to visualize 2D vector fields and their uncertainty using squid glyphs with the <code class="docutils literal notranslate"><span class="pre">uvisbox</span></code> library.
+The example generates a 2D grid of vectors representing the double gyre flow, creates an ensemble by adding Gaussian noise, and then visualizes the ensemble using squid glyphs to represent uncertainty.</p>
+<p>Import necessary libraries</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.SquidGlyphs.squid_glyphs</span><span class="w"> </span><span class="kn">import</span> <span class="n">squid_glyph_2D</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</pre></div>
+</div>
+<p>generate a 2D grid over [0,2] x [0,1] and use double gyre flow to generate vector field
+with some noise to create an ensemble of vector fields</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the double gyre flow function</span>
+<span class="n">A</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.25</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">double_gyre</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">epsilon</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">omega</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">x</span>
+    <span class="n">df_dx</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">b</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">df_dx</span>
+    <span class="k">return</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span>
+
+<span class="c1"># Change domain to [0,2] x [0,1]</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">U</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">double_gyre</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+<span class="c1"># Create ensemble data by perturbing vector magnitude and direction with Gaussian noise</span>
+<span class="n">n_ensemble</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># number of ensemble members</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Flatten the grid for easier perturbation</span>
+<span class="n">X_flat</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">Y_flat</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">U_flat</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">V_flat</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">n_points</span> <span class="o">=</span> <span class="n">X_flat</span><span class="o">.</span><span class="n">size</span>
+
+<span class="c1"># Compute magnitude and angle</span>
+<span class="n">mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">U_flat</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">V_flat</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">V_flat</span><span class="p">,</span> <span class="n">U_flat</span><span class="p">)</span>
+
+<span class="c1"># Standard deviations for noise (tune as needed)</span>
+<span class="n">mag_noise_std</span> <span class="o">=</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">mag</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">angle_noise_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># 5 degree std</span>
+
+<span class="n">n_ensemble</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">ensemble_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_points</span><span class="p">,</span> <span class="n">n_ensemble</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_points</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ensemble</span><span class="p">):</span>
+        <span class="c1"># Perturb magnitude and anglels</span>
+        <span class="n">mag_perturbed</span> <span class="o">=</span> <span class="n">mag</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mag_noise_std</span><span class="p">)</span>
+        <span class="n">angle_perturbed</span> <span class="o">=</span> <span class="n">angle</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">angle_noise_std</span><span class="p">)</span>
+
+        <span class="c1"># Convert back to Cartesian coordinates</span>
+        <span class="n">ensemble_vectors</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">mag_perturbed</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle_perturbed</span><span class="p">),</span>
+            <span class="n">mag_perturbed</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle_perturbed</span><span class="p">)</span>
+        <span class="p">]</span>
+<span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">X_flat</span><span class="p">,</span> <span class="n">Y_flat</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+<p>Set up the plot for both original vector field and uncertainty squid glyphs</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="c1"># Plot original vector field with arrows</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_points</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ensemble</span><span class="p">):</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">ensemble_vectors</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">head_width</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">head_length</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">length_includes_head</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Original Vector Field with Ensemble Members&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="c1"># Plot uncertainty squid glyphs</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">squid_glyph_2D</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">ensemble_vectors</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Uncertainty Squid Glyphs for Double Gyre Flow&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Uncertainty Lobes 2D Example" class="align-center" src="_images/uncertainty_lobes_2D_example.png" />
+</section>
+<section id="module-examples.squid_glyphs_3D_example">
+<span id="squid-glyphs-3d-example"></span><h2>squid_glyphs_3D_example<a class="headerlink" href="#module-examples.squid_glyphs_3D_example" title="Link to this heading"></a></h2>
+<p>This example demonstrates how to visualize 3D vector fields and their uncertainty using squid glyphs with the <code class="docutils literal notranslate"><span class="pre">uvisbox</span></code> library.
+The example generates a 3D grid of vectors, creates an ensemble by adding Gaussian noise, and then visualizes the ensemble using squid glyphs to represent uncertainty.</p>
+<p>Import necessary libraries</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Core.BandDepths.vector_depths</span><span class="w"> </span><span class="kn">import</span> <span class="n">cartesian_to_spherical</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.SquidGlyphs.squid_glyphs</span><span class="w"> </span><span class="kn">import</span> <span class="n">squid_glyph_3D</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyvista</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pv</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a 3D grid of vectors. [vx,vy,vz]=[x,y,z]</span>
+<span class="n">grid_size</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">vectors</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">grid_size</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">grid_size</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">grid_size</span><span class="p">):</span>
+            <span class="n">vectors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">))</span>
+
+<span class="n">grid_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vectors</span><span class="p">)</span>
+<span class="c1"># Convert to spherical coordinates</span>
+<span class="n">spherical_vectors</span> <span class="o">=</span> <span class="n">cartesian_to_spherical</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vectors</span><span class="p">))</span>
+
+<span class="c1"># Add Gaussian noise to spherical vectors to create an ensemble</span>
+<span class="n">ensemble_size</span> <span class="o">=</span> <span class="mi">20</span> <span class="c1"># Number of ensemble members</span>
+<span class="n">noise_std_dev</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># Standard deviation for Gaussian noise</span>
+<span class="n">ensemble_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">spherical_vectors</span><span class="p">),</span> <span class="n">ensemble_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="c1"># initialize ensemble vectors</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spherical_vectors</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ensemble_size</span><span class="p">):</span>
+        <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise_std_dev</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">noisy_vec</span> <span class="o">=</span> <span class="n">vec</span> <span class="o">+</span> <span class="n">noise</span>
+        <span class="n">ensemble_vectors</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">noisy_vec</span>
+</pre></div>
+</div>
+<p>Convert back to cartesian vectors for plotting with pyvista</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_points</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">plot_directions</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spherical_vectors</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ensemble_size</span><span class="p">):</span>
+        <span class="n">noisy_vec</span> <span class="o">=</span> <span class="n">ensemble_vectors</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="c1"># Convert back to Cartesian coordinates for plotting</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">noisy_vec</span>
+        <span class="n">vx</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">+</span> <span class="n">grid_points</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># start from original point</span>
+        <span class="n">vy</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">+</span> <span class="n">grid_points</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="c1"># start from original point</span>
+        <span class="n">vz</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="n">grid_points</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="c1"># start from original point</span>
+        <span class="n">plot_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">grid_points</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">plot_directions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">))</span>
+<span class="c1"># conver t to numpy arrays</span>
+<span class="n">plot_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">plot_points</span><span class="p">)</span>
+<span class="n">plot_directions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">plot_directions</span><span class="p">)</span>
+<span class="c1"># Set up a pyvista plotter with two subplots</span>
+<span class="n">plotter</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="c1"># Plot ensemble vectors using arrows in the first subplot</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">plot_points</span><span class="p">,</span> <span class="n">plot_directions</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">mag</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">add_axes</span><span class="p">()</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="s1">&#39;Ensemble Vectors in 3D&#39;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Calculate and plot squid glyphs in the second subplot with 50th percentile
+filtering and scale vector lengths by 0.1</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plotter</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">triangles</span> <span class="o">=</span> <span class="n">squid_glyph_3D</span><span class="p">(</span><span class="n">grid_points</span><span class="p">,</span> <span class="n">ensemble_vectors</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">plotter</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="s1">&#39;Uncertainty Squid Glyphs in 3D&#39;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Squid Glyphs Example 3D" class="align-center" src="_images/squid_glyphs_example_3D.png" />
+</section>
+<section id="module-examples.uncertainty_lobes_2D_example">
+<span id="uncertainty-lobes-2d-example"></span><h2>uncertainty_lobes_2D_example<a class="headerlink" href="#module-examples.uncertainty_lobes_2D_example" title="Link to this heading"></a></h2>
+<p>This example demonstrates how to visualize 2D vector fields and their uncertainty using squid glyphs with the <code class="docutils literal notranslate"><span class="pre">uvisbox</span></code> library.
+The example generates a 2D grid of vectors representing the double gyre flow, creates an ensemble by adding Gaussian noise, and then visualizes the ensemble using squid glyphs to represent uncertainty.</p>
+<p>Import necessary libraries</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.UncertaintyLobes.uncertainty_lobes</span><span class="w"> </span><span class="kn">import</span> <span class="n">uncertainty_lobes</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</pre></div>
+</div>
+<p>generate a 2D grid over [0,2] x [0,1] and use double gyre flow to generate vector field
+with some noise to create an ensemble of vector fields</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the double gyre flow function</span>
+<span class="n">A</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.25</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">double_gyre</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">epsilon</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">omega</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">x</span>
+    <span class="n">df_dx</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">b</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">f</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">df_dx</span>
+    <span class="k">return</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span>
+
+<span class="c1"># Change domain to [0,2] x [0,1]</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">U</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">double_gyre</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+<span class="c1"># Create ensemble data by perturbing vector magnitude and direction with Gaussian noise</span>
+<span class="n">n_ensemble</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># number of ensemble members</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Flatten the grid for easier perturbation</span>
+<span class="n">X_flat</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">Y_flat</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">U_flat</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">V_flat</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">n_points</span> <span class="o">=</span> <span class="n">X_flat</span><span class="o">.</span><span class="n">size</span>
+
+<span class="c1"># Compute magnitude and angle</span>
+<span class="n">mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">U_flat</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">V_flat</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">V_flat</span><span class="p">,</span> <span class="n">U_flat</span><span class="p">)</span>
+
+<span class="c1"># Standard deviations for noise (tune as needed)</span>
+<span class="n">mag_noise_std</span> <span class="o">=</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">mag</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">angle_noise_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># 5 degree std</span>
+
+<span class="n">n_ensemble</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">ensemble_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_points</span><span class="p">,</span> <span class="n">n_ensemble</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_points</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ensemble</span><span class="p">):</span>
+        <span class="c1"># Perturb magnitude and anglels</span>
+        <span class="n">mag_perturbed</span> <span class="o">=</span> <span class="n">mag</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mag_noise_std</span><span class="p">)</span>
+        <span class="n">angle_perturbed</span> <span class="o">=</span> <span class="n">angle</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">angle_noise_std</span><span class="p">)</span>
+
+        <span class="c1"># Convert back to Cartesian coordinates</span>
+        <span class="n">ensemble_vectors</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">mag_perturbed</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle_perturbed</span><span class="p">),</span>
+            <span class="n">mag_perturbed</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle_perturbed</span><span class="p">)</span>
+        <span class="p">]</span>
+<span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">X_flat</span><span class="p">,</span> <span class="n">Y_flat</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+<p>Set up the plot for both original vector field and uncertainty squid glyphs</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="c1"># Plot original vector field with arrows</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_points</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ensemble</span><span class="p">):</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">ensemble_vectors</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">head_width</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">head_length</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">length_includes_head</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Original Vector Field with Ensemble Members&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="c1"># Plot uncertainty squid glyphs</span>
+<span class="n">ax2</span> <span class="o">=</span><span class="n">uncertainty_lobes</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">ensemble_vectors</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Uncertainty Lobes for Double Gyre Flow&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Uncertainty Lobes 2D Example" class="align-center" src="_images/uncertainty_lobes_2D_example.png" />
+</section>
+<section id="module-examples.uncertainty_tube_example">
+<span id="uncertainty-tube-example"></span><h2>uncertainty_tube_example<a class="headerlink" href="#module-examples.uncertainty_tube_example" title="Link to this heading"></a></h2>
+<p>This example demonstrates how to visualize uncertainty tubes in 3D using the <code class="docutils literal notranslate"><span class="pre">uvisbox</span></code> library.
+It generates random seed points, computes their trajectories in a 3D flow field, and visualizes the uncertainty tubes along these trajectories.</p>
+<p>Import necessary libraries</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">flowmap_3d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Core.Interpolations</span><span class="w"> </span><span class="kn">import</span> <span class="n">linear_interpolate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.UncertaintyTube.uncertainty_tubes_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_cross_sections</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.UncertaintyTube.uncertainty_tubes_mesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_tube_mesh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Modules.UncertaintyTube.uncertainty_tubes_vis</span><span class="w"> </span><span class="kn">import</span> <span class="n">matplotlib_uncertainty_tube_vis</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Core.Colors.colortree</span><span class="w"> </span><span class="kn">import</span> <span class="n">ColorTree</span>
+</pre></div>
+</div>
+<p>Generate random seed points and compute their trajectories in a 3D flow field</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">t0</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># start time</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># end time</span>
+<span class="n">n_steps</span> <span class="o">=</span> <span class="mi">30</span> <span class="c1"># number of time steps</span>
+<span class="n">number_of_seeds</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Increased for better parallel demonstration</span>
+
+<span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">number_of_seeds</span><span class="p">)</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="n">linear_interpolate</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">number_of_seeds</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
+<span class="n">xy_scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">number_of_seeds</span><span class="p">)</span>
+<span class="c1"># change odd place of xy_scale to 0.1</span>
+<span class="n">xy_scale</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># Set every second element to 0.1</span>
+
+<span class="n">seeds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">number_of_seeds</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+<span class="c1"># trajectories are generated in [n_steps, n_seeds, n_samples, n_dims]</span>
+<span class="n">trajectories</span> <span class="o">=</span> <span class="n">flowmap_3d</span><span class="p">(</span><span class="n">seeds</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">xy_scale</span><span class="o">=</span><span class="n">xy_scale</span><span class="p">)</span>
+
+
+<span class="c1"># Key functions to generate uncertainty tubes</span>
+<span class="n">cross_sections</span><span class="p">,</span> <span class="n">eigen_values</span> <span class="o">=</span> <span class="n">generate_cross_sections</span><span class="p">(</span><span class="n">trajectories</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">e_proj</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">mean_trajectories</span> <span class="o">=</span> <span class="n">generate_tube_mesh</span><span class="p">(</span><span class="n">trajectories</span><span class="p">,</span> <span class="n">cross_sections</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>use eigen values to create texture coordinates</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">eigen_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">eigen_values</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">eigen_values</span> <span class="o">=</span> <span class="n">eigen_values</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="n">max_eigen_values</span> <span class="o">=</span> <span class="n">eigen_values</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># prepare to rescale eigen values to 0,1 to create texture coordinates</span>
+<span class="n">rescaled_max_eigen_values</span> <span class="o">=</span> <span class="n">linear_interpolate</span><span class="p">(</span><span class="n">max_eigen_values</span><span class="p">,</span> <span class="n">max_eigen_values</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">max_eigen_values</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">eigen_values_ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">eigen_values</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">eigen_values</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">posinf</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">neginf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span> <span class="c1"># the second axis</span>
+
+<span class="n">uv_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">rescaled_max_eigen_values</span><span class="p">,</span> <span class="n">eigen_values_ratio</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#  create figure and axis with two subplots</span>
+<span class="n">fig</span> <span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;3d&#39;</span><span class="p">})</span>
+
+<span class="c1"># spaghetti plot of all trajectories</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">trajectories</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">i_sample</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">trajectories</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">trajectories</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i_sample</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">trajectories</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i_sample</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">trajectories</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i_sample</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.50</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Spaghetti Plot of Trajectories&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;Z&quot;</span><span class="p">)</span>
+
+<span class="c1"># for the colormap, rescaled_max_eigen_values are used for level of uncertainty,</span>
+<span class="c1"># vivid color highlights high uncertainty (larger size),</span>
+<span class="c1"># gray color represents low uncertainty (smaller size).</span>
+<span class="c1"># eigen_values are used for the interpolating the colormap (&#39;viridis&#39;),</span>
+<span class="c1"># blue means high asymmetry, yellow means symmetry.</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">matplotlib_uncertainty_tube_vis</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">mean_trajectories</span><span class="p">,</span> <span class="n">uv_coords</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="Uncertainty Tube Example" class="align-center" src="_images/uncertainty_tube.png" />
+</section>
+<section id="module-examples.vsup_example">
+<span id="vsup-example"></span><h2>vsup_example<a class="headerlink" href="#module-examples.vsup_example" title="Link to this heading"></a></h2>
+<p>Example script demonstrating the ColorTree colormap for visualizing value and uncertainty.
+A ColorTree is inspired by VSUP (Value-Suppressing Uncertainty Palettes) and creates a tree-based colormap.
+Value is suppressed based on uncertainty, allowing for more effective visualization of uncertain data.</p>
+<p>VSUP:https://medium.com/&#64;uwdata/value-suppressing-uncertainty-palettes-426130122ce9</p>
+<p>This script creates a sample 2D image where the x-axis represents value (0 to 1) and the y-axis represents uncertainty (0 to 1).
+It generates three visualizations:
+- Discrete: Uses tree nodes for discrete levels.
+- Continuous: Interpolates colormap colors with uncertainty.
+- Continuous Leaves: Uses colormap for leaf levels in discrete mode.</p>
+<p>Run this script to see the differences between the modes.</p>
+<p>Important necessary libraries</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uvisbox.Core.Colors.colortree</span><span class="w"> </span><span class="kn">import</span> <span class="n">ColorTree</span>
+</pre></div>
+</div>
+<p>Set up the figure with three subplots</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Create a sample image where x (columns) is value (0 to 1), y (rows) is uncertainty (0 to 1)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span>
+<span class="n">value_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape (1, 100), broadcasted to (100, 100)</span>
+<span class="n">uncertainty_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">height</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>  <span class="c1"># Shape (100, 1), broadcasted to (100, 100)</span>
+
+<span class="c1"># Create image array with shape (100, 100, 2) where last dim is [uncertainty, value]</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">uncertainty_grid</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)),</span> <span class="n">value_grid</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Initialize ColorTree with depth=4 and default settings</span>
+<span class="n">colormap</span> <span class="o">=</span> <span class="n">ColorTree</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">)</span>
+<span class="c1"># Generate colors for discrete mode (uses tree nodes)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">colormap</span><span class="o">.</span><span class="n">get_colors</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Plot the discrete color map</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Discrete Color Map&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Value&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Uncertainty&quot;</span><span class="p">)</span>
+<span class="c1"># Generate colors for continuous mode (interpolates colormap with uncertainty)</span>
+<span class="n">continuous_color</span> <span class="o">=</span> <span class="n">colormap</span><span class="o">.</span><span class="n">get_colors</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Plot the continuous color map</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">continuous_color</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Continuous Color Map&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Value&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Uncertainty&quot;</span><span class="p">)</span>
+
+<span class="c1"># Generate colors for continuous leaves mode (discrete with colormap at leaves)</span>
+<span class="n">continuous_leaves_color</span> <span class="o">=</span> <span class="n">colormap</span><span class="o">.</span><span class="n">get_colors</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">continuous_leaves</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Plot the continuous leaves color map</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">continuous_leaves_color</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Continuous Leaves Color Map&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Value&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Uncertainty&quot;</span><span class="p">)</span>
+<span class="c1"># Display the plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="ColorTree Example" class="align-center" src="_images/colortree_example.png" />
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="uvisbox" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Timbwaoga A. J. Ouermi and Jixian Li.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
