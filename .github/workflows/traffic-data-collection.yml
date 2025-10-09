@@ -1,37 +1,78 @@
+# =============================================================================
+# Repository Traffic Data Collection Workflow
+# =============================================================================
+# Purpose: Automatically collect GitHub repository traffic analytics data
+# Schedule: Runs daily at midnight UTC
+# Output: Saves data to dedicated 'traffic_data' branch (keeps main branch clean)
+# =============================================================================
+
 name: Repository Traffic Data Collection
 
 on:
   schedule:
-    # Run daily at midnight UTC
+    # Run daily at midnight UTC to collect previous day's traffic data
     - cron: '0 0 * * *'
-  workflow_dispatch: # Allow manual triggering
+  workflow_dispatch: # Allow manual triggering for testing and immediate collection
 
 jobs:
   collect-traffic-data:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write  # Required to push to the traffic_data branch
     
     steps:
+    # -------------------------------------------------------------------------
+    # STEP 1: Checkout the repository with full history
+    # -------------------------------------------------------------------------
+    # - Uses Personal Access Token (PAT) if available for better permissions
+    # - Falls back to default GITHUB_TOKEN if PAT not configured
+    # - fetch-depth: 0 ensures we get full git history for branch operations
+    # -------------------------------------------------------------------------
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         token: ${{secrets.UVisBox_TRAFFIC_TOKEN || secrets.GITHUB_TOKEN }}
         fetch-depth: 0
 
+    # -------------------------------------------------------------------------
+    # STEP 2: Set up Python environment
+    # -------------------------------------------------------------------------
+    # - Uses Python 3.9 for stability and compatibility
+    # - Required for running the traffic data collection script
+    # -------------------------------------------------------------------------
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
 
+    # -------------------------------------------------------------------------
+    # STEP 3: Install required Python packages
+    # -------------------------------------------------------------------------
+    # - requests: For making HTTP API calls to GitHub
+    # - PyGithub: Official GitHub API library for Python
+    # -------------------------------------------------------------------------
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install requests PyGithub
 
+    # -------------------------------------------------------------------------
+    # STEP 4: Create temporary traffic_data directory
+    # -------------------------------------------------------------------------
+    # - Creates directory in main branch (temporarily)
+    # - Will be moved to traffic_data branch and cleaned up from main later
+    # -------------------------------------------------------------------------
     - name: Create traffic_data directory
       run: mkdir -p traffic_data
 
+    # -------------------------------------------------------------------------
+    # STEP 5: Collect repository traffic data using GitHub API
+    # -------------------------------------------------------------------------
+    # - Collects 4 types of data: views, clones, referrers, popular paths
+    # - Uses Personal Access Token for elevated permissions (traffic data requires repo scope)
+    # - Handles API errors gracefully and logs them in the output files
+    # - Creates both daily snapshot and rolling summary files
+    # -------------------------------------------------------------------------
     - name: Collect repository traffic data
       env:
         GITHUB_TOKEN: ${{secrets.UVisBox_TRAFFIC_TOKEN || secrets.GITHUB_TOKEN }}
@@ -44,25 +85,26 @@ jobs:
         from datetime import datetime, timezone
         from github import Github
 
-        # Initialize GitHub client
+        # Initialize GitHub API client
         token = os.environ['GITHUB_TOKEN']
         repo_name = os.environ['REPOSITORY']
         
-        # Check if we have a personal access token
+        # Token validation: Traffic data APIs require Personal Access Token with 'repo' scope
+        # Default GITHUB_TOKEN (ghs_*) lacks permissions for traffic data
         if token.startswith('ghs_'):
             print("⚠️  Using default GITHUB_TOKEN - this may not have traffic data permissions")
-            print("   Consider setting up a Personal Access Token with 'repo' scope as TRAFFIC_TOKEN secret")
+            print("   Consider setting up a Personal Access Token with 'repo' scope as UVisBox_TRAFFIC_TOKEN secret")
         else:
             print("✅ Using Personal Access Token for traffic data access")
         
         g = Github(token)
         repo = g.get_repo(repo_name)
 
-        # Get current timestamp
+        # Generate timestamps for data organization
         timestamp = datetime.now(timezone.utc).isoformat()
         date_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 
-        # Collect traffic data
+        # Initialize traffic data structure
         traffic_data = {
             'timestamp': timestamp,
             'date': date_str,
@@ -70,61 +112,69 @@ jobs:
             'data': {}
         }
 
+        # =====================================================================
+        # DATA COLLECTION: Views (Repository page views - past 14 days)
+        # =====================================================================
         try:
-            # Get views data (past 14 days)
             views = repo.get_views_traffic(per='day')
             traffic_data['data']['views'] = {
-                'count': views.count,
-                'uniques': views.uniques,
+                'count': views.count,        # Total views in the period
+                'uniques': views.uniques,    # Unique visitors
                 'views': [{'timestamp': view.timestamp.isoformat(), 'count': view.count, 'uniques': view.uniques} for view in views.views]
             }
-            print(f"Views data collected: {views.count} total views, {views.uniques} unique visitors")
+            print(f"✅ Views data collected: {views.count} total views, {views.uniques} unique visitors")
         except Exception as e:
-            print(f"Error collecting views data: {e}")
+            print(f"❌ Error collecting views data: {e}")
             traffic_data['data']['views'] = {'error': str(e)}
 
+        # =====================================================================
+        # DATA COLLECTION: Clones (Repository clones - past 14 days) 
+        # =====================================================================
         try:
-            # Get clones data (past 14 days)
             clones = repo.get_clones_traffic(per='day')
             traffic_data['data']['clones'] = {
-                'count': clones.count,
-                'uniques': clones.uniques,
+                'count': clones.count,       # Total clones in the period
+                'uniques': clones.uniques,   # Unique cloners
                 'clones': [{'timestamp': clone.timestamp.isoformat(), 'count': clone.count, 'uniques': clone.uniques} for clone in clones.clones]
             }
-            print(f"Clones data collected: {clones.count} total clones, {clones.uniques} unique cloners")
+            print(f"✅ Clones data collected: {clones.count} total clones, {clones.uniques} unique cloners")
         except Exception as e:
-            print(f"Error collecting clones data: {e}")
+            print(f"❌ Error collecting clones data: {e}")
             traffic_data['data']['clones'] = {'error': str(e)}
 
+        # =====================================================================
+        # DATA COLLECTION: Referrers (Top traffic sources)
+        # =====================================================================
         try:
-            # Get referrers data
             referrers = repo.get_top_referrers()
             traffic_data['data']['referrers'] = [
                 {
-                    'referrer': ref.referrer,
-                    'count': ref.count,
-                    'uniques': ref.uniques
+                    'referrer': ref.referrer,  # Source website/domain
+                    'count': ref.count,        # Total visits from this source
+                    'uniques': ref.uniques     # Unique visitors from this source
                 } for ref in referrers
             ]
-            print(f"Referrers data collected: {len(referrers)} referrers")
+            print(f"✅ Referrers data collected: {len(referrers)} referral sources")
         except Exception as e:
-            print(f"Error collecting referrers data: {e}")
+            print(f"❌ Error collecting referrers data: {e}")
             traffic_data['data']['referrers'] = {'error': str(e)}
 
+        # =====================================================================
+        # DATA COLLECTION: Popular Paths (Most visited repository paths)
+        # =====================================================================
         try:
-            # Get popular paths data
             paths = repo.get_top_paths()
             traffic_data['data']['popular_paths'] = [
                 {
-                    'path': path.path,
-                    'title': path.title,
-                    'count': path.count,
-                    'uniques': path.uniques
+                    'path': path.path,         # Repository path (e.g., /README.md)
+                    'title': path.title,       # Page title
+                    'count': path.count,       # Total visits to this path
+                    'uniques': path.uniques    # Unique visitors to this path
                 } for path in paths
             ]
-            print(f"Popular paths data collected: {len(paths)} paths")
+            print(f"✅ Popular paths data collected: {len(paths)} paths tracked")
         except Exception as e:
-            print(f"Error collecting popular paths data: {e}")
+            print(f"❌ Error collecting popular paths data: {e}")
             traffic_data['data']['popular_paths'] = {'error': str(e)}
 
         # Save data to file
