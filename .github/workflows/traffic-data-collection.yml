@@ -16,7 +16,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        token: ${{secrets.GITHUB_TOKEN }}
+        token: ${{secrets.UVisBox_TRAFFIC_TOKEN || secrets.GITHUB_TOKEN }}
         fetch-depth: 0
 
     - name: Set up Python
@@ -34,7 +34,7 @@ jobs:
 
     - name: Collect repository traffic data
       env:
-        GITHUB_TOKEN: ${{secrets.UVisBox_TRAFFIC_TOKEN}}
+        GITHUB_TOKEN: ${{secrets.UVisBox_TRAFFIC_TOKEN || secrets.GITHUB_TOKEN }}
         REPOSITORY: ${{ github.repository }}
       run: |
         python << 'EOF'
