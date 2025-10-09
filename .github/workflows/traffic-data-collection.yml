@@ -34,7 +34,7 @@ jobs:
 
     - name: Collect repository traffic data
       env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{secrets.UVisBox_TRAFFIC_TOKEN}}
         REPOSITORY: ${{ github.repository }}
       run: |
         python << 'EOF'
