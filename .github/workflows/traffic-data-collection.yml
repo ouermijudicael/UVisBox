@@ -74,11 +74,11 @@ jobs:
             # Get views data (past 14 days)
             views = repo.get_views_traffic(per='day')
             traffic_data['data']['views'] = {
-                'count': views['count'],
-                'uniques': views['uniques'],
-                'views': views['views']
+                'count': views.count,
+                'uniques': views.uniques,
+                'views': [{'timestamp': view.timestamp.isoformat(), 'count': view.count, 'uniques': view.uniques} for view in views.views]
             }
-            print(f"Views data collected: {views['count']} total views, {views['uniques']} unique visitors")
+            print(f"Views data collected: {views.count} total views, {views.uniques} unique visitors")
         except Exception as e:
             print(f"Error collecting views data: {e}")
             traffic_data['data']['views'] = {'error': str(e)}
@@ -87,11 +87,11 @@ jobs:
             # Get clones data (past 14 days)
             clones = repo.get_clones_traffic(per='day')
             traffic_data['data']['clones'] = {
-                'count': clones['count'],
-                'uniques': clones['uniques'],
-                'clones': clones['clones']
+                'count': clones.count,
+                'uniques': clones.uniques,
+                'clones': [{'timestamp': clone.timestamp.isoformat(), 'count': clone.count, 'uniques': clone.uniques} for clone in clones.clones]
             }
-            print(f"Clones data collected: {clones['count']} total clones, {clones['uniques']} unique cloners")
+            print(f"Clones data collected: {clones.count} total clones, {clones.uniques} unique cloners")
         except Exception as e:
             print(f"Error collecting clones data: {e}")
             traffic_data['data']['clones'] = {'error': str(e)}
