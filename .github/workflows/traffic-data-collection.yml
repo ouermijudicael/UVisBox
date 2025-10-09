@@ -221,7 +221,8 @@ jobs:
         if git ls-remote --heads origin traffic_data | grep -q traffic_data; then
           echo "🔄 Existing traffic_data branch found, checking it out..."
           git fetch origin traffic_data
-          git checkout traffic_data
+          # Use explicit branch syntax to avoid ambiguity with directory name
+          git checkout -B traffic_data origin/traffic_data
         else
           echo "🆕 Creating new traffic_data branch (orphan - no history from main)..."
           git checkout --orphan traffic_data
