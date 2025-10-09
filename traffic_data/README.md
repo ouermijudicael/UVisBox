@@ -75,9 +75,33 @@ The data collection is automated through the GitHub Action workflow `.github/wor
 - Runs daily at midnight UTC (00:00)
 - Can be manually triggered via GitHub Actions tab
 
+### Setup Required
+
+⚠️ **Important**: The default GitHub Actions token doesn't have permissions to access traffic data. You need to create a Personal Access Token (PAT).
+
+#### Creating a Personal Access Token:
+
+1. Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
+2. Click "Generate new token (classic)"
+3. Give it a descriptive name like "Traffic Data Collection"
+4. Set expiration (recommend: 1 year)
+5. Select scopes:
+   - `repo` (Full control of private repositories) - **Required for traffic data**
+   - `public_repo` (Access public repositories) - If you only need public repo access
+6. Click "Generate token"
+7. **Copy the token immediately** (you won't see it again!)
+
+#### Adding the Token to Repository:
+
+1. Go to your repository Settings → Security → Secrets and variables → Actions
+2. Click "New repository secret"
+3. Name: `TRAFFIC_TOKEN`
+4. Value: Paste your Personal Access Token
+5. Click "Add secret"
+
 ### Permissions Required
-- `contents: write` - To commit and push traffic data files
-- `repository-projects: read` - To access repository traffic analytics
+- Personal Access Token with `repo` scope (for traffic data access)
+- `contents: write` - To commit and push traffic data files (automatically granted)
 
 ## Manual Execution
 

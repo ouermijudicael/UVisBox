@@ -11,13 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      repository-projects: read
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.TRAFFIC_TOKEN || secrets.GITHUB_TOKEN }}
         fetch-depth: 0
 
     - name: Set up Python
@@ -35,7 +34,7 @@ jobs:
 
     - name: Collect repository traffic data
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.TRAFFIC_TOKEN || secrets.GITHUB_TOKEN }}
         REPOSITORY: ${{ github.repository }}
       run: |
         python << 'EOF'
@@ -48,6 +47,14 @@ jobs:
         # Initialize GitHub client
         token = os.environ['GITHUB_TOKEN']
         repo_name = os.environ['REPOSITORY']
+        
+        # Check if we have a personal access token
+        if token.startswith('ghs_'):
+            print("⚠️  Using default GITHUB_TOKEN - this may not have traffic data permissions")
+            print("   Consider setting up a Personal Access Token with 'repo' scope as TRAFFIC_TOKEN secret")
+        else:
+            print("✅ Using Personal Access Token for traffic data access")
+        
         g = Github(token)
         repo = g.get_repo(repo_name)
 
