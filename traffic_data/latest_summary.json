@@ -1,0 +1,18 @@
+{
+  "last_updated": "2025-10-09T18:29:00.401854+00:00",
+  "repository": "ouermijudicael/UVisBox",
+  "latest_data": {
+    "views": {
+      "error": "Resource not accessible by integration: 403 {\"message\": \"Resource not accessible by integration\", \"documentation_url\": \"https://docs.github.com/rest/metrics/traffic#get-page-views\", \"status\": \"403\"}"
+    },
+    "clones": {
+      "error": "Resource not accessible by integration: 403 {\"message\": \"Resource not accessible by integration\", \"documentation_url\": \"https://docs.github.com/rest/metrics/traffic#get-repository-clones\", \"status\": \"403\"}"
+    },
+    "referrers": {
+      "error": "Resource not accessible by integration: 403 {\"message\": \"Resource not accessible by integration\", \"documentation_url\": \"https://docs.github.com/rest/metrics/traffic#get-top-referral-sources\", \"status\": \"403\"}"
+    },
+    "popular_paths": {
+      "error": "Resource not accessible by integration: 403 {\"message\": \"Resource not accessible by integration\", \"documentation_url\": \"https://docs.github.com/rest/metrics/traffic#get-top-referral-paths\", \"status\": \"403\"}"
+    }
+  }
+}
