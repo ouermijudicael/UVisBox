@@ -56,10 +56,10 @@ probabilistic\_marching\_triangles\_example
 .. .. automodule:: examples.squid_glyph_temp_wind_example
 ..    :undoc-members:
 
-squid\_glyphs\_2d\_example    
-------------------------------------------
+squid\_glyphs\_2D\_example    
+-----------------------------
 
-.. automodule:: examples.squid_glyphs_2d_example
+.. automodule:: examples.squid_glyphs_2D_example
    :undoc-members:
 
 squid\_glyphs\_3D\_example
