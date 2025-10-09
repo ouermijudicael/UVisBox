@@ -1,18 +1,14 @@
 {
-  "last_updated": "2025-10-09T20:09:16.082801+00:00",
+  "last_updated": "2025-10-09T20:16:42.658943+00:00",
   "repository": "ouermijudicael/UVisBox",
   "latest_data": {
     "views": {
-      "error": "Resource not accessible by integration: 403 {\"message\": \"Resource not accessible by integration\", \"documentation_url\": \"https://docs.github.com/rest/metrics/traffic#get-page-views\", \"status\": \"403\"}"
+      "error": "'View' object is not subscriptable"
     },
     "clones": {
-      "error": "Resource not accessible by integration: 403 {\"message\": \"Resource not accessible by integration\", \"documentation_url\": \"https://docs.github.com/rest/metrics/traffic#get-repository-clones\", \"status\": \"403\"}"
+      "error": "'Clones' object is not subscriptable"
     },
-    "referrers": {
-      "error": "Resource not accessible by integration: 403 {\"message\": \"Resource not accessible by integration\", \"documentation_url\": \"https://docs.github.com/rest/metrics/traffic#get-top-referral-sources\", \"status\": \"403\"}"
-    },
-    "popular_paths": {
-      "error": "Resource not accessible by integration: 403 {\"message\": \"Resource not accessible by integration\", \"documentation_url\": \"https://docs.github.com/rest/metrics/traffic#get-top-referral-paths\", \"status\": \"403\"}"
-    }
+    "referrers": [],
+    "popular_paths": []
   }
 }
