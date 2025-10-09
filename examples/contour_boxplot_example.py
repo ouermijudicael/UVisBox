@@ -9,7 +9,7 @@ import necessary libraries
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from uvisbox.Modules.ContourBoxplot.contour_boxplot import contour_boxplot
+    from uvisbox.Modules.ContourBoxplot import contour_boxplot
     from PIL import Image
 
 .. code-block:: python
@@ -79,7 +79,7 @@ Calculate and plot the contour boxplot
 # import necessary libraries
 import numpy as np
 import matplotlib.pyplot as plt
-from uvisbox.Modules.ContourBoxplot.contour_boxplot import contour_boxplot
+from uvisbox.Modules.ContourBoxplot import contour_boxplot
 from PIL import Image
 
 def create_ensemble_scalarfield(image_res=256, n_ensembles=30, sigma_min=5, sigma_max=50):

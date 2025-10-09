@@ -7,7 +7,7 @@ Import necessary libraries
 
 .. code-block:: python
 
-    from uvisbox.Modules.UncertaintyLobes.uncertainty_lobes import uncertainty_lobes
+    from uvisbox.Modules.UncertaintyLobes import uncertainty_lobes
     import numpy as np
     import matplotlib.pyplot as plt
 
@@ -103,7 +103,7 @@ Set up the plot for both original vector field and uncertainty squid glyphs
     :align: center
 """
 # Import necessary libraries
-from uvisbox.Modules.UncertaintyLobes.uncertainty_lobes import uncertainty_lobes
+from uvisbox.Modules.UncertaintyLobes import uncertainty_lobes
 import numpy as np
 import matplotlib.pyplot as plt
 

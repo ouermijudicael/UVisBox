@@ -10,7 +10,7 @@ Import necessary libraries
 
     import numpy as np
     import pyvista as pv
-    from uvisbox.Modules.ProbabilisticMarchingTetrahedra.probabilistic_marching_tetrahedra import probabilistic_marching_tetrahedra as pmt
+    from uvisbox.Modules.ProbabilisticMarchingTetrahedra import probabilistic_marching_tetrahedra as pmt
 
 Generate tetrahedral mesh over a 3D domain [-1, 1] and use the tear drop function
 to create an ensemble of scalar fields with some noise
@@ -76,7 +76,7 @@ to create an ensemble of scalar fields with some noise
 # Import necessary libraries
 import numpy as np
 import pyvista as pv
-from uvisbox.Modules.ProbabilisticMarchingTetrahedra.probabilistic_marching_tetrahedra import probabilistic_marching_tetrahedra as pmt
+from uvisbox.Modules.ProbabilisticMarchingTetrahedra import probabilistic_marching_tetrahedra as pmt
 
 # Generate tetrahedral mesh over a 3D domain [-1, 1] and use the tear drop function
 # to create an ensemble of scalar fields with some noise

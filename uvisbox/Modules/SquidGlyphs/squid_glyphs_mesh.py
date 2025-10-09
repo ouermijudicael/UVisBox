@@ -7,7 +7,7 @@ def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, pe
     Build squid glyphs for 2D visualization. Assumes vectors are in polar coordinates (magnitude, angle).
     
     Parameters:
-    ----------
+    -----------
     positions : numpy.ndarray
         Array of shape (n, 2) The positions of the squid glyphs.
     ensemble_polar_vectors : numpy.ndarray
@@ -20,7 +20,7 @@ def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, pe
         The scale factor for the glyphs.
     
     Returns:
-    -------
+    --------
     glyphs_points : numpy.ndarray
         Array of shape (k, 2) The points of the squid glyphs.
     glyphs_polygons : numpy.ndarray
@@ -42,14 +42,6 @@ def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, pe
         min_angle = np.min(ensemble_polar_vectors[i_pos][indices][:, 1]) if indices.size > 0 else 0
         max_angle = np.max(ensemble_polar_vectors[i_pos][indices][:, 1]) if indices.size > 0 else 0
         
-        if i_pos == 0:
-            print(f"position {i_pos} with {indices.size} vectors above depth threshold {1.0 - percentil1}")
-            print(f" min_mag: {min_mag}, max_mag: {max_mag}, min_angle: {min_angle}, max_angle: {max_angle}")
-            print(f" median vector (mag, angle): {median_vector}")
-        # rotate all angles by 90-mid_angle so the median vector aligns with the y-axis
-        #  and project all vectors onto the x-axis
-        # x_projection = ensemble_polar_vectors[i_pos][indices, 0] * np.cos(ensemble_polar_vectors[i_pos][indices, 1] - np.radians(mid_angle[i_pos]))
-    
         delta_h = max_mag -min_mag
         h = median_vector[0]
 
@@ -150,7 +142,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
     Build superelliptical squid glyphs for 3D visualization. Assumes vectors are in spherical coordinates (magnitude, theta, phi).
 
     Parameters:
-    ----------
+    -----------
     directional_variations : numpy.ndarray
         Array of shape (n, 4, 2) where the 4 represents the
         (pca variance, pca first component, pca second component, pca mean) and the 2 represents
@@ -175,7 +167,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
         The number of glyphs to be created.
 
     Returns:
-    -------
+    --------
     points : numpy.ndarray
         Array of shape (m, 3) The points of the squid glyphs.
     polygons : numpy.ndarray
@@ -220,7 +212,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
             y = x0*np.sin(angle) + y0*np.cos(angle) #+ mean_vals[1]
             phi = median_vector[2]
             theta = median_vector[1]
-            
+           
             Ry = np.zeros((3, 3))
             Ry[0][0] = np.cos(theta)
             Ry[0][2] = np.sin(theta)
@@ -233,11 +225,11 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
             Rz[1][0] = np.sin(phi)
             Rz[1][1] = np.cos(phi)
             Rz[2][2] = 1
-
+            R = Rz @ Ry
             ## mappoints to the position
             for i in range(resolution):
-                pt = np.dot(Ry, np.array([x[i], y[i], 0.0]))
-                pt = np.dot(Rz, pt)
+                pt = np.dot(R, np.array([x[i], y[i], 0.0]))
+                # pt = np.dot(Rz, pt)
                 pt = pt*scale + position
                 points[points_id + i, 0] = pt[0]
                 points[points_id + i, 1] = pt[1]
@@ -259,15 +251,15 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
 
 
             for i in range(resolution):
-                pt = np.dot(Ry, np.array([x[i], y[i], max_vector[0]-min_vector[0]]))
-                pt = np.dot(Rz, pt)
+                pt = np.dot(R, np.array([x[i], y[i], max_vector[0]-min_vector[0]]))
+                # pt = np.dot(Rz, pt)
                 pt = pt*scale + position
                 points[points_id + i, 0] = pt[0]
                 points[points_id + i, 1] = pt[1]
                 points[points_id + i, 2] = pt[2]
 
-            pt = np.dot(Ry, np.array([0, 0, max_vector[0]-min_vector[0]])) 
-            pt = np.dot(Rz, pt)
+            pt = np.dot(R, np.array([0, 0, max_vector[0]-min_vector[0]])) 
+            # pt = np.dot(Rz, pt)
             pt = pt*scale + position
             points[points_id + resolution, 0] = pt[0]
             points[points_id + resolution, 1] = pt[1]
@@ -308,8 +300,8 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
             x = x0*np.cos(angle) - y0*np.sin(angle) #+ mean_vals[0]
             y = x0*np.sin(angle) + y0*np.cos(angle) #+ mean_vals[1]
             for i in range(resolution):
-                pt = np.dot(Ry, np.array([x[i], y[i], max_vector[0] - min_vector[0]]))
-                pt = np.dot(Rz, pt)
+                pt = np.dot(R, np.array([x[i], y[i], max_vector[0] - min_vector[0]]))
+                # pt = np.dot(Rz, pt)
                 pt = pt*scale + position
                 points[points_id + i, 0] = pt[0]
                 points[points_id + i, 1] = pt[1]
@@ -327,8 +319,8 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
             x = x0*np.cos(angle) - y0*np.sin(angle) #+ mean_vals[0]
             y = x0*np.sin(angle) + y0*np.cos(angle) #+ mean_vals[1]
             for i in range(resolution):
-                pt = np.dot(Ry, np.array([x[i], y[i], 0.8*max_vector[0]]))
-                pt = np.dot(Rz, pt)
+                pt = np.dot(R, np.array([x[i], y[i], 0.8*max_vector[0]]))
+                # pt = np.dot(Rz, pt)
                 pt = pt*scale + position
                 points[points_id + i, 0] = pt[0]
                 points[points_id + i, 1] = pt[1]
@@ -354,15 +346,15 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
             y = x0*np.sin(angle) + y0*np.cos(angle) #+ mean_vals[1]
 
             for i in range(resolution):
-                pt = np.dot(Ry, np.array([x[i], y[i], 0.8*max_vector[0]]))
-                pt = np.dot(Rz, pt)
+                pt = np.dot(R, np.array([x[i], y[i], 0.8*max_vector[0]]))
+                # pt = np.dot(Rz, pt)
                 pt = pt*scale + position
                 points[points_id + i, 0] = pt[0]
                 points[points_id + i, 1] = pt[1]
                 points[points_id + i, 2] = pt[2]
 
-            pt = np.dot(Ry, np.array([0.0, 0.0, 0.8*max_vector[0]]))
-            pt = np.dot(Rz, pt)
+            pt = np.dot(R, np.array([0.0, 0.0, 0.8*max_vector[0]]))
+            # pt = np.dot(Rz, pt)
             pt = pt*scale + position
             points[points_id + resolution, 0] = pt[0]
             points[points_id + resolution, 1] = pt[1]
@@ -378,8 +370,8 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
 
             # cone tip
             # pt = np.dot(Ry, np.array([mean_vals[0], mean_vals[1], max_vector[0]]))
-            pt = np.dot(Ry, np.array([0, 0, max_vector[0]]))
-            pt = np.dot(Rz, pt)
+            pt = np.dot(R, np.array([0, 0, max_vector[0]]))
+            # pt = np.dot(Rz, pt)
             pt = pt*scale + position
             points[points_id + resolution+1, 0] = pt[0]
             points[points_id + resolution+1, 1] = pt[1]

@@ -10,7 +10,7 @@ Import necessary libraries
 .. code-block:: python
 
     import numpy as np
-    from uvisbox.Modules.ProbabilisticMarchingSquares.probabilistic_marching_squares import probabilistic_marching_squares
+    from uvisbox.Modules.ProbabilisticMarchingSquares import probabilistic_marching_squares
     import matplotlib.pyplot as plt
 
 Generate a regular grid over a 2D domain [0, 4π], use function f(x, y) = sin(x) * cos(y)
@@ -52,7 +52,7 @@ Set isovalue, run probabilistic marching squares, and visualize result
 
 # Import necessary libraries
 import numpy as np
-from uvisbox.Modules.ProbabilisticMarchingSquares.probabilistic_marching_squares import probabilistic_marching_squares
+from uvisbox.Modules.ProbabilisticMarchingSquares import probabilistic_marching_squares
 import matplotlib.pyplot as plt
 
 # Generate a regular grid over a 2D domain [0, 4π], use function f(x, y) = sin(x) * cos(y)

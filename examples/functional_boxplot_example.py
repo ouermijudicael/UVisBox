@@ -13,7 +13,7 @@ import necessary libraries and load dataset
 
     from uvisbox.Datasets import sea_surface_temp_data
     import matplotlib.pyplot as plt
-    from uvisbox.Modules.FunctionalBoxplot.functional_boxplot import functional_boxplot
+    from uvisbox.Modules.FunctionalBoxplot import functional_boxplot
 
     data = sea_surface_temp_data.load_dataset()
     X = data.T
@@ -49,7 +49,7 @@ percentile bands in the second and third subplots, respectively.
 
 from uvisbox.Datasets import sea_surface_temp_data
 import matplotlib.pyplot as plt
-from uvisbox.Modules.FunctionalBoxplot.functional_boxplot import functional_boxplot
+from uvisbox.Modules.FunctionalBoxplot import functional_boxplot
 
 data = sea_surface_temp_data.load_dataset()
 X = data.T

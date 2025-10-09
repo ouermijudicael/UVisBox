@@ -147,5 +147,5 @@ ax1.set_zlabel("Z")
 # eigen_values are used for the interpolating the colormap ('viridis'), 
 # blue means high asymmetry, yellow means symmetry.
 ax2 = matplotlib_uncertainty_tube_vis(vertices, faces, mean_trajectories, uv_coords, axis=ax2)
-plt.savefig("uncertainty_tube.png")
+# plt.savefig("uncertainty_tube.png")
 plt.show()

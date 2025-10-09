@@ -7,7 +7,7 @@ Import necessary libraries
 
 .. code-block:: python
 
-    from uvisbox.Modules.SquidGlyphs.squid_glyphs import squid_glyph_2D
+    from uvisbox.Modules.SquidGlyphs import squid_glyph_2D
     import numpy as np
     import matplotlib.pyplot as plt
 
@@ -98,12 +98,12 @@ Set up the plot for both original vector field and uncertainty squid glyphs
     plt.tight_layout()
     plt.show()
 
-.. image:: _static/uncertainty_lobes_2D_example.png
-    :alt: Uncertainty Lobes 2D Example
+.. image:: _static/squid_glyphs_2D_example.png
+    :alt: Squid Glyphs 2D Example
     :align: center
 """
 # Import necessary libraries
-from uvisbox.Modules.SquidGlyphs.squid_glyphs import squid_glyph_2D
+from uvisbox.Modules.SquidGlyphs import squid_glyph_2D
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -188,5 +188,5 @@ ax2.set_ylabel("Y")
 ax2.grid()
 
 plt.tight_layout()
-# plt.savefig("squid_glyphs_2D_example.png")
+plt.savefig("squid_glyphs_2D_example.png")
 plt.show()

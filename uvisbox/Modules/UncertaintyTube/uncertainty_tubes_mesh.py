@@ -72,15 +72,21 @@ def apply_circular_alignment(points, best_shift, best_is_reversed):
     Apply circular alignment transformation to a set of points based on the calculated 
     shift and orientation.
     
-    Args:
-        points (np.ndarray): Points to transform (shape: n_points × num_dims)
-        best_shift (int): Number of positions to shift
-        best_is_reversed (bool): Whether to reverse point order
-        
+    Parameters:
+    -----------
+    points (np.ndarray): 
+        Points to transform (shape: n_points × num_dims)
+    best_shift (int): 
+        Number of positions to shift
+    best_is_reversed (bool): 
+        Whether to reverse point order
+    
     Returns:
-        tuple:
-            - aligned (np.ndarray): Transformed points
-            - point_correspondence_map (np.ndarray): Index mapping from original to transformed points
+    --------
+    aligned (np.ndarray): 
+        Transformed points
+    point_correspondence_map (np.ndarray): 
+        Index mapping from original to transformed points
     """
     m = len(points)
     
@@ -100,13 +106,21 @@ def circular_align_min_twist(points_ref, points_target, stride=1):
     """
     Aligns two sets of points forming closed loops with minimal twist.
     
-    Args:
-        points_ref (np.ndarray): Reference point set (shape: n_points × num_dims)
-        points_target (np.ndarray): Target point set to align (shape: n_points × num_dims)
-        stride (int): Stride for sampling subset of points (for efficiency)
+    Parameters:
+    -----------
+    points_ref (np.ndarray): 
+        Reference point set (shape: n_points × num_dims)
+    points_target (np.ndarray): 
+        Target point set to align (shape: n_points × num_dims)
+    stride (int): 
+        Stride for sampling subset of points (for efficiency)
         
     Returns:
-        tuple: (aligned_points, correspondence_map)
+    -------
+    aligned_points (np.ndarray): 
+        Aligned target points
+    correspondence_map (np.ndarray): 
+        Index mapping from original to aligned points
     """
     # Check if stride is larger than array length
     if stride >= len(points_ref):
@@ -148,17 +162,24 @@ def generate_tube_mesh(trajectories, ellipsoids, n_jobs=1):
     """
     Generate triangle mesh for uncertainty tubes with sequential or parallel alignment.
     
-    Args:
-        trajectories (np.ndarray): Ensemble trajectories with shape (n_steps, n_seeds, n_samples, num_dims)
-        ellipsoids (np.ndarray): Cross-section boundary points with shape (n_steps, n_seeds, resolution, num_dims)
-        n_jobs (int, optional): Number of parallel jobs to use. If n_jobs=1, uses sequential processing.
-            If joblib is not available, falls back to sequential processing. Defaults to 1.
+    Parameters:
+    -----------
+    trajectories (np.ndarray): 
+        Ensemble trajectories with shape (n_steps, n_seeds, n_samples, num_dims)
+    ellipsoids (np.ndarray): 
+        Cross-section boundary points with shape (n_steps, n_seeds, resolution, num_dims)
+    n_jobs (int, optional): 
+        Number of parallel jobs to use. If n_jobs=1, uses sequential processing.
+        If joblib is not available, falls back to sequential processing. Defaults to 1.
         
     Returns:
-        tuple:
-            - vertices (np.ndarray): Mesh vertices with shape (total_vertices, 3)
-            - faces (np.ndarray): Triangle indices with shape (n_seeds, triangles_per_seed, 3)
-            - mean_trajectories (np.ndarray): Mean trajectory paths
+    --------
+    vertices (np.ndarray): 
+        Tube mesh vertices with shape (total_vertices, num_dims)
+    faces (np.ndarray): 
+        Triangle indices with shape (n_seeds, triangles_per_seed, 3)
+    mean_trajectories (np.ndarray): 
+        Mean trajectory paths
     """
     mean_trajectories = np.mean(trajectories, axis=2)
     n_steps, n_seeds, resolution, num_dims = ellipsoids.shape
@@ -222,18 +243,25 @@ def generate_tube_mesh(trajectories, ellipsoids, n_jobs=1):
 
 def _process_single_seed(ellipsoids, seed_idx, n_steps, resolution):
     """
-    Process a single seed's tube (used for parallel processing).
-    
-    Args:
-        ellipsoids (np.ndarray): All cross-sections
-        seed_idx (int): Current seed index
-        n_steps (int): Number of time steps
-        resolution (int): Number of points per cross-section
-        
+    Process a single seed's tube for parallel mesh generation.
+
+    Parameters:
+    -----------
+    ellipsoids : np.ndarray
+        All cross-section boundary points.
+    seed_idx : int
+        Index of the current seed.
+    n_steps : int
+        Number of time steps.
+    resolution : int
+        Number of points per cross-section.
+
     Returns:
-        tuple:
-            - seed_ellipsoids (np.ndarray): Aligned cross-sections for this seed
-            - vertex_count (int): Number of vertices for this seed
+    --------
+    seed_ellipsoids : np.ndarray
+        Aligned cross-sections for this seed.
+    vertex_count : int
+        Number of vertices for this seed.
     """
     # Align cross-sections
     seed_ellipsoids = align_cross_sections(ellipsoids, seed_idx, n_steps, resolution)

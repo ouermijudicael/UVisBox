@@ -9,7 +9,7 @@ Import necessary libraries
     import numpy as np
     from mpl_toolkits.mplot3d import Axes3D
     from uvisbox.Core.BandDepths.vector_depths import cartesian_to_spherical
-    from uvisbox.Modules.SquidGlyphs.squid_glyphs import squid_glyph_3D
+    from uvisbox.Modules.SquidGlyphs import squid_glyph_3D
     import pyvista as pv
 
 .. code-block:: python
@@ -35,7 +35,13 @@ Import necessary libraries
             noise = np.random.normal(0, noise_std_dev, 3)
             noisy_vec = vec + noise
             ensemble_vectors[i, j] = noisy_vec
-    
+            # Convert back to Cartesian coordinates for plotting
+            r, theta, phi = noisy_vec
+            vx = r * np.sin(theta) * np.cos(phi)
+            vy = r * np.sin(theta) * np.sin(phi)
+            vz = r * np.cos(theta)
+            ensemble_vectors_cartesian[i, j] = np.array([vx, vy, vz])
+
 Convert back to cartesian vectors for plotting with pyvista
 
 .. code-block:: python
@@ -44,24 +50,18 @@ Convert back to cartesian vectors for plotting with pyvista
     plot_directions = []
     for i, vec in enumerate(spherical_vectors):
         for j in range(ensemble_size):
-            noisy_vec = ensemble_vectors[i, j]
-            # Convert back to Cartesian coordinates for plotting
-            r, theta, phi = noisy_vec
-            vx = r * np.sin(theta) * np.cos(phi) + grid_points[i, 0] # start from original point
-            vy = r * np.sin(theta) * np.sin(phi) + grid_points[i, 1] # start from original point
-            vz = r * np.cos(theta) + grid_points[i, 2] # start from original point
             plot_points.append(grid_points[i])
-            plot_directions.append((vx, vy, vz))
-    # conver t to numpy arrays
-    plot_points = np.array(plot_points)
-    plot_directions = np.array(plot_directions)
-    # Set up a pyvista plotter with two subplots
-    plotter = pv.Plotter(shape=(1, 2))
-    # Plot ensemble vectors using arrows in the first subplot
-    plotter.subplot(0, 0)
-    plotter.add_arrows(plot_points, plot_directions, color='green', mag=0.1, opacity=0.5)
-    plotter.add_axes()
-    plotter.add_text('Ensemble Vectors in 3D', font_size=12)
+            plot_directions.append((ensemble_vectors_cartesian[i, j][0], ensemble_vectors_cartesian[i, j][1], ensemble_vectors_cartesian[i, j][2]))
+        # conver t to numpy arrays
+        plot_points = np.array(plot_points)
+        plot_directions = np.array(plot_directions)
+        # Set up a pyvista plotter with two subplots
+        plotter = pv.Plotter(shape=(1, 2))
+        # Plot ensemble vectors using arrows in the first subplot
+        plotter.subplot(0, 0)
+        plotter.add_arrows(plot_points, plot_directions, color='green', mag=0.1, opacity=0.5)
+        plotter.add_axes()
+        plotter.add_text('Ensemble Vectors in 3D', font_size=12)
 
 Calculate and plot squid glyphs in the second subplot with 50th percentile 
 filtering and scale vector lengths by 0.1
@@ -82,7 +82,7 @@ filtering and scale vector lengths by 0.1
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from uvisbox.Core.BandDepths.vector_depths import cartesian_to_spherical
-from uvisbox.Modules.SquidGlyphs.squid_glyphs import squid_glyph_3D
+from uvisbox.Modules.SquidGlyphs import squid_glyph_3D
 import pyvista as pv
 
 
@@ -102,27 +102,28 @@ spherical_vectors = cartesian_to_spherical(np.array(vectors))
 ensemble_size = 20 # Number of ensemble members
 noise_std_dev = 0.1  # Standard deviation for Gaussian noise
 ensemble_vectors = np.zeros((len(spherical_vectors), ensemble_size, 3)) # initialize ensemble vectors
+ensemble_vectors_cartesian = np.zeros((len(spherical_vectors), ensemble_size, 3)) # initialize ensemble vectors in cartesian coordinates
 for i, vec in enumerate(spherical_vectors):
     for j in range(ensemble_size):
         noise = np.random.normal(0, noise_std_dev, 3)
         noisy_vec = vec + noise
         ensemble_vectors[i, j] = noisy_vec
-    
-# Convert back to cartesian vectors for plotting with pyvista
+        # Convert back to Cartesian coordinates for plotting
+        r, theta, phi = noisy_vec
+        vx = r * np.sin(theta) * np.cos(phi)
+        vy = r * np.sin(theta) * np.sin(phi)
+        vz = r * np.cos(theta)
+        ensemble_vectors_cartesian[i, j] = np.array([vx, vy, vz])
+
+# plotting with pyvista
 
 plot_points = []
 plot_directions = []
 for i, vec in enumerate(spherical_vectors):
     for j in range(ensemble_size):
-        noisy_vec = ensemble_vectors[i, j]
-        # Convert back to Cartesian coordinates for plotting
-        r, theta, phi = noisy_vec
-        vx = r * np.sin(theta) * np.cos(phi) + grid_points[i, 0] # start from original point
-        vy = r * np.sin(theta) * np.sin(phi) + grid_points[i, 1] # start from original point
-        vz = r * np.cos(theta) + grid_points[i, 2] # start from original point
         plot_points.append(grid_points[i])
-        plot_directions.append((vx, vy, vz))
-# conver t to numpy arrays
+        plot_directions.append((ensemble_vectors_cartesian[i, j][0], ensemble_vectors_cartesian[i, j][1], ensemble_vectors_cartesian[i, j][2]))
+# convert to numpy arrays
 plot_points = np.array(plot_points)
 plot_directions = np.array(plot_directions)
 # Set up a pyvista plotter with two subplots
@@ -137,7 +138,7 @@ plotter.add_text('Ensemble Vectors in 3D', font_size=12)
 # filtering and scale vector lengths by 0.1
 
 plotter.subplot(0, 1)
-plotter, points, triangles = squid_glyph_3D(grid_points, ensemble_vectors, 0.5, 0.1, ax=plotter)
+plotter, points, triangles = squid_glyph_3D(grid_points, ensemble_vectors_cartesian, 0.5, 0.1, ax=plotter)
 plotter.add_text('Uncertainty Squid Glyphs in 3D', font_size=12)
-# plotter.show()
-# plotter.screenshot("squid_glyphs_example_3D.png")
+plotter.show()
+plotter.screenshot("squid_glyphs_example_3D.png")
