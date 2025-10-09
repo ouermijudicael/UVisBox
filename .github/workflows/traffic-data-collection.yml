@@ -177,43 +177,58 @@ jobs:
             print(f"❌ Error collecting popular paths data: {e}")
             traffic_data['data']['popular_paths'] = {'error': str(e)}
 
-        # Save data to file
+        # =====================================================================
+        # FILE GENERATION: Daily snapshot file
+        # =====================================================================
+        # Create timestamped file with complete traffic data for this collection
         filename = f"traffic_data/traffic_{date_str}.json"
         with open(filename, 'w') as f:
             json.dump(traffic_data, f, indent=2, default=str)
-        
-        print(f"Traffic data saved to {filename}")
+        print(f"📄 Daily traffic data saved to {filename}")
 
-        # Also create/update a summary file with latest data
+        # =====================================================================
+        # FILE GENERATION: Rolling summary file  
+        # =====================================================================
+        # Create/update summary file with latest data for quick access
         summary_file = "traffic_data/last_90_days_summary.json"
         summary_data = {
-            'last_updated': timestamp,
-            'repository': repo_name,
-            'latest_data': traffic_data['data']
+            'last_updated': timestamp,           # When this summary was last updated
+            'repository': repo_name,             # Repository identifier
+            'latest_data': traffic_data['data']  # Most recent traffic data snapshot
         }
         
         with open(summary_file, 'w') as f:
             json.dump(summary_data, f, indent=2, default=str)
-        
-        print(f"Summary data saved to {summary_file}")
+        print(f"📄 Rolling summary saved to {summary_file}")
         EOF
 
+    # -------------------------------------------------------------------------
+    # STEP 6: Commit and push traffic data to dedicated branch
+    # -------------------------------------------------------------------------
+    # - Creates or switches to 'traffic_data' branch (separate from main)
+    # - Commits collected data files to keep main branch clean
+    # - Cleans up temporary files from main branch after transfer
+    # -------------------------------------------------------------------------
     - name: Commit and push traffic data to traffic_data branch
       run: |
+        # Configure git identity for automated commits
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # Check if traffic_data branch exists remotely
+        # =================================================================
+        # BRANCH MANAGEMENT: Switch to or create traffic_data branch
+        # =================================================================
         if git ls-remote --heads origin traffic_data | grep -q traffic_data; then
-          echo "traffic_data branch exists, checking it out"
+          echo "🔄 Existing traffic_data branch found, checking it out..."
           git fetch origin traffic_data
           git checkout traffic_data
         else
-          echo "Creating new traffic_data branch"
+          echo "🆕 Creating new traffic_data branch (orphan - no history from main)..."
           git checkout --orphan traffic_data
-          # Remove all files except traffic_data directory for the orphan branch
+          # Clean up all main branch files for dedicated data branch
           git rm -rf . 2>/dev/null || true
-          # Add a README for the traffic_data branch
+          
+          # Create documentation for the traffic_data branch
           echo "# Traffic Data Branch" > README.md
           echo "" >> README.md
           echo "This branch contains automated traffic data collection for the UVisBox repository." >> README.md
@@ -226,63 +241,86 @@ jobs:
           git add README.md
         fi
         
-        # Add traffic data
+        # =================================================================
+        # DATA COMMIT: Add and commit traffic data files
+        # =================================================================
         git add traffic_data/
         
-        # Check if there are changes to commit
         if git diff --staged --quiet; then
-          echo "No changes to commit"
+          echo "ℹ️  No new traffic data to commit"
         else
           git commit -m "📈 Update traffic data - $(date -u +%Y-%m-%d)"
           git push origin traffic_data
-          echo "Traffic data committed and pushed to traffic_data branch"
+          echo "✅ Traffic data committed and pushed to traffic_data branch"
         fi
         
-        # Switch back to main branch and clean up traffic_data directory
+        # =================================================================
+        # CLEANUP: Remove traffic_data directory from main branch
+        # =================================================================
         git checkout main
         if [ -d "traffic_data" ]; then
           rm -rf traffic_data
-          echo "Cleaned up traffic_data directory from main branch"
+          echo "🧹 Cleaned up traffic_data directory from main branch"
         fi
 
+    # -------------------------------------------------------------------------
+    # STEP 7: Generate workflow summary for GitHub Actions UI
+    # -------------------------------------------------------------------------
+    # - Creates a formatted summary visible in the GitHub Actions interface
+    # - Shows key metrics from the collected traffic data
+    # - Only runs if summary file exists (after successful data collection)
+    # -------------------------------------------------------------------------
     - name: Create traffic data summary
       run: |
+        # Check if summary file was created successfully
         if [ -f "traffic_data/last_90_days_summary.json" ]; then
           echo "## Repository Traffic Summary" >> $GITHUB_STEP_SUMMARY
           echo "Traffic data collected on $(date -u +%Y-%m-%d)" >> $GITHUB_STEP_SUMMARY
           
-          # Extract key metrics from the summary file
+          # Parse and format summary data for display
           python << 'EOF'
         import json
         import os
         
         try:
+            # Load the summary data
             with open('traffic_data/last_90_days_summary.json', 'r') as f:
                 data = json.load(f)
             
             summary_lines = []
             
+            # Format views data (if available and no errors)
             if 'views' in data['latest_data'] and 'error' not in data['latest_data']['views']:
                 views = data['latest_data']['views']
                 summary_lines.append(f"- **Views**: {views['count']} total ({views['uniques']} unique)")
             
+            # Format clones data (if available and no errors)
             if 'clones' in data['latest_data'] and 'error' not in data['latest_data']['clones']:
                 clones = data['latest_data']['clones']
                 summary_lines.append(f"- **Clones**: {clones['count']} total ({clones['uniques']} unique)")
             
+            # Format referrers data (if available and no errors)
             if 'referrers' in data['latest_data'] and 'error' not in data['latest_data']['referrers']:
                 referrers = data['latest_data']['referrers']
                 summary_lines.append(f"- **Top Referrers**: {len(referrers)} sources")
             
+            # Format popular paths data (if available and no errors)
             if 'popular_paths' in data['latest_data'] and 'error' not in data['latest_data']['popular_paths']:
                 paths = data['latest_data']['popular_paths']
                 summary_lines.append(f"- **Popular Paths**: {len(paths)} paths tracked")
             
+            # Write summary to GitHub Actions summary
             if summary_lines:
                 with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
                     f.write('\n'.join(summary_lines) + '\n')
                     f.write(f"\nData updated: {data['last_updated']}\n")
+                    f.write(f"\n**Note**: Data is stored in the `traffic_data` branch to keep main branch clean.\n")
+            else:
+                print("⚠️  No traffic data available to summarize")
+                
         except Exception as e:
-            print(f"Error creating summary: {e}")
+            print(f"❌ Error creating workflow summary: {e}")
         EOF
+        else
+          echo "⚠️  Summary file not found - traffic data collection may have failed"
         fi
