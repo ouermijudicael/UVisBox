@@ -186,21 +186,21 @@ jobs:
             json.dump(traffic_data, f, indent=2, default=str)
         print(f"📄 Daily traffic data saved to {filename}")
 
-        # =====================================================================
-        # FILE GENERATION: Rolling summary file  
-        # =====================================================================
-        # Create/update summary file with latest data for quick access
-        summary_file = "traffic_data/last_90_days_summary.json"
-        summary_data = {
-            'last_updated': timestamp,           # When this summary was last updated
-            'repository': repo_name,             # Repository identifier
-            'latest_data': traffic_data['data']  # Most recent traffic data snapshot
-        }
+        # # =====================================================================
+        # # FILE GENERATION: Rolling summary file  
+        # # =====================================================================
+        # # Create/update summary file with latest data for quick access
+        # summary_file = "traffic_data/last_90_days_summary.json"
+        # summary_data = {
+        #     'last_updated': timestamp,           # When this summary was last updated
+        #     'repository': repo_name,             # Repository identifier
+        #     'latest_data': traffic_data['data']  # Most recent traffic data snapshot
+        # }
         
-        with open(summary_file, 'w') as f:
-            json.dump(summary_data, f, indent=2, default=str)
-        print(f"📄 Rolling summary saved to {summary_file}")
-        EOF
+        # with open(summary_file, 'w') as f:
+        #     json.dump(summary_data, f, indent=2, default=str)
+        # print(f"📄 Rolling summary saved to {summary_file}")
+        # EOF
 
     # -------------------------------------------------------------------------
     # STEP 6: Commit and push traffic data to dedicated branch
