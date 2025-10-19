@@ -1,0 +1,136 @@
+{
+  "timestamp": "2025-10-19T00:19:57.209951+00:00",
+  "date": "2025-10-19",
+  "repository": "ouermijudicael/UVisBox",
+  "data": {
+    "views": {
+      "count": 334,
+      "uniques": 3,
+      "views": [
+        {
+          "timestamp": "2025-10-06T00:00:00+00:00",
+          "count": 44,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2025-10-07T00:00:00+00:00",
+          "count": 43,
+          "uniques": 2
+        },
+        {
+          "timestamp": "2025-10-08T00:00:00+00:00",
+          "count": 26,
+          "uniques": 2
+        },
+        {
+          "timestamp": "2025-10-09T00:00:00+00:00",
+          "count": 186,
+          "uniques": 2
+        },
+        {
+          "timestamp": "2025-10-10T00:00:00+00:00",
+          "count": 18,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2025-10-11T00:00:00+00:00",
+          "count": 6,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2025-10-13T00:00:00+00:00",
+          "count": 4,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2025-10-14T00:00:00+00:00",
+          "count": 3,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2025-10-15T00:00:00+00:00",
+          "count": 4,
+          "uniques": 1
+        }
+      ]
+    },
+    "clones": {
+      "count": 149,
+      "uniques": 81,
+      "clones": [
+        {
+          "timestamp": "2025-10-05T00:00:00+00:00",
+          "count": 1,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2025-10-06T00:00:00+00:00",
+          "count": 8,
+          "uniques": 8
+        },
+        {
+          "timestamp": "2025-10-07T00:00:00+00:00",
+          "count": 23,
+          "uniques": 19
+        },
+        {
+          "timestamp": "2025-10-08T00:00:00+00:00",
+          "count": 2,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2025-10-09T00:00:00+00:00",
+          "count": 82,
+          "uniques": 44
+        },
+        {
+          "timestamp": "2025-10-10T00:00:00+00:00",
+          "count": 9,
+          "uniques": 7
+        },
+        {
+          "timestamp": "2025-10-11T00:00:00+00:00",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "timestamp": "2025-10-12T00:00:00+00:00",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "timestamp": "2025-10-13T00:00:00+00:00",
+          "count": 1,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2025-10-14T00:00:00+00:00",
+          "count": 7,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2025-10-15T00:00:00+00:00",
+          "count": 3,
+          "uniques": 2
+        },
+        {
+          "timestamp": "2025-10-16T00:00:00+00:00",
+          "count": 5,
+          "uniques": 3
+        },
+        {
+          "timestamp": "2025-10-17T00:00:00+00:00",
+          "count": 1,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2025-10-18T00:00:00+00:00",
+          "count": 1,
+          "uniques": 1
+        }
+      ]
+    },
+    "referrers": [],
+    "popular_paths": []
+  }
+}
