@@ -9,7 +9,7 @@ from .squid_glyphs_stats import compute_vector_depths_2D
 from .squid_glyphs_vis import matplotlib_uncertainty_squid_glyphs_2D_vis
 from .squid_glyphs_mesh import squid_glyphs_meshing_2D
 
-def squid_glyph_3D(positions, ensemble_vectors, percentil, scale=0.5, 
+def squid_glyph_3D(positions, ensemble_vectors, point_values=None, percentil=0.95, scale=0.5, 
                                 show_edges=True, glyph_color='lightblue', ax=None):
     """
     Draws uncertainty squid glyphs for the given positions and ensemble vectors in 3D. this implementation is based on
@@ -24,6 +24,8 @@ def squid_glyph_3D(positions, ensemble_vectors, percentil, scale=0.5,
     ensemble_vectors : numpy.ndarray
         Array of shape (n, m, 3) The ensemble vectors in spherical coordinates.
         The ensemble vectors for each position in Cartesian coordinates.
+    point_values : numpy.ndarray, optional
+        Array of shape (n,) The values associated with each position for coloring.
     percentil : float
         The first percentile for depth filtering.
     scale : float, optional
@@ -91,10 +93,11 @@ def squid_glyph_3D(positions, ensemble_vectors, percentil, scale=0.5,
     directional_variations = getDirectionalVariations(ensemble_vectors, depths, depth_threshold, min_vectors, median_vectors, max_vectors)
     
     # build squid glyphs
-    points, polygons = squid_glyphs_meshing_3D(directional_variations, positions, ensemble_spherical_vectors, min_vectors, median_vectors, max_vectors, glyph_markers, scale, resolution=10, num_of_glyphs=numb_of_glyphs)
+    points, polygons, scalar_values = squid_glyphs_meshing_3D(directional_variations, positions, ensemble_spherical_vectors, min_vectors, median_vectors, 
+                                               max_vectors, point_values, glyph_markers, scale, resolution=10, num_of_glyphs=numb_of_glyphs)
     
     # plot squid glyphs
-    plotter = pyvista_uncertainty_squid_glyphs_3D_vis(points, polygons, ax, show_edges, glyph_color)
+    plotter = pyvista_uncertainty_squid_glyphs_3D_vis(points, polygons, points_values=scalar_values, ax=ax, show_edges=show_edges, glyph_color=glyph_color)
 
     return plotter, points, polygons
 

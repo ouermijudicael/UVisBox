@@ -31,7 +31,8 @@ def matplotlib_uncertainty_squid_glyphs_2D_vis(glyphs_points, glyphs_polygons, a
     return ax
 
     
-def pyvista_uncertainty_squid_glyphs_3D_vis(points, triangles, ax=None, show_edges=True, glyph_color='lightblue'):
+def pyvista_uncertainty_squid_glyphs_3D_vis(points, triangles, points_values=None, ax=None, show_edges=True, 
+                                            glyph_color='lightblue', cmap='RdBu_r'):
     """
     Plots the 3D squid glyphs using pyvista.
     
@@ -41,6 +42,8 @@ def pyvista_uncertainty_squid_glyphs_3D_vis(points, triangles, ax=None, show_edg
         Array of shape (m, 3) The points of the squid glyphs.
     triangles : numpy.ndarray
         Array of shape (n, 3) The triangle connectivity of the squid glyphs.
+    points_values : numpy.ndarray, optional
+        Array of shape (m,) The values associated with each point for coloring.
     ax : pyvista.Plotter, optional
         The pyvista plotter to use. If None, a new plotter will be created.
     show_edges : bool, optional
@@ -58,7 +61,11 @@ def pyvista_uncertainty_squid_glyphs_3D_vis(points, triangles, ax=None, show_edg
     mesh = pv.PolyData(points, triangles_flat) # 
     if ax is None:
         ax = pv.Plotter()
-    ax.add_mesh(mesh, color=glyph_color, show_edges=show_edges)
+    if points_values is not None:
+        mesh.point_data['Values'] = points_values
+        ax.add_mesh(mesh, scalars='Values', cmap=cmap, show_edges=show_edges)
+    else:
+        ax.add_mesh(mesh, color=glyph_color, show_edges=show_edges)
     ax.add_axes()
     ax.set_background('white')
 

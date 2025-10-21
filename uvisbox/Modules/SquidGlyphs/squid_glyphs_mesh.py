@@ -137,7 +137,7 @@ def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, pe
 
 
 def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vectors, 
-                                    median_vectors, max_vectors, glyph_markers, scale, resolution, num_of_glyphs):
+                                    median_vectors, max_vectors, scaler_values, glyph_markers, scale, resolution, num_of_glyphs):
     """
     Build superelliptical squid glyphs for 3D visualization. Assumes vectors are in spherical coordinates (magnitude, theta, phi).
 
@@ -157,6 +157,8 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
         Array of shape (n, 3) The median vectors in spherical coordinates.
     max_vectors : numpy.ndarray
         Array of shape (n, 3) The maximum vectors in spherical coordinates.
+    scaler_values : numpy.ndarray
+        Array of shape (n,) The scaler values for each glyph.
     glyph_markers : numpy.ndarray
         Array of shape (n,) with values 0 (no glyph), 1 (full glyph), 2 (arrow only)
     scale : float
@@ -177,6 +179,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
     num_points = positions.shape[0]
     points = np.zeros((num_of_glyphs*((resolution + 1)*3 + resolution*2 + 1), 3))
     polygons = np.zeros((num_of_glyphs*((resolution)*8 ),3), dtype=np.int32)
+    points_values = np.zeros((num_of_glyphs*((resolution + 1)*3 + resolution*2 + 1)))
     points_id = 0
     polygons_id = 0
     old_points_id = 0
@@ -234,11 +237,13 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
                 points[points_id + i, 0] = pt[0]
                 points[points_id + i, 1] = pt[1]
                 points[points_id + i, 2] = pt[2]
+                points_values[points_id + i] = scaler_values[i_p]
 
             pt = position
             points[points_id + resolution, 0] = pt[0]
             points[points_id + resolution, 1] = pt[1]
             points[points_id + resolution, 2] = pt[2]
+            points_values[points_id + resolution] = scaler_values[i_p]
 
             center_id = points_id + resolution 
             for i in range(resolution):
@@ -257,6 +262,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
                 points[points_id + i, 0] = pt[0]
                 points[points_id + i, 1] = pt[1]
                 points[points_id + i, 2] = pt[2]
+                points_values[points_id + i] = scaler_values[i_p]
 
             pt = np.dot(R, np.array([0, 0, max_vector[0]-min_vector[0]])) 
             # pt = np.dot(Rz, pt)
@@ -264,6 +270,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
             points[points_id + resolution, 0] = pt[0]
             points[points_id + resolution, 1] = pt[1]
             points[points_id + resolution, 2] = pt[2]
+            points_values[points_id + resolution] = scaler_values[i_p]
 
             center_id = points_id + resolution
 
@@ -306,6 +313,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
                 points[points_id + i, 0] = pt[0]
                 points[points_id + i, 1] = pt[1]
                 points[points_id + i, 2] = pt[2]
+                points_values[points_id + i] = scaler_values[i_p]
             old_points_id = points_id
             points_id += resolution
             # shaft_top_v0_scale = v0_scale/max_vector[0]*(0.2*max_vector[0])
@@ -325,6 +333,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
                 points[points_id + i, 0] = pt[0]
                 points[points_id + i, 1] = pt[1]
                 points[points_id + i, 2] = pt[2]
+                points_values[points_id + i] = scaler_values[i_p]
 
             for i in range(resolution):
                 polygons[polygons_id, 0] = old_points_id + i
@@ -352,6 +361,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
                 points[points_id + i, 0] = pt[0]
                 points[points_id + i, 1] = pt[1]
                 points[points_id + i, 2] = pt[2]
+                points_values[points_id + i] = scaler_values[i_p]
 
             pt = np.dot(R, np.array([0.0, 0.0, 0.8*max_vector[0]]))
             # pt = np.dot(Rz, pt)
@@ -359,6 +369,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
             points[points_id + resolution, 0] = pt[0]
             points[points_id + resolution, 1] = pt[1]
             points[points_id + resolution, 2] = pt[2]
+            points_values[points_id + resolution] = scaler_values[i_p]
             center_id = points_id + resolution
             for i in range(resolution):
                 polygons[polygons_id,0] = points_id + i
@@ -376,6 +387,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
             points[points_id + resolution+1, 0] = pt[0]
             points[points_id + resolution+1, 1] = pt[1]
             points[points_id + resolution+1, 2] = pt[2]
+            points_values[points_id + resolution+1] = scaler_values[i_p]
             tip_id = points_id + resolution + 1
 
             for i in range(resolution):
@@ -386,6 +398,6 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
             old_points_id = points_id
             points_id = points_id + resolution + 2
 
-    return points, polygons
+    return points, polygons, points_values
 
 
