@@ -92,6 +92,8 @@ def squid_glyph_3D(positions, ensemble_vectors, point_values=None, percentil=0.9
     depth_threshold = 1.0 - percentil
     directional_variations = getDirectionalVariations(ensemble_vectors, depths, depth_threshold, min_vectors, median_vectors, max_vectors)
     
+    if point_values is None:
+        point_values = np.zeros((num_positions,))
     # build squid glyphs
     points, polygons, scalar_values = squid_glyphs_meshing_3D(directional_variations, positions, ensemble_spherical_vectors, min_vectors, median_vectors, 
                                                max_vectors, point_values, glyph_markers, scale, resolution=10, num_of_glyphs=numb_of_glyphs)

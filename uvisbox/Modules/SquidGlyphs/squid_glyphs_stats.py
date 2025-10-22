@@ -66,12 +66,20 @@ def getDirectionalVariations(vectors, depths, depth_threshold, min_vectors, medi
                 ii_m = ii_m + 1
         local_X = local_XX[0:ii_m]
         n_local_points, n_local_features = local_X.shape
+
+        # compute local std
+        if n_local_points < 2:
+            local_std = np.array([0.0, 0.0])
+        else:
+            local_std = np.std(local_X, axis=0)
+
         pca = PCA(n_components=2)
 
-        if n_local_points > 2 and n_local_features > 2: # ensures that we have enough points and features for PCA
+        # fit PCA if there are enough points and non-zero std
+        if n_local_points > 2 and n_local_features > 1 and np.all(local_std > 1.0e-20): 
             pca.fit(local_X)
             pca_components = pca.components_
-            pca_mean = pca.mean_
+            # pca_mean = pca.mean_
             pca_variance = pca.explained_variance_
             v0_scale = pca_variance[0]
             v1_scale = pca_variance[1]

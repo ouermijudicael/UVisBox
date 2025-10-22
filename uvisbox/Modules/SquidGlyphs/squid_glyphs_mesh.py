@@ -193,11 +193,13 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
                 elipse_scale = 1.0
                 angle = 0.001 # min angle paramter
             else:
-
                 elipse_scale = np.maximum(v1_scale/v0_scale, 0.01)
                 v0 = vectors[i_p][1]
                 v0 = directional_variations[i_p][1]
-                angle = np.arctan2( v0[1], v0[0])
+                if (np.absolute(v0[0]) < 1.e-16 and np.absolute(v0[1]) < 1.e-16):
+                    angle = 0.0
+                else:
+                    angle = np.arctan2( v0[1], v0[0])
                 # mean_vals = directional_variations[ii_t][i_p][3]
             min_vector = min_vectors[i_p]
             median_vector = median_vectors[i_p]
@@ -216,19 +218,27 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
             phi = median_vector[2]
             theta = median_vector[1]
            
+            Rx = np.zeros((3, 3))
+            Rx[0][0] = 1
+            Rx[1][1] = np.cos(theta)
+            Rx[1][2] = -np.sin(theta)
+            Rx[2][1] = np.sin(theta)
+            Rx[2][2] = np.cos(theta)
+
             Ry = np.zeros((3, 3))
             Ry[0][0] = np.cos(theta)
             Ry[0][2] = np.sin(theta)
             Ry[1][1] = 1
             Ry[2][0] = -np.sin(theta)
             Ry[2][2] = np.cos(theta)
+
             Rz = np.zeros((3, 3))
             Rz[0][0] = np.cos(phi)
             Rz[0][1] = -np.sin(phi)
             Rz[1][0] = np.sin(phi)
             Rz[1][1] = np.cos(phi)
             Rz[2][2] = 1
-            R = Rz @ Ry
+            R = Rz @ Rx 
             ## mappoints to the position
             for i in range(resolution):
                 pt = np.dot(R, np.array([x[i], y[i], 0.0]))
