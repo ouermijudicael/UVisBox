@@ -68,24 +68,26 @@ def _process_time_step(args):
     # Initialize depth increments for this time step
     step_depths = np.zeros(n_curves)
     
-    # For each curve, check its current point against all band hulls
-    for curve_point_idx in range(n_curves):
-        # Get the current point of the curve at this time step
-        point = curves[curve_point_idx, step_idx, :]
+    # OPTIMIZATION: Build each hull once, then test all points against it
+    # This reduces hull construction from O(n_curves * len(indices)) to O(len(indices))
+    for band in indices:
+        # Extract all points from curves in this band up to current time step
+        # Shape: (len(band), step_idx+1, n_dims) -> (total_points, n_dims)
+        band_curves = curves[band, :step_idx+1, :]
         
-        # Check this point against each band's convex hull
-        for band in indices:
-            # Extract all points from curves in this band up to current time step
-            # Shape: (len(band), step_idx+1, n_dims) -> (total_points, n_dims)
-            band_curves = curves[band, :step_idx+1, :]
-            
-            try:
-                # Create convex hull from all band points flattened to 2D
-                # Reshape combines all time steps and curves in band into single point cloud
-                hull = ConvexHull(band_curves.reshape(-1, n_dims))
-            except:
-                # Skip if hull construction fails (e.g., insufficient points, colinear points)
-                continue
+        try:
+            # Create convex hull from all band points flattened to 2D
+            # Reshape combines all time steps and curves in band into single point cloud
+            # BUILD HULL ONCE per band (instead of once per curve per band)
+            hull = ConvexHull(band_curves.reshape(-1, n_dims))
+        except:
+            # Skip if hull construction fails (e.g., insufficient points, colinear points)
+            continue
+        
+        # Now test all curve points against this hull
+        for curve_point_idx in range(n_curves):
+            # Get the current point of the curve at this time step
+            point = curves[curve_point_idx, step_idx, :]
             
             # Check if current curve's point lies inside this band's convex hull
             if point_in_hull(point, hull):
@@ -159,28 +161,30 @@ def curve_banddepths(curves, indices=None, workers=12):
             pool.close()
             pool.join()
     else:
-        # Sequential processing (original implementation)
+        # Sequential processing (optimized implementation)
         # Iterate through each time step (starting from step 1, not 0)
         # This is because we need at least 2 points to form a meaningful convex hull
         for step_idx in range(1, n_steps):
-            # For each curve, check its current point against all band hulls
-            for curve_point_idx in range(n_curves):
-                # Get the current point of the curve at this time step
-                point = curves[curve_point_idx, step_idx, :]
+            # OPTIMIZATION: Build each hull once, then test all points against it
+            # This reduces hull construction from O(n_curves * len(indices)) to O(len(indices))
+            for band in indices:
+                # Extract all points from curves in this band up to current time step
+                # Shape: (len(band), step_idx+1, n_dims) -> (total_points, n_dims)
+                band_curves = curves[band, :step_idx+1, :]
                 
-                # Check this point against each band's convex hull
-                for band in indices:
-                    # Extract all points from curves in this band up to current time step
-                    # Shape: (len(band), step_idx+1, n_dims) -> (total_points, n_dims)
-                    band_curves = curves[band, :step_idx+1, :]
-                    
-                    try:
-                        # Create convex hull from all band points flattened to 2D
-                        # Reshape combines all time steps and curves in band into single point cloud
-                        hull = ConvexHull(band_curves.reshape(-1, n_dims))
-                    except:
-                        # Skip if hull construction fails (e.g., insufficient points, colinear points)
-                        continue
+                try:
+                    # Create convex hull from all band points flattened to 2D
+                    # Reshape combines all time steps and curves in band into single point cloud
+                    # BUILD HULL ONCE per band (instead of once per curve per band)
+                    hull = ConvexHull(band_curves.reshape(-1, n_dims))
+                except:
+                    # Skip if hull construction fails (e.g., insufficient points, colinear points)
+                    continue
+                
+                # Now test all curve points against this hull
+                for curve_point_idx in range(n_curves):
+                    # Get the current point of the curve at this time step
+                    point = curves[curve_point_idx, step_idx, :]
                     
                     # Check if current curve's point lies inside this band's convex hull
                     if point_in_hull(point, hull):
