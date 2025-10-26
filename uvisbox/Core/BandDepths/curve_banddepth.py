@@ -49,6 +49,69 @@ def point_in_hull(point, hull_or_vertices, eps=1e-6):
     return all((np.dot(eq[:-1], point) + eq[-1] < eps) for eq in hull.equations)
 
 
+def points_in_hull(points, hull, eps=1e-6):
+    """
+    Vectorized check if multiple points are inside a convex hull.
+    
+    This function uses vectorized NumPy operations to efficiently test multiple points
+    against a convex hull simultaneously, providing significant performance improvements
+    over calling point_in_hull repeatedly.
+    
+    Parameters:
+    ----------
+    points : numpy.ndarray
+        Array of points to check, shape (n_points, n_dims).
+        Can also be a single point of shape (n_dims,), which will be treated as (1, n_dims).
+    hull : scipy.spatial.ConvexHull
+        A SciPy ConvexHull object defining the convex hull to test against.
+    eps : float, optional
+        Tolerance for numerical precision when checking if points are inside the hull. 
+        Default is 1e-6.
+    
+    Returns:
+    -------
+    numpy.ndarray
+        Boolean array of shape (n_points,) where True indicates the point is inside 
+        the hull (within the specified tolerance), False otherwise.
+    
+    Notes
+    -----
+    - Uses vectorized matrix operations: equations[:, :-1] @ points.T + equations[:, -1]
+    - Much faster than looping: O(1) matrix op vs O(n_points * n_equations) loop iterations
+    - Points on the boundary (within `eps` tolerance) are considered inside.
+    - For single point queries, consider using point_in_hull() for simplicity.
+    
+    Examples
+    --------
+    >>> hull = ConvexHull(np.array([[0, 0], [1, 0], [0, 1]]))
+    >>> points = np.array([[0.2, 0.2], [2.0, 2.0]])
+    >>> points_in_hull(points, hull)
+    array([ True, False])
+    """
+    # Ensure points is 2D array
+    points = np.atleast_2d(points)
+    
+    # Vectorized computation: 
+    # For each equation (hyperplane), compute signed distance to all points
+    # equations shape: (n_equations, n_dims + 1)
+    # points shape: (n_points, n_dims)
+    # Result shape: (n_equations, n_points)
+    
+    # Extract normal vectors and offsets from hull equations
+    normals = hull.equations[:, :-1]  # Shape: (n_equations, n_dims)
+    offsets = hull.equations[:, -1]    # Shape: (n_equations,)
+    
+    # Compute signed distances: normals @ points.T + offsets
+    # Broadcasting: (n_equations, n_dims) @ (n_dims, n_points) + (n_equations, 1)
+    signed_distances = normals @ points.T + offsets[:, np.newaxis]
+    
+    # A point is inside the hull if ALL signed distances are <= eps
+    # Check across equations dimension (axis=0)
+    inside = np.all(signed_distances <= eps, axis=0)
+    
+    return inside
+
+
 def _process_time_step(args):
     """
     Worker function to process a single time step for parallel computation.
@@ -68,8 +131,12 @@ def _process_time_step(args):
     # Initialize depth increments for this time step
     step_depths = np.zeros(n_curves)
     
-    # OPTIMIZATION: Build each hull once, then test all points against it
-    # This reduces hull construction from O(n_curves * len(indices)) to O(len(indices))
+    # Extract all curve points at this time step once (memory optimization)
+    # Shape: (n_curves, n_dims)
+    all_points = curves[:, step_idx, :]
+    
+    # OPTIMIZATION: Build each hull once, then test all points against it using vectorization
+    # This eliminates both the hull reconstruction and the inner point loop
     for band in indices:
         # Extract all points from curves in this band up to current time step
         # Shape: (len(band), step_idx+1, n_dims) -> (total_points, n_dims)
@@ -77,22 +144,18 @@ def _process_time_step(args):
         
         try:
             # Create convex hull from all band points flattened to 2D
-            # Reshape combines all time steps and curves in band into single point cloud
-            # BUILD HULL ONCE per band (instead of once per curve per band)
+            # BUILD HULL ONCE per band
             hull = ConvexHull(band_curves.reshape(-1, n_dims))
         except:
             # Skip if hull construction fails (e.g., insufficient points, colinear points)
             continue
         
-        # Now test all curve points against this hull
-        for curve_point_idx in range(n_curves):
-            # Get the current point of the curve at this time step
-            point = curves[curve_point_idx, step_idx, :]
-            
-            # Check if current curve's point lies inside this band's convex hull
-            if point_in_hull(point, hull):
-                # Increment depth score if point is contained within the hull
-                step_depths[curve_point_idx] += 1
+        # VECTORIZED: Test all curve points against this hull simultaneously
+        # Returns boolean array of shape (n_curves,)
+        in_hull_mask = points_in_hull(all_points, hull)
+        
+        # Increment depth scores for all curves that are inside this hull
+        step_depths += in_hull_mask.astype(int)
     
     return step_depths
 
@@ -161,12 +224,15 @@ def curve_banddepths(curves, indices=None, workers=12):
             pool.close()
             pool.join()
     else:
-        # Sequential processing (optimized implementation)
+        # Sequential processing (vectorized and optimized implementation)
         # Iterate through each time step (starting from step 1, not 0)
         # This is because we need at least 2 points to form a meaningful convex hull
         for step_idx in range(1, n_steps):
-            # OPTIMIZATION: Build each hull once, then test all points against it
-            # This reduces hull construction from O(n_curves * len(indices)) to O(len(indices))
+            # Extract all curve points at this time step once (memory optimization)
+            # Shape: (n_curves, n_dims)
+            all_points = curves[:, step_idx, :]
+            
+            # OPTIMIZATION: Build each hull once, then test all points vectorized
             for band in indices:
                 # Extract all points from curves in this band up to current time step
                 # Shape: (len(band), step_idx+1, n_dims) -> (total_points, n_dims)
@@ -174,22 +240,18 @@ def curve_banddepths(curves, indices=None, workers=12):
                 
                 try:
                     # Create convex hull from all band points flattened to 2D
-                    # Reshape combines all time steps and curves in band into single point cloud
-                    # BUILD HULL ONCE per band (instead of once per curve per band)
+                    # BUILD HULL ONCE per band
                     hull = ConvexHull(band_curves.reshape(-1, n_dims))
                 except:
                     # Skip if hull construction fails (e.g., insufficient points, colinear points)
                     continue
                 
-                # Now test all curve points against this hull
-                for curve_point_idx in range(n_curves):
-                    # Get the current point of the curve at this time step
-                    point = curves[curve_point_idx, step_idx, :]
-                    
-                    # Check if current curve's point lies inside this band's convex hull
-                    if point_in_hull(point, hull):
-                        # Increment depth score if point is contained within the hull
-                        depths[curve_point_idx] += 1
+                # VECTORIZED: Test all curve points against this hull simultaneously
+                # Returns boolean array of shape (n_curves,)
+                in_hull_mask = points_in_hull(all_points, hull)
+                
+                # Increment depth scores for all curves that are inside this hull
+                depths += in_hull_mask.astype(int)
     
     # Normalize depths by total number of comparisons made
     # (n_steps-1) time steps * len(indices) bands per time step
