@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.spatial import ConvexHull
 from itertools import combinations
+import multiprocessing as mp
 
 
 
@@ -48,7 +49,53 @@ def point_in_hull(point, hull_or_vertices, eps=1e-6):
     return all((np.dot(eq[:-1], point) + eq[-1] < eps) for eq in hull.equations)
 
 
-def curve_banddepths(curves, indices =None):
+def _process_time_step(args):
+    """
+    Worker function to process a single time step for parallel computation.
+    
+    Parameters:
+    ----------
+    args : tuple
+        Tuple containing (step_idx, curves, n_curves, indices, n_dims)
+    
+    Returns:
+    -------
+    numpy.ndarray
+        Depth increments for each curve at this time step
+    """
+    step_idx, curves, n_curves, indices, n_dims = args
+    
+    # Initialize depth increments for this time step
+    step_depths = np.zeros(n_curves)
+    
+    # For each curve, check its current point against all band hulls
+    for curve_point_idx in range(n_curves):
+        # Get the current point of the curve at this time step
+        point = curves[curve_point_idx, step_idx, :]
+        
+        # Check this point against each band's convex hull
+        for band in indices:
+            # Extract all points from curves in this band up to current time step
+            # Shape: (len(band), step_idx+1, n_dims) -> (total_points, n_dims)
+            band_curves = curves[band, :step_idx+1, :]
+            
+            try:
+                # Create convex hull from all band points flattened to 2D
+                # Reshape combines all time steps and curves in band into single point cloud
+                hull = ConvexHull(band_curves.reshape(-1, n_dims))
+            except:
+                # Skip if hull construction fails (e.g., insufficient points, colinear points)
+                continue
+            
+            # Check if current curve's point lies inside this band's convex hull
+            if point_in_hull(point, hull):
+                # Increment depth score if point is contained within the hull
+                step_depths[curve_point_idx] += 1
+    
+    return step_depths
+
+
+def curve_banddepths(curves, indices=None, workers=12):
     """
     Calculate band depth for curves based on how often each curve's points lie within convex hulls 
     formed by bands of other curves. M. Mirzargar, R. T. Whitaker and R. M. Kirby, "Curve Boxplot: 
@@ -59,10 +106,14 @@ def curve_banddepths(curves, indices =None):
     ----------
     curves : numpy.ndarray
         3D array of shape (n_curves, n_steps, n_dims) containing curve data
-    indices : list of lists
+    indices : list of lists, optional
         Each inner list contains indices of curves that form a band
         indices can be created by itertools.combinations(range(n_curves), k) for some k
         recommended caching for indices
+    workers : int, optional
+        Number of worker processes for parallel computation. Default is 12.
+        Set to 1 or None to use sequential processing (useful for debugging).
+        Uses fork context for macOS compatibility.
     
     Returns:
     -------
@@ -81,32 +132,60 @@ def curve_banddepths(curves, indices =None):
     # Initialize depth scores for each curve (starts at zero)
     depths = np.zeros(n_curves)
     
-    # Iterate through each time step (starting from step 1, not 0)
-    # This is because we need at least 2 points to form a meaningful convex hull
-    for step_idx in range(1, n_steps):
-        # For each curve, check its current point against all band hulls
-        for curve_point_idx in range(n_curves):
-            # Get the current point of the curve at this time step
-            point = curves[curve_point_idx, step_idx, :]
+    # Decide whether to use parallel or sequential processing
+    use_parallel = workers is not None and workers > 1
+    
+    if use_parallel:
+        # Parallel processing using multiprocessing with fork context
+        # Prepare arguments for each time step
+        step_args = [
+            (step_idx, curves, n_curves, indices, n_dims)
+            for step_idx in range(1, n_steps)
+        ]
+        
+        # Create a multiprocessing pool using fork context for macOS compatibility
+        ctx = mp.get_context('fork')
+        pool = ctx.Pool(processes=workers)
+        
+        try:
+            # Process all time steps in parallel
+            step_depths_list = pool.map(_process_time_step, step_args)
             
-            # Check this point against each band's convex hull
-            for band in indices:
-                # Extract all points from curves in this band up to current time step
-                # Shape: (len(band), step_idx+1, n_dims) -> (total_points, n_dims)
-                band_curves = curves[band, :step_idx+1, :]
+            # Sum up depth increments from all time steps
+            for step_depths in step_depths_list:
+                depths += step_depths
+        finally:
+            # Ensure pool is properly closed and joined
+            pool.close()
+            pool.join()
+    else:
+        # Sequential processing (original implementation)
+        # Iterate through each time step (starting from step 1, not 0)
+        # This is because we need at least 2 points to form a meaningful convex hull
+        for step_idx in range(1, n_steps):
+            # For each curve, check its current point against all band hulls
+            for curve_point_idx in range(n_curves):
+                # Get the current point of the curve at this time step
+                point = curves[curve_point_idx, step_idx, :]
                 
-                try:
-                    # Create convex hull from all band points flattened to 2D
-                    # Reshape combines all time steps and curves in band into single point cloud
-                    hull = ConvexHull(band_curves.reshape(-1, n_dims))
-                except:
-                    # Skip if hull construction fails (e.g., insufficient points, colinear points)
-                    continue
-                
-                # Check if current curve's point lies inside this band's convex hull
-                if point_in_hull(point, hull):
-                    # Increment depth score if point is contained within the hull
-                    depths[curve_point_idx] += 1
+                # Check this point against each band's convex hull
+                for band in indices:
+                    # Extract all points from curves in this band up to current time step
+                    # Shape: (len(band), step_idx+1, n_dims) -> (total_points, n_dims)
+                    band_curves = curves[band, :step_idx+1, :]
+                    
+                    try:
+                        # Create convex hull from all band points flattened to 2D
+                        # Reshape combines all time steps and curves in band into single point cloud
+                        hull = ConvexHull(band_curves.reshape(-1, n_dims))
+                    except:
+                        # Skip if hull construction fails (e.g., insufficient points, colinear points)
+                        continue
+                    
+                    # Check if current curve's point lies inside this band's convex hull
+                    if point_in_hull(point, hull):
+                        # Increment depth score if point is contained within the hull
+                        depths[curve_point_idx] += 1
     
     # Normalize depths by total number of comparisons made
     # (n_steps-1) time steps * len(indices) bands per time step
