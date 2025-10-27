@@ -31,13 +31,12 @@ Create figure with three subplots and plot the original sea surface temperature 
     ax1.set_xlabel("Month")
     ax1.set_ylabel("Temperature")
 
-Calculate and plot the functional band depth for the time series data with 50th and 10th 
-percentile bands in the second and third subplots, respectively.
+plot the functional boxplot for the time series data with different methods at [25,50,90,100] percentiles (default)
 
 .. code-block:: python
 
-    ax2 = functional_boxplot(X, percentil=50, scale=1.0, ax=ax2)
-    ax3 = functional_boxplot(X, method='modified_bd', percentil=10, scale=1.0, ax=ax3)
+    ax2 = functional_boxplot(X, ax=ax2)
+    ax3 = functional_boxplot(X, method='mfdb', ax=ax3)
     plt.show()
 
 .. image:: _static/sea_surface_temp_functional_banddepth_example.png
@@ -65,12 +64,10 @@ ax1.set_title("Sea Surface Temperature Time Series")
 ax1.set_xlabel("Month")
 ax1.set_ylabel("Temperature")
 
-# Calculate and plot the functional band depth for the time series data with 50th and 10th 
-# percentile bands in the second and third subplots, respectively.
+# plot the functional boxplot for the time series data with different methods at [25,50,90,100] percentiles (default)
 
-
-ax2 = functional_boxplot(X, percentil=50, scale=1.0, ax=ax2)
-ax3 = functional_boxplot(X, method='modified_bd', percentil=10, scale=1.0, ax=ax3)
+ax2 = functional_boxplot(X, ax=ax2)
+ax3 = functional_boxplot(X, method='mfdb', ax=ax3)
 
 # plt.savefig("sea_surface_temp_functional_banddepth_example.png")
 plt.show()
