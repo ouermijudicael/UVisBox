@@ -39,24 +39,43 @@ def curves_band_mesh(sorted_curves, percentile=50):
         i_t_end = np.minimum( i_t, num_time_steps - 1)
         points = before[:,i_t_start:i_t_end+1,:].reshape(-1, before.shape[2]) 
         
+        n_dims = points.shape[1]
         hull = ConvexHull(points)
 
-
-        # get convex hull vertices
-        hull_points = Delaunay(points[hull.vertices])
-        # add a point at the center of the convex hull
-        center = np.mean(points[hull.vertices], axis=0)
-        points = np.vstack([points, center])
-        # create new triangles connecting the center to the hull edges
-        new_triangles = []
-        for simplex in hull.simplices:
-            new_triangles.append([simplex[0], simplex[1], points.shape[0]-1])
-        # new_triangles = np.array(new_triangles)
-
-        final_points.append(points)
-        final_triangles.append(np.vstack([hull_points.simplices, new_triangles]) + i_point)
-        i_point += points.shape[0]
-        i_triangle +=  len(new_triangles)
+        if n_dims == 2:
+            # 2D case: hull.simplices are edges, need to triangulate interior
+            # and create triangles from center to hull edges
+            
+            # Triangulate the convex hull interior
+            hull_points = Delaunay(points[hull.vertices])
+            
+            # Add center point
+            center = np.mean(points[hull.vertices], axis=0)
+            points_with_center = np.vstack([points, center])
+            center_idx = points.shape[0]
+            
+            # Create triangles from center to hull edges
+            # hull.simplices contains direct point indices (edges)
+            new_triangles = []
+            for simplex in hull.simplices:
+                new_triangles.append([simplex[0], simplex[1], center_idx])
+            
+            # Remap Delaunay indices from 0..len(hull.vertices)-1 to original point indices
+            remapped_delaunay = hull.vertices[hull_points.simplices]
+            
+            # Combine all triangles
+            all_triangles = np.vstack([remapped_delaunay, new_triangles])
+            
+        else:  # 3D case
+            # In 3D, hull.simplices already contains triangular faces of the convex hull
+            # hull.simplices contains direct point indices
+            points_with_center = points
+            all_triangles = hull.simplices
+        
+        final_points.append(points_with_center)
+        final_triangles.append(all_triangles + i_point)
+        i_point += points_with_center.shape[0]
+        i_triangle += len(all_triangles)
     final_points = np.vstack(final_points)
     final_triangles = np.vstack(final_triangles)
 
