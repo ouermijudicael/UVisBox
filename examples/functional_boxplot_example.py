@@ -67,7 +67,7 @@ ax1.set_ylabel("Temperature")
 # plot the functional boxplot for the time series data with different methods at [25,50,90,100] percentiles (default)
 
 ax2 = functional_boxplot(X, ax=ax2)
-ax3 = functional_boxplot(X, method='mfdb', ax=ax3)
+ax3 = functional_boxplot(X, method='mfbd', ax=ax3)
 
 # plt.savefig("sea_surface_temp_functional_banddepth_example.png")
 plt.show()

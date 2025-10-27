@@ -1,15 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.patches import Polygon
-from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_mesh import functional_depth_mesh
 
 
 def plot_band(bottom_curve, top_curve, ax=None, color='red', alpha=1.0, scale=1.0):
     """
     Plot a functional band envelope between bottom and top curves.
     
-    This function creates a triangulated mesh between the curves and visualizes
-    it as a filled band area using matplotlib.
+    This function creates a filled area between the curves using matplotlib's fill_between.
     
     Parameters:
     -----------
@@ -25,7 +22,7 @@ def plot_band(bottom_curve, top_curve, ax=None, color='red', alpha=1.0, scale=1.
     alpha : float, optional
         Transparency of the band (0=transparent, 1=opaque). Default is 1.0.
     scale : float, optional
-        Scale factor for the depth area. Default is 1.0.
+        Scale factor for the curves. Default is 1.0.
     
     Returns:
     --------
@@ -71,16 +68,17 @@ def plot_band(bottom_curve, top_curve, ax=None, color='red', alpha=1.0, scale=1.
     if ax is None:
         fig, ax = plt.subplots()
     
-    # Generate triangulated mesh
-    points, triangles = functional_depth_mesh(top_curve, bottom_curve, scale=scale)
+    # Apply scale
+    bottom_scaled = bottom_curve * scale
+    top_scaled = top_curve * scale
     
-    # Plot triangles as filled polygons
-    for tri in triangles:
-        poly = Polygon(points[tri], facecolor=color, edgecolor='none', alpha=alpha)
-        ax.add_patch(poly)
+    # Create x-coordinates (normalized to [0, 1])
+    n_points = len(bottom_curve)
+    x = np.linspace(0, 1, n_points)
     
-    # Auto-scale the view to fit the data
-    ax.autoscale_view()
+    # Use fill_between to create the band
+    ax.fill_between(x, bottom_scaled, top_scaled, 
+                    color=color, alpha=alpha, edgecolor='none')
     
     return ax
 

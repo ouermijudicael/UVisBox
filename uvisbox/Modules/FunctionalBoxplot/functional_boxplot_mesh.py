@@ -39,11 +39,11 @@ def get_band(data, percentile, method='fdb'):
     # Compute band depths based on method
     if method == 'fdb':
         depths = functional_banddepth(data)
-    elif method == 'mfdb':
+    elif method == 'mfbd':
         depths = modified_functional_banddepth(data)
     else:
-        raise ValueError(f"Unknown method '{method}'. Choose 'fdb' or 'mfdb'.")
-    
+        raise ValueError(f"Unknown method '{method}'. Choose 'fdb' or 'mfbd'.")
+
     # Sort curves by depth (descending order - highest depth first)
     sorted_indices = np.argsort(depths)[::-1]
     sorted_curves = data[sorted_indices]

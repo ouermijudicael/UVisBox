@@ -6,7 +6,7 @@ from .functional_boxplot_vis import plot_band
 
 
 def functional_boxplot(data, method='fdb', percentiles=[25, 50, 90, 100], ax=None, 
-                      colors=None, median_color='red', alpha=0.7):
+                      colors=None, median_color='red', alpha=1, plot_all_curves=False):
     """
     Create a functional band depth boxplot with multiple percentile bands.
     
@@ -86,10 +86,10 @@ def functional_boxplot(data, method='fdb', percentiles=[25, 50, 90, 100], ax=Non
     data_copy = data.copy()
     
     # Compute band depths
-    if method == 'fdb' or method == 'mfdb':
+    if method == 'fdb' or method == 'mfbd':
         depths = band_depths(data_copy, method=method)
     else:
-        raise ValueError(f"Unknown method '{method}'. Choose 'fdb' or 'mfdb'.")
+        raise ValueError(f"Unknown method '{method}'. Choose 'fdb' or 'mfbd'.")
 
     # Sort curves by depth (descending order - highest depth first)
     sorted_indices = np.argsort(depths)[::-1]
@@ -123,8 +123,10 @@ def functional_boxplot(data, method='fdb', percentiles=[25, 50, 90, 100], ax=Non
     # Plot all curves in light gray for context
     n_points = data_copy.shape[1]
     x = np.linspace(0, 1, n_points)
-    for curve in data_copy:
-        ax.plot(x, curve, color='gray', alpha=0.1, linewidth=0.5, zorder=1)
+    
+    if plot_all_curves:
+        for curve in data_copy:
+            ax.plot(x, curve, color='gray', alpha=0.1, linewidth=0.5, zorder=1)
     
     # Plot the median curve (curve with maximum depth)
     median_curve = sorted_data[0]
