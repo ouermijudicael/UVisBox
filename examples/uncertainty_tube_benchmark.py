@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import multiprocessing
 
 from uvisbox.Datasets import flowmap_3d
-from uvisbox.Interpolations import linear_interpolate
-from uvisbox.UncertaintyTube import generate_cross_sections, generate_tube_mesh
+from uvisbox.Core.Interpolations import linear_interpolate
+from uvisbox.Modules.UncertaintyTube import generate_cross_sections, generate_tube_mesh
 
 def benchmark_uncertainty_tube(n_seeds=100, n_steps=100, n_jobs_list=[1, 4, 12], repeats=3):
     """

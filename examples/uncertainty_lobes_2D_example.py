@@ -185,7 +185,7 @@ ax1.grid()
 # positions is the first parameter, ensemble_vectors is the second
 # percentile1 defaults to 90, percentile2 defaults to 50
 ax2 = uncertainty_lobes(positions, ensemble_vectors, 
-                       percentile1=75, percentile2=50, scale=0.4, ax=ax2)
+                       percentile1=90, percentile2=50, scale=0.4, ax=ax2)
 ax2.set_title("Uncertainty Lobes for Double Gyre Flow")
 ax2.set_xlim(-0.25, 2.25)
 ax2.set_ylim(-0.25, 1.25)
