@@ -86,8 +86,11 @@ Set up the plot for both original vector field and uncertainty squid glyphs
     ax1.set_ylabel("Y")
     ax1.grid()
 
-    # Plot uncertainty squid glyphs
-    ax2 =uncertainty_lobes(positions, ensemble_vectors, 1.0, 0.5, scale=0.4, ax=ax2)
+    # Plot uncertainty lobes
+    # positions is the first parameter, ensemble_vectors is the second
+    # percentile1 defaults to 90, percentile2 defaults to 50
+    ax2 = uncertainty_lobes(positions, ensemble_vectors, 
+                           percentile1=50, percentile2=75, scale=0.4, ax=ax2)
     ax2.set_title("Uncertainty Lobes for Double Gyre Flow")
     ax2.set_xlim(-0.25, 2.25)
     ax2.set_ylim(-0.25, 1.25)
@@ -178,8 +181,11 @@ ax1.set_xlabel("X")
 ax1.set_ylabel("Y")
 ax1.grid()
 
-# Plot uncertainty squid glyphs
-ax2 =uncertainty_lobes(positions, ensemble_vectors, 1.0, 0.5, scale=0.4, ax=ax2)
+# Plot uncertainty lobes
+# positions is the first parameter, ensemble_vectors is the second
+# percentile1 defaults to 90, percentile2 defaults to 50
+ax2 = uncertainty_lobes(positions, ensemble_vectors, 
+                       percentile1=75, percentile2=50, scale=0.4, ax=ax2)
 ax2.set_title("Uncertainty Lobes for Double Gyre Flow")
 ax2.set_xlim(-0.25, 2.25)
 ax2.set_ylim(-0.25, 1.25)

@@ -2,7 +2,7 @@
 
 import numpy as np
 
-def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, percentil1, scale=0.2):
+def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, percentile1, scale=0.2):
     """
     Build squid glyphs for 2D visualization. Assumes vectors are in polar coordinates (magnitude, angle).
     
@@ -14,8 +14,8 @@ def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, pe
         Array of shape (n, m, 2) The ensemble polar vectors for each position.
     vector_depths : numpy.ndarray
         Array of shape (n, m) The vector depths for each position.
-    percentil1 : float
-        The first percentile for depth filtering.
+    percentile1 : float
+        The first percentile for depth filtering (0-100).
     scale : float
         The scale factor for the glyphs.
     
@@ -26,6 +26,9 @@ def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, pe
     glyphs_polygons : numpy.ndarray
         Array of shape (k, 3) The polygons of the squid glyphs.
     """
+    # Convert percentile from 0-100 to 0-1 range
+    percentile_norm = percentile1 / 100.0
+    
     num_positions = ensemble_polar_vectors.shape[0]
 
     glyphs_points = np.zeros((num_positions*11, 2))
@@ -36,7 +39,7 @@ def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, pe
 
         median_idx = np.argmax(vector_depths[i_pos])
         median_vector = ensemble_polar_vectors[i_pos][median_idx] if median_idx is not None else np.array([0,0])
-        indices = np.where(vector_depths[i_pos] >= 1.0 - percentil1)[0]
+        indices = np.where(vector_depths[i_pos] >= 1.0 - percentile_norm)[0]
         min_mag = np.min(ensemble_polar_vectors[i_pos][indices][:, 0]) if indices.size > 0 else 0
         max_mag = np.max(ensemble_polar_vectors[i_pos][indices][:, 0]) if indices.size > 0 else 0
         min_angle = np.min(ensemble_polar_vectors[i_pos][indices][:, 1]) if indices.size > 0 else 0

@@ -2,7 +2,7 @@ import numpy as np
 from itertools import combinations
 
 
-def calculate_spread_2D(vectors, depths, percentil):
+def calculate_spread_2D(vectors, depths, percentile):
     """
     Calculate the spread in 2D polar coordinates.
     Parameters:
@@ -11,18 +11,21 @@ def calculate_spread_2D(vectors, depths, percentil):
             Array of shape (n, 2) in polar coordinates (magnitude, angle)
         depths : numpy.ndarray
             Array of shape (n,) representing the depth of each vector
-        percentil : float
-            The percentile for depth filtering
+        percentile : float
+            The percentile for depth filtering (0-100)
     Returns:
     --------
         tuple
-            Indices of vectors with min/max magnitude, angle among those with depth > 1.0-percentil
+            Indices of vectors with min/max magnitude, angle among those with depth > 1.0-percentile/100
     """
+    # Convert percentile from 0-100 to 0-1 range
+    percentile_norm = percentile / 100.0
+    
     first_quadrant = False # Set to True if you want to restrict to first quadrant 0 to pi/2
     second_quadrant = False # Set to True if you want to restrict to second quadrant pi/2 to pi
     third_quadrant = False # Set to True if you want to restrict to third quadrant -pi to -pi/2
     fourth_quadrant = False # Set to True if you want to restrict to fourth quadrant -pi/2 to 0
-    indices = np.where(depths >= 1.0-percentil)[0]
+    indices = np.where(depths >= 1.0-percentile_norm)[0]
     median_idx = np.argmax(depths)
     if indices.size > 0:
         filtered_vectors = vectors[indices]
@@ -51,7 +54,7 @@ def calculate_spread_2D(vectors, depths, percentil):
         min_mag, max_mag = 0.0, 0.0
     return median_idx, min_mag, max_mag, min_angle, max_angle
 
-def calculate_spread_3D(vectors, depths, percentil):
+def calculate_spread_3D(vectors, depths, percentile):
     """
     Calculate the spread in 3D spherical coordinates.
 
@@ -61,15 +64,18 @@ def calculate_spread_3D(vectors, depths, percentil):
             Array of shape (n, 3) in spherical coordinates (magnitude, theta, phi)
         depths : numpy.ndarray
             Array of shape (n,) representing the depth of each vector
-        percentil : float
-            The percentile for depth filtering
+        percentile : float
+            The percentile for depth filtering (0-100)
 
     Returns:
     --------
         tuple
-            Indices of vectors with min/max magnitude, theta, phi among those with depth > 1.0-percentil
+            Indices of vectors with min/max magnitude, theta, phi among those with depth > 1.0-percentile/100
     """
-    indices = np.where(depths > 1.0-percentil)[0]
+    # Convert percentile from 0-100 to 0-1 range
+    percentile_norm = percentile / 100.0
+    
+    indices = np.where(depths > 1.0-percentile_norm)[0]
     median_idx = np.argmax(depths)
     if indices.size > 0:
         filtered_vectors = vectors[indices]
