@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def crossing_prob_squares_mc(F, isovalue, num_samples=200):
+def crossing_prob_squares_mc(ensemble_images, isovalue, num_samples=200):
     """
     Perform probabilistic marching squares on a 2D scalar field with uncertainty. This function calculates
     the probability of the isocontour passing through each cell in the grid based on an ensemble of scalar fields.
@@ -11,8 +11,8 @@ def crossing_prob_squares_mc(F, isovalue, num_samples=200):
 
     Parameters:
     -----------
-        F : np.ndarray
-            3D array of shape (n, m, n_ens) representing the scalar field with ensemble members.
+        ensemble_images : np.ndarray
+            3D array of shape [y, x, n_ens] representing the scalar field with ensemble members.
         isovalue : float
             The isovalue for which to compute the contour.
         num_samples : int, optional
@@ -21,15 +21,15 @@ def crossing_prob_squares_mc(F, isovalue, num_samples=200):
     Returns:
     --------
         prob_contour : np.ndarray
-            2D array of shape (n-1, m-1) with probabilities of contour presence in each cell.
+            2D array of shape (y-1, x-1) with probabilities of contour presence in each cell.
     """
     
-    n, m, n_ens = F.shape
+    n, m, n_ens = ensemble_images.shape
     prob_contour = np.zeros((n - 1, m - 1))
 
     for i in range(n - 1):
         for j in range(m - 1):
-            F_cell = F[i:i + 2, j:j + 2, :].reshape(-1, n_ens)  # Shape (4, n_ens)
+            F_cell = ensemble_images[i:i + 2, j:j + 2, :].reshape(-1, n_ens)  # Shape (4, n_ens)
             cov_mat = np.cov(F_cell)
             mean_vec = np.mean(F_cell, axis=1)
             samples = np.random.multivariate_normal(mean_vec, cov_mat, num_samples)  # Shape (num_samples, 4)

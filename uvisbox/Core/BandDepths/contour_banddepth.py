@@ -1,4 +1,5 @@
 import numpy as np
+from multiprocessing import get_context
 
 
 def choose2(x):
@@ -42,7 +43,7 @@ def get_combinations(n):
             idx += 1
     return combinations
 
-def _epsilon_subset(A, B, eps):
+def _epsilon_subset(A, B, eps, cardA=None):
     """ 
     determine if two sets are epsilon-close (Order matters!)
 
@@ -54,15 +55,28 @@ def _epsilon_subset(A, B, eps):
         binary array representing set B
     eps : float
         tolerance level
+    cardA : int, optional
+        Pre-computed cardinality of A (for optimization)
 
     Returns:
     -----------
     bool : True if A is an epsilon-subset of B, False otherwise
     """
-    cardA = np.sum(A)
-    return cardA == 0 or np.sum(np.bitwise_and(A, np.logical_not(B))) / cardA <= eps
+    if cardA is None:
+        cardA = np.count_nonzero(A)
+    
+    if cardA == 0:
+        return True
+    
+    # Fast path for eps=0 (exact subset check)
+    if eps == 0:
+        # A is subset of B if A & ~B is empty
+        return np.count_nonzero(A & ~B) == 0
+    
+    # General case
+    return np.count_nonzero(A & ~B) / cardA <= eps
 
-def _portion_subset(A, B):
+def _portion_subset(A, B, cardA=None):
     """
     determine if two sets are partial-overlapping (Order matters!)
 
@@ -72,17 +86,97 @@ def _portion_subset(A, B):
         binary array representing set A
     B : np.ndarray
         binary array representing set B
+    cardA : int, optional
+        Pre-computed cardinality of A (for optimization)
     
     Returns:
     -----------
     float : portion of A not in B
     """
-    cardA = np.sum(A)
+    if cardA is None:
+        cardA = np.count_nonzero(A)
+    
     if cardA == 0:
         return 0
-    return np.sum(np.bitwise_and(A,np.logical_not(B)))/ cardA
+    
+    return np.count_nonzero(A & ~B) / cardA
 
-def contour_banddepth(data, combination = None, allow_portion=False, eps = 0):
+def _compute_depth_for_image_optimized(args):
+    """
+    Helper function to compute depth for a single image (for multiprocessing).
+    Optimized to avoid passing large arrays - uses indices instead.
+    
+    Parameters:
+    -----------
+    args : tuple
+        (tdx, target, cardA_target, binary_data, combination, allow_portion, eps)
+    
+    Returns:
+    --------
+    tuple : (tdx, depth_value)
+    """
+    tdx, target, cardA_target, binary_data, combination, allow_portion, eps = args
+    depth = 0
+    
+    for xdx, ydx in combination:
+        intersection = binary_data[xdx] & binary_data[ydx]
+        union = binary_data[xdx] | binary_data[ydx]
+        
+        if allow_portion:
+            # Early termination: skip if intersection is empty
+            cardA_intersection = np.count_nonzero(intersection)
+            if cardA_intersection == 0:
+                depth += _portion_subset(target, union, cardA_target)
+            else:
+                depth += _portion_subset(intersection, target, cardA_intersection) + _portion_subset(target, union, cardA_target)
+        else:
+            # Early termination: skip if intersection is empty
+            if not np.any(intersection):
+                continue
+            
+            if _epsilon_subset(intersection, target, eps) and _epsilon_subset(target, union, eps, cardA_target):
+                depth += 1
+    
+    return (tdx, depth)
+
+def _compute_depth_for_image(args):
+    """
+    Helper function to compute depth for a single image (for multiprocessing).
+    
+    Parameters:
+    -----------
+    args : tuple
+        (tdx, target, cardA_target, intersections, unions, combination, allow_portion, eps)
+    
+    Returns:
+    --------
+    tuple : (tdx, depth_value)
+    """
+    tdx, target, cardA_target, intersections, unions, combination, allow_portion, eps = args
+    depth = 0
+    
+    for idx, (xdx, ydx) in enumerate(combination):
+        intersection = intersections[idx]
+        union = unions[idx]
+        
+        if allow_portion:
+            # Early termination: skip if intersection is empty
+            cardA_intersection = np.count_nonzero(intersection)
+            if cardA_intersection == 0:
+                depth += _portion_subset(target, union, cardA_target)
+            else:
+                depth += _portion_subset(intersection, target, cardA_intersection) + _portion_subset(target, union, cardA_target)
+        else:
+            # Early termination: skip if intersection is empty
+            if not np.any(intersection):
+                continue
+            
+            if _epsilon_subset(intersection, target, eps) and _epsilon_subset(target, union, eps, cardA_target):
+                depth += 1
+    
+    return (tdx, depth)
+
+def contour_banddepth(data, combination = None, allow_portion=False, eps = 0, workers=12):
     """
     Calculates the band depth of binary contour data using pairwise combinations. 
     R. T. Whitaker, M. Mirzargar and R. M. Kirby, "Contour Boxplots: A Method for 
@@ -99,6 +193,8 @@ def contour_banddepth(data, combination = None, allow_portion=False, eps = 0):
         If True, uses a portion-based subset calculation for depth; otherwise, uses epsilon-based subset.
     eps : float, default 0
         Epsilon tolerance for subset checks when `allow_portion` is False.
+    workers : int, default 12
+        Number of parallel workers for multiprocessing. Set to 1 to disable parallel processing.
 
     Returns:
     --------
@@ -115,6 +211,7 @@ def contour_banddepth(data, combination = None, allow_portion=False, eps = 0):
     - The function expects binary contour data, where each image is represented as a boolean array.
     - Depth is computed by evaluating how each image fits within the intersection and union of pairs of images.
     - Helper functions `_portion_subset` and `_epsilon_subset` are used for subset checks.
+    - Uses fork context for multiprocessing to ensure compatibility with macOS.
     """
    
     
@@ -134,15 +231,60 @@ def contour_banddepth(data, combination = None, allow_portion=False, eps = 0):
     if combination is None:
         combination = get_combinations(n_images)
     
+    # Pre-compute cardinalities for all target images (lightweight optimization)
+    cardinalities = np.array([np.count_nonzero(img) for img in binary_data])
+    
     depths = np.zeros([n_images])
-    for tdx in np.arange(n_images):
-        target = binary_data[tdx]
-        for xdx, ydx in combination:
-            intersection = np.bitwise_and(binary_data[xdx], binary_data[ydx])
-            union = np.bitwise_or(binary_data[xdx], binary_data[ydx])
-            if allow_portion:
-                depths[tdx] += _portion_subset(intersection, target) + _portion_subset(target, union)
-            else:
-                if _epsilon_subset(intersection, target, eps) and _epsilon_subset(target, union, eps):
-                    depths[tdx] += 1
+    
+    if workers == 1:
+        # Sequential processing with pre-computed intersections/unions
+        # Pre-compute all intersections and unions (major optimization)
+        n_combinations = len(combination)
+        intersections = np.empty((n_combinations,) + binary_data.shape[1:], dtype=np.bool_)
+        unions = np.empty((n_combinations,) + binary_data.shape[1:], dtype=np.bool_)
+        
+        for idx, (xdx, ydx) in enumerate(combination):
+            intersections[idx] = binary_data[xdx] & binary_data[ydx]
+            unions[idx] = binary_data[xdx] | binary_data[ydx]
+        
+        for tdx in range(n_images):
+            target = binary_data[tdx]
+            cardA_target = cardinalities[tdx]
+            
+            for idx in range(n_combinations):
+                intersection = intersections[idx]
+                union = unions[idx]
+                
+                if allow_portion:
+                    # Early termination: skip if intersection is empty
+                    cardA_intersection = np.count_nonzero(intersection)
+                    if cardA_intersection == 0:
+                        depths[tdx] += _portion_subset(target, union, cardA_target)
+                    else:
+                        depths[tdx] += _portion_subset(intersection, target, cardA_intersection) + _portion_subset(target, union, cardA_target)
+                else:
+                    # Early termination: skip if intersection is empty
+                    if not np.any(intersection):
+                        continue
+                    
+                    if _epsilon_subset(intersection, target, eps) and _epsilon_subset(target, union, eps, cardA_target):
+                        depths[tdx] += 1
+    else:
+        # Parallel processing - compute intersections on-the-fly in each worker to avoid memory overhead
+        # This trades some redundant computation for better parallelization
+        ctx = get_context('fork')
+        with ctx.Pool(processes=workers) as pool:
+            # Prepare arguments for each image
+            args_list = [
+                (tdx, binary_data[tdx], cardinalities[tdx], binary_data, combination, allow_portion, eps)
+                for tdx in range(n_images)
+            ]
+            # Compute depths in parallel
+            results = pool.map(_compute_depth_for_image_optimized, args_list)
+            # Collect results
+            for tdx, depth in results:
+                depths[tdx] = depth
+    
     return depths
+
+__all__ = ["contour_banddepth", "choose2", "get_combinations"]

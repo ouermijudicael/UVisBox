@@ -10,7 +10,6 @@ import necessary libraries
     import numpy as np
     import matplotlib.pyplot as plt
     from uvisbox.Modules.ContourBoxplot import contour_boxplot
-    from PIL import Image
 
 .. code-block:: python
 
@@ -47,26 +46,35 @@ Generate a synthetic ensemble of scalar fields and visualize using spaghetti
 
     # Generate synthetic ensemble of scalar fields
     ensemble = create_ensemble_scalarfield(image_res=128, n_ensembles=100, sigma_min=20, sigma_max=100) 
-    # extract contours at isovalue = 0.7
-    binary_images = (ensemble < 0.7).astype(np.bool_)    
 
     # Visualize the ensemble contours using spaghetti 
-    fig, ax = plt.subplots(1,2, figsize=(8, 4),sharex=True,sharey=True)
-    for i in range(binary_images.shape[0]):
-        # contour at the middle of 0 and 1
-        ax[0].contour(binary_images[i], levels=[0.5], colors='black', linewidths=1, alpha=0.3) 
-    ax[0].set_title("Ensemble Contours")
+    fig, ax = plt.subplots(1, 2, figsize=(10, 4), sharex=True, sharey=True)
+    
+    # Spaghetti plot - show contours at isovalue = 0.7
+    for i in range(ensemble.shape[0]):
+        ax[0].contour(ensemble[i], levels=[0.7], colors='black', linewidths=1, alpha=0.3) 
+    ax[0].set_title("Ensemble Contours (Spaghetti Plot)")
+    ax[0].set_aspect('equal', adjustable='box')
 
 
 Calculate and plot the contour boxplot
 
 .. code-block:: python
 
-    # contour_boxplot(binary_images, ax=ax[1], show_median=True, show_iqr=True, 
-    #                 show_non_outliers=True, show_outliers=True, show_firstquartile=True, outlier_percentile=95)
-    ax[1] = contour_boxplot(binary_images, percentil=95, ax=ax[1], show_median=True, show_outliers=True)
+    # Contour boxplot using the new interface
+    ax[1] = contour_boxplot(
+        ensemble, 
+        isovalue=0.7,
+        percentiles=[25, 50, 75, 95],
+        colormap='hot',
+        show_median=True, 
+        show_outliers=True,
+        ax=ax[1],
+        workers=6
+    )
     ax[1].set_title("Contour Boxplot")
-    ax[0].set_aspect('equal', adjustable='box')
+    ax[1].set_aspect('equal', adjustable='box')
+    plt.tight_layout()
     plt.show()
 
 
@@ -77,10 +85,10 @@ Calculate and plot the contour boxplot
 """
 
 # import necessary libraries
+from flask.config import T
 import numpy as np
 import matplotlib.pyplot as plt
 from uvisbox.Modules.ContourBoxplot import contour_boxplot
-from PIL import Image
 
 def create_ensemble_scalarfield(image_res=256, n_ensembles=30, sigma_min=5, sigma_max=50):
     """
@@ -114,24 +122,31 @@ def create_ensemble_scalarfield(image_res=256, n_ensembles=30, sigma_min=5, sigm
 # Generate a synthetic ensemble of scalar fields and visualize using spaghetti 
 
 # Generate synthetic ensemble of scalar fields
-ensemble = create_ensemble_scalarfield(image_res=128, n_ensembles=100, sigma_min=20, sigma_max=100) 
-# extract contours at isovalue = 0.7
-binary_images = (ensemble < 0.7).astype(np.bool_)    
+ensemble = create_ensemble_scalarfield(image_res=256, n_ensembles=100, sigma_min=20, sigma_max=100) 
 
 # Visualize the ensemble contours using spaghetti 
-fig, ax = plt.subplots(1,2, figsize=(8, 4),sharex=True,sharey=True)
-for i in range(binary_images.shape[0]):
-    # contour at the middle of 0 and 1
-    ax[0].contour(binary_images[i], levels=[0.5], colors='black', linewidths=1, alpha=0.3) 
-ax[0].set_title("Ensemble Contours")
+fig, ax = plt.subplots(1, 2, figsize=(10, 4), sharex=True, sharey=True)
 
-
-# Calculate and plot the contour boxplot
-
-# contour_boxplot(binary_images, ax=ax[1], show_median=True, show_iqr=True, 
-#                 show_non_outliers=True, show_outliers=True, show_firstquartile=True, outlier_percentile=95)
-ax[1] = contour_boxplot(binary_images, percentil=95, ax=ax[1], show_median=True, show_outliers=True)
-ax[1].set_title("Contour Boxplot")
+# Spaghetti plot - show contours at isovalue = 0.7
+for i in range(ensemble.shape[0]):
+    ax[0].contour(ensemble[i], levels=[0.7], colors='black', linewidths=1, alpha=0.3) 
+ax[0].set_title("Ensemble Contours (Spaghetti Plot)")
 ax[0].set_aspect('equal', adjustable='box')
+
+# Calculate and plot the contour boxplot using the new interface
+ax[1] = contour_boxplot(
+    ensemble, 
+    isovalue=0.7,
+    percentiles=[25, 50, 75, 95],
+    colormap='hot',
+    show_median=True, 
+    show_outliers=True,
+    ax=ax[1],
+    workers=6
+)
+ax[1].set_title("Contour Boxplot")
+ax[1].set_aspect('equal', adjustable='box')
+
+plt.tight_layout()
 # plt.savefig("contour_boxplot_example.png", dpi=300)
 plt.show()
