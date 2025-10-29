@@ -71,7 +71,7 @@ multiple percentile bands and the median curve.
     colors = ['#e0e0e0', '#a0c4e8', '#5a8dc4', '#2e5f8a']
     
     curve_boxplot(curves, percentiles=percentiles, colors=colors, 
-                 ax=ax2, median_color='red', alpha=0.7)
+                 ax=ax2, median_color='red')
     
     ax2.set_title('Curve Band Depth Plot with Percentile Bands')
     ax2.set_xlabel('X')
@@ -89,7 +89,9 @@ multiple percentile bands and the median curve.
 """
 
 # Import necessary libraries
+from scipy.__config__ import show
 from uvisbox.Modules.CurveBoxplot import curve_boxplot
+from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -156,12 +158,18 @@ ax1.grid(True, alpha=0.3)
 
 # Right subplot: Use curve_boxplot to plot multiple percentile bands
 print("\nCreating curve boxplot with multiple percentile bands...")
-percentiles = [100, 90, 50, 25]
-colors = ['#e0e0e0', '#a0c4e8', '#5a8dc4', '#2e5f8a']  # Light to dark blue
 
-# Call the curve_boxplot function - it handles everything!
-curve_boxplot(curves, percentiles=percentiles, colors=colors, 
-             ax=ax2, median_color='red', alpha=0.7)
+# Create custom styling configuration
+style = BoxplotStyleConfig(
+    percentiles=[90, 50, 25],
+    percentile_colormap='viridis',  # Use viridis colormap for bands
+    show_median=True,
+    median_color='red',
+    show_outliers=True
+)
+
+# Call the curve_boxplot function with the style configuration
+curve_boxplot(curves, boxplot_style=style, ax=ax2)
 
 ax2.set_title('Curve Band Depth Plot with Percentile Bands')
 ax2.set_xlabel('X')

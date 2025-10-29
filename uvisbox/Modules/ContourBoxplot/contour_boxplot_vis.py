@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from .contour_boxplot_mesh import get_band
+from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 
-def matplotlib_contour_boxplot(ordered_binary_images, percentiles=[25,50,75,90], colormap='viridis', show_median=True, show_outliers=False, ax=None):
+def matplotlib_contour_boxplot(ordered_binary_images, boxplot_style=None, ax=None):
     """
     Plot the contour boxplot bands by summing band envelopes for given percentiles.
     
@@ -11,13 +12,10 @@ def matplotlib_contour_boxplot(ordered_binary_images, percentiles=[25,50,75,90],
     ordered_binary_images : np.ndarray
         3D array of shape (N, H, W) where N is the number of binary images and H, W are the height and width of each image.
         The images should be ordered by their contour band depths in descending order (highest depth first).
-    percentiles : list of float, optional
-        List of percentile values (0-100) for the band envelopes. Default is [25, 50, 75, 90].
-        Percentiles do not need to be sorted.
-    colormap : str, optional
-        Matplotlib colormap name. Default is 'viridis'.
-    outliers : bool, optional
-        Whether to display outlier contours. Default is False.
+    boxplot_style : BoxplotStyleConfig, optional
+        Configuration for the boxplot visualization including percentiles,
+        and median/outlier styling. If None, uses default configuration.
+        The percentile_colormap is used for the band sum visualization.
     ax : matplotlib.axes.Axes, optional
         Matplotlib Axes object to plot on. If None, a new figure and axes will be created.
     
@@ -27,11 +25,15 @@ def matplotlib_contour_boxplot(ordered_binary_images, percentiles=[25,50,75,90],
         Matplotlib Axes object with the plotted contour boxplot.
     """
 
+    # Use default config if none provided
+    if boxplot_style is None:
+        boxplot_style = BoxplotStyleConfig()
+
     if ax is None:
         fig, ax = plt.subplots()
 
     # Sort percentiles in decreasing order
-    sorted_percentiles = sorted(percentiles, reverse=True)
+    sorted_percentiles = sorted(boxplot_style.percentiles, reverse=True)
     
     # Initialize sum image
     h, w = ordered_binary_images.shape[1], ordered_binary_images.shape[2]
@@ -43,26 +45,32 @@ def matplotlib_contour_boxplot(ordered_binary_images, percentiles=[25,50,75,90],
         band_sum += band.astype(np.int32)
     
     # Display with origin='lower'
-    im = ax.imshow(band_sum, cmap=colormap, origin='lower', interpolation='nearest')
+    im = ax.imshow(band_sum, cmap=boxplot_style.percentile_colormap, origin='lower', interpolation='nearest')
     plt.colorbar(im, ax=ax, label='Band sum')
 
     # Track handles and labels for legend
     legend_handles = []
     legend_labels = []
 
-    if show_outliers:
+    if boxplot_style.show_outliers:
         start_idx = np.ceil(sorted_percentiles[0] / 100 * ordered_binary_images.shape[0]).astype(int)
         for i, idx in enumerate(range(start_idx, ordered_binary_images.shape[0])):
-            contour_set = ax.contour(ordered_binary_images[idx], levels=[0.5], colors='gray', linewidths=1, alpha=0.5)
+            contour_set = ax.contour(ordered_binary_images[idx], levels=[0.5], 
+                                   colors=boxplot_style.outliers_color, 
+                                   linewidths=boxplot_style.outliers_width, 
+                                   alpha=boxplot_style.outliers_alpha)
             # Only add to legend once (first outlier)
             if i == 0:
                 handles, _ = contour_set.legend_elements()
                 legend_handles.append(handles[0])
                 legend_labels.append('Outliers')
     
-    if show_median:
+    if boxplot_style.show_median:
         median_idx = 0
-        contour_set = ax.contour(ordered_binary_images[median_idx], levels=[0.5], colors='red', linewidths=3)
+        contour_set = ax.contour(ordered_binary_images[median_idx], levels=[0.5], 
+                               colors=boxplot_style.median_color, 
+                               linewidths=boxplot_style.median_width,
+                               alpha=boxplot_style.median_alpha)
         handles, _ = contour_set.legend_elements()
         legend_handles.append(handles[0])
         legend_labels.append('Median')

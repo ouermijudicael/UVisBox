@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 from .functional_boxplot_stats import band_depths
 from .functional_boxplot_mesh import get_band
 from .functional_boxplot_vis import plot_band
+from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 
 
-def functional_boxplot(data, method='fdb', percentiles=[25, 50, 90, 100], ax=None, 
-                      colors=None, median_color='red', alpha=1, plot_all_curves=False):
+def functional_boxplot(data, method='fdb', boxplot_style=None, ax=None):
     """
     Create a functional band depth boxplot with multiple percentile bands.
     
@@ -22,19 +22,11 @@ def functional_boxplot(data, method='fdb', percentiles=[25, 50, 90, 100], ax=Non
         Method for computing band depth. Options are:
         - 'fdb': functional band depth (default)
         - 'mfdb': modified functional band depth
-    percentiles : list of float, optional
-        List of percentiles for the bands to be plotted (default is [25, 50, 90, 100]).
-        Bands are plotted in descending order so smaller bands appear on top.
-        Values should be between 0 and 100.
+    boxplot_style : BoxplotStyleConfig, optional
+        Configuration for the boxplot visualization including percentiles, colormap,
+        and median/outlier styling. If None, uses default configuration.
     ax : matplotlib.axes.Axes, optional
         Matplotlib axes to plot on. If None, creates a new figure.
-    colors : list of str or tuples, optional
-        List of colors for each percentile band. If None, uses a default color scheme.
-        Must have the same length as percentiles if provided.
-    median_color : str or tuple, optional
-        Color for the median curve (default is 'red').
-    alpha : float, optional
-        Transparency level for the bands (0=transparent, 1=opaque). Default is 0.7.
     
     Returns:
     --------
@@ -44,19 +36,21 @@ def functional_boxplot(data, method='fdb', percentiles=[25, 50, 90, 100], ax=Non
     Raises:
     -------
     ValueError
-        If data is not 2D, if method is invalid, or if colors length doesn't match percentiles.
+        If data is not 2D or if method is invalid.
     
     Notes:
     ------
     - Input data is not modified (computation happens on a copy)
     - Bands are plotted from largest to smallest percentile for proper visual layering
     - The median curve is the curve with the highest band depth value
-    - All curves are plotted with light gray transparency for context
+    - Outliers are curves beyond the largest percentile
+    - Curve depths are always computed internally
     
     Examples:
     ---------
     >>> import numpy as np
     >>> from uvisbox.Modules.FunctionalBoxplot import functional_boxplot
+    >>> from uvisbox.Core.CommonInterface import BoxplotStyleConfig
     >>> 
     >>> # Generate synthetic functional data
     >>> t = np.linspace(0, 1, 100)
@@ -65,17 +59,25 @@ def functional_boxplot(data, method='fdb', percentiles=[25, 50, 90, 100], ax=Non
     >>> # Basic usage with default settings
     >>> ax = functional_boxplot(data)
     >>> 
-    >>> # Custom percentiles and colors
-    >>> ax = functional_boxplot(data, percentiles=[10, 50, 90], 
-    ...                         colors=['lightblue', 'blue', 'darkblue'],
-    ...                         method='fdb')
+    >>> # Custom styling
+    >>> style = BoxplotStyleConfig(
+    ...     percentiles=[10, 50, 90],
+    ...     percentile_colormap='plasma',
+    ...     show_median=True,
+    ...     show_outliers=True
+    ... )
+    >>> ax = functional_boxplot(data, boxplot_style=style)
     >>> 
     >>> # Plot on existing axes
     >>> import matplotlib.pyplot as plt
     >>> fig, ax = plt.subplots(figsize=(12, 6))
-    >>> functional_boxplot(data, ax=ax, median_color='black', alpha=0.5)
+    >>> functional_boxplot(data, ax=ax)
     >>> plt.show()
     """
+    # Use default config if none provided
+    if boxplot_style is None:
+        boxplot_style = BoxplotStyleConfig()
+    
     # Validate and copy input data
     if not isinstance(data, np.ndarray):
         data = np.array(data)
@@ -99,16 +101,9 @@ def functional_boxplot(data, method='fdb', percentiles=[25, 50, 90, 100], ax=Non
     if ax is None:
         fig, ax = plt.subplots(figsize=(10, 6))
     
-    # Set default colors if not provided
-    if colors is None:
-        # Default color scheme: light to dark blue
-        colors = ['#e0e0e0', '#a0c4e8', '#5a8dc4', '#2e5f8a']
-        # Extend or truncate to match number of percentiles
-        while len(colors) < len(percentiles):
-            colors.append('#1a3a52')  # Add darker blue if needed
-        colors = colors[:len(percentiles)]
-    elif len(colors) != len(percentiles):
-        raise ValueError(f"Length of colors ({len(colors)}) must match length of percentiles ({len(percentiles)})")
+    # Get colors from colormap
+    colors = boxplot_style.get_percentile_colors()
+    percentiles = boxplot_style.percentiles
     
     # Sort percentiles in descending order for proper plotting (largest first)
     sorted_percentile_indices = np.argsort(percentiles)[::-1]
@@ -118,20 +113,36 @@ def functional_boxplot(data, method='fdb', percentiles=[25, 50, 90, 100], ax=Non
     # Plot each percentile band from largest to smallest
     for percentile, color in zip(sorted_percentiles, sorted_colors):
         bottom, top = get_band(data_copy, percentile, method=method)
-        plot_band(bottom, top, ax=ax, color=color, alpha=alpha)
+        plot_band(bottom, top, ax=ax, color=color, alpha=1.0)
     
-    # Plot all curves in light gray for context
+    # Setup x-axis for curve plotting
     n_points = data_copy.shape[1]
     x = np.linspace(0, 1, n_points)
     
-    if plot_all_curves:
-        for curve in data_copy:
-            ax.plot(x, curve, color='gray', alpha=0.1, linewidth=0.5, zorder=1)
+    # Plot outliers (curves beyond the largest percentile)
+    if boxplot_style.show_outliers:
+        largest_percentile = max(percentiles)
+        outlier_start_idx = int(np.ceil(len(sorted_data) * largest_percentile / 100))
+        
+        for idx in range(outlier_start_idx, len(sorted_data)):
+            outlier_curve = sorted_data[idx]
+            # Add label only for the first outlier to avoid duplicate legend entries
+            label = 'Outliers' if idx == outlier_start_idx else None
+            ax.plot(x, outlier_curve, 
+                   color=boxplot_style.outliers_color, 
+                   linewidth=boxplot_style.outliers_width, 
+                   alpha=boxplot_style.outliers_alpha,
+                   label=label,
+                   zorder=5)
     
-    # Plot the median curve (curve with maximum depth)
-    median_curve = sorted_data[0]
-    ax.plot(x, median_curve, color=median_color, linewidth=2.5, 
-           label='Median Curve', zorder=10)
+    # Plot the median curve (curve with maximum depth) if requested
+    if boxplot_style.show_median:
+        median_curve = sorted_data[0]
+        ax.plot(x, median_curve, 
+               color=boxplot_style.median_color, 
+               linewidth=boxplot_style.median_width,
+               alpha=boxplot_style.median_alpha, 
+               label='Median Curve', zorder=10)
     
     # Add labels and legend
     ax.set_xlabel('Time')

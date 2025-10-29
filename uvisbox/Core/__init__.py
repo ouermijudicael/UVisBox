@@ -9,6 +9,7 @@ The Core module is organized into the following submodules:
 - BandDepths: Core statistical methods for band depth calculations
 - CellCrossingProb: Cell crossing probability algorithms  
 - Colors: Core color interpolation and tree data structures
+- CommonInterface: Shared interfaces and configurations across modules
 - Interpolations: Core interpolation algorithms
 """
 
@@ -16,4 +17,5 @@ The Core module is organized into the following submodules:
 from .BandDepths import *
 from .CellsCrossingProb import *
 from .Colors import *
+from .CommonInterface import *
 from .Interpolations import *

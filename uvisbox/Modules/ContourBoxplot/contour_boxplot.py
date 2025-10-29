@@ -2,9 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from .contour_boxplot_stats import contour_banddepth
 from .contour_boxplot_vis import matplotlib_contour_boxplot
+from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 
-def contour_boxplot(ensemble_images, isovalue, percentiles=[25, 50, 75, 90], ax=None, colormap='viridis',
-            show_median=True, show_outliers=True, workers=12):
+def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, workers=12):
         """
         Create a contour boxplot visualization from an ensemble of scalar fields.
         
@@ -18,17 +18,12 @@ def contour_boxplot(ensemble_images, isovalue, percentiles=[25, 50, 75, 90], ax=
             Can be shape (n_ensemble, y_dim, x_dim) or will be rearranged to this format.
         isovalue : float
             Threshold value for creating binary images. Pixels with values < isovalue are set to 1.
-        percentiles : list of float, optional
-            List of percentile values (0-100) for band envelope visualization. Default is [25, 50, 75, 90].
-            Percentiles do not need to be sorted.
+        boxplot_style : BoxplotStyleConfig, optional
+            Configuration for the boxplot visualization including percentiles,
+            and median/outlier styling. If None, uses default configuration.
+            The percentile_colormap is used for the band sum visualization.
         ax : matplotlib.axes.Axes, optional
             Matplotlib Axes object to plot on. If None, a new figure and axes will be created.
-        colormap : str, optional
-            Matplotlib colormap name for the band visualization. Default is 'viridis'.
-        show_median : bool, optional
-            Whether to overlay the median contour in red. Default is True.
-        show_outliers : bool, optional
-            Whether to overlay outlier contours in gray. Default is True.
         workers : int, optional
             Number of parallel workers for band depth computation. Default is 12.
         
@@ -39,8 +34,19 @@ def contour_boxplot(ensemble_images, isovalue, percentiles=[25, 50, 75, 90], ax=
         
         Examples:
         ---------
+        >>> # Basic usage with defaults
         >>> ensemble = np.random.randn(50, 100, 100)  # 50 ensemble members
-        >>> ax = contour_boxplot(ensemble, isovalue=0.5, percentiles=[25, 50, 75])
+        >>> ax = contour_boxplot(ensemble, isovalue=0.5)
+        
+        >>> # Custom styling
+        >>> from uvisbox.Core.CommonInterface import BoxplotStyleConfig
+        >>> style = BoxplotStyleConfig(
+        ...     percentiles=[25, 50, 75],
+        ...     percentile_colormap='hot',
+        ...     show_median=True,
+        ...     show_outliers=True
+        ... )
+        >>> ax = contour_boxplot(ensemble, isovalue=0.5, boxplot_style=style)
         """
         
         # Make a copy and ensure correct shape (n_ensemble, y_dim, x_dim)
@@ -70,10 +76,7 @@ def contour_boxplot(ensemble_images, isovalue, percentiles=[25, 50, 75, 90], ax=
         # Call matplotlib_contour_boxplot for visualization
         ax = matplotlib_contour_boxplot(
             ordered_binary_images, 
-            percentiles=percentiles,
-            colormap=colormap,
-            show_median=show_median,
-            show_outliers=show_outliers,
+            boxplot_style=boxplot_style,
             ax=ax
         )
         

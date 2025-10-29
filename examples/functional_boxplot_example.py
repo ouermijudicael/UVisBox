@@ -47,6 +47,7 @@ plot the functional boxplot for the time series data with different methods at [
 # import necessary libraries and load dataset
 
 from uvisbox.Datasets import sea_surface_temp_data
+from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 import matplotlib.pyplot as plt
 from uvisbox.Modules.FunctionalBoxplot import functional_boxplot
 
@@ -66,8 +67,22 @@ ax1.set_ylabel("Temperature")
 
 # plot the functional boxplot for the time series data with different methods at [25,50,90,100] percentiles (default)
 
-ax2 = functional_boxplot(X, ax=ax2)
-ax3 = functional_boxplot(X, method='mfbd', ax=ax3)
+# Create style configuration to show outliers
+style = BoxplotStyleConfig(
+    percentiles=[25, 50, 75, 90],
+    percentile_colormap='viridis',
+    show_median=True,
+    median_color='red',
+    show_outliers=True,  # Show outliers beyond the largest percentile
+    outliers_color='gray',
+    outliers_alpha=0.5
+)
+
+ax2 = functional_boxplot(X, boxplot_style=style, ax=ax2)
+ax2.set_title("Functional Boxplot (FDB) with Outliers")
+
+ax3 = functional_boxplot(X, boxplot_style=style, method='mfbd', ax=ax3)
+ax3.set_title("Functional Boxplot (MFBD) with Outliers")
 
 # plt.savefig("sea_surface_temp_functional_banddepth_example.png")
 plt.show()

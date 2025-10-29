@@ -89,6 +89,7 @@ from flask.config import T
 import numpy as np
 import matplotlib.pyplot as plt
 from uvisbox.Modules.ContourBoxplot import contour_boxplot
+from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 
 def create_ensemble_scalarfield(image_res=256, n_ensembles=30, sigma_min=5, sigma_max=50):
     """
@@ -134,13 +135,16 @@ ax[0].set_title("Ensemble Contours (Spaghetti Plot)")
 ax[0].set_aspect('equal', adjustable='box')
 
 # Calculate and plot the contour boxplot using the new interface
+style = BoxplotStyleConfig(
+    percentiles=[25, 50, 75, 95],
+    percentile_colormap='jet',  # Use jet colormap for visualization
+    show_median=True,
+    show_outliers=True
+)
 ax[1] = contour_boxplot(
     ensemble, 
     isovalue=0.7,
-    percentiles=[25, 50, 75, 95],
-    colormap='hot',
-    show_median=True, 
-    show_outliers=True,
+    boxplot_style=style,
     ax=ax[1],
     workers=6
 )
