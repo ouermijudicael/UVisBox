@@ -1,7 +1,7 @@
 
 
 """
-This example demonstrates how to visualize uncertainty tubes in 3D using the ``uvisbox`` library.
+This example demonstrates how to visualize uncertainty tubes in 3D using the ``uvisbox`` library with PyVista.
 It generates random seed points, computes their trajectories in a 3D flow field, and visualizes the uncertainty tubes along these trajectories.
 
 Import necessary libraries
@@ -9,13 +9,12 @@ Import necessary libraries
 .. code-block:: python
 
     import numpy as np
-    import matplotlib.pyplot as plt
+    import pyvista as pv
 
     from uvisbox.Datasets import flowmap_3d
     from uvisbox.Core.Interpolations import linear_interpolate
     from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_stats import generate_cross_sections
     from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_mesh import generate_tube_mesh
-    from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_vis import matplotlib_uncertainty_tube_vis
     from uvisbox.Core.Colors.colortree import ColorTree
 
 Generate random seed points and compute their trajectories in a 3D flow field
@@ -56,26 +55,29 @@ use eigen values to create texture coordinates
 
     uv_coords = np.stack([rescaled_max_eigen_values, eigen_values_ratio], axis=1)
 
-    #  create figure and axis with two subplots
-    fig , (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 7), subplot_kw={'projection': '3d'})
+    # Create PyVista plotter with two subplots
+    plotter = pv.Plotter(shape=(1, 2))
 
-    # spaghetti plot of all trajectories
+    # Subplot 0: Spaghetti plot of all trajectories
+    plotter.subplot(0, 0)
     for i in range(trajectories.shape[1]):
         for i_sample in range(trajectories.shape[2]):
-            ax1.plot(trajectories[:, i, i_sample, 0], trajectories[:, i, i_sample, 1], 
-                    trajectories[:, i, i_sample, 2], color='black', alpha=0.50)
-    ax1.set_title("Spaghetti Plot of Trajectories")
-    ax1.set_xlabel("X")
-    ax1.set_ylabel("Y")
-    ax1.set_zlabel("Z")
+            points = trajectories[:, i, i_sample, :]
+            line = pv.PolyData(points)
+            line.lines = np.hstack([[2] + [j, j+1] for j in range(len(points)-1)])
+            plotter.add_mesh(line, color='black', opacity=0.5, line_width=2)
+    plotter.add_text("Spaghetti Plot of Trajectories", font_size=12)
 
-    # for the colormap, rescaled_max_eigen_values are used for level of uncertainty, 
-    # vivid color highlights high uncertainty (larger size),
-    # gray color represents low uncertainty (smaller size).
-    # eigen_values are used for the interpolating the colormap ('viridis'), 
-    # blue means high asymmetry, yellow means symmetry.
-    ax2 = matplotlib_uncertainty_tube_vis(vertices, faces, mean_trajectories, uv_coords, axis=ax2)
-    plt.show()
+    # Subplot 1: Uncertainty tubes with eigen value-based coloring
+    # Blue = high asymmetry, Yellow = symmetry (viridis colormap)
+    plotter.subplot(0, 1)
+    tube_mesh = pv.PolyData(vertices, faces)
+    tube_mesh['asymmetry'] = eigen_values_ratio
+    plotter.add_mesh(tube_mesh, scalars='asymmetry', cmap='viridis', opacity=0.8)
+    plotter.add_text("Uncertainty Tubes", font_size=12)
+    
+    plotter.link_views()
+    plotter.show()
     
 .. image:: _static/uncertainty_tube.png
     :alt: Uncertainty Tube Example
@@ -85,13 +87,12 @@ use eigen values to create texture coordinates
 
 # Import necessary libraries
 import numpy as np
-import matplotlib.pyplot as plt
+import pyvista as pv
 
 from uvisbox.Datasets import flowmap_3d
 from uvisbox.Core.Interpolations import linear_interpolate
 from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_stats import generate_cross_sections
 from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_mesh import generate_tube_mesh
-from uvisbox.Modules.UncertaintyTube.uncertainty_tubes_vis import matplotlib_uncertainty_tube_vis
 from uvisbox.Core.Colors.colortree import ColorTree
 
 # Generate random seed points and compute their trajectories in a 3D flow field
@@ -128,24 +129,72 @@ eigen_values_ratio = np.nan_to_num(eigen_values[:,1] / eigen_values[:,0] , nan=0
 
 uv_coords = np.stack([rescaled_max_eigen_values, eigen_values_ratio], axis=1)
 
-#  create figure and axis with two subplots
-fig , (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 7), subplot_kw={'projection': '3d'})
+# Create PyVista plotter with two subplots
+plotter = pv.Plotter(shape=(1, 2))
 
-# spaghetti plot of all trajectories
+# Subplot 0: Spaghetti plot of all trajectories
+plotter.subplot(0, 0)
 for i in range(trajectories.shape[1]):
     for i_sample in range(trajectories.shape[2]):
-        ax1.plot(trajectories[:, i, i_sample, 0], trajectories[:, i, i_sample, 1], 
-                 trajectories[:, i, i_sample, 2], color='black', alpha=0.50)
-ax1.set_title("Spaghetti Plot of Trajectories")
-ax1.set_xlabel("X")
-ax1.set_ylabel("Y")
-ax1.set_zlabel("Z")
+        points = trajectories[:, i, i_sample, :]
+        # Create line connectivity: [n_points, point_0, point_1, n_points, point_1, point_2, ...]
+        n_points = len(points)
+        lines = np.full((n_points - 1, 3), 2, dtype=np.int_)
+        lines[:, 1] = np.arange(n_points - 1)
+        lines[:, 2] = np.arange(1, n_points)
+        line = pv.PolyData(points, lines=lines.ravel())
+        plotter.add_mesh(line, color='black', opacity=0.5, line_width=2)
+plotter.add_axes()
+plotter.add_text("Spaghetti Plot of Trajectories", font_size=12)
 
-# for the colormap, rescaled_max_eigen_values are used for level of uncertainty, 
-# vivid color highlights high uncertainty (larger size),
-# gray color represents low uncertainty (smaller size).
-# eigen_values are used for the interpolating the colormap ('viridis'), 
-# blue means high asymmetry, yellow means symmetry.
-ax2 = matplotlib_uncertainty_tube_vis(vertices, faces, mean_trajectories, uv_coords, axis=ax2)
-# plt.savefig("uncertainty_tube.png")
-plt.show()
+# Subplot 1: Uncertainty tubes
+plotter.subplot(0, 1)
+
+# Create separate mesh for each tube to avoid connecting different tubes
+n_trajectories = faces.shape[0]
+vertices_per_trajectory = vertices.shape[0] // n_trajectories
+
+for i_traj in range(n_trajectories):
+    # Extract vertices and faces for this trajectory
+    vertex_start = i_traj * vertices_per_trajectory
+    vertex_end = (i_traj + 1) * vertices_per_trajectory
+    traj_vertices = vertices[vertex_start:vertex_end]
+    
+    # Get faces for this trajectory and adjust indices to local vertex indices
+    traj_faces = faces[i_traj]
+    traj_faces_local = traj_faces - vertex_start
+    
+    # Create mesh for this tube
+    n_verts_per_face = 3  # triangles
+    faces_with_count = np.column_stack([np.full(len(traj_faces_local), n_verts_per_face), traj_faces_local])
+    tube_mesh = pv.PolyData(traj_vertices, faces_with_count.ravel())
+    
+    # Add scalars for coloring based on eigen values for this trajectory
+    eigen_start = i_traj * (len(eigen_values_ratio) // n_trajectories)
+    eigen_end = (i_traj + 1) * (len(eigen_values_ratio) // n_trajectories)
+    tube_mesh['asymmetry'] = eigen_values_ratio[eigen_start:eigen_end]
+    
+    # Plot with colormap (Blue = high asymmetry, Yellow = symmetry)
+    plotter.add_mesh(tube_mesh, scalars='asymmetry', cmap='viridis', 
+                     opacity=0.8, show_edges=False, smooth_shading=True)
+
+# Add mean trajectories as reference lines
+# mean_trajectories shape is (n_steps, n_trajectories, 3), need to transpose
+mean_trajectories_transposed = np.transpose(mean_trajectories, (1, 0, 2))  # -> (n_trajectories, n_steps, 3)
+for i in range(mean_trajectories_transposed.shape[0]):
+    points = mean_trajectories_transposed[i]
+    n_points = len(points)
+    lines = np.full((n_points - 1, 3), 2, dtype=np.int_)
+    lines[:, 1] = np.arange(n_points - 1)
+    lines[:, 2] = np.arange(1, n_points)
+    mean_line = pv.PolyData(points, lines=lines.ravel())
+    plotter.add_mesh(mean_line, color='red', line_width=3, opacity=0.7)
+
+plotter.add_axes()
+plotter.add_text("Uncertainty Tubes", font_size=12)
+
+# Link camera views
+plotter.link_views()
+
+plotter.show()
+# plotter.screenshot("uncertainty_tube.png")

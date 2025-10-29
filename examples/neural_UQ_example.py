@@ -1,8 +1,8 @@
-from uvisbox.Colors import ColorTree
+from uvisbox.Core.Colors import ColorTree
 import numpy as np
 import matplotlib.pyplot as plt
 from uvisbox.Datasets import darcy_flow_NN
-from uvisbox.Colors import ColorTree
+from uvisbox.Core.Colors import ColorTree
 
 data = darcy_flow_NN.load_data()
 print(f"data keys: {data.keys()}")

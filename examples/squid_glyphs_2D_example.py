@@ -172,16 +172,16 @@ ylim = (-0.25, 1.25)
 # Plot original vector field with arrows
 for i in range(n_points):
     for j in range(n_ensemble):
-        u, v = ensemble_vectors[i, j]
+        u, v = ensemble_vectors[i, j] * 0.5
         x, y = positions[i]
-        ax1.arrow(x, y, u, v, head_width=0.03, head_length=0.06, fc='blue', ec='blue', alpha=0.1, length_includes_head=True)
+        ax1.arrow(x, y, u, v, head_width=0.03, head_length=0.03, fc='blue', ec='blue', alpha=0.1, length_includes_head=True)
 
 ax1.set_title("Original Vector Field with Ensemble Members")
 ax1.set_xlim(xlim)
 ax1.set_ylim(ylim)
 ax1.set_xlabel("X")
 ax1.set_ylabel("Y")
-ax1.grid()
+ax1.grid(zorder=0)
 ax1.set_aspect('equal', adjustable='box')
 
 # Plot uncertainty squid glyphs
@@ -191,7 +191,7 @@ ax2.set_xlim(xlim)
 ax2.set_ylim(ylim)
 ax2.set_xlabel("X")
 ax2.set_ylabel("Y")
-ax2.grid()
+ax2.grid(zorder=0)
 ax2.set_aspect('equal', adjustable='box')
 
 plt.tight_layout()

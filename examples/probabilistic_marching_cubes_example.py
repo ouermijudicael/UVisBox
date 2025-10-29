@@ -99,7 +99,7 @@ grid.point_data["values"] = noise_less_F.flatten(order='F')
 isovalue = -0.001
 iso_surface = grid.contour([isovalue], scalars="values")
 # Set up the plotter with two subplots
-plotter = pv.Plotter(shape=(1, 2), off_screen=True)
+plotter = pv.Plotter(shape=(1, 2))
 # Plot deterministic isosurface
 plotter.subplot(0, 0)
 plotter.add_text("Deterministic Isosurface", font_size=12)
@@ -118,5 +118,5 @@ for e in range(n_ens):
 plotter.subplot(0, 1)
 plotter = pmc(F, isovalue, plotter=plotter)
 plotter.add_text("Probabilistic Isosurface", font_size=12)
-# plotter.show()
+plotter.show()
 # plotter.screenshot("probabilistic_marching_cubes_example.png")

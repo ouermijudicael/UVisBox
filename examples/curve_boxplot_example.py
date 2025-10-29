@@ -177,7 +177,20 @@ ax2.set_ylabel('Y')
 ax2.legend(loc='best')
 ax2.grid(True, alpha=0.3)
 
-plt.tight_layout()
+# Add colorbar to show percentile mapping
+import matplotlib.cm as cm
+from matplotlib.colorbar import ColorbarBase
+from matplotlib.colors import Normalize
+
+# Adjust layout to make room for colorbar
+plt.tight_layout(rect=[0, 0, 0.9, 1])
+
+# Create a new axis for the colorbar
+cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])  # [left, bottom, width, height]
+norm = Normalize(vmin=min(style.percentiles), vmax=max(style.percentiles))
+cbar = ColorbarBase(cbar_ax, cmap=cm.get_cmap(style.percentile_colormap), norm=norm, orientation='vertical')
+cbar.set_label('Percentile (%)', rotation=270, labelpad=20)
+
 print("\n" + "=" * 70)
 print("Displaying plot...")
 print("=" * 70)

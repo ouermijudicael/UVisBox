@@ -137,7 +137,7 @@ ax[0].set_aspect('equal', adjustable='box')
 # Calculate and plot the contour boxplot using the new interface
 style = BoxplotStyleConfig(
     percentiles=[25, 50, 75, 95],
-    percentile_colormap='jet',  # Use jet colormap for visualization
+    percentile_colormap='Oranges',  # Use magma colormap for visualization
     show_median=True,
     show_outliers=True
 )

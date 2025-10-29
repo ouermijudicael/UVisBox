@@ -32,21 +32,26 @@ def matplotlib_contour_boxplot(ordered_binary_images, boxplot_style=None, ax=Non
     if ax is None:
         fig, ax = plt.subplots()
 
-    # Sort percentiles in decreasing order
+    # Sort percentiles in descending order (highest to lowest)
     sorted_percentiles = sorted(boxplot_style.percentiles, reverse=True)
     
-    # Initialize sum image
+    # Initialize color value image with zeros
     h, w = ordered_binary_images.shape[1], ordered_binary_images.shape[2]
-    band_sum = np.zeros((h, w), dtype=np.int32)
+    color_array = np.zeros((h, w), dtype=np.float32)
     
-    # Get bands for each percentile and sum them
+    # Apply bands in descending order of percentile
+    # Higher percentiles overwrite lower ones at non-zero pixels
     for percentile in sorted_percentiles:
         band = get_band(ordered_binary_images, percentile)
-        band_sum += band.astype(np.int32)
+        # Where band is non-zero, set color value to percentile/100
+        color_value = percentile / 100.0
+        mask = band > 0
+        color_array[mask] = color_value
     
     # Display with origin='lower'
-    im = ax.imshow(band_sum, cmap=boxplot_style.percentile_colormap, origin='lower', interpolation='nearest')
-    plt.colorbar(im, ax=ax, label='Band sum')
+    im = ax.imshow(color_array, cmap=boxplot_style.percentile_colormap, origin='lower', 
+                   interpolation='nearest', vmin=0, vmax=1)
+    plt.colorbar(im, ax=ax, label='Percentile')
 
     # Track handles and labels for legend
     legend_handles = []

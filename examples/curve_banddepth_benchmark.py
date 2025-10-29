@@ -153,7 +153,7 @@ for workers, speedup in zip(worker_counts, speedups):
                 fontsize=9)
 
 plt.tight_layout()
-plt.savefig("curve_banddepth_benchmark.png", dpi=150, bbox_inches='tight')
+# plt.savefig("curve_banddepth_benchmark.png", dpi=150, bbox_inches='tight')
 print("\nPlot saved as: curve_banddepth_benchmark.png")
 plt.show()
 

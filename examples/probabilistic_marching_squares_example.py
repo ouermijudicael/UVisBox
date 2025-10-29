@@ -80,4 +80,4 @@ isovalue = 0.5
 fig, ax = plt.subplots(figsize=(8, 6))
 ax = probabilistic_marching_squares(F, isovalue, ax=ax)
 # plt.savefig("probabilistic_marching_squares_example.png")
-# plt.show()
+plt.show()
