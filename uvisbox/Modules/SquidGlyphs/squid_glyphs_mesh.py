@@ -2,6 +2,201 @@
 
 import numpy as np
 
+
+def build_squid_glyph_mesh_2d(positions, stats_2d, scale=0.2):
+    """
+    Build 2D squid glyph mesh from statistics.
+    
+    Parameters:
+    -----------
+    positions : numpy.ndarray
+        Shape (n, 2) - glyph positions
+    stats_2d : dict
+        From compute_squid_glyph_stats_2d()
+    scale : float
+        Glyph scale factor (default: 0.2)
+    
+    Returns:
+    --------
+    mesh_2d : dict
+        {
+            'points': (k, 2) - vertex positions,
+            'polygons': (m, 3) - triangle connectivity
+        }
+    """
+    ensemble_polar_vectors = stats_2d['ensemble_polar_vectors']
+    depths = stats_2d['depths']
+    min_mags = stats_2d['min_mag']
+    max_mags = stats_2d['max_mag']
+    min_angles = stats_2d['min_angle']
+    max_angles = stats_2d['max_angle']
+    median_vectors = stats_2d['median_vectors']
+    
+    num_positions = positions.shape[0]
+    glyphs_points = np.zeros((num_positions * 11, 2))
+    glyphs_polygons = np.zeros((num_positions * 5, 3), dtype=int)
+    
+    tri_idx = 0
+    point_idx = 0
+    
+    for i_pos in range(num_positions):
+        median_vector = median_vectors[i_pos]
+        min_mag = min_mags[i_pos]
+        max_mag = max_mags[i_pos]
+        min_angle = min_angles[i_pos]
+        max_angle = max_angles[i_pos]
+        
+        delta_h = max_mag - min_mag
+        h = median_vector[0]
+        rad_angle = (max_angle - min_angle) * 0.5
+        rot_angle = median_vector[1] - np.pi * 0.5
+        base = 2 * np.arctan(rad_angle) * max_mag
+        
+        # Build 2D squid glyph triangulation
+        if (base > 1e-5) and (delta_h > 1e-5):
+            # Base (2 triangles)
+            pt = np.array([- base * 0.5, 0]) * scale
+            pt = np.array([pt[0]*np.cos(rot_angle) - pt[1]*np.sin(rot_angle),
+                           pt[0]*np.sin(rot_angle) + pt[1]*np.cos(rot_angle)])
+            pt = pt + positions[i_pos]
+            
+            pt1 = np.array([base * 0.5, 0]) * scale
+            pt1 = np.array([pt1[0]*np.cos(rot_angle) - pt1[1]*np.sin(rot_angle),
+                            pt1[0]*np.sin(rot_angle) + pt1[1]*np.cos(rot_angle)])
+            pt1 = pt1 + positions[i_pos]
+
+            pt2 = np.array([- base * 0.5, delta_h]) * scale
+            pt2 = np.array([pt2[0]*np.cos(rot_angle) - pt2[1]*np.sin(rot_angle),
+                            pt2[0]*np.sin(rot_angle) + pt2[1]*np.cos(rot_angle)])
+            pt2 = pt2 + positions[i_pos]
+
+            pt3 = np.array([base * 0.5, delta_h]) * scale
+            pt3 = np.array([pt3[0]*np.cos(rot_angle) - pt3[1]*np.sin(rot_angle),
+                            pt3[0]*np.sin(rot_angle) + pt3[1]*np.cos(rot_angle)])
+            pt3 = pt3 + positions[i_pos]
+            
+            glyphs_points[point_idx] = pt
+            glyphs_points[point_idx+1] = pt1
+            glyphs_points[point_idx+2] = pt2
+            glyphs_points[point_idx+3] = pt3
+            glyphs_polygons[tri_idx] = [point_idx, point_idx+1, point_idx+2]
+            glyphs_polygons[tri_idx+1] = [point_idx+1, point_idx+3, point_idx+2]
+            tri_idx += 2
+            point_idx += 4
+
+            # Shaft (2 triangles)
+            shaft_pt = np.array([- np.arctan(rad_angle)*h, delta_h]) * scale
+            shaft_pt = np.array([shaft_pt[0]*np.cos(rot_angle) - shaft_pt[1]*np.sin(rot_angle),
+                                 shaft_pt[0]*np.sin(rot_angle) + shaft_pt[1]*np.cos(rot_angle)])
+            shaft_pt = shaft_pt + positions[i_pos]
+            
+            shaft_pt1 = np.array([np.arctan(rad_angle)*h, delta_h]) * scale
+            shaft_pt1 = np.array([shaft_pt1[0]*np.cos(rot_angle) - shaft_pt1[1]*np.sin(rot_angle),
+                                  shaft_pt1[0]*np.sin(rot_angle) + shaft_pt1[1]*np.cos(rot_angle)])
+            shaft_pt1 = shaft_pt1 + positions[i_pos]
+            
+            shaft_pt2 = np.array([- np.arctan(rad_angle)*max_mag*0.2, max_mag*0.8]) * scale
+            shaft_pt2 = np.array([shaft_pt2[0]*np.cos(rot_angle) - shaft_pt2[1]*np.sin(rot_angle),
+                                  shaft_pt2[0]*np.sin(rot_angle) + shaft_pt2[1]*np.cos(rot_angle)])
+            shaft_pt2 = shaft_pt2 + positions[i_pos]
+            
+            shaft_pt3 = np.array([np.arctan(rad_angle)*max_mag*0.2, max_mag*0.8]) * scale
+            shaft_pt3 = np.array([shaft_pt3[0]*np.cos(rot_angle) - shaft_pt3[1]*np.sin(rot_angle),
+                                  shaft_pt3[0]*np.sin(rot_angle) + shaft_pt3[1]*np.cos(rot_angle)])
+            shaft_pt3 = shaft_pt3 + positions[i_pos]
+            
+            glyphs_points[point_idx] = shaft_pt
+            glyphs_points[point_idx+1] = shaft_pt1
+            glyphs_points[point_idx+2] = shaft_pt2
+            glyphs_points[point_idx+3] = shaft_pt3      
+            glyphs_polygons[tri_idx] = [point_idx, point_idx+1, point_idx+2]
+            glyphs_polygons[tri_idx+1] = [point_idx+1, point_idx+3, point_idx+2]
+            tri_idx += 2
+            point_idx += 4
+
+            # Head (1 triangle)
+            head_pt = np.array([- base *0.5, max_mag*0.8]) * scale
+            head_pt = np.array([head_pt[0]*np.cos(rot_angle) - head_pt[1]*np.sin(rot_angle),
+                               head_pt[0]*np.sin(rot_angle) + head_pt[1]*np.cos(rot_angle)])
+            head_pt = head_pt + positions[i_pos]
+            
+            head_pt1 = np.array([base *0.5, max_mag*0.8]) * scale
+            head_pt1 = np.array([head_pt1[0]*np.cos(rot_angle) - head_pt1[1]*np.sin(rot_angle),
+                                 head_pt1[0]*np.sin(rot_angle) + head_pt1[1]*np.cos(rot_angle)])
+            head_pt1 = head_pt1 + positions[i_pos]
+            
+            head_pt2 = np.array([0, max_mag]) * scale
+            head_pt2 = np.array([head_pt2[0]*np.cos(rot_angle) - head_pt2[1]*np.sin(rot_angle),
+                                 head_pt2[0]*np.sin(rot_angle) + head_pt2[1]*np.cos(rot_angle)])
+            head_pt2 = head_pt2 + positions[i_pos]
+            
+            glyphs_points[point_idx] = head_pt
+            glyphs_points[point_idx+1] = head_pt1
+            glyphs_points[point_idx+2] = head_pt2
+            glyphs_polygons[tri_idx] = [point_idx, point_idx+1, point_idx+2]
+            tri_idx += 1
+            point_idx += 3  
+
+    return {
+        'points': glyphs_points[:point_idx],
+        'polygons': glyphs_polygons[:tri_idx]
+    }
+
+
+def build_squid_glyph_mesh_3d(positions, stats_3d, point_values=None, scale=0.5, resolution=10):
+    """
+    Build 3D squid glyph mesh from statistics.
+    
+    Parameters:
+    -----------
+    positions : numpy.ndarray
+        Shape (n, 3) - glyph positions
+    stats_3d : dict
+        From compute_squid_glyph_stats_3d()
+    point_values : numpy.ndarray, optional
+        Shape (n,) - scalar values for coloring
+    scale : float
+        Glyph scale factor (default: 0.5)
+    resolution : int
+        Circle resolution (default: 10)
+    
+    Returns:
+    --------
+    mesh_3d : dict
+        {
+            'points': (k, 3) - vertex positions,
+            'polygons': (m, 3) - triangle connectivity,
+            'point_values': (k,) - scalar values for coloring
+        }
+    """
+    directional_variations = stats_3d['directional_variations']
+    vectors = stats_3d['ensemble_spherical_vectors']
+    min_vectors = stats_3d['min_vectors']
+    median_vectors = stats_3d['median_vectors']
+    max_vectors = stats_3d['max_vectors']
+    glyph_markers = stats_3d['glyph_markers']
+    num_of_glyphs = stats_3d['num_glyphs']
+    
+    num_positions = positions.shape[0]
+    
+    if point_values is None:
+        scaler_values = np.zeros(num_positions)
+    else:
+        scaler_values = point_values
+    
+    # Call existing implementation
+    points, polygons, points_values = squid_glyphs_meshing_3D(
+        directional_variations, positions, vectors, min_vectors, median_vectors,
+        max_vectors, scaler_values, glyph_markers, scale, resolution, num_of_glyphs
+    )
+    
+    return {
+        'points': points,
+        'polygons': polygons,
+        'point_values': points_values
+    }
+
+
 def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, percentile1, scale=0.2):
     """
     Build squid glyphs for 2D visualization. Assumes vectors are in polar coordinates (magnitude, angle).
@@ -221,13 +416,7 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
             phi = median_vector[2]
             theta = median_vector[1]
            
-            Rx = np.zeros((3, 3))
-            Rx[0][0] = 1
-            Rx[1][1] = np.cos(theta)
-            Rx[1][2] = -np.sin(theta)
-            Rx[2][1] = np.sin(theta)
-            Rx[2][2] = np.cos(theta)
-
+            # Rotation around y-axis by theta (polar angle from z-axis)
             Ry = np.zeros((3, 3))
             Ry[0][0] = np.cos(theta)
             Ry[0][2] = np.sin(theta)
@@ -235,13 +424,16 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
             Ry[2][0] = -np.sin(theta)
             Ry[2][2] = np.cos(theta)
 
+            # Rotation around z-axis by phi (azimuthal angle)
             Rz = np.zeros((3, 3))
             Rz[0][0] = np.cos(phi)
             Rz[0][1] = -np.sin(phi)
             Rz[1][0] = np.sin(phi)
             Rz[1][1] = np.cos(phi)
             Rz[2][2] = 1
-            R = Rz @ Rx 
+            
+            # FIXED: Use Ry (not Rx) to rotate from z-axis by theta
+            R = Rz @ Ry 
             ## mappoints to the position
             for i in range(resolution):
                 pt = np.dot(R, np.array([x[i], y[i], 0.0]))

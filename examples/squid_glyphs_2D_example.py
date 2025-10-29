@@ -87,7 +87,7 @@ Set up the plot for both original vector field and uncertainty squid glyphs
     ax1.grid()
 
     # Plot uncertainty squid glyphs
-    ax2 = squid_glyph_2D(positions, ensemble_vectors, 1.0, scale=0.4, ax=ax2)
+    ax2 = squid_glyph_2D(positions, ensemble_vectors, percentile=95, scale=0.4, ax=ax2)
     ax2.set_title("Uncertainty Squid Glyphs for Double Gyre Flow")
     ax2.set_xlim(-0.25, 2.25)
     ax2.set_ylim(-0.25, 1.25)
@@ -163,7 +163,12 @@ positions = np.vstack((X_flat, Y_flat)).T
 
 # Set up the plot for both original vector field and uncertainty squid glyphs
 
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(20, 20))
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10), sharex=True, sharey=True)
+
+# Define shared axis limits
+xlim = (-0.25, 2.25)
+ylim = (-0.25, 1.25)
+
 # Plot original vector field with arrows
 for i in range(n_points):
     for j in range(n_ensemble):
@@ -172,21 +177,23 @@ for i in range(n_points):
         ax1.arrow(x, y, u, v, head_width=0.03, head_length=0.06, fc='blue', ec='blue', alpha=0.1, length_includes_head=True)
 
 ax1.set_title("Original Vector Field with Ensemble Members")
-ax1.set_xlim(-0.25, 2.25)
-ax1.set_ylim(-0.25, 1.25)
+ax1.set_xlim(xlim)
+ax1.set_ylim(ylim)
 ax1.set_xlabel("X")
 ax1.set_ylabel("Y")
 ax1.grid()
+ax1.set_aspect('equal', adjustable='box')
 
 # Plot uncertainty squid glyphs
-ax2 = squid_glyph_2D(positions, ensemble_vectors, 1.0, scale=0.4, ax=ax2)
+ax2 = squid_glyph_2D(positions, ensemble_vectors, percentile=95, scale=0.2, ax=ax2)
 ax2.set_title("Uncertainty Squid Glyphs for Double Gyre Flow")
-ax2.set_xlim(-0.25, 2.25)
-ax2.set_ylim(-0.25, 1.25)
+ax2.set_xlim(xlim)
+ax2.set_ylim(ylim)
 ax2.set_xlabel("X")
 ax2.set_ylabel("Y")
 ax2.grid()
+ax2.set_aspect('equal', adjustable='box')
 
 plt.tight_layout()
-plt.savefig("squid_glyphs_2D_example.png")
+# plt.savefig("squid_glyphs_2D_example.png")
 plt.show()

@@ -43,20 +43,25 @@ def calculate_spread_2D(vectors, depths, percentile):
         depths : numpy.ndarray
             Array of shape (n,) representing the depth of each vector
         percentile : float
-            The percentile for depth filtering (0-100)
+            Percentile of vectors to include based on depth ranking (0-100).
+            Higher values include more vectors.
+            - percentile=50: Include top 50% deepest vectors
+            - percentile=95: Include top 95% deepest vectors (typical)
+            - percentile=100: Include ALL vectors
     Returns:
     --------
         tuple
-            Indices of vectors with min/max magnitude, angle among those with depth > 1.0-percentile/100
+            Indices of vectors with min/max magnitude, angle among those passing depth threshold
     """
-    # Convert percentile from 0-100 to 0-1 range
-    percentile_norm = percentile / 100.0
+    # FIXED: Use proper percentile semantics
+    # percentile=95 means keep top 95% by depth = depth >= 5th percentile
+    depth_threshold = np.percentile(depths, 100.0 - percentile)
     
     first_quadrant = False # Set to True if you want to restrict to first quadrant 0 to pi/2
     second_quadrant = False # Set to True if you want to restrict to second quadrant pi/2 to pi
     third_quadrant = False # Set to True if you want to restrict to third quadrant -pi to -pi/2
     fourth_quadrant = False # Set to True if you want to restrict to fourth quadrant -pi/2 to 0
-    indices = np.where(depths >= 1.0-percentile_norm)[0]
+    indices = np.where(depths >= depth_threshold)[0]
     median_idx = np.argmax(depths)
     if indices.size > 0:
         filtered_vectors = vectors[indices]
@@ -96,17 +101,22 @@ def calculate_spread_3D(vectors, depths, percentile):
         depths : numpy.ndarray
             Array of shape (n,) representing the depth of each vector
         percentile : float
-            The percentile for depth filtering (0-100)
+            Percentile of vectors to include based on depth ranking (0-100).
+            Higher values include more vectors.
+            - percentile=50: Include top 50% deepest vectors
+            - percentile=95: Include top 95% deepest vectors (typical)
+            - percentile=100: Include ALL vectors
 
     Returns:
     --------
         tuple
-            Indices of vectors with min/max magnitude, theta, phi among those with depth > 1.0-percentile/100
+            Indices of vectors with min/max magnitude, theta, phi among those passing depth threshold
     """
-    # Convert percentile from 0-100 to 0-1 range
-    percentile_norm = percentile / 100.0
+    # FIXED: Use proper percentile semantics
+    # percentile=95 means keep top 95% by depth = depth >= 5th percentile
+    depth_threshold = np.percentile(depths, 100.0 - percentile)
     
-    indices = np.where(depths > 1.0-percentile_norm)[0]
+    indices = np.where(depths >= depth_threshold)[0]
     median_idx = np.argmax(depths)
     if indices.size > 0:
         filtered_vectors = vectors[indices]

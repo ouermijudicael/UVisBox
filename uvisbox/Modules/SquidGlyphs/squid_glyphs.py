@@ -1,34 +1,50 @@
+"""
+Top-level API for squid glyph visualization.
 
-from .squid_glyphs_stats import compute_vector_depths_3D, getDirectionalVariations, calculate_spread_3D
-from .squid_glyphs_mesh import squid_glyphs_meshing_3D
-from .squid_glyphs_vis import pyvista_uncertainty_squid_glyphs_3D_vis
-from uvisbox.Core.BandDepths.vector_depths import cartesian_to_spherical
-from uvisbox.Core.BandDepths.vector_depths import cartesian_to_polar
+This module provides high-level functions that orchestrate the three-stage pipeline:
+    1. Compute statistics (vector depths, spreads, variations)
+    2. Build mesh geometry (vertices, triangles)
+    3. Render visualization (matplotlib or pyvista)
+
+For fine-grained control, use the individual stage functions directly:
+    - compute_squid_glyph_stats_2d() / compute_squid_glyph_stats_3d()
+    - build_squid_glyph_mesh_2d() / build_squid_glyph_mesh_3d()
+    - render_squid_glyph_2d() / render_squid_glyph_3d()
+"""
+
+from .squid_glyphs_stats import compute_squid_glyph_stats_2d, compute_squid_glyph_stats_3d
+from .squid_glyphs_mesh import build_squid_glyph_mesh_2d, build_squid_glyph_mesh_3d
+from .squid_glyphs_vis import render_squid_glyph_2d, render_squid_glyph_3d
 import numpy as np
-from .squid_glyphs_stats import compute_vector_depths_2D
-from .squid_glyphs_vis import matplotlib_uncertainty_squid_glyphs_2D_vis
-from .squid_glyphs_mesh import squid_glyphs_meshing_2D
 
 
 def squid_glyph_3D(positions, ensemble_vectors, point_values=None, percentile=95, scale=0.5,
                    show_edges=True, glyph_color='lightblue', ax=None):
     """
-    Draws uncertainty squid glyphs for the given positions and ensemble vectors in 3D. this implementation is based on
-    T. A. J. Ouermi, J. Li, Z. Morrow, B. Van Bloemen Waanders and C. R. Johnson, "Glyph-Based Uncertainty Visualization
-    and Analysis of Time-Varying Vector Fields," 2024 IEEE Workshop on Uncertainty Visualization: Applications,
-    Techniques, Software, and Decision Frameworks, St Pete Beach, FL, USA, 2024, pp. 73-77, doi: 10.1109/UncertaintyVisualization63963.2024.00014.
+    Visualize 3D uncertainty squid glyphs.
+    
+    This function orchestrates the three-stage pipeline:
+        1. Convert Cartesian → Spherical, compute vector depths, spreads, and PCA
+        2. Build superelliptical glyph mesh (vertices, triangles)
+        3. Render with pyvista
+    
+    Based on: T. A. J. Ouermi et al., "Glyph-Based Uncertainty Visualization
+    and Analysis of Time-Varying Vector Fields," IEEE UncertaintyVis 2024.
 
     Parameters:
     -----------
     positions : numpy.ndarray
         Array of shape (n, 3) The positions of the squid glyphs.
     ensemble_vectors : numpy.ndarray
-        Array of shape (n, m, 3) The ensemble vectors in spherical coordinates.
-        The ensemble vectors for each position in Cartesian coordinates.
+        Array of shape (n, m, 3) The ensemble vectors for each position in Cartesian coordinates.
     point_values : numpy.ndarray, optional
         Array of shape (n,) The values associated with each position for coloring.
-    percentile : float
-        The first percentile for depth filtering (0-100, default: 95).
+    percentile : float (0-100)
+        Percentile of ensemble members to include based on depth ranking.
+        Higher values include more vectors (larger glyphs showing more variation).
+        - percentile=50: Include top 50% deepest vectors
+        - percentile=95: Include top 95% deepest vectors (typical, default)
+        - percentile=100: Include ALL vectors (maximum variation)
     scale : float, optional
         The scale factor for the glyphs. Default is 0.5.
     show_edges : bool, optional
@@ -48,76 +64,29 @@ def squid_glyph_3D(positions, ensemble_vectors, point_values=None, percentile=95
         The polygon connectivity for the glyphs.
 
     """
-
-    num_positions, num_ens_members = ensemble_vectors.shape[0], ensemble_vectors.shape[1]
-
-    # Convert ensemble_vectors to spherical coordinates
-    ensemble_spherical_vectors = np.zeros_like(ensemble_vectors)
-    for i in range(num_positions):
-        ensemble_spherical_vectors[i] = cartesian_to_spherical(
-            ensemble_vectors[i])
-
-    # Ccalculate vector depths in spherical coordinates
-    depths = np.zeros((num_positions, num_ens_members))
-    for i in range(num_positions):
-        depths[i] = compute_vector_depths_3D(ensemble_spherical_vectors[i])
-
-    min_vectors = np.zeros((num_positions, 3))
-    max_vectors = np.zeros((num_positions, 3))
-    median_vectors = np.zeros((num_positions, 3))
-    glyph_markers = np.zeros((num_positions,), dtype=int)
-    numb_of_glyphs = 0
-    num_arrows = 0
-    for i_pos in range(num_positions):
-        # find indices where depth > 1.0-percentile/100
-        median_idx, min_mag_idx, max_mag_idx, min_theta_idx, max_theta_idx, min_phi_idx, max_phi_idx = calculate_spread_3D(
-            ensemble_spherical_vectors[i_pos], depths[i_pos], percentile)
-        median_vectors[i_pos] = ensemble_spherical_vectors[i_pos][median_idx] if median_idx is not None else np.array([
-                                                                                                                      0, 0, 0])
-        min_mag_temp = ensemble_spherical_vectors[i_pos][min_mag_idx] if min_mag_idx is not None else np.array([
-                                                                                                               0, 0, 0])
-        max_mag_temp = ensemble_spherical_vectors[i_pos][max_mag_idx] if max_mag_idx is not None else np.array([
-                                                                                                               0, 0, 0])
-        min_phi = ensemble_spherical_vectors[i_pos][min_phi_idx][2] if min_phi_idx is not None else 0
-        max_phi = ensemble_spherical_vectors[i_pos][max_phi_idx][2] if max_phi_idx is not None else 0
-        min_theta = ensemble_spherical_vectors[i_pos][min_theta_idx][1] if min_theta_idx is not None else 0
-        max_theta = ensemble_spherical_vectors[i_pos][max_theta_idx][1] if max_theta_idx is not None else 0
-        min_vectors[i_pos] = np.array([min_mag_temp[0], min_theta, min_phi])
-        max_vectors[i_pos] = np.array([max_mag_temp[0], max_theta, max_phi])
-        if (np.absolute(max_vectors[i_pos][0]-min_vectors[i_pos][0]) > 1e-5) and \
-           (np.absolute(max_vectors[i_pos][1]-min_vectors[i_pos][1]) > 1e-5) and \
-           (np.absolute(max_vectors[i_pos][2]-min_vectors[i_pos][2]) > 1e-5):
-            glyph_markers[i_pos] = 1
-            numb_of_glyphs += 1
-        elif (max_vectors[i_pos][0] > 1e-3):
-            glyph_markers[i_pos] = 2
-            num_arrows += 1
-
-    # compute directional variations
-    depth_threshold = 1.0 - (percentile / 100.0)
-    directional_variations = getDirectionalVariations(
-        ensemble_vectors, depths, depth_threshold, min_vectors, median_vectors, max_vectors)
-
-    if point_values is None:
-        point_values = np.zeros((num_positions,))
-    # build squid glyphs
-    points, polygons, scalar_values = squid_glyphs_meshing_3D(directional_variations, positions, ensemble_spherical_vectors, min_vectors, median_vectors,
-                                                              max_vectors, point_values, glyph_markers, scale, resolution=10, num_of_glyphs=numb_of_glyphs)
-
-    # plot squid glyphs
-    plotter = pyvista_uncertainty_squid_glyphs_3D_vis(
-        points, polygons, points_values=scalar_values, ax=ax, show_edges=show_edges, glyph_color=glyph_color)
-
-    return plotter, points, polygons
+    # Stage 1: Compute statistics
+    stats = compute_squid_glyph_stats_3d(ensemble_vectors, percentile)
+    
+    # Stage 2: Build mesh
+    mesh = build_squid_glyph_mesh_3d(positions, stats, point_values, scale, resolution=10)
+    
+    # Stage 3: Render
+    plotter = render_squid_glyph_3d(mesh, point_values, show_edges, glyph_color, ax=ax)
+    
+    return plotter, mesh['points'], mesh['polygons']
 
 
-def squid_glyph_2D(positions, ensemble_vectors, percentile1, scale=0.2, ax=None):
+def squid_glyph_2D(positions, ensemble_vectors, percentile=95, scale=0.2, ax=None):
     """
-    Draws uncertainty squid glyphs for the given positions and ensemble vectors in 2D. This a 2D version
-    of the 3D uncertainty squid glyphs in T. A. J. Ouermi, J. Li, Z. Morrow, B. Van Bloemen Waanders and 
-    C. R. Johnson, "Glyph-Based Uncertainty Visualization and Analysis of Time-Varying Vector Fields," 
-    2024 IEEE Workshop on Uncertainty Visualization: Applications, Techniques, Software, and Decision Frameworks, 
-    St Pete Beach, FL, USA, 2024, pp. 73-77, doi: 10.1109/UncertaintyVisualization63963.2024.00014.
+    Visualize 2D uncertainty squid glyphs.
+    
+    This function orchestrates the three-stage pipeline:
+        1. Convert Cartesian → Polar, compute vector depths and spreads
+        2. Build glyph mesh (vertices, triangles)
+        3. Render with matplotlib
+    
+    Based on: T. A. J. Ouermi et al., "Glyph-Based Uncertainty Visualization
+    and Analysis of Time-Varying Vector Fields," IEEE UncertaintyVis 2024.
 
     Parameters:
     -----------
@@ -125,8 +94,12 @@ def squid_glyph_2D(positions, ensemble_vectors, percentile1, scale=0.2, ax=None)
         Array of shape (n, 2) representing the positions of the squid glyphs.
     ensemble_vectors : numpy.ndarray
         Array of shape (n, m, 2) representing the ensemble vectors for each position.
-    percentile1 : float
-        The first percentile for depth filtering (0-100).
+    percentile : float (0-100)
+        Percentile of ensemble members to include based on depth ranking.
+        Higher values include more vectors (larger glyphs showing more variation).
+        - percentile=50: Include top 50% deepest vectors
+        - percentile=95: Include top 95% deepest vectors (typical, default)
+        - percentile=100: Include ALL vectors (maximum variation)
     scale : float
         The scale factor for the glyphs.
     ax : matplotlib axis
@@ -138,29 +111,13 @@ def squid_glyph_2D(positions, ensemble_vectors, percentile1, scale=0.2, ax=None)
         The axis with the drawn squid glyphs.
 
     """
-    num_positions, num_ens_members = ensemble_vectors.shape[0], ensemble_vectors.shape[1]
-
-    # Convert ensemble_vectors to spherical coordinates
-    ensemble_polar_vectors = np.zeros_like(ensemble_vectors)
-    for i in range(num_positions):
-        ensemble_polar_vectors[i] = cartesian_to_polar(ensemble_vectors[i])
-
-    # Ccalculate vector depths in spherical coordinates
-    depths = np.zeros((num_positions, num_ens_members))
-    for i in range(num_positions):
-        depths[i] = compute_vector_depths_2D(ensemble_polar_vectors[i])
-        if i == 0:
-            print(
-                f"max depth at position {i}: {depths[i].max()} with index {np.argmax(depths[i])}")
-            print(
-                f" and vector {ensemble_polar_vectors[i][np.argmax(depths[i])]}")
-
-    # build squid glyphs
-    glyphs_points, glyphs_polygons = squid_glyphs_meshing_2D(
-        positions, ensemble_polar_vectors, depths, percentile1, scale)
-
-    # plot squid glyphs
-    ax = matplotlib_uncertainty_squid_glyphs_2D_vis(
-        glyphs_points, glyphs_polygons, ax)
-
+    # Stage 1: Compute statistics
+    stats = compute_squid_glyph_stats_2d(ensemble_vectors, percentile)
+    
+    # Stage 2: Build mesh
+    mesh = build_squid_glyph_mesh_2d(positions, stats, scale)
+    
+    # Stage 3: Render
+    ax = render_squid_glyph_2d(mesh, ax)
+    
     return ax
