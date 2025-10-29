@@ -5,7 +5,7 @@ from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 import numpy as np
 import matplotlib.pyplot as plt
 
-def curve_boxplot(curves, boxplot_style=None, ax=None):
+def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     """
     Create a curve band depth plot with multiple percentile bands.
 
@@ -20,6 +20,9 @@ def curve_boxplot(curves, boxplot_style=None, ax=None):
     ax : matplotlib.axes.Axes, optional
         The axes to plot on. If None, creates a new figure.
         For 3D curves, must be a 3D axes if provided.
+    workers : int, optional
+        Number of worker processes for parallel computation of band depths. Default is 12.
+        Set to 1 or None to use sequential processing (useful for debugging).
 
     Returns:
     --------
@@ -63,7 +66,7 @@ def curve_boxplot(curves, boxplot_style=None, ax=None):
     curves_copy = curves.copy()
     
     # Always compute depths internally
-    curve_depths = curve_banddepths(curves_copy)
+    curve_depths = curve_banddepths(curves_copy, workers=workers)
 
     # Sort the curves by depth from deepest to shallowest
     sorted_indices = np.argsort(curve_depths)[::-1]

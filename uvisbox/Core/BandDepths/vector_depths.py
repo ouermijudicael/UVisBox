@@ -1,5 +1,36 @@
 import numpy as np
 from itertools import combinations
+import multiprocessing as mp
+
+
+def _compute_depth_for_vector(args):
+    """
+    Worker function to compute depth for a single vector (for parallelization).
+    
+    Parameters:
+    -----------
+    args : tuple
+        (vector_idx, angles, magnitudes, pairs)
+    
+    Returns:
+    --------
+    int : depth count for this vector
+    """
+    i, angles, magnitudes, pairs = args
+    angle_i = angles[i]
+    mag_i = magnitudes[i]
+    
+    depth = 0
+    for j, k in pairs:
+        angle_j, angle_k = angles[j], angles[k]
+        mag_j, mag_k = magnitudes[j], magnitudes[k]
+        
+        # Check if vector i is between vectors j and k
+        if (angle_j <= angle_i <= angle_k or angle_k <= angle_i <= angle_j) and \
+           (min(mag_j, mag_k) <= mag_i <= max(mag_j, mag_k)):
+            depth += 1
+    
+    return depth
 
 
 def calculate_spread_2D(vectors, depths, percentile):
@@ -199,101 +230,246 @@ def magnitude_spread(vectors):
     return magnitude_spread, min_mag_idx, max_mag_idx
 
 
-def compute_vector_depths_2D(vectors):
+def compute_vector_depths_2D(vectors, workers=None):
     """
-    Compute the depth of each vector in the ensemble. The vector depth calculation is based on
-    T. A. J. Ouermi, J. Li, Z. Morrow, B. Van Bloemen Waanders and C. R. Johnson, 
-    "Glyph-Based Uncertainty Visualization and Analysis of Time-Varying Vector Fields," 
-    2024 IEEE Workshop on Uncertainty Visualization: Applications, Techniques, Software, 
-    and Decision Frameworks, St Pete Beach, FL, USA, 2024, pp. 73-77, 
+    Compute the depth of each vector in the ensemble using optimized vectorized operations.
+    The vector depth calculation is based on T. A. J. Ouermi, J. Li, Z. Morrow, 
+    B. Van Bloemen Waanders and C. R. Johnson, "Glyph-Based Uncertainty Visualization 
+    and Analysis of Time-Varying Vector Fields," 2024 IEEE Workshop on Uncertainty 
+    Visualization: Applications, Techniques, Software, and Decision Frameworks, 
+    St Pete Beach, FL, USA, 2024, pp. 73-77, 
     doi: 10.1109/UncertaintyVisualization63963.2024.00014.
 
     Parameters:
     -----------
         vectors : numpy.ndarray
             Array of shape (n, 2) representing 2D Cartesian vectors.
+        workers : int, optional
+            Number of worker processes for parallel computation. Default is None (sequential).
+            Set to a positive integer to enable multiprocessing.
 
     Returns:
     --------
         depths : numpy.ndarray
             Array of shape (n,) with the depth of each vector.
+    
+    Notes:
+    ------
+        Optimized version using:
+        1. Vectorized angle/magnitude computation (precomputed once)
+        2. Algorithm optimization (avoid redundant computations)
+        3. Optional parallelization for large ensembles
     """
     n = vectors.shape[0]
-    depths = np.zeros(n)
-    # Calculate n choose 2 combinations of indices
-    n = vectors.shape[0]
+    
+    # Fast path for small ensembles
+    if n < 3:
+        return np.zeros(n)
+    
+    # OPTIMIZATION 1: Precompute all angles and magnitudes once (vectorized)
+    angles = np.arctan2(vectors[:, 1], vectors[:, 0])
+    magnitudes = np.linalg.norm(vectors, axis=1)
+    
+    # Generate pairs once
     pairs = list(combinations(np.arange(n), 2))
-
-    # Compute depth for each vector
-    for i in range(n):
-        depth = 0
-        for j, k in pairs:
-            angle_i = np.arctan2(vectors[i, 1], vectors[i, 0])  
-            angle_j = np.arctan2(vectors[j, 1], vectors[j, 0])
-            angle_k = np.arctan2(vectors[k, 1], vectors[k, 0])
-            mag_i = np.linalg.norm(vectors[i])
-            mag_j = np.linalg.norm(vectors[j])
-            mag_k = np.linalg.norm(vectors[k])
-            # print(f"angle_i: {angle_i}, angle_j: {angle_j}, angle_k: {angle_k}")
-
-            # Check if vector i is between vectors j and k and magnitude is also between
-            if (angle_j <= angle_i <= angle_k or angle_k <= angle_i <= angle_j) and \
-               (min(mag_j, mag_k) <= mag_i <= max(mag_j, mag_k)):
-                depth += 1
-
-        depths[i] = depth
-
-    # scale depths between 0 and 1
+    n_pairs = len(pairs)
+    
+    # OPTIMIZATION 2: Vectorized depth computation
+    # For small ensembles, vectorized version is faster than parallelization overhead
+    if workers is None or workers <= 1 or n < 30:
+        depths = np.zeros(n, dtype=np.int32)
+        
+        # Convert pairs to arrays for vectorized operations
+        pairs_arr = np.array(pairs)
+        j_indices = pairs_arr[:, 0]
+        k_indices = pairs_arr[:, 1]
+        
+        # Precompute pair properties (vectorized)
+        angles_j = angles[j_indices]
+        angles_k = angles[k_indices]
+        mags_j = magnitudes[j_indices]
+        mags_k = magnitudes[k_indices]
+        
+        # Precompute min/max for magnitudes
+        min_mags = np.minimum(mags_j, mags_k)
+        max_mags = np.maximum(mags_j, mags_k)
+        
+        # Compute depth for each vector
+        for i in range(n):
+            angle_i = angles[i]
+            mag_i = magnitudes[i]
+            
+            # Vectorized angle check: i is between j and k
+            angle_between = ((angles_j <= angle_i) & (angle_i <= angles_k)) | \
+                           ((angles_k <= angle_i) & (angle_i <= angles_j))
+            
+            # Vectorized magnitude check: i is between j and k
+            mag_between = (min_mags <= mag_i) & (mag_i <= max_mags)
+            
+            # Count how many pairs satisfy both conditions
+            depths[i] = np.sum(angle_between & mag_between)
+    
+    else:
+        # OPTIMIZATION 3: Parallel computation for large ensembles
+        ctx = mp.get_context('fork')
+        pool = ctx.Pool(processes=workers)
+        
+        try:
+            # Prepare arguments for each vector
+            args_list = [(i, angles, magnitudes, pairs) for i in range(n)]
+            
+            # Compute depths in parallel
+            depths = np.array(pool.map(_compute_depth_for_vector, args_list), dtype=np.int32)
+        finally:
+            pool.close()
+            pool.join()
+    
+    # Scale depths between 0 and 1
+    depths = depths.astype(np.float64)
     if depths.max() > 0.0:
         depths = (depths - depths.min()) / (depths.max() - depths.min())
+    
     return depths
 
 
-def compute_vector_depths_3D(vectors):
+def _compute_depth_for_vector_3D(args):
     """
-    Compute the depth of each vector in the ensemble in 3D. Assumes vectors are in
-    spherical coordinates (magnitude, theta, phi). The vector depth calculation is based on
-    T. A. J. Ouermi, J. Li, Z. Morrow, B. Van Bloemen Waanders and C. R. Johnson, 
-    "Glyph-Based Uncertainty Visualization and Analysis of Time-Varying Vector Fields," 
-    2024 IEEE Workshop on Uncertainty Visualization: Applications, Techniques, Software, 
+    Worker function to compute depth for a single 3D vector (for parallelization).
+    
+    Parameters:
+    -----------
+    args : tuple
+        (vector_idx, magnitudes, thetas, phis, pairs)
+    
+    Returns:
+    --------
+    int : depth count for this vector
+    """
+    i, magnitudes, thetas, phis, pairs = args
+    mag_i = magnitudes[i]
+    theta_i = thetas[i]
+    phi_i = phis[i]
+    
+    depth = 0
+    for j, k in pairs:
+        mag_j, mag_k = magnitudes[j], magnitudes[k]
+        theta_j, theta_k = thetas[j], thetas[k]
+        phi_j, phi_k = phis[j], phis[k]
+        
+        # Check if vector i is between vectors j and k in spherical coordinates
+        if (theta_j < theta_i < theta_k or theta_k < theta_i < theta_j) and \
+           (phi_j < phi_i < phi_k or phi_k < phi_i < phi_j) and \
+           (min(mag_j, mag_k) < mag_i < max(mag_j, mag_k)):
+            depth += 1
+    
+    return depth
+
+
+def compute_vector_depths_3D(vectors, workers=None):
+    """
+    Compute the depth of each vector in the ensemble in 3D using optimized vectorized operations.
+    Assumes vectors are in spherical coordinates (magnitude, theta, phi). The vector depth 
+    calculation is based on T. A. J. Ouermi, J. Li, Z. Morrow, B. Van Bloemen Waanders and 
+    C. R. Johnson, "Glyph-Based Uncertainty Visualization and Analysis of Time-Varying Vector 
+    Fields," 2024 IEEE Workshop on Uncertainty Visualization: Applications, Techniques, Software, 
     and Decision Frameworks, St Pete Beach, FL, USA, 2024, pp. 73-77, 
     doi: 10.1109/UncertaintyVisualization63963.2024.00014.
 
     Parameters:
     -----------
         vectors : numpy.ndarray
-            Array of shape (n, 3) representing 3D spherical coordinates.
+            Array of shape (n, 3) representing 3D spherical coordinates (magnitude, theta, phi).
+        workers : int, optional
+            Number of worker processes for parallel computation. Default is None (sequential).
+            Set to a positive integer to enable multiprocessing.
+
     Returns:
     --------
         depths : numpy.ndarray
             Array of shape (n,) with the depth of each vector.
+    
+    Notes:
+    ------
+        Optimized version using:
+        1. Vectorized magnitude/angle computation (precomputed once)
+        2. Algorithm optimization (avoid redundant computations)
+        3. Optional parallelization for large ensembles
     """
     n = vectors.shape[0]
-    depths = np.zeros(n)
-    # Calculate n choose 2 combinations of indices
-    n = vectors.shape[0]
+    
+    # Fast path for small ensembles
+    if n < 3:
+        return np.zeros(n)
+    
+    # OPTIMIZATION 1: Precompute all components once (vectorized)
+    magnitudes = vectors[:, 0]
+    thetas = vectors[:, 1]
+    phis = vectors[:, 2]
+    
+    # Generate pairs once
     pairs = list(combinations(np.arange(n), 2))
-
-    # Compute depth for each vector
-    for i in range(n):
-        depth = 0
-        for j, k in pairs:
-            mag_i, phi_i, theta_i = vectors[i][0], vectors[i][1], vectors[i][2]
-            mag_j, phi_j, theta_j = vectors[j][0], vectors[j][1], vectors[j][2]
-            mag_k, phi_k, theta_k = vectors[k][0], vectors[k][1], vectors[k][2]
-
-            # Check if vector i is between vectors j and k in spherical coordinates
-            if (theta_j < theta_i < theta_k or theta_k < theta_i < theta_j) and \
-               (phi_j < phi_i < phi_k or phi_k < phi_i < phi_j) and \
-               (min(mag_j, mag_k) < mag_i < max(mag_j, mag_k)):
-                depth += 1
-        depths[i] = depth
-
+    
+    # OPTIMIZATION 2: Vectorized depth computation
+    # For small ensembles, vectorized version is faster than parallelization overhead
+    if workers is None or workers <= 1 or n < 30:
+        depths = np.zeros(n, dtype=np.int32)
         
-    # scale depths between 0 and 1
+        # Convert pairs to arrays for vectorized operations
+        pairs_arr = np.array(pairs)
+        j_indices = pairs_arr[:, 0]
+        k_indices = pairs_arr[:, 1]
+        
+        # Precompute pair properties (vectorized)
+        mags_j = magnitudes[j_indices]
+        mags_k = magnitudes[k_indices]
+        thetas_j = thetas[j_indices]
+        thetas_k = thetas[k_indices]
+        phis_j = phis[j_indices]
+        phis_k = phis[k_indices]
+        
+        # Precompute min/max for magnitudes
+        min_mags = np.minimum(mags_j, mags_k)
+        max_mags = np.maximum(mags_j, mags_k)
+        
+        # Compute depth for each vector
+        for i in range(n):
+            mag_i = magnitudes[i]
+            theta_i = thetas[i]
+            phi_i = phis[i]
+            
+            # Vectorized theta check: i is between j and k
+            theta_between = ((thetas_j < theta_i) & (theta_i < thetas_k)) | \
+                           ((thetas_k < theta_i) & (theta_i < thetas_j))
+            
+            # Vectorized phi check: i is between j and k
+            phi_between = ((phis_j < phi_i) & (phi_i < phis_k)) | \
+                         ((phis_k < phi_i) & (phi_i < phis_j))
+            
+            # Vectorized magnitude check: i is between j and k (strict inequality)
+            mag_between = (min_mags < mag_i) & (mag_i < max_mags)
+            
+            # Count how many pairs satisfy all three conditions
+            depths[i] = np.sum(theta_between & phi_between & mag_between)
+    
+    else:
+        # OPTIMIZATION 3: Parallel computation for large ensembles
+        ctx = mp.get_context('fork')
+        pool = ctx.Pool(processes=workers)
+        
+        try:
+            # Prepare arguments for each vector
+            args_list = [(i, magnitudes, thetas, phis, pairs) for i in range(n)]
+            
+            # Compute depths in parallel
+            depths = np.array(pool.map(_compute_depth_for_vector_3D, args_list), dtype=np.int32)
+        finally:
+            pool.close()
+            pool.join()
+    
+    # Scale depths between 0 and 1
+    depths = depths.astype(np.float64)
     if depths.max() > 0.0:
         depths = (depths - depths.min()) / (depths.max() - depths.min())
     
-
     return depths
 
