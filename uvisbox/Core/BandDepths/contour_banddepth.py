@@ -7,12 +7,12 @@ def choose2(x):
     Helper function to compute x choose 2
 
     Parameters:
-    ----------
+    -----------
     x : int
         number of elements
     
     Returns:
-    -------
+    --------
     [] : int
         x choose 2  
     """

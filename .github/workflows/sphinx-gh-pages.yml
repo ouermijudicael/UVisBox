@@ -26,24 +26,30 @@ jobs:
         with:
           python-version: "3.11"   # or your version
 
+      - name: Setup virtual display
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -e .
-          pip install sphinx sphinx-rtd-theme  # add other extensions if needed
-          pip install scipy
-          pip install numpy
-          pip install matplotlib
-          pip install scikit-learn
-          pip install scikit-image
-          pip install pyvista
-          pip install basemap
-          pip install flask
+          pip install --upgrade pip
+          # Install essential dependencies for documentation
+          pip install numpy scipy scikit-learn scikit-image matplotlib sphinx sphinx-rtd-theme
+          # Install package without heavy dependencies (pyvista, basemap will be mocked)
+          pip install -e . --no-deps
 
-      - name: Build HTML
+      - name: Build documentation
+        env:
+          MPLBACKEND: Agg
+          PYVISTA_OFF_SCREEN: true
+          DISPLAY: ":99.0"
+          SPHINX_BUILD: "1"
         run: |
+          # Start virtual display
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
           cd docs
-          sphinx-build -b html source/ build/html   # adjust paths if needed
+          sphinx-build -b html source/ build/html/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
