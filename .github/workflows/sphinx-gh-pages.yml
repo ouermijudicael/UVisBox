@@ -38,6 +38,7 @@ jobs:
           pip install scikit-image
           pip install pyvista
           pip install basemap
+          pip install flask
 
       - name: Build HTML
         run: |
