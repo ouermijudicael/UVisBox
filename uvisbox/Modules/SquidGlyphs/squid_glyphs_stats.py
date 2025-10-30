@@ -6,7 +6,7 @@ from uvisbox.Core.BandDepths.vector_depths import calculate_spread_3D, compute_v
 from uvisbox.Core.BandDepths.vector_depths import cartesian_to_polar, cartesian_to_spherical
 
 
-def compute_squid_glyph_stats_2d(ensemble_vectors, percentile):
+def compute_squid_glyph_stats_2d(ensemble_vectors, percentile, workers=None):
     """
     Compute vector depth statistics for 2D squid glyphs.
     
@@ -20,6 +20,8 @@ def compute_squid_glyph_stats_2d(ensemble_vectors, percentile):
         - percentile=50: Include top 50% deepest vectors
         - percentile=95: Include top 95% deepest vectors (typical)
         - percentile=100: Include ALL vectors (maximum variation)
+    workers : int, optional
+        Number of parallel workers for depth computation. Default is None (sequential)
     
     Returns:
     --------
@@ -44,7 +46,7 @@ def compute_squid_glyph_stats_2d(ensemble_vectors, percentile):
     # Compute depths
     depths = np.zeros((num_positions, num_ensemble))
     for i in range(num_positions):
-        depths[i] = compute_vector_depths_2D(ensemble_polar_vectors[i])
+        depths[i] = compute_vector_depths_2D(ensemble_polar_vectors[i], workers=workers)
     
     # Calculate spreads using CORRECTED percentile semantics
     # percentile=95 means "keep top 95% by depth" = depth >= 5th percentile

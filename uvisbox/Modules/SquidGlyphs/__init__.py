@@ -17,13 +17,6 @@ Low-level API (for advanced customization):
     Visualization Stage:
         - render_squid_glyph_2d: Render 2D glyphs with matplotlib
         - render_squid_glyph_3d: Render 3D glyphs with pyvista
-
-Legacy functions (for backward compatibility):
-    - squid_glyphs_meshing_2D, squid_glyphs_meshing_3D
-    - matplotlib_uncertainty_squid_glyphs_2D_vis, pyvista_uncertainty_squid_glyphs_3D_vis
-    - compute_vector_depths_2D, compute_vector_depths_3D
-    - calculate_spread_2D, calculate_spread_3D
-    - getDirectionalVariations
 """
 
 # High-level API
@@ -33,30 +26,18 @@ from .squid_glyphs import squid_glyph_2D, squid_glyph_3D
 from .squid_glyphs_stats import (
     compute_squid_glyph_stats_2d,
     compute_squid_glyph_stats_3d,
-    # Legacy
-    compute_vector_depths_2D,
-    compute_vector_depths_3D,
-    calculate_spread_2D,
-    calculate_spread_3D,
-    getDirectionalVariations
 )
 
 # Low-level API - Mesh
 from .squid_glyphs_mesh import (
     build_squid_glyph_mesh_2d,
     build_squid_glyph_mesh_3d,
-    # Legacy
-    squid_glyphs_meshing_2D,
-    squid_glyphs_meshing_3D
 )
 
 # Low-level API - Visualization
 from .squid_glyphs_vis import (
     render_squid_glyph_2d,
     render_squid_glyph_3d,
-    # Legacy
-    matplotlib_uncertainty_squid_glyphs_2D_vis,
-    pyvista_uncertainty_squid_glyphs_3D_vis
 )
 
 __all__ = [
@@ -75,15 +56,4 @@ __all__ = [
     # Low-level API - Visualization
     'render_squid_glyph_2d',
     'render_squid_glyph_3d',
-    
-    # Legacy functions
-    'compute_vector_depths_2D',
-    'compute_vector_depths_3D',
-    'calculate_spread_2D',
-    'calculate_spread_3D',
-    'getDirectionalVariations',
-    'squid_glyphs_meshing_2D',
-    'squid_glyphs_meshing_3D',
-    'matplotlib_uncertainty_squid_glyphs_2D_vis',
-    'pyvista_uncertainty_squid_glyphs_3D_vis',
 ]

@@ -19,7 +19,14 @@ dependencies = [
     "basemap (>=2.0.0,<2.1.0)"
 ]
 
-
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+netcdf4 = "^1.7.3"
+pytest = "^8.4.2"
+black = "^25.9.0"
+isort = "^7.0.0"
+h5py = "^3.15.1"
+

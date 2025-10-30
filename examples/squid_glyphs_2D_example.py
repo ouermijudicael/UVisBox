@@ -181,7 +181,7 @@ ax1.set_xlim(xlim)
 ax1.set_ylim(ylim)
 ax1.set_xlabel("X")
 ax1.set_ylabel("Y")
-ax1.grid(zorder=0)
+ax1.grid()
 ax1.set_aspect('equal', adjustable='box')
 
 # Plot uncertainty squid glyphs
@@ -191,7 +191,7 @@ ax2.set_xlim(xlim)
 ax2.set_ylim(ylim)
 ax2.set_xlabel("X")
 ax2.set_ylabel("Y")
-ax2.grid(zorder=0)
+ax2.grid()
 ax2.set_aspect('equal', adjustable='box')
 
 plt.tight_layout()

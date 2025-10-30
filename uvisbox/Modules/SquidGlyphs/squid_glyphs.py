@@ -76,7 +76,7 @@ def squid_glyph_3D(positions, ensemble_vectors, point_values=None, percentile=95
     return plotter, mesh['points'], mesh['polygons']
 
 
-def squid_glyph_2D(positions, ensemble_vectors, percentile=95, scale=0.2, ax=None):
+def squid_glyph_2D(positions, ensemble_vectors, percentile=95, scale=0.2, ax=None, workers=None):
     """
     Visualize 2D uncertainty squid glyphs.
     
@@ -104,6 +104,8 @@ def squid_glyph_2D(positions, ensemble_vectors, percentile=95, scale=0.2, ax=Non
         The scale factor for the glyphs.
     ax : matplotlib axis
         The axis to draw on. If None, a new figure and axis will be created.
+    workers : int, optional
+        Number of parallel workers for computation. Default is None (sequential).
 
     Returns:
     --------
@@ -111,8 +113,8 @@ def squid_glyph_2D(positions, ensemble_vectors, percentile=95, scale=0.2, ax=Non
         The axis with the drawn squid glyphs.
 
     """
-    # Stage 1: Compute statistics
-    stats = compute_squid_glyph_stats_2d(ensemble_vectors, percentile)
+        # 1. Compute vector depth statistics
+    stats = compute_squid_glyph_stats_2d(ensemble_vectors, percentile, workers=workers)
     
     # Stage 2: Build mesh
     mesh = build_squid_glyph_mesh_2d(positions, stats, scale)

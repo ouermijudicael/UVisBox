@@ -3,9 +3,63 @@
 import numpy as np
 
 
+def _rotate_point_2d(pt, angle):
+    """Rotate a 2D point by given angle."""
+    return np.array([
+        pt[0] * np.cos(angle) - pt[1] * np.sin(angle),
+        pt[0] * np.sin(angle) + pt[1] * np.cos(angle)
+    ])
+
+
+def _add_quad_2d(points, polygons, point_idx, tri_idx, corners, position, rot_angle, scale):
+    """Add a quadrilateral as 2 triangles to the 2D mesh."""
+    # Rotate and position all 4 corners
+    pts = []
+    for corner in corners:
+        pt = corner * scale
+        pt = _rotate_point_2d(pt, rot_angle)
+        pt = pt + position
+        pts.append(pt)
+    
+    # Add points
+    for i, pt in enumerate(pts):
+        points[point_idx + i] = pt
+    
+    # Add triangles (counter-clockwise winding)
+    polygons[tri_idx] = [point_idx, point_idx + 1, point_idx + 2]
+    polygons[tri_idx + 1] = [point_idx + 1, point_idx + 3, point_idx + 2]
+    
+    return point_idx + 4, tri_idx + 2
+
+
+def _add_triangle_2d(points, polygons, point_idx, tri_idx, corners, position, rot_angle, scale):
+    """Add a triangle to the 2D mesh."""
+    # Rotate and position all 3 corners
+    pts = []
+    for corner in corners:
+        pt = corner * scale
+        pt = _rotate_point_2d(pt, rot_angle)
+        pt = pt + position
+        pts.append(pt)
+    
+    # Add points
+    for i, pt in enumerate(pts):
+        points[point_idx + i] = pt
+    
+    # Add triangle
+    polygons[tri_idx] = [point_idx, point_idx + 1, point_idx + 2]
+    
+    return point_idx + 3, tri_idx + 1
+
+
 def build_squid_glyph_mesh_2d(positions, stats_2d, scale=0.2):
     """
     Build 2D squid glyph mesh from statistics.
+    
+    Creates arrow-shaped glyphs with three components:
+    1. Base rectangle (uncertainty in magnitude)
+    2. Shaft rectangle (tapered middle section)
+    3. Head triangle (arrow tip)
     
     Parameters:
     -----------
@@ -24,13 +78,11 @@ def build_squid_glyph_mesh_2d(positions, stats_2d, scale=0.2):
             'polygons': (m, 3) - triangle connectivity
         }
     """
-    ensemble_polar_vectors = stats_2d['ensemble_polar_vectors']
-    depths = stats_2d['depths']
+    median_vectors = stats_2d['median_vectors']
     min_mags = stats_2d['min_mag']
     max_mags = stats_2d['max_mag']
     min_angles = stats_2d['min_angle']
     max_angles = stats_2d['max_angle']
-    median_vectors = stats_2d['median_vectors']
     
     num_positions = positions.shape[0]
     glyphs_points = np.zeros((num_positions * 11, 2))
@@ -40,103 +92,55 @@ def build_squid_glyph_mesh_2d(positions, stats_2d, scale=0.2):
     point_idx = 0
     
     for i_pos in range(num_positions):
+        # Extract glyph parameters
         median_vector = median_vectors[i_pos]
         min_mag = min_mags[i_pos]
         max_mag = max_mags[i_pos]
         min_angle = min_angles[i_pos]
         max_angle = max_angles[i_pos]
+        position = positions[i_pos]
         
-        delta_h = max_mag - min_mag
-        h = median_vector[0]
-        rad_angle = (max_angle - min_angle) * 0.5
-        rot_angle = median_vector[1] - np.pi * 0.5
-        base = 2 * np.arctan(rad_angle) * max_mag
+        # Compute glyph dimensions
+        delta_h = max_mag - min_mag  # Height of base (magnitude uncertainty)
+        h = median_vector[0]  # Median magnitude
+        rad_angle = (max_angle - min_angle) * 0.5  # Half angular spread
+        rot_angle = median_vector[1] - np.pi * 0.5  # Rotation to align with median direction
+        base = 2 * np.arctan(rad_angle) * max_mag  # Width of base
         
-        # Build 2D squid glyph triangulation
-        if (base > 1e-5) and (delta_h > 1e-5):
-            # Base (2 triangles)
-            pt = np.array([- base * 0.5, 0]) * scale
-            pt = np.array([pt[0]*np.cos(rot_angle) - pt[1]*np.sin(rot_angle),
-                           pt[0]*np.sin(rot_angle) + pt[1]*np.cos(rot_angle)])
-            pt = pt + positions[i_pos]
-            
-            pt1 = np.array([base * 0.5, 0]) * scale
-            pt1 = np.array([pt1[0]*np.cos(rot_angle) - pt1[1]*np.sin(rot_angle),
-                            pt1[0]*np.sin(rot_angle) + pt1[1]*np.cos(rot_angle)])
-            pt1 = pt1 + positions[i_pos]
-
-            pt2 = np.array([- base * 0.5, delta_h]) * scale
-            pt2 = np.array([pt2[0]*np.cos(rot_angle) - pt2[1]*np.sin(rot_angle),
-                            pt2[0]*np.sin(rot_angle) + pt2[1]*np.cos(rot_angle)])
-            pt2 = pt2 + positions[i_pos]
-
-            pt3 = np.array([base * 0.5, delta_h]) * scale
-            pt3 = np.array([pt3[0]*np.cos(rot_angle) - pt3[1]*np.sin(rot_angle),
-                            pt3[0]*np.sin(rot_angle) + pt3[1]*np.cos(rot_angle)])
-            pt3 = pt3 + positions[i_pos]
-            
-            glyphs_points[point_idx] = pt
-            glyphs_points[point_idx+1] = pt1
-            glyphs_points[point_idx+2] = pt2
-            glyphs_points[point_idx+3] = pt3
-            glyphs_polygons[tri_idx] = [point_idx, point_idx+1, point_idx+2]
-            glyphs_polygons[tri_idx+1] = [point_idx+1, point_idx+3, point_idx+2]
-            tri_idx += 2
-            point_idx += 4
-
-            # Shaft (2 triangles)
-            shaft_pt = np.array([- np.arctan(rad_angle)*h, delta_h]) * scale
-            shaft_pt = np.array([shaft_pt[0]*np.cos(rot_angle) - shaft_pt[1]*np.sin(rot_angle),
-                                 shaft_pt[0]*np.sin(rot_angle) + shaft_pt[1]*np.cos(rot_angle)])
-            shaft_pt = shaft_pt + positions[i_pos]
-            
-            shaft_pt1 = np.array([np.arctan(rad_angle)*h, delta_h]) * scale
-            shaft_pt1 = np.array([shaft_pt1[0]*np.cos(rot_angle) - shaft_pt1[1]*np.sin(rot_angle),
-                                  shaft_pt1[0]*np.sin(rot_angle) + shaft_pt1[1]*np.cos(rot_angle)])
-            shaft_pt1 = shaft_pt1 + positions[i_pos]
-            
-            shaft_pt2 = np.array([- np.arctan(rad_angle)*max_mag*0.2, max_mag*0.8]) * scale
-            shaft_pt2 = np.array([shaft_pt2[0]*np.cos(rot_angle) - shaft_pt2[1]*np.sin(rot_angle),
-                                  shaft_pt2[0]*np.sin(rot_angle) + shaft_pt2[1]*np.cos(rot_angle)])
-            shaft_pt2 = shaft_pt2 + positions[i_pos]
-            
-            shaft_pt3 = np.array([np.arctan(rad_angle)*max_mag*0.2, max_mag*0.8]) * scale
-            shaft_pt3 = np.array([shaft_pt3[0]*np.cos(rot_angle) - shaft_pt3[1]*np.sin(rot_angle),
-                                  shaft_pt3[0]*np.sin(rot_angle) + shaft_pt3[1]*np.cos(rot_angle)])
-            shaft_pt3 = shaft_pt3 + positions[i_pos]
-            
-            glyphs_points[point_idx] = shaft_pt
-            glyphs_points[point_idx+1] = shaft_pt1
-            glyphs_points[point_idx+2] = shaft_pt2
-            glyphs_points[point_idx+3] = shaft_pt3      
-            glyphs_polygons[tri_idx] = [point_idx, point_idx+1, point_idx+2]
-            glyphs_polygons[tri_idx+1] = [point_idx+1, point_idx+3, point_idx+2]
-            tri_idx += 2
-            point_idx += 4
-
-            # Head (1 triangle)
-            head_pt = np.array([- base *0.5, max_mag*0.8]) * scale
-            head_pt = np.array([head_pt[0]*np.cos(rot_angle) - head_pt[1]*np.sin(rot_angle),
-                               head_pt[0]*np.sin(rot_angle) + head_pt[1]*np.cos(rot_angle)])
-            head_pt = head_pt + positions[i_pos]
-            
-            head_pt1 = np.array([base *0.5, max_mag*0.8]) * scale
-            head_pt1 = np.array([head_pt1[0]*np.cos(rot_angle) - head_pt1[1]*np.sin(rot_angle),
-                                 head_pt1[0]*np.sin(rot_angle) + head_pt1[1]*np.cos(rot_angle)])
-            head_pt1 = head_pt1 + positions[i_pos]
-            
-            head_pt2 = np.array([0, max_mag]) * scale
-            head_pt2 = np.array([head_pt2[0]*np.cos(rot_angle) - head_pt2[1]*np.sin(rot_angle),
-                                 head_pt2[0]*np.sin(rot_angle) + head_pt2[1]*np.cos(rot_angle)])
-            head_pt2 = head_pt2 + positions[i_pos]
-            
-            glyphs_points[point_idx] = head_pt
-            glyphs_points[point_idx+1] = head_pt1
-            glyphs_points[point_idx+2] = head_pt2
-            glyphs_polygons[tri_idx] = [point_idx, point_idx+1, point_idx+2]
-            tri_idx += 1
-            point_idx += 3  
-
+        # Skip degenerate glyphs
+        if base <= 1e-5 or delta_h <= 1e-5:
+            continue
+        
+        # 1. BASE RECTANGLE (magnitude uncertainty)
+        base_corners = np.array([
+            [-base * 0.5, 0],          # Bottom left
+            [base * 0.5, 0],           # Bottom right
+            [-base * 0.5, delta_h],    # Top left
+            [base * 0.5, delta_h]      # Top right
+        ])
+        point_idx, tri_idx = _add_quad_2d(glyphs_points, glyphs_polygons, point_idx, tri_idx,
+                                          base_corners, position, rot_angle, scale)
+        
+        # 2. SHAFT RECTANGLE (tapered middle section)
+        shaft_width = np.arctan(rad_angle) * h
+        shaft_corners = np.array([
+            [-shaft_width, delta_h],              # Bottom left
+            [shaft_width, delta_h],               # Bottom right
+            [-np.arctan(rad_angle) * max_mag * 0.2, max_mag * 0.8],  # Top left
+            [np.arctan(rad_angle) * max_mag * 0.2, max_mag * 0.8]    # Top right
+        ])
+        point_idx, tri_idx = _add_quad_2d(glyphs_points, glyphs_polygons, point_idx, tri_idx,
+                                          shaft_corners, position, rot_angle, scale)
+        
+        # 3. HEAD TRIANGLE (arrow tip)
+        head_corners = np.array([
+            [-base * 0.5, max_mag * 0.8],  # Left base
+            [base * 0.5, max_mag * 0.8],   # Right base
+            [0, max_mag]                    # Tip
+        ])
+        point_idx, tri_idx = _add_triangle_2d(glyphs_points, glyphs_polygons, point_idx, tri_idx,
+                                              head_corners, position, rot_angle, scale)
+    
     return {
         'points': glyphs_points[:point_idx],
         'polygons': glyphs_polygons[:tri_idx]
@@ -197,412 +201,234 @@ def build_squid_glyph_mesh_3d(positions, stats_3d, point_values=None, scale=0.5,
     }
 
 
-def squid_glyphs_meshing_2D(positions, ensemble_polar_vectors, vector_depths, percentile1, scale=0.2):
-    """
-    Build squid glyphs for 2D visualization. Assumes vectors are in polar coordinates (magnitude, angle).
+def _compute_ellipse_scale_and_angle(directional_variations, i_p):
+    """Compute ellipse scale factor and rotation angle from PCA components."""
+    v0_scale = directional_variations[i_p][0][0]
+    v1_scale = directional_variations[i_p][0][1]
     
-    Parameters:
-    -----------
-    positions : numpy.ndarray
-        Array of shape (n, 2) The positions of the squid glyphs.
-    ensemble_polar_vectors : numpy.ndarray
-        Array of shape (n, m, 2) The ensemble polar vectors for each position.
-    vector_depths : numpy.ndarray
-        Array of shape (n, m) The vector depths for each position.
-    percentile1 : float
-        The first percentile for depth filtering (0-100).
-    scale : float
-        The scale factor for the glyphs.
+    if np.absolute(v0_scale) < 1.e-20:
+        return 1.0, 0.001
     
-    Returns:
-    --------
-    glyphs_points : numpy.ndarray
-        Array of shape (k, 2) The points of the squid glyphs.
-    glyphs_polygons : numpy.ndarray
-        Array of shape (k, 3) The polygons of the squid glyphs.
-    """
-    # Convert percentile from 0-100 to 0-1 range
-    percentile_norm = percentile1 / 100.0
+    elipse_scale = np.maximum(v1_scale / v0_scale, 0.01)
+    v0 = directional_variations[i_p][1]
     
-    num_positions = ensemble_polar_vectors.shape[0]
+    if np.absolute(v0[0]) < 1.e-16 and np.absolute(v0[1]) < 1.e-16:
+        angle = 0.0
+    else:
+        angle = np.arctan2(v0[1], v0[0])
+    
+    return elipse_scale, angle
 
-    glyphs_points = np.zeros((num_positions*11, 2))
-    glyphs_polygons = np.zeros((num_positions*5, 3), dtype=int)
-    tri_idx = 0
-    point_idx = 0
-    for i_pos in range(num_positions):
 
-        median_idx = np.argmax(vector_depths[i_pos])
-        median_vector = ensemble_polar_vectors[i_pos][median_idx] if median_idx is not None else np.array([0,0])
-        indices = np.where(vector_depths[i_pos] >= 1.0 - percentile_norm)[0]
-        min_mag = np.min(ensemble_polar_vectors[i_pos][indices][:, 0]) if indices.size > 0 else 0
-        max_mag = np.max(ensemble_polar_vectors[i_pos][indices][:, 0]) if indices.size > 0 else 0
-        min_angle = np.min(ensemble_polar_vectors[i_pos][indices][:, 1]) if indices.size > 0 else 0
-        max_angle = np.max(ensemble_polar_vectors[i_pos][indices][:, 1]) if indices.size > 0 else 0
-        
-        delta_h = max_mag -min_mag
-        h = median_vector[0]
+def _compute_superellipse_profile(r0, r1, angle, resolution):
+    """Compute superellipse profile in 2D (x, y coordinates)."""
+    phi_vals = np.linspace(0, 2 * np.pi, resolution)
+    x0 = np.abs(np.cos(phi_vals))**(2/4) * np.sign(np.cos(phi_vals)) * r0
+    y0 = np.abs(np.sin(phi_vals))**(2/4) * np.sign(np.sin(phi_vals)) * r1
+    
+    # Rotate by angle
+    x = x0 * np.cos(angle) - y0 * np.sin(angle)
+    y = x0 * np.sin(angle) + y0 * np.cos(angle)
+    
+    return x, y
 
-        rad_angle = (max_angle - min_angle)*0.5
-        rot_angle = median_vector[1]- np.pi*0.5 # rotate median vector to y-axis
-        base = 2* np.arctan(rad_angle)*max_mag
-        # build 2D squid glyph triangulation
-        if (base > 1e-5) and (delta_h > 1e-5):
-            # base bottom left
-            pt = np.array([- base * 0.5, 0]) * scale
-            pt = np.array([pt[0]*np.cos(rot_angle) - pt[1]*np.sin(rot_angle),
-                           pt[0]*np.sin(rot_angle) + pt[1]*np.cos(rot_angle)])
-            pt = pt + positions[i_pos]
-            
-            # base bottom right
-            pt1 = np.array([base * 0.5, 0]) * scale
-            pt1 = np.array([pt1[0]*np.cos(rot_angle) - pt1[1]*np.sin(rot_angle),
-                            pt1[0]*np.sin(rot_angle) + pt1[1]*np.cos(rot_angle)])
-            pt1 = pt1 + positions[i_pos]
 
-            # base top left
-            pt2 = np.array([- base * 0.5, delta_h]) * scale
-            pt2 = np.array([pt2[0]*np.cos(rot_angle) - pt2[1]*np.sin(rot_angle),
-                            pt2[0]*np.sin(rot_angle) + pt2[1]*np.cos(rot_angle)])
-            pt2 = pt2 + positions[i_pos]
+def _create_rotation_matrix(median_vector):
+    """Create 3D rotation matrix from spherical coordinates."""
+    phi = median_vector[2]
+    theta = median_vector[1]
+    
+    # Rotation around y-axis by theta (polar angle from z-axis)
+    Ry = np.array([
+        [np.cos(theta), 0, np.sin(theta)],
+        [0, 1, 0],
+        [-np.sin(theta), 0, np.cos(theta)]
+    ])
+    
+    # Rotation around z-axis by phi (azimuthal angle)
+    Rz = np.array([
+        [np.cos(phi), -np.sin(phi), 0],
+        [np.sin(phi), np.cos(phi), 0],
+        [0, 0, 1]
+    ])
+    
+    return Rz @ Ry
 
-            # base top right
-            pt3 = np.array([base * 0.5, delta_h]) * scale
-            pt3 = np.array([pt3[0]*np.cos(rot_angle) - pt3[1]*np.sin(rot_angle),
-                            pt3[0]*np.sin(rot_angle) + pt3[1]*np.cos(rot_angle)])
-            pt3 = pt3 + positions[i_pos]
-            glyphs_points[point_idx] = pt
-            glyphs_points[point_idx+1] = pt1
-            glyphs_points[point_idx+2] = pt2
-            glyphs_points[point_idx+3] = pt3
-            glyphs_polygons[tri_idx] = [point_idx, point_idx+1, point_idx+2]
-            glyphs_polygons[tri_idx+1] = [point_idx+1, point_idx+3, point_idx+2]
-            tri_idx += 2
-            point_idx += 4
 
-            # shaft bottom left
-            shaft_pt = np.array([- np.arctan(rad_angle)*h, delta_h]) * scale
-            shaft_pt = np.array([shaft_pt[0]*np.cos(rot_angle) - shaft_pt[1]*np.sin(rot_angle),
-                                 shaft_pt[0]*np.sin(rot_angle) + shaft_pt[1]*np.cos(rot_angle)])
-            shaft_pt = shaft_pt + positions[i_pos]
-            # shaft bottom right
-            shaft_pt1 = np.array([np.arctan(rad_angle)*h, delta_h]) * scale
-            shaft_pt1 = np.array([shaft_pt1[0]*np.cos(rot_angle) - shaft_pt1[1]*np.sin(rot_angle),
-                                  shaft_pt1[0]*np.sin(rot_angle) + shaft_pt1[1]*np.cos(rot_angle)])
-            shaft_pt1 = shaft_pt1 + positions[i_pos]
-            # shaft top left
-            shaft_pt2 = np.array([- np.arctan(rad_angle)*max_mag*0.2, max_mag*0.8]) * scale
-            shaft_pt2 = np.array([shaft_pt2[0]*np.cos(rot_angle) - shaft_pt2[1]*np.sin(rot_angle),
-                                  shaft_pt2[0]*np.sin(rot_angle) + shaft_pt2[1]*np.cos(rot_angle)])
-            shaft_pt2 = shaft_pt2 + positions[i_pos]
-            # shaft top right
-            shaft_pt3 = np.array([np.arctan(rad_angle)*max_mag*0.2, max_mag*0.8]) * scale
-            shaft_pt3 = np.array([shaft_pt3[0]*np.cos(rot_angle) - shaft_pt3[1]*np.sin(rot_angle),
-                                  shaft_pt3[0]*np.sin(rot_angle) + shaft_pt3[1]*np.cos(rot_angle)])
-            shaft_pt3 = shaft_pt3 + positions[i_pos]
-            glyphs_points[point_idx] = shaft_pt
-            glyphs_points[point_idx+1] = shaft_pt1
-            glyphs_points[point_idx+2] = shaft_pt2
-            glyphs_points[point_idx+3] = shaft_pt3      
-            glyphs_polygons[tri_idx] = [point_idx, point_idx+1, point_idx+2]
-            glyphs_polygons[tri_idx+1] = [point_idx+1, point_idx+3, point_idx+2]
-            tri_idx += 2
-            point_idx += 4
+def _add_circle_ring(points, points_values, points_id, x, y, z_offset, R, position, scale, scaler_value, resolution):
+    """Add a circular ring of vertices to the mesh."""
+    for i in range(resolution):
+        pt = R @ np.array([x[i], y[i], z_offset])
+        pt = pt * scale + position
+        points[points_id + i] = pt
+        points_values[points_id + i] = scaler_value
+    return points_id + resolution
 
-            # head bottom left
-            head_pt = np.array([- base *0.5, max_mag*0.8]) * scale
-            head_pt = np.array([head_pt[0]*np.cos(rot_angle) - head_pt[1]*np.sin(rot_angle),
-                               head_pt[0]*np.sin(rot_angle) + head_pt[1]*np.cos(rot_angle)])
-            head_pt = head_pt + positions[i_pos]
-            # head bottom right
-            head_pt1 = np.array([base *0.5, max_mag*0.8]) * scale
-            head_pt1 = np.array([head_pt1[0]*np.cos(rot_angle) - head_pt1[1]*np.sin(rot_angle),
-                                 head_pt1[0]*np.sin(rot_angle) + head_pt1[1]*np.cos(rot_angle)])
-            head_pt1 = head_pt1 + positions[i_pos]
-            # head top (tip)
-            head_pt2 = np.array([0, max_mag]) * scale
-            head_pt2 = np.array([head_pt2[0]*np.cos(rot_angle) - head_pt2[1]*np.sin(rot_angle),
-                                 head_pt2[0]*np.sin(rot_angle) + head_pt2[1]*np.cos(rot_angle)])
-            head_pt2 = head_pt2 + positions[i_pos]
-            glyphs_points[point_idx] = head_pt
-            glyphs_points[point_idx+1] = head_pt1
-            glyphs_points[point_idx+2] = head_pt2
-            glyphs_polygons[tri_idx] = [point_idx, point_idx+1, point_idx+2]
-            tri_idx += 1
-            point_idx += 3  
 
-    return glyphs_points[:point_idx], glyphs_polygons[:tri_idx]
+def _add_center_point(points, points_values, points_id, z_offset, R, position, scale, scaler_value):
+    """Add a center point for a circle."""
+    if z_offset == 0:
+        pt = position
+    else:
+        pt = R @ np.array([0, 0, z_offset])
+        pt = pt * scale + position
+    
+    points[points_id] = pt
+    points_values[points_id] = scaler_value
+    return points_id + 1
+
+
+def _triangulate_disk(polygons, polygons_id, center_id, ring_start_id, resolution):
+    """Triangulate a disk (center + outer ring)."""
+    for i in range(resolution):
+        polygons[polygons_id] = [ring_start_id + i, center_id, ring_start_id + (i + 1) % resolution]
+        polygons_id += 1
+    return polygons_id
+
+
+def _triangulate_cylinder(polygons, polygons_id, bottom_ring_id, top_ring_id, resolution):
+    """Triangulate a cylindrical surface between two rings."""
+    for i in range(resolution):
+        # Triangle 1
+        polygons[polygons_id] = [bottom_ring_id + i, top_ring_id + i, top_ring_id + (i + 1) % resolution]
+        polygons_id += 1
+        # Triangle 2
+        polygons[polygons_id] = [top_ring_id + (i + 1) % resolution, bottom_ring_id + (i + 1) % resolution, bottom_ring_id + i]
+        polygons_id += 1
+    return polygons_id
 
 
 def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vectors, 
                                     median_vectors, max_vectors, scaler_values, glyph_markers, scale, resolution, num_of_glyphs):
     """
-    Build superelliptical squid glyphs for 3D visualization. Assumes vectors are in spherical coordinates (magnitude, theta, phi).
-
+    Build superelliptical squid glyphs for 3D visualization.
+    
+    Creates glyphs with these components:
+    1. Base disk (at position)
+    2. Body cylinder (from base to shoulder)
+    3. Shaft (tapered section)
+    4. Head cone (arrow tip)
+    
     Parameters:
     -----------
     directional_variations : numpy.ndarray
-        Array of shape (n, 4, 2) where the 4 represents the
-        (pca variance, pca first component, pca second component, pca mean) and the 2 represents
-        the x and y components of the pca components.
+        PCA components for cross-section shape
     positions : numpy.ndarray
-        Array of shape (n, 3) The positions of the squid glyphs.
+        Glyph center positions (n, 3)
     vectors : numpy.ndarray
-        Array of shape (n, m, 3) The ensemble vectors in spherical coordinates.
-    min_vectors : numpy.ndarray
-        Array of shape (n, 3) The minimum vectors in spherical coordinates.
-    median_vectors : numpy.ndarray
-        Array of shape (n, 3) The median vectors in spherical coordinates.
-    max_vectors : numpy.ndarray
-        Array of shape (n, 3) The maximum vectors in spherical coordinates.
+        Ensemble vectors (unused, for compatibility)
+    min_vectors, median_vectors, max_vectors : numpy.ndarray
+        Vector statistics in spherical coordinates
     scaler_values : numpy.ndarray
-        Array of shape (n,) The scaler values for each glyph.
+        Scalar values for coloring
     glyph_markers : numpy.ndarray
-        Array of shape (n,) with values 0 (no glyph), 1 (full glyph), 2 (arrow only)
+        Glyph type flags (0=none, 1=full, 2=arrow only)
     scale : float
-        The scale factor for the glyphs.
+        Overall glyph scale
     resolution : int
-        The resolution of the base circle of the squid glyph.
+        Number of vertices per circle
     num_of_glyphs : int
-        The number of glyphs to be created.
-
+        Number of full glyphs to create
+    
     Returns:
     --------
-    points : numpy.ndarray
-        Array of shape (m, 3) The points of the squid glyphs.
-    polygons : numpy.ndarray
-        Array of shape (k,) The polygon connectivity for the glyphs.
+    points, polygons, points_values : tuple
+        Mesh geometry and scalar values
     """
-    
     num_points = positions.shape[0]
-    points = np.zeros((num_of_glyphs*((resolution + 1)*3 + resolution*2 + 1), 3))
-    polygons = np.zeros((num_of_glyphs*((resolution)*8 ),3), dtype=np.int32)
-    points_values = np.zeros((num_of_glyphs*((resolution + 1)*3 + resolution*2 + 1)))
+    
+    # Pre-allocate arrays
+    points = np.zeros((num_of_glyphs * ((resolution + 1) * 3 + resolution * 2 + 1), 3))
+    polygons = np.zeros((num_of_glyphs * (resolution * 8), 3), dtype=np.int32)
+    points_values = np.zeros(num_of_glyphs * ((resolution + 1) * 3 + resolution * 2 + 1))
+    
     points_id = 0
     polygons_id = 0
-    old_points_id = 0
+    
     for i_p in range(num_points):
-        if(glyph_markers[i_p] == 1):
-            position = positions[i_p]
-            v0_scale = directional_variations[i_p][0][0]
-            v1_scale = directional_variations[i_p][0][1]
-            # # elipse_scale = np.maximum(v1_scale/v0_scale, 0.01)
-            if(np.absolute(v0_scale) < 1.e-20):
-                elipse_scale = 1.0
-                angle = 0.001 # min angle paramter
-            else:
-                elipse_scale = np.maximum(v1_scale/v0_scale, 0.01)
-                v0 = vectors[i_p][1]
-                v0 = directional_variations[i_p][1]
-                if (np.absolute(v0[0]) < 1.e-16 and np.absolute(v0[1]) < 1.e-16):
-                    angle = 0.0
-                else:
-                    angle = np.arctan2( v0[1], v0[0])
-                # mean_vals = directional_variations[ii_t][i_p][3]
-            min_vector = min_vectors[i_p]
-            median_vector = median_vectors[i_p]
-            max_vector = max_vectors[i_p]
-
-            
-            r0 = max_vector[0]*np.tan(max_vector[1]*0.5)
-            r0 = np.maximum(r0, 0.01*max_vector[0])
-            r1 = r0 * elipse_scale
-            phi_vals = np.linspace(0, 2*np.pi, resolution)
-            x0 = np.abs(np.cos(phi_vals))**(2/4)*np.sign(np.cos(phi_vals))* r0
-            y0 = np.abs(np.sin(phi_vals))**(2/4)*np.sign(np.sin(phi_vals))* r1
-
-            x = x0*np.cos(angle) - y0*np.sin(angle) #+ mean_vals[0]
-            y = x0*np.sin(angle) + y0*np.cos(angle) #+ mean_vals[1]
-            phi = median_vector[2]
-            theta = median_vector[1]
-           
-            # Rotation around y-axis by theta (polar angle from z-axis)
-            Ry = np.zeros((3, 3))
-            Ry[0][0] = np.cos(theta)
-            Ry[0][2] = np.sin(theta)
-            Ry[1][1] = 1
-            Ry[2][0] = -np.sin(theta)
-            Ry[2][2] = np.cos(theta)
-
-            # Rotation around z-axis by phi (azimuthal angle)
-            Rz = np.zeros((3, 3))
-            Rz[0][0] = np.cos(phi)
-            Rz[0][1] = -np.sin(phi)
-            Rz[1][0] = np.sin(phi)
-            Rz[1][1] = np.cos(phi)
-            Rz[2][2] = 1
-            
-            # FIXED: Use Ry (not Rx) to rotate from z-axis by theta
-            R = Rz @ Ry 
-            ## mappoints to the position
-            for i in range(resolution):
-                pt = np.dot(R, np.array([x[i], y[i], 0.0]))
-                # pt = np.dot(Rz, pt)
-                pt = pt*scale + position
-                points[points_id + i, 0] = pt[0]
-                points[points_id + i, 1] = pt[1]
-                points[points_id + i, 2] = pt[2]
-                points_values[points_id + i] = scaler_values[i_p]
-
-            pt = position
-            points[points_id + resolution, 0] = pt[0]
-            points[points_id + resolution, 1] = pt[1]
-            points[points_id + resolution, 2] = pt[2]
-            points_values[points_id + resolution] = scaler_values[i_p]
-
-            center_id = points_id + resolution 
-            for i in range(resolution):
-                polygons[polygons_id,0] = points_id + i
-                polygons[polygons_id,1] = center_id
-                polygons[polygons_id,2] = points_id + (i+1)%resolution
-                polygons_id += 1
-            old_points_id = points_id
-            points_id = points_id + resolution + 1
-
-
-            for i in range(resolution):
-                pt = np.dot(R, np.array([x[i], y[i], max_vector[0]-min_vector[0]]))
-                # pt = np.dot(Rz, pt)
-                pt = pt*scale + position
-                points[points_id + i, 0] = pt[0]
-                points[points_id + i, 1] = pt[1]
-                points[points_id + i, 2] = pt[2]
-                points_values[points_id + i] = scaler_values[i_p]
-
-            pt = np.dot(R, np.array([0, 0, max_vector[0]-min_vector[0]])) 
-            # pt = np.dot(Rz, pt)
-            pt = pt*scale + position
-            points[points_id + resolution, 0] = pt[0]
-            points[points_id + resolution, 1] = pt[1]
-            points[points_id + resolution, 2] = pt[2]
-            points_values[points_id + resolution] = scaler_values[i_p]
-
-            center_id = points_id + resolution
-
-            for i in range(resolution):
-                polygons[polygons_id, 0] = old_points_id + i
-                polygons[polygons_id, 1] = points_id + i
-                polygons[polygons_id, 2] = points_id + (i+1)%resolution
-                polygons_id += 1
-                polygons[polygons_id, 0] = points_id + (i+1)%resolution
-                polygons[polygons_id, 1] = old_points_id + (i+1)%resolution
-                polygons[polygons_id, 2] = old_points_id + i
-                polygons_id += 1
-
-            for i in range(resolution):
-                polygons[polygons_id,0] = points_id + i
-                polygons[polygons_id,1] = center_id
-                polygons[polygons_id,2] = points_id + (i+1)%resolution
-                polygons_id += 1
-            
-            old_points_id = points_id
-            points_id = points_id + resolution + 1
-
-
-
-            # # # angle0 = np.arctan2(v0_scale, max_vector[0])
-            # shaft_base_v0_scale = v0_scale/max_vector[0]*min_vector[0]
-            # shaft_base_v1_scale = v1_scale/max_vector[0]*min_vector[0]
-            shaft_base_r0 = min_vector[0]*np.tan(np.absolute(max_vector[1])*0.5)
-            shaft_base_r0 = np.maximum(shaft_base_r0, 0.01*min_vector[0])
-            shaft_base_r1 = shaft_base_r0 * elipse_scale
-
-            x0 = np.abs(np.cos(phi_vals))**(2/4)*np.sign(np.cos(phi_vals))* shaft_base_r0
-            y0 = np.abs(np.sin(phi_vals))**(2/4)*np.sign(np.sin(phi_vals))* shaft_base_r1
-            x = x0*np.cos(angle) - y0*np.sin(angle) #+ mean_vals[0]
-            y = x0*np.sin(angle) + y0*np.cos(angle) #+ mean_vals[1]
-            for i in range(resolution):
-                pt = np.dot(R, np.array([x[i], y[i], max_vector[0] - min_vector[0]]))
-                # pt = np.dot(Rz, pt)
-                pt = pt*scale + position
-                points[points_id + i, 0] = pt[0]
-                points[points_id + i, 1] = pt[1]
-                points[points_id + i, 2] = pt[2]
-                points_values[points_id + i] = scaler_values[i_p]
-            old_points_id = points_id
-            points_id += resolution
-            # shaft_top_v0_scale = v0_scale/max_vector[0]*(0.2*max_vector[0])
-            # shaft_top_v1_scale = v1_scale/max_vector[0]*(0.2*max_vector[0])
-            shaft_top_r0 = 0.2*max_vector[0]*np.tan(np.absolute(max_vector[1])*0.5)
-            shaft_top_r0 = np.maximum(shaft_top_r0, 0.01*0.2*max_vector[0])
-            shaft_top_r1 = shaft_top_r0 * elipse_scale
-
-            x0 = np.abs(np.cos(phi_vals))**(2/4)*np.sign(np.cos(phi_vals))* shaft_top_r0
-            y0 = np.abs(np.sin(phi_vals))**(2/4)*np.sign(np.sin(phi_vals))* shaft_top_r1
-            x = x0*np.cos(angle) - y0*np.sin(angle) #+ mean_vals[0]
-            y = x0*np.sin(angle) + y0*np.cos(angle) #+ mean_vals[1]
-            for i in range(resolution):
-                pt = np.dot(R, np.array([x[i], y[i], 0.8*max_vector[0]]))
-                # pt = np.dot(Rz, pt)
-                pt = pt*scale + position
-                points[points_id + i, 0] = pt[0]
-                points[points_id + i, 1] = pt[1]
-                points[points_id + i, 2] = pt[2]
-                points_values[points_id + i] = scaler_values[i_p]
-
-            for i in range(resolution):
-                polygons[polygons_id, 0] = old_points_id + i
-                polygons[polygons_id, 1] = points_id + i
-                polygons[polygons_id, 2] = points_id + (i+1)%resolution
-                polygons_id += 1
-                polygons[polygons_id, 0] = points_id + (i+1)%resolution
-                polygons[polygons_id, 1] = old_points_id + (i+1)%resolution
-                polygons[polygons_id, 2] = old_points_id + i
-                polygons_id += 1
-
-            old_points_id += points_id
-            points_id += resolution
-
-            x0 = np.abs(np.cos(phi_vals))**(2/4)*np.sign(np.cos(phi_vals))* r0 
-            y0 = np.abs(np.sin(phi_vals))**(2/4)*np.sign(np.sin(phi_vals))* r1
-
-            x = x0*np.cos(angle) - y0*np.sin(angle) #+ mean_vals[0]
-            y = x0*np.sin(angle) + y0*np.cos(angle) #+ mean_vals[1]
-
-            for i in range(resolution):
-                pt = np.dot(R, np.array([x[i], y[i], 0.8*max_vector[0]]))
-                # pt = np.dot(Rz, pt)
-                pt = pt*scale + position
-                points[points_id + i, 0] = pt[0]
-                points[points_id + i, 1] = pt[1]
-                points[points_id + i, 2] = pt[2]
-                points_values[points_id + i] = scaler_values[i_p]
-
-            pt = np.dot(R, np.array([0.0, 0.0, 0.8*max_vector[0]]))
-            # pt = np.dot(Rz, pt)
-            pt = pt*scale + position
-            points[points_id + resolution, 0] = pt[0]
-            points[points_id + resolution, 1] = pt[1]
-            points[points_id + resolution, 2] = pt[2]
-            points_values[points_id + resolution] = scaler_values[i_p]
-            center_id = points_id + resolution
-            for i in range(resolution):
-                polygons[polygons_id,0] = points_id + i
-                polygons[polygons_id,1] = center_id
-                polygons[polygons_id,2] = points_id + (i+1)%resolution
-                polygons_id += 1
-            
-            
-
-            # cone tip
-            # pt = np.dot(Ry, np.array([mean_vals[0], mean_vals[1], max_vector[0]]))
-            pt = np.dot(R, np.array([0, 0, max_vector[0]]))
-            # pt = np.dot(Rz, pt)
-            pt = pt*scale + position
-            points[points_id + resolution+1, 0] = pt[0]
-            points[points_id + resolution+1, 1] = pt[1]
-            points[points_id + resolution+1, 2] = pt[2]
-            points_values[points_id + resolution+1] = scaler_values[i_p]
-            tip_id = points_id + resolution + 1
-
-            for i in range(resolution):
-                polygons[polygons_id, 0] = points_id + i
-                polygons[polygons_id, 1] = tip_id
-                polygons[polygons_id, 2] = points_id + (i + 1)%resolution
-                polygons_id += 1
-            old_points_id = points_id
-            points_id = points_id + resolution + 2
-
-    return points, polygons, points_values
+        if glyph_markers[i_p] != 1:  # Skip if not a full glyph
+            continue
+        
+        # Extract parameters
+        position = positions[i_p]
+        min_vector = min_vectors[i_p]
+        median_vector = median_vectors[i_p]
+        max_vector = max_vectors[i_p]
+        scaler_value = scaler_values[i_p]
+        
+        # Compute ellipse parameters
+        elipse_scale, angle = _compute_ellipse_scale_and_angle(directional_variations, i_p)
+        
+        # Compute rotation matrix
+        R = _create_rotation_matrix(median_vector)
+        
+        # Base radius (at max_vector magnitude)
+        r0_base = np.maximum(max_vector[0] * np.tan(max_vector[1] * 0.5), 0.01 * max_vector[0])
+        r1_base = r0_base * elipse_scale
+        x_base, y_base = _compute_superellipse_profile(r0_base, r1_base, angle, resolution)
+        
+        # 1. BASE DISK (bottom at position)
+        base_ring_id = points_id
+        points_id = _add_circle_ring(points, points_values, points_id, x_base, y_base, 0.0, 
+                                     R, position, scale, scaler_value, resolution)
+        base_center_id = points_id
+        points_id = _add_center_point(points, points_values, points_id, 0.0, 
+                                       R, position, scale, scaler_value)
+        polygons_id = _triangulate_disk(polygons, polygons_id, base_center_id, base_ring_id, resolution)
+        
+        # 2. BODY TOP (at shoulder height = max_mag - min_mag)
+        body_height = max_vector[0] - min_vector[0]
+        body_top_ring_id = points_id
+        points_id = _add_circle_ring(points, points_values, points_id, x_base, y_base, body_height,
+                                     R, position, scale, scaler_value, resolution)
+        body_top_center_id = points_id
+        points_id = _add_center_point(points, points_values, points_id, body_height,
+                                       R, position, scale, scaler_value)
+        
+        # Triangulate body cylinder
+        polygons_id = _triangulate_cylinder(polygons, polygons_id, base_ring_id, body_top_ring_id, resolution)
+        polygons_id = _triangulate_disk(polygons, polygons_id, body_top_center_id, body_top_ring_id, resolution)
+        
+        # 3. SHAFT BOTTOM (narrow at shoulder)
+        shaft_base_r0 = np.maximum(min_vector[0] * np.tan(np.absolute(max_vector[1]) * 0.5), 0.01 * min_vector[0])
+        shaft_base_r1 = shaft_base_r0 * elipse_scale
+        x_shaft_base, y_shaft_base = _compute_superellipse_profile(shaft_base_r0, shaft_base_r1, angle, resolution)
+        
+        shaft_bottom_ring_id = points_id
+        points_id = _add_circle_ring(points, points_values, points_id, x_shaft_base, y_shaft_base, body_height,
+                                     R, position, scale, scaler_value, resolution)
+        
+        # 4. SHAFT TOP (at 0.8 * max_mag)
+        shaft_top_r0 = np.maximum(0.2 * max_vector[0] * np.tan(np.absolute(max_vector[1]) * 0.5), 0.01 * 0.2 * max_vector[0])
+        shaft_top_r1 = shaft_top_r0 * elipse_scale
+        x_shaft_top, y_shaft_top = _compute_superellipse_profile(shaft_top_r0, shaft_top_r1, angle, resolution)
+        
+        shaft_top_ring_id = points_id
+        points_id = _add_circle_ring(points, points_values, points_id, x_shaft_top, y_shaft_top, 0.8 * max_vector[0],
+                                     R, position, scale, scaler_value, resolution)
+        
+        # Triangulate shaft
+        polygons_id = _triangulate_cylinder(polygons, polygons_id, shaft_bottom_ring_id, shaft_top_ring_id, resolution)
+        
+        # 5. HEAD BASE (wide ring at 0.8 * max_mag)
+        head_base_ring_id = points_id
+        points_id = _add_circle_ring(points, points_values, points_id, x_base, y_base, 0.8 * max_vector[0],
+                                     R, position, scale, scaler_value, resolution)
+        head_base_center_id = points_id
+        points_id = _add_center_point(points, points_values, points_id, 0.8 * max_vector[0],
+                                       R, position, scale, scaler_value)
+        polygons_id = _triangulate_disk(polygons, polygons_id, head_base_center_id, head_base_ring_id, resolution)
+        
+        # 6. HEAD TIP (cone point at max_mag)
+        tip_id = points_id
+        points_id = _add_center_point(points, points_values, points_id, max_vector[0],
+                                       R, position, scale, scaler_value)
+        
+        # Triangulate cone
+        for i in range(resolution):
+            polygons[polygons_id] = [head_base_ring_id + i, tip_id, head_base_ring_id + (i + 1) % resolution]
+            polygons_id += 1
+    
+    return points[:points_id], polygons[:polygons_id], points_values[:points_id]
 
 
