@@ -66,5 +66,3 @@ Project Folder Structure:
    installation
    examples
    modules
-   .. tests
-

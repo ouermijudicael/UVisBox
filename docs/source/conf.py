@@ -35,6 +35,8 @@ sys.modules['basemap'] = MockModule()
 sys.modules['mpl_toolkits.basemap'] = MockModule()
 sys.modules['mayavi'] = MockModule()
 sys.modules['mayavi.mlab'] = MockModule()
+sys.modules['flask'] = MockModule()
+sys.modules['flask.config'] = MockModule()
 
 # sys.path.insert(0, os.path.abspath('../..'))  # Adjust the path as needed
 sys.path.insert(0, os.path.abspath('../../uvisbox'))  # Adjust the path as needed
@@ -69,7 +71,9 @@ autodoc_mock_imports = [
     'vtk',
     'vtkmodules',
     'mayavi',
-    'mayavi.mlab'
+    'mayavi.mlab',
+    'flask',
+    'flask.config'
 ]
 
 # Set environment variable to indicate we're building docs
