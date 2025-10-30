@@ -1,7 +1,7 @@
 import numpy as np
 from uvisbox.Core.BandDepths.functional_banddepth import functional_banddepth, modified_functional_banddepth
 
-def get_band(data, percentile, method='fdb'):
+def get_band(data, percentile, method='fbd'):
     """
     Compute the band envelope for a given percentile using functional band depth.
     
@@ -13,8 +13,8 @@ def get_band(data, percentile, method='fdb'):
         Percentile value (0-100) for the band envelope.
     method : str, optional
         Method for computing band depth. Options are:
-        - 'fdb': functional band depth (default)
-        - 'mfdb': modified functional band depth
+        - 'fbd': functional band depth (default)
+        - 'mfbd': modified functional band depth
     
     Returns:
     --------
@@ -26,7 +26,7 @@ def get_band(data, percentile, method='fdb'):
     Examples:
     ---------
     >>> data = np.random.randn(100, 50)  # 100 curves, 50 points each
-    >>> bottom, top = get_band(data, 50, method='fdb')  # 50th percentile band
+    >>> bottom, top = get_band(data, 50, method='fbd')  # 50th percentile band
     """
     # Validate input
     if not isinstance(data, np.ndarray):
@@ -37,12 +37,12 @@ def get_band(data, percentile, method='fdb'):
         raise ValueError("Percentile must be between 0 and 100.")
     
     # Compute band depths based on method
-    if method == 'fdb':
+    if method == 'fbd':
         depths = functional_banddepth(data)
     elif method == 'mfbd':
         depths = modified_functional_banddepth(data)
     else:
-        raise ValueError(f"Unknown method '{method}'. Choose 'fdb' or 'mfbd'.")
+        raise ValueError(f"Unknown method '{method}'. Choose 'fbd' or 'mfbd'.")
 
     # Sort curves by depth (descending order - highest depth first)
     sorted_indices = np.argsort(depths)[::-1]

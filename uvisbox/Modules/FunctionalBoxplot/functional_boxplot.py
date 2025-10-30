@@ -6,7 +6,7 @@ from .functional_boxplot_vis import plot_band
 from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 
 
-def functional_boxplot(data, method='fdb', boxplot_style=None, ax=None):
+def functional_boxplot(data, method='fbd', boxplot_style=None, ax=None):
     """
     Create a functional band depth boxplot with multiple percentile bands.
     
@@ -20,8 +20,8 @@ def functional_boxplot(data, method='fdb', boxplot_style=None, ax=None):
         of points per curve.
     method : str, optional
         Method for computing band depth. Options are:
-        - 'fdb': functional band depth (default)
-        - 'mfdb': modified functional band depth
+        - 'fbd': functional band depth (default)
+        - 'mfbd': modified functional band depth
     boxplot_style : BoxplotStyleConfig, optional
         Configuration for the boxplot visualization including percentiles, colormap,
         and median/outlier styling. If None, uses default configuration.
@@ -88,10 +88,10 @@ def functional_boxplot(data, method='fdb', boxplot_style=None, ax=None):
     data_copy = data.copy()
     
     # Compute band depths
-    if method == 'fdb' or method == 'mfbd':
+    if method == 'fbd' or method == 'mfbd':
         depths = band_depths(data_copy, method=method)
     else:
-        raise ValueError(f"Unknown method '{method}'. Choose 'fdb' or 'mfbd'.")
+        raise ValueError(f"Unknown method '{method}'. Choose 'fbd' or 'mfbd'.")
 
     # Sort curves by depth (descending order - highest depth first)
     sorted_indices = np.argsort(depths)[::-1]

@@ -59,7 +59,7 @@ mean_divergences = np.mean(ensemble_divergences, axis=1)
 stddev_divergences = np.std(ensemble_divergences, axis=1)
 plotter = pv.Plotter()
 plotter, points, triangles = squid_glyph_3D(grid_points, ensemble_vectors, point_values=stddev_temps, 
-                                            percentil=0.95, scale=0.02, ax=plotter)
+                                            percentile=95, scale=0.02, ax=plotter)
 plotter.add_text("3D Squid Glyphs for Wind Uncertainty")
 plotter.show()
 plotter.screenshot("squid_glyph_temp_wind_example.png")

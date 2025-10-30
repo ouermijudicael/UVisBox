@@ -44,7 +44,7 @@ def plot_band(bottom_curve, top_curve, ax=None, color='red', alpha=1.0, scale=1.
     >>> data = np.random.randn(100, 50).cumsum(axis=1)
     >>> 
     >>> # Get 50th percentile band
-    >>> bottom, top = get_band(data, 50, method='fdb')
+    >>> bottom, top = get_band(data, 50, method='fbd')
     >>> 
     >>> # Plot the band
     >>> fig, ax = plt.subplots()

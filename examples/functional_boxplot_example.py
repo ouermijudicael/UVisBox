@@ -48,7 +48,7 @@ plot the functional boxplot for the time series data with different methods at [
     )
 
     ax2 = functional_boxplot(X, boxplot_style=style, ax=ax2)
-    ax2.set_title("Functional Boxplot (FDB) with Outliers")
+    ax2.set_title("Functional Boxplot (FBD) with Outliers")
 
     ax3 = functional_boxplot(X, boxplot_style=style, method='mfbd', ax=ax3)
     ax3.set_title("Functional Boxplot (MFBD) with Outliers")
@@ -109,7 +109,7 @@ style = BoxplotStyleConfig(
 )
 
 ax2 = functional_boxplot(X, boxplot_style=style, ax=ax2)
-ax2.set_title("Functional Boxplot (FDB) with Outliers")
+ax2.set_title("Functional Boxplot (FBD) with Outliers")
 
 ax3 = functional_boxplot(X, boxplot_style=style, method='mfbd', ax=ax3)
 ax3.set_title("Functional Boxplot (MFBD) with Outliers")

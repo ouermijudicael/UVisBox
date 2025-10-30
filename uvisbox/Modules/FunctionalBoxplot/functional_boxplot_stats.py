@@ -8,7 +8,7 @@ from uvisbox.Core.BandDepths.functional_banddepth import *
 #   - mfbd = modified_functional_banddepth
 #
 
-def band_depths(data, method='fdb'):
+def band_depths(data, method='fbd'):
     """
     Compute band depths for a set of functional curves.
 
@@ -18,12 +18,12 @@ def band_depths(data, method='fdb'):
         2D array of shape (N, D) where N is the number of curves and D is the number of points per curve.
     method : str, optional
         Method for computing band depth. Options are:
-        - 'fdb': Functional band depth (default)
+        - 'fbd': Functional band depth (default)
         - 'mfbd': Modified functional band depth
     """
-    if method == 'fdb':
+    if method == 'fbd':
         return functional_banddepth(data)
     elif method == 'mfbd':
         return modified_functional_banddepth(data)
     else:
-        raise ValueError(f"Unknown method '{method}'. Choose 'fdb' or 'mfbd'.")
+        raise ValueError(f"Unknown method '{method}'. Choose 'fbd' or 'mfbd'.")
