@@ -28,10 +28,10 @@ Modules.CurveBoxplot.curve\_boxplot\_stats module
    :show-inheritance:
    :undoc-members:
 
-Modules.CurveBoxplot.cuve\_boxplot\_vis module
-----------------------------------------------
+Modules.CurveBoxplot.curve\_boxplot\_vis module
+-----------------------------------------------
 
-.. automodule:: Modules.CurveBoxplot.cuve_boxplot_vis
+.. automodule:: Modules.CurveBoxplot.curve_boxplot_vis
    :members:
    :show-inheritance:
    :undoc-members:

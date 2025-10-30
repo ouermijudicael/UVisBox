@@ -11,6 +11,7 @@ Subpackages
    Core.CellsCrossingProb
    Core.Colors
    Core.Interpolations
+   Core.CommonInterface
 
 Module contents
 ---------------
