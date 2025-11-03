@@ -10,7 +10,7 @@ Import necessary libraries
 
     import numpy as np
     import pyvista as pv
-    from uvisbox.Modules.ProbabilisticMarchingTetrahedra import probabilistic_marching_tetrahedra as pmt
+    from uvisbox.Modules.ProbabilisticMarchingTetrahedra import probabilistic_marching_tetrahedron
 
 Generate tetrahedral mesh over a 3D domain [-1, 1] and use the tear drop function
 to create an ensemble of scalar fields with some noise
@@ -63,7 +63,7 @@ to create an ensemble of scalar fields with some noise
     F_reshaped = F.reshape(-1, n_ens)   
     # Compute probabilistic marching tetrahedra
     plotter.subplot(0, 1)
-    plotter = pmt(points, F_reshaped, tetrahedra, isovalue, plotter=plotter)
+    plotter = probabilistic_marching_tetrahedron(F_reshaped, tetrahedra, points, isovalue, plotter=plotter)
     plotter.add_text("Probabilistic Isosurface", font_size=12)
     plotter.show()
 
@@ -76,7 +76,7 @@ to create an ensemble of scalar fields with some noise
 # Import necessary libraries
 import numpy as np
 import pyvista as pv
-from uvisbox.Modules.ProbabilisticMarchingTetrahedra import probabilistic_marching_tetrahedra as pmt
+from uvisbox.Modules.ProbabilisticMarchingTetrahedra import probabilistic_marching_tetrahedron
 
 # Generate tetrahedral mesh over a 3D domain [-1, 1] and use the tear drop function
 # to create an ensemble of scalar fields with some noise
@@ -127,7 +127,7 @@ plotter.add_mesh(iso_surface, color='lightblue', opacity=0.5)
 F_reshaped = F.reshape(-1, n_ens)   
 # Compute probabilistic marching tetrahedra
 plotter.subplot(0, 1)
-plotter = pmt(points, F_reshaped, tetrahedra, isovalue, plotter=plotter)
+plotter = probabilistic_marching_tetrahedron(F_reshaped, tetrahedra, points, isovalue, plotter=plotter)
 plotter.add_text("Probabilistic Isosurface", font_size=12)
 plotter.show()
 # plotter.screenshot("probabilistic_marching_tetrahedra_example.png")
