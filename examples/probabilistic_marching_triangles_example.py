@@ -11,7 +11,7 @@ Import necessary libraries
     from matplotlib.tri import Triangulation
     import matplotlib.pyplot as plt
     import numpy as np  
-    from uvisbox.Modules.ProbabilisticMarchingTriangles import probabilistic_marching_triangles
+    from uvisbox.Modules.ProbabilisticMarchingTriangles import probabilistic_marching_triangle
 
 Generate a triangular mesh over a 2D domain [0, 2π], use function f(x, y) = sin(x) * cos(y)
 and create an ensemble of scalar fields with some noise
@@ -46,12 +46,9 @@ Set isovalue, run probabilistic marching triangles, and visualize result
     # Set isovalue
     isovalue = 0.5
 
-    # # Run probabilistic marching triangles
-    # prob_contour = probabilistic_marching_triangles(F, triangles, isovalue, num_samples=200)
-
-
+    # Run probabilistic marching triangles
     fig, ax = plt.subplots(figsize=(8, 6))
-    ax = probabilistic_marching_triangles(F, points, triangles, isovalue, ax=ax)
+    ax = probabilistic_marching_triangle(F, triangles, points, isovalue, ax=ax)
     plt.show()
 
 .. image:: _static/probabilistic_marching_triangles_example.png
@@ -64,7 +61,7 @@ Set isovalue, run probabilistic marching triangles, and visualize result
 from matplotlib.tri import Triangulation
 import matplotlib.pyplot as plt
 import numpy as np  
-from uvisbox.Modules.ProbabilisticMarchingTriangles import probabilistic_marching_triangles
+from uvisbox.Modules.ProbabilisticMarchingTriangles import probabilistic_marching_triangle
 
 # Generate a triangular mesh over a 2D domain [0, 2π], use function f(x, y) = sin(x) * cos(y)
 # and create an ensemble of scalar fields with some noise
@@ -95,11 +92,8 @@ F = np.array([
 # Set isovalue
 isovalue = 0.5
 
-# # Run probabilistic marching triangles
-# prob_contour = probabilistic_marching_triangles(F, triangles, isovalue, num_samples=200)
-
-
+# Run probabilistic marching triangles
 fig, ax = plt.subplots(figsize=(8, 6))
-ax = probabilistic_marching_triangles(F, points, triangles, isovalue, ax=ax)
+ax = probabilistic_marching_triangle(F, triangles, points, isovalue, ax=ax)
 # plt.savefig("probabilistic_marching_triangles_example.png")
 plt.show()
