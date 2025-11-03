@@ -36,7 +36,7 @@ to create an ensemble of scalar fields with some noise
     grid.point_data["values"] = noise_less_F.flatten(order='F')
 
     # Set isovalue and compute deterministic isosurface
-    isovalue = -0.001
+    isovalue = 0
     iso_surface = grid.contour([isovalue], scalars="values")
     # Set up the plotter with two subplots
     plotter = pv.Plotter(shape=(1, 2), off_screen=True)
