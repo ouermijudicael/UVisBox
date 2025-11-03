@@ -6,7 +6,7 @@ from uvisbox.Core.BandDepths.vector_depths import calculate_spread_3D, compute_v
 from uvisbox.Core.BandDepths.vector_depths import cartesian_to_polar, cartesian_to_spherical
 
 
-def compute_squid_glyph_stats_2d(ensemble_vectors, percentile, workers=None):
+def squid_glyphs_2d_summary_statistics(ensemble_vectors, percentile, workers=None):
     """
     Compute vector depth statistics for 2D squid glyphs.
     
@@ -82,7 +82,7 @@ def compute_squid_glyph_stats_2d(ensemble_vectors, percentile, workers=None):
     }
 
 
-def compute_squid_glyph_stats_3d(ensemble_vectors, percentile):
+def squid_glyphs_3d_summary_statistics(ensemble_vectors, percentile):
     """
     Compute vector depth statistics for 3D squid glyphs.
     

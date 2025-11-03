@@ -7,14 +7,14 @@ This module provides high-level functions that orchestrate the three-stage pipel
     3. Render visualization (matplotlib or pyvista)
 
 For fine-grained control, use the individual stage functions directly:
-    - compute_squid_glyph_stats_2d() / compute_squid_glyph_stats_3d()
-    - build_squid_glyph_mesh_2d() / build_squid_glyph_mesh_3d()
-    - render_squid_glyph_2d() / render_squid_glyph_3d()
+    - squid_glyphs_2d_summary_statistics() / squid_glyphs_3d_summary_statistics()
+    - squid_glyphs_2d_mesh() / squid_glyphs_3d_mesh()
+    - visualize_squid_glyphs_2d() / visualize_squid_glyphs_3d()
 """
 
-from .squid_glyphs_stats import compute_squid_glyph_stats_2d, compute_squid_glyph_stats_3d
-from .squid_glyphs_mesh import build_squid_glyph_mesh_2d, build_squid_glyph_mesh_3d
-from .squid_glyphs_vis import render_squid_glyph_2d, render_squid_glyph_3d
+from .squid_glyphs_stats import squid_glyphs_2d_summary_statistics, squid_glyphs_3d_summary_statistics
+from .squid_glyphs_mesh import squid_glyphs_2d_mesh, squid_glyphs_3d_mesh
+from .squid_glyphs_vis import visualize_squid_glyphs_2d, visualize_squid_glyphs_3d
 import numpy as np
 
 
@@ -65,13 +65,13 @@ def squid_glyph_3D(positions, ensemble_vectors, point_values=None, percentile=95
 
     """
     # Stage 1: Compute statistics
-    stats = compute_squid_glyph_stats_3d(ensemble_vectors, percentile)
+    stats = squid_glyphs_3d_summary_statistics(ensemble_vectors, percentile)
     
     # Stage 2: Build mesh
-    mesh = build_squid_glyph_mesh_3d(positions, stats, point_values, scale, resolution=10)
+    mesh = squid_glyphs_3d_mesh(positions, stats, point_values, scale, resolution=10)
     
     # Stage 3: Render
-    plotter = render_squid_glyph_3d(mesh, point_values, show_edges, glyph_color, ax=ax)
+    plotter = visualize_squid_glyphs_3d(mesh, point_values, show_edges, glyph_color, ax=ax)
     
     return plotter, mesh['points'], mesh['polygons']
 
@@ -114,12 +114,12 @@ def squid_glyph_2D(positions, ensemble_vectors, percentile=95, scale=0.2, ax=Non
 
     """
         # 1. Compute vector depth statistics
-    stats = compute_squid_glyph_stats_2d(ensemble_vectors, percentile, workers=workers)
+    stats = squid_glyphs_2d_summary_statistics(ensemble_vectors, percentile, workers=workers)
     
     # Stage 2: Build mesh
-    mesh = build_squid_glyph_mesh_2d(positions, stats, scale)
+    mesh = squid_glyphs_2d_mesh(positions, stats, scale)
     
     # Stage 3: Render
-    ax = render_squid_glyph_2d(mesh, ax)
+    ax = visualize_squid_glyphs_2d(mesh, ax)
     
     return ax

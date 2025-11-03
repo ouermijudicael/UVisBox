@@ -52,7 +52,7 @@ def _add_triangle_2d(points, polygons, point_idx, tri_idx, corners, position, ro
     return point_idx + 3, tri_idx + 1
 
 
-def build_squid_glyph_mesh_2d(positions, stats_2d, scale=0.2):
+def squid_glyphs_2d_mesh(positions, stats_2d, scale=0.2):
     """
     Build 2D squid glyph mesh from statistics.
     
@@ -66,7 +66,7 @@ def build_squid_glyph_mesh_2d(positions, stats_2d, scale=0.2):
     positions : numpy.ndarray
         Shape (n, 2) - glyph positions
     stats_2d : dict
-        From compute_squid_glyph_stats_2d()
+        From squid_glyphs_2d_summary_statistics()
     scale : float
         Glyph scale factor (default: 0.2)
     
@@ -147,7 +147,7 @@ def build_squid_glyph_mesh_2d(positions, stats_2d, scale=0.2):
     }
 
 
-def build_squid_glyph_mesh_3d(positions, stats_3d, point_values=None, scale=0.5, resolution=10):
+def squid_glyphs_3d_mesh(positions, stats_3d, point_values=None, scale=0.5, resolution=10):
     """
     Build 3D squid glyph mesh from statistics.
     
@@ -156,7 +156,7 @@ def build_squid_glyph_mesh_3d(positions, stats_3d, point_values=None, scale=0.5,
     positions : numpy.ndarray
         Shape (n, 3) - glyph positions
     stats_3d : dict
-        From compute_squid_glyph_stats_3d()
+        From squid_glyphs_3d_summary_statistics()
     point_values : numpy.ndarray, optional
         Shape (n,) - scalar values for coloring
     scale : float
