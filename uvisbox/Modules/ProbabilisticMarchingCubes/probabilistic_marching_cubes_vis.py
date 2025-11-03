@@ -11,7 +11,7 @@ def visualize_probabilistic_marching_cube(mesh_data, plotter=None, opacity='line
     Parameters:
     -----------
         mesh_data : np.ndarray
-            3D array of shape (n_x-1, n_y-1, n_z-1) with probabilities of isosurface 
+            3D array of shape (n_z-1, n_y-1, n_x-1) with probabilities of isosurface 
             presence in each cell.
         plotter : pyvista.Plotter, optional
             An existing PyVista plotter to add the volume rendering to. If None, 

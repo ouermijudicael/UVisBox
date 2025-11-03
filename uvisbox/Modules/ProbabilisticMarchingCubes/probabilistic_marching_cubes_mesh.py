@@ -9,7 +9,7 @@ def probabilistic_marching_cube_mesh(summary_statistics):
     Parameters:
     -----------
         summary_statistics : np.ndarray
-            3D array of shape (n_x-1, n_y-1, n_z-1) representing the probability 
+            3D array of shape (n_z-1, n_y-1, n_x-1) representing the probability 
             of isosurface presence in each cell.
     
     Returns:

@@ -102,7 +102,7 @@ def crossing_probability_cubes_monte_carlo(ensemble_images, isovalue, num_sample
     Parameters:
     -----------
         ensemble_images : np.ndarray
-            4D array of shape (n_x, n_y, n_z, n_ensemble) representing the scalar field with ensemble members.
+            4D array of shape (n_z, n_y, n_x, n_ensemble) representing the scalar field with ensemble members.
         isovalue : float
             The isovalue for which to compute the isosurface.
         num_samples : int, optional
@@ -111,15 +111,15 @@ def crossing_probability_cubes_monte_carlo(ensemble_images, isovalue, num_sample
     Returns:
     --------
         probability_contour : np.ndarray
-            3D array of shape (n_x-1, n_y-1, n_z-1) with probabilities of contour presence in each cell.
+            3D array of shape (n_z-1, n_y-1, n_x-1) with probabilities of contour presence in each cell.
     """
-    n_x, n_y, n_z, n_ensemble = ensemble_images.shape
-    probability_contour = np.zeros((n_x - 1, n_y - 1, n_z - 1))
+    n_z, n_y, n_x, n_ensemble = ensemble_images.shape
+    probability_contour = np.zeros((n_z - 1, n_y - 1, n_x - 1))
 
-    for i in range(n_x - 1):
+    for k in range(n_z - 1):
         for j in range(n_y - 1):
-            for k in range(n_z - 1):
-                cell_data = ensemble_images[i:i+2, j:j+2, k:k+2, :].reshape(-1, n_ensemble)  # Shape (8, n_ensemble)
+            for i in range(n_x - 1):
+                cell_data = ensemble_images[k:k+2, j:j+2, i:i+2, :].reshape(-1, n_ensemble)  # Shape (8, n_ensemble)
                 covariance_matrix = np.cov(cell_data)
                 mean_vector = np.mean(cell_data, axis=1)
                 samples = np.random.multivariate_normal(mean_vector, covariance_matrix, num_samples)  # Shape (num_samples, 8)
@@ -128,7 +128,7 @@ def crossing_probability_cubes_monte_carlo(ensemble_images, isovalue, num_sample
                 min_values = samples.min(axis=1)
                 max_values = samples.max(axis=1)
                 crossing = (min_values <= isovalue) & (isovalue <= max_values)
-                probability_contour[i, j, k] = crossing.sum() / num_samples
+                probability_contour[k, j, i] = crossing.sum() / num_samples
 
     return probability_contour
 

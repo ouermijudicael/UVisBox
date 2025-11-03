@@ -14,7 +14,7 @@ def probabilistic_marching_cube(ensemble_images, isovalue, plotter=None, opacity
     Parameters:
     -----------
         ensemble_images : np.ndarray
-            4D array of shape (n_x, n_y, n_z, n_ensemble) representing the scalar 
+            4D array of shape (n_z, n_y, n_x, n_ensemble) representing the scalar 
             field with ensemble members.
         isovalue : float
             The isovalue for which to compute the isosurface.
