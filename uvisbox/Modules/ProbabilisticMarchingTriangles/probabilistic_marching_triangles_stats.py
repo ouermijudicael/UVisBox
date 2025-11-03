@@ -1,1 +1,1 @@
-from uvisbox.Core.CellsCrossingProb.crossing_probability_mc import crossing_prob_triangles_mc
+from uvisbox.Core.CellsCrossingProb.crossing_probability_mc import crossing_probability_triangles_monte_carlo

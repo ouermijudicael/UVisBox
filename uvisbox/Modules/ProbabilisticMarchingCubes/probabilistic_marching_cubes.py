@@ -1,4 +1,4 @@
-from .probabilistic_marching_cubes_stats import crossing_prob_cubes_mc
+from .probabilistic_marching_cubes_stats import crossing_probability_cubes_monte_carlo
 from .probabilistic_marching_cubes_vis import pyvista_probabilistic_marching_cubes_vis
 
 def probabilistic_marching_cubes(F, isovalue, cross_prob=None, opacity='linear', cmap='viridis',   
@@ -29,7 +29,7 @@ def probabilistic_marching_cubes(F, isovalue, cross_prob=None, opacity='linear',
     """
 
     if cross_prob is None:
-        cross_prob = crossing_prob_cubes_mc(F, isovalue)
+        cross_prob = crossing_probability_cubes_monte_carlo(F, isovalue)
 
     plotter = pyvista_probabilistic_marching_cubes_vis(cross_prob, opacity, cmap, plotter)
    

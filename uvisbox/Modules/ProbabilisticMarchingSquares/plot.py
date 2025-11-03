@@ -1,4 +1,4 @@
-from .probabilistic_marching_squares_stats import crossing_prob_squares_mc
+from .probabilistic_marching_squares_stats import crossing_probability_squares_monte_carlo
 from .probabilistic_marching_squares_vis import matplotlib_probabilistic_marching_squares_vis
 def plot(ensemble_images, isovalue, prob_contour=None, cmap='viridis', ax=None):
     """
@@ -23,6 +23,6 @@ def plot(ensemble_images, isovalue, prob_contour=None, cmap='viridis', ax=None):
             The axis with the visualized probabilistic isocontour.
     """
     if prob_contour is None:
-        prob_contour = crossing_prob_squares_mc(ensemble_images, isovalue)
+        prob_contour = crossing_probability_squares_monte_carlo(ensemble_images, isovalue)
     ax = matplotlib_probabilistic_marching_squares_vis(prob_contour, cmap, ax)
     return ax

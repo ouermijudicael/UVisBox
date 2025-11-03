@@ -1,4 +1,4 @@
-from uvisbox.Core.CellsCrossingProb.crossing_probability_mc import crossing_prob_squares_mc
+from uvisbox.Core.CellsCrossingProb.crossing_probability_mc import crossing_probability_squares_monte_carlo
 
 
 def probabilistic_marching_square_summary_statistics(ensemble_images, isovalue):
@@ -22,4 +22,4 @@ def probabilistic_marching_square_summary_statistics(ensemble_images, isovalue):
             2D array of shape (y_dim-1, x_dim-1) with probabilities of contour 
             presence in each cell. Values range from 0 to 1.
     """
-    return crossing_prob_squares_mc(ensemble_images, isovalue)
+    return crossing_probability_squares_monte_carlo(ensemble_images, isovalue)

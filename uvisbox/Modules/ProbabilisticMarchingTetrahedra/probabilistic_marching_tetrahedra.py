@@ -1,5 +1,5 @@
 import numpy as np
-from .probabilistic_marching_tetrahedra_stats import crossing_prob_tetrahedra_mc
+from .probabilistic_marching_tetrahedra_stats import crossing_probability_tetrahedra_monte_carlo
 from .probabilistic_marching_tetrahedra_vis import pyvista_probabilistic_marching_tetrahedra_vis
 
 
@@ -31,7 +31,7 @@ def probabilistic_marching_tetrahedra(points, F, tetrahedra, isovalue, cross_pro
     """
 
     if cross_prob is None:
-        cross_prob = crossing_prob_tetrahedra_mc(F, tetrahedra, isovalue)
+        cross_prob = crossing_probability_tetrahedra_monte_carlo(F, tetrahedra, isovalue)
 
     plotter = pyvista_probabilistic_marching_tetrahedra_vis(points, tetrahedra, isovalue, cross_prob, 
                                            opacity=opacity, cmap=cmap, plotter=plotter) 

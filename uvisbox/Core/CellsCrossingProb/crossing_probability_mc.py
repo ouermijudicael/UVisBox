@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def crossing_prob_squares_mc(ensemble_images, isovalue, num_samples=200):
+def crossing_probability_squares_monte_carlo(ensemble_images, isovalue, num_samples=200):
     """
     Perform probabilistic marching squares on a 2D scalar field with uncertainty. This function calculates
     the probability of the isocontour passing through each cell in the grid based on an ensemble of scalar fields.
@@ -12,38 +12,38 @@ def crossing_prob_squares_mc(ensemble_images, isovalue, num_samples=200):
     Parameters:
     -----------
         ensemble_images : np.ndarray
-            3D array of shape [y, x, n_ens] representing the scalar field with ensemble members.
+            3D array of shape [y, x, n_ensemble] representing the scalar field with ensemble members.
         isovalue : float
             The isovalue for which to compute the contour.
         num_samples : int, optional
-            Number of samples to draw for estimating the probability of contour presence in each cell.
+            Number of Monte Carlo samples to draw for estimating the probability of contour presence in each cell.
             
     Returns:
     --------
-        prob_contour : np.ndarray
+        probability_contour : np.ndarray
             2D array of shape (y-1, x-1) with probabilities of contour presence in each cell.
     """
     
-    n, m, n_ens = ensemble_images.shape
-    prob_contour = np.zeros((n - 1, m - 1))
+    n, m, n_ensemble = ensemble_images.shape
+    probability_contour = np.zeros((n - 1, m - 1))
 
     for i in range(n - 1):
         for j in range(m - 1):
-            F_cell = ensemble_images[i:i + 2, j:j + 2, :].reshape(-1, n_ens)  # Shape (4, n_ens)
-            cov_mat = np.cov(F_cell)
-            mean_vec = np.mean(F_cell, axis=1)
-            samples = np.random.multivariate_normal(mean_vec, cov_mat, num_samples)  # Shape (num_samples, 4)
+            cell_data = ensemble_images[i:i + 2, j:j + 2, :].reshape(-1, n_ensemble)  # Shape (4, n_ensemble)
+            covariance_matrix = np.cov(cell_data)
+            mean_vector = np.mean(cell_data, axis=1)
+            samples = np.random.multivariate_normal(mean_vector, covariance_matrix, num_samples)  # Shape (num_samples, 4)
             
             # Vectorized crossing check (8-10x faster than loop)
-            min_vals = samples.min(axis=1)
-            max_vals = samples.max(axis=1)
-            crossing = (min_vals <= isovalue) & (isovalue <= max_vals)
-            prob_contour[i, j] = crossing.sum() / num_samples
+            min_values = samples.min(axis=1)
+            max_values = samples.max(axis=1)
+            crossing = (min_values <= isovalue) & (isovalue <= max_values)
+            probability_contour[i, j] = crossing.sum() / num_samples
 
-    return prob_contour
+    return probability_contour
 
 
-def crossing_prob_triangles_mc(F, triangles, isovalue, num_samples=200):
+def crossing_probability_triangles_monte_carlo(ensemble_data, triangle_mesh, isovalue, num_samples=200):
     """
     Perform probabilistic marching triangles on a 2D scalar field with uncertainty. 
     This function calculates the probability of the isocontour passing through each 
@@ -56,43 +56,43 @@ def crossing_prob_triangles_mc(F, triangles, isovalue, num_samples=200):
 
     Parameters:
     -----------
-        F : np.ndarray
-            2D array of shape (n_points, n_ens) representing the scalar field with ensemble members.
-        triangles : np.ndarray
-            2D array of shape (n_triangles, 3) representing the triangulation of the points.
+        ensemble_data : np.ndarray
+            2D array of shape (n_points, n_ensemble) representing the scalar field with ensemble members.
+        triangle_mesh : np.ndarray
+            2D array of shape (n_triangles, 3) representing the triangulation connectivity.
         isovalue : float
             The isovalue for which to compute the contour.  
         num_samples : int, optional
-            Number of samples to draw for estimating the probability of contour presence in each cell.
+            Number of Monte Carlo samples to draw for estimating the probability of contour presence in each triangle.
     
     Returns:
     --------
-        prob_contour : np.ndarray
+        probability_contour : np.ndarray
             1D array of shape (n_triangles,) with probabilities of contour presence in each triangle.
     """
     
-    n_triangles = triangles.shape[0]
-    prob_contour = np.zeros(n_triangles)
+    n_triangles = triangle_mesh.shape[0]
+    probability_contour = np.zeros(n_triangles)
 
     for t in range(n_triangles):
-        vertex_indices = triangles[t]  # Indices of the triangle's vertices
-        F_cell = F[vertex_indices, :]  # Shape (3, n_ens)
-        cov_mat = np.cov(F_cell)
-        mean_vec = np.mean(F_cell, axis=1)
-        samples = np.random.multivariate_normal(mean_vec, cov_mat, num_samples)  # Shape (num_samples, 3)
+        vertex_indices = triangle_mesh[t]  # Indices of the triangle's vertices
+        cell_data = ensemble_data[vertex_indices, :]  # Shape (3, n_ensemble)
+        covariance_matrix = np.cov(cell_data)
+        mean_vector = np.mean(cell_data, axis=1)
+        samples = np.random.multivariate_normal(mean_vector, covariance_matrix, num_samples)  # Shape (num_samples, 3)
         
         # Vectorized crossing check (8-10x faster than loop)
-        min_vals = samples.min(axis=1)
-        max_vals = samples.max(axis=1)
-        crossing = (min_vals <= isovalue) & (isovalue <= max_vals)
-        prob_contour[t] = crossing.sum() / num_samples
+        min_values = samples.min(axis=1)
+        max_values = samples.max(axis=1)
+        crossing = (min_values <= isovalue) & (isovalue <= max_values)
+        probability_contour[t] = crossing.sum() / num_samples
 
-    return prob_contour
+    return probability_contour
 
 
     
 
-def crossing_prob_cubes_mc(F, isovalue, num_samples=200):
+def crossing_probability_cubes_monte_carlo(ensemble_images, isovalue, num_samples=200):
     """
     Perform probabilistic marching cubes on a 3D scalar field with uncertainty. This function calculates
     the probability of the isosurface passing through each cell in the grid based on an ensemble of scalar fields.
@@ -101,74 +101,75 @@ def crossing_prob_cubes_mc(F, isovalue, num_samples=200):
     
     Parameters:
     -----------
-        F : np.ndarray
-            4D array of shape (n_x, n_y, n_z, n_ens) representing the scalar field with ensemble members.
+        ensemble_images : np.ndarray
+            4D array of shape (n_x, n_y, n_z, n_ensemble) representing the scalar field with ensemble members.
         isovalue : float
             The isovalue for which to compute the isosurface.
         num_samples : int, optional
-            Number of samples to draw for estimating the probability of contour presence in each cell.
+            Number of Monte Carlo samples to draw for estimating the probability of contour presence in each cell.
     
     Returns:
     --------
-        prob_contour : np.ndarray
+        probability_contour : np.ndarray
             3D array of shape (n_x-1, n_y-1, n_z-1) with probabilities of contour presence in each cell.
     """
-    n_x, n_y, n_z, n_ens = F.shape
-    cross_prob = np.zeros((n_x - 1, n_y - 1, n_z - 1))
+    n_x, n_y, n_z, n_ensemble = ensemble_images.shape
+    probability_contour = np.zeros((n_x - 1, n_y - 1, n_z - 1))
 
     for i in range(n_x - 1):
         for j in range(n_y - 1):
             for k in range(n_z - 1):
-                F_cell = F[i:i+2, j:j+2, k:k+2, :].reshape(-1, n_ens)  # Shape (8, n_ens)
-                cov_mat = np.cov(F_cell)
-                mean_vec = np.mean(F_cell, axis=1)
-                samples = np.random.multivariate_normal(mean_vec, cov_mat, num_samples)  # Shape (num_samples, 8)
+                cell_data = ensemble_images[i:i+2, j:j+2, k:k+2, :].reshape(-1, n_ensemble)  # Shape (8, n_ensemble)
+                covariance_matrix = np.cov(cell_data)
+                mean_vector = np.mean(cell_data, axis=1)
+                samples = np.random.multivariate_normal(mean_vector, covariance_matrix, num_samples)  # Shape (num_samples, 8)
                 
                 # Vectorized crossing check (8-10x faster than loop)
-                min_vals = samples.min(axis=1)
-                max_vals = samples.max(axis=1)
-                crossing = (min_vals <= isovalue) & (isovalue <= max_vals)
-                cross_prob[i, j, k] = crossing.sum() / num_samples
+                min_values = samples.min(axis=1)
+                max_values = samples.max(axis=1)
+                crossing = (min_values <= isovalue) & (isovalue <= max_values)
+                probability_contour[i, j, k] = crossing.sum() / num_samples
 
-    return cross_prob
+    return probability_contour
 
 
-def crossing_prob_tetrahedra_mc(F, tetrahedra, isovalue, num_samples=200):
+def crossing_probability_tetrahedra_monte_carlo(ensemble_data, tetrahedral_mesh, isovalue, num_samples=200):
     """
-    Perform probabilistic marching tetrahedra on a 3D scalar field with uncertainty. This function calculates
-    the probability of the isosurface passing through each tetrahedron in the mesh based on an ensemble of scalar fields.
-
+    Perform probabilistic marching tetrahedra on an ensemble of scalar fields defined on a tetrahedral mesh.
+    The function calculates the probability of the isosurface passing through each tetrahedron based on Monte Carlo sampling.
+    
     Parameters:
     -----------
-        F : np.ndarray
-            2D array of shape (n_points, n_ens) representing the scalar field with ensemble members.
-        tetrahedra : np.ndarray
-            2D array of shape (n_tetrahedra, 4) representing the tetrahedra of the points.
+        ensemble_data : np.ndarray
+            2D array of shape (num_points, n_ensemble) where each column is a realization and each row corresponds 
+            to a vertex in the tetrahedral mesh.
+        tetrahedral_mesh : np.ndarray
+            2D array of shape (num_tetrahedra, 4) representing the tetrahedra. Each row contains the indices 
+            of the four vertices forming a tetrahedron.
         isovalue : float
-            The isovalue for which to compute the contour.  
+            The isovalue for which to compute the isosurface.
         num_samples : int, optional
-            Number of samples to draw for estimating the probability of contour presence in each cell.
-
-    Returns:
-    --------    
-        prob_contour : np.ndarray
-            1D array of shape (n_tetrahedra,) with probabilities of contour presence in each tetrahedron.
-    """
+            Number of Monte Carlo samples to draw for estimating the probability of contour presence in each tetrahedron.
     
-    n_tetrahedra = tetrahedra.shape[0]
-    crossing_prob = np.zeros(n_tetrahedra)
+    Returns:
+    --------
+        probability_contour : np.ndarray
+            1D array of shape (num_tetrahedra,) with probabilities of contour presence in each tetrahedron.
+    """
+    num_tetrahedra = tetrahedral_mesh.shape[0]
+    probability_contour = np.zeros(num_tetrahedra)
 
-    for t in range(n_tetrahedra):
-        vertex_indices = tetrahedra[t]  # Indices of the tetrahedron's vertices
-        F_cell = F[vertex_indices, :]  # Shape (4, n_ens)
-        cov_mat = np.cov(F_cell)
-        mean_vec = np.mean(F_cell, axis=1)
-        samples = np.random.multivariate_normal(mean_vec, cov_mat, num_samples)  # Shape (num_samples, 4)
+    for tet_idx in range(num_tetrahedra):
+        vertex_indices = tetrahedral_mesh[tet_idx]
+        cell_data = ensemble_data[vertex_indices, :]  # Shape (4, n_ensemble)
+        covariance_matrix = np.cov(cell_data)
+        mean_vector = np.mean(cell_data, axis=1)
+        samples = np.random.multivariate_normal(mean_vector, covariance_matrix, num_samples)  # Shape (num_samples, 4)
         
         # Vectorized crossing check (8-10x faster than loop)
-        min_vals = samples.min(axis=1)
-        max_vals = samples.max(axis=1)
-        crossing = (min_vals <= isovalue) & (isovalue <= max_vals)
-        crossing_prob[t] = crossing.sum() / num_samples
+        min_values = samples.min(axis=1)
+        max_values = samples.max(axis=1)
+        crossing = (min_values <= isovalue) & (isovalue <= max_values)
+        probability_contour[tet_idx] = crossing.sum() / num_samples
 
-    return crossing_prob
+    return probability_contour

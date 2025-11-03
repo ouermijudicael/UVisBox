@@ -1,5 +1,5 @@
 import numpy as np
-from .probabilistic_marching_triangles_stats import crossing_prob_triangles_mc
+from .probabilistic_marching_triangles_stats import crossing_probability_triangles_monte_carlo
 from .probabilistic_marching_triangles_vis import matplotlib_probabilistic_marching_triangles_vis
 
 def probabilistic_marching_triangles(F, points, triangles, isovalue, prob_contour=None, cmap='viridis', ax=None):
@@ -29,6 +29,6 @@ def probabilistic_marching_triangles(F, points, triangles, isovalue, prob_contou
             The axis with the visualized probabilistic isocontour.
     """
     if prob_contour is None:
-        prob_contour = crossing_prob_triangles_mc(F, triangles, isovalue)
+        prob_contour = crossing_probability_triangles_monte_carlo(F, triangles, isovalue)
     ax = matplotlib_probabilistic_marching_triangles_vis(points,triangles, prob_contour, cmap, ax)
     return ax

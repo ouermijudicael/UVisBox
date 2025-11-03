@@ -1,1 +1,1 @@
-from uvisbox.Core.CellsCrossingProb.crossing_probability_mc import crossing_prob_tetrahedra_mc
+from uvisbox.Core.CellsCrossingProb.crossing_probability_mc import crossing_probability_tetrahedra_monte_carlo
