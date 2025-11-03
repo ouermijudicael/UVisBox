@@ -9,19 +9,19 @@ It follows a three-stage visualization pipeline:
 
 Main functions:
     - uncertainty_lobes(): High-level API for complete visualization
-    - compute_uncertainty_lobes_stats_2d(): Stage 1 - Statistics computation
-    - build_uncertainty_lobes_mesh_2d(): Stage 2 - Mesh generation
-    - render_uncertainty_lobes_2d(): Stage 3 - Visualization rendering
+    - uncertainty_lobes_summary_statistics(): Stage 1 - Statistics computation
+    - uncertainty_lobes_mesh(): Stage 2 - Mesh generation
+    - visualize_uncertainty_lobes(): Stage 3 - Visualization rendering
 """ 
 
 from .uncertainty_lobes import uncertainty_lobes
-from .uncertainty_lobes_stats import compute_uncertainty_lobes_stats_2d
-from .uncertainty_lobes_mesh import build_uncertainty_lobes_mesh_2d
-from .uncertainty_lobes_vis import render_uncertainty_lobes_2d
+from .uncertainty_lobes_stats import uncertainty_lobes_summary_statistics
+from .uncertainty_lobes_mesh import uncertainty_lobes_mesh
+from .uncertainty_lobes_vis import visualize_uncertainty_lobes
 
 __all__ = [
     'uncertainty_lobes',
-    'compute_uncertainty_lobes_stats_2d',
-    'build_uncertainty_lobes_mesh_2d',
-    'render_uncertainty_lobes_2d'
+    'uncertainty_lobes_summary_statistics',
+    'uncertainty_lobes_mesh',
+    'visualize_uncertainty_lobes'
 ]

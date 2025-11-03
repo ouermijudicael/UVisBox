@@ -59,7 +59,7 @@ def _process_position_stats(args):
     return i_pos, depths, theta1, theta2, mid_angle, r1, r2, r_arrow
 
 
-def compute_uncertainty_lobes_stats_2d(ensemble_vectors, percentile1=90, percentile2=50, workers=None):
+def uncertainty_lobes_summary_statistics(ensemble_vectors, percentile1=90, percentile2=50, workers=None):
     """
     Compute vector depth statistics for 2D uncertainty lobes.
     

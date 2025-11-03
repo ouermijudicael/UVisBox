@@ -112,7 +112,7 @@ def _triangulate_wedge(num_points):
     return np.array(triangles, dtype=int)
 
 
-def build_uncertainty_lobes_mesh_2d(positions, stats_2d, scale=0.2, arc_resolution=20):
+def uncertainty_lobes_mesh(positions, stats_2d, scale=0.2, arc_resolution=20):
     """
     Build 2D uncertainty lobe mesh from statistics.
     
@@ -126,7 +126,7 @@ def build_uncertainty_lobes_mesh_2d(positions, stats_2d, scale=0.2, arc_resoluti
     positions : numpy.ndarray
         Shape (n, 2) - lobe center positions
     stats_2d : dict
-        From compute_uncertainty_lobes_stats_2d()
+        From uncertainty_lobes_summary_statistics()
     scale : float
         Glyph scale factor (default: 0.2)
     arc_resolution : int

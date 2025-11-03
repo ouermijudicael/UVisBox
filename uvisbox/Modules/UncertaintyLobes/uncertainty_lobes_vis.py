@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 
 
-def render_uncertainty_lobes_2d(mesh_2d, show_median=True, ax=None):
+def visualize_uncertainty_lobes(mesh_2d, show_median=True, ax=None):
     """
     Render 2D uncertainty lobe mesh with matplotlib.
     
@@ -24,7 +24,7 @@ def render_uncertainty_lobes_2d(mesh_2d, show_median=True, ax=None):
     Parameters:
     -----------
     mesh_2d : dict
-        From build_uncertainty_lobes_mesh_2d() containing:
+        From uncertainty_lobes_mesh() containing:
         - 'wedges': outer lobe wedge data
         - 'inner_wedges': inner lobe wedge data (optional)
         - 'arrows': median direction arrow data

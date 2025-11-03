@@ -7,9 +7,9 @@ This module provides high-level functions that orchestrate the three-stage pipel
     3. Render visualization (matplotlib)
 
 For fine-grained control, use the individual stage functions directly:
-    - compute_uncertainty_lobes_stats_2d()
-    - build_uncertainty_lobes_mesh_2d()
-    - render_uncertainty_lobes_2d()
+    - uncertainty_lobes_summary_statistics()
+    - uncertainty_lobes_mesh()
+    - visualize_uncertainty_lobes()
 
 Based on: M. Jarema, I. Demir, J. Kehrer and R. Westermann, "Comparative visual 
 analysis of vector field ensembles," 2015 IEEE VAST, doi: 10.1109/VAST.2015.7347634.
@@ -19,9 +19,9 @@ Model as in the original paper. In addition, this implementation doesn't perform
 clustering of the vectors, instead it draws lobes for all vectors at each position.
 """
 
-from .uncertainty_lobes_stats import compute_uncertainty_lobes_stats_2d
-from .uncertainty_lobes_mesh import build_uncertainty_lobes_mesh_2d
-from .uncertainty_lobes_vis import render_uncertainty_lobes_2d
+from .uncertainty_lobes_stats import uncertainty_lobes_summary_statistics
+from .uncertainty_lobes_mesh import uncertainty_lobes_mesh
+from .uncertainty_lobes_vis import visualize_uncertainty_lobes
 import matplotlib.pyplot as plt
 
 
@@ -73,7 +73,7 @@ def uncertainty_lobes(positions, ensemble_vectors, percentile1=90, percentile2=5
         The axis with the drawn lobe glyphs.
     """
     # Stage 1: Compute statistics
-    stats = compute_uncertainty_lobes_stats_2d(
+    stats = uncertainty_lobes_summary_statistics(
         ensemble_vectors, 
         percentile1=percentile1, 
         percentile2=percentile2,
@@ -81,9 +81,9 @@ def uncertainty_lobes(positions, ensemble_vectors, percentile1=90, percentile2=5
     )
     
     # Stage 2: Build mesh
-    mesh = build_uncertainty_lobes_mesh_2d(positions, stats, scale=scale)
+    mesh = uncertainty_lobes_mesh(positions, stats, scale=scale)
     
     # Stage 3: Render
-    ax = render_uncertainty_lobes_2d(mesh, show_median=show_median, ax=ax)
+    ax = visualize_uncertainty_lobes(mesh, show_median=show_median, ax=ax)
     
     return ax
