@@ -79,10 +79,10 @@ def squid_glyphs_2d_mesh(positions, stats_2d, scale=0.2):
         }
     """
     median_vectors = stats_2d['median_vectors']
-    min_mags = stats_2d['min_mag']
-    max_mags = stats_2d['max_mag']
-    min_angles = stats_2d['min_angle']
-    max_angles = stats_2d['max_angle']
+    magnitudes_min = stats_2d['magnitudes_min']
+    magnitudes_max = stats_2d['magnitudes_max']
+    angles_min = stats_2d['angles_min']
+    angles_max = stats_2d['angles_max']
     
     num_positions = positions.shape[0]
     glyphs_points = np.zeros((num_positions * 11, 2))
@@ -94,18 +94,18 @@ def squid_glyphs_2d_mesh(positions, stats_2d, scale=0.2):
     for i_pos in range(num_positions):
         # Extract glyph parameters
         median_vector = median_vectors[i_pos]
-        min_mag = min_mags[i_pos]
-        max_mag = max_mags[i_pos]
-        min_angle = min_angles[i_pos]
-        max_angle = max_angles[i_pos]
+        magnitude_min = magnitudes_min[i_pos]
+        magnitude_max = magnitudes_max[i_pos]
+        angle_min = angles_min[i_pos]
+        angle_max = angles_max[i_pos]
         position = positions[i_pos]
         
         # Compute glyph dimensions
-        delta_h = max_mag - min_mag  # Height of base (magnitude uncertainty)
+        delta_h = magnitude_max - magnitude_min  # Height of base (magnitude uncertainty)
         h = median_vector[0]  # Median magnitude
-        rad_angle = (max_angle - min_angle) * 0.5  # Half angular spread
+        rad_angle = (angle_max - angle_min) * 0.5  # Half angular spread
         rot_angle = median_vector[1] - np.pi * 0.5  # Rotation to align with median direction
-        base = 2 * np.arctan(rad_angle) * max_mag  # Width of base
+        base = 2 * np.arctan(rad_angle) * magnitude_max  # Width of base
         
         # Skip degenerate glyphs
         if base <= 1e-5 or delta_h <= 1e-5:
@@ -126,17 +126,17 @@ def squid_glyphs_2d_mesh(positions, stats_2d, scale=0.2):
         shaft_corners = np.array([
             [-shaft_width, delta_h],              # Bottom left
             [shaft_width, delta_h],               # Bottom right
-            [-np.arctan(rad_angle) * max_mag * 0.2, max_mag * 0.8],  # Top left
-            [np.arctan(rad_angle) * max_mag * 0.2, max_mag * 0.8]    # Top right
+            [-np.arctan(rad_angle) * magnitude_max * 0.2, magnitude_max * 0.8],  # Top left
+            [np.arctan(rad_angle) * magnitude_max * 0.2, magnitude_max * 0.8]    # Top right
         ])
         point_idx, tri_idx = _add_quad_2d(glyphs_points, glyphs_polygons, point_idx, tri_idx,
                                           shaft_corners, position, rot_angle, scale)
         
         # 3. HEAD TRIANGLE (arrow tip)
         head_corners = np.array([
-            [-base * 0.5, max_mag * 0.8],  # Left base
-            [base * 0.5, max_mag * 0.8],   # Right base
-            [0, max_mag]                    # Tip
+            [-base * 0.5, magnitude_max * 0.8],  # Left base
+            [base * 0.5, magnitude_max * 0.8],   # Right base
+            [0, magnitude_max]                    # Tip
         ])
         point_idx, tri_idx = _add_triangle_2d(glyphs_points, glyphs_polygons, point_idx, tri_idx,
                                               head_corners, position, rot_angle, scale)
@@ -173,12 +173,12 @@ def squid_glyphs_3d_mesh(positions, stats_3d, point_values=None, scale=0.5, reso
             'point_values': (k,) - scalar values for coloring
         }
     """
-    directional_variations = stats_3d['directional_variations']
+    pca_components = stats_3d['pca_components']
     vectors = stats_3d['ensemble_spherical_vectors']
-    min_vectors = stats_3d['min_vectors']
+    spread_min_vectors = stats_3d['spread_min_vectors']
     median_vectors = stats_3d['median_vectors']
-    max_vectors = stats_3d['max_vectors']
-    glyph_markers = stats_3d['glyph_markers']
+    spread_max_vectors = stats_3d['spread_max_vectors']
+    glyph_types = stats_3d['glyph_types']
     num_of_glyphs = stats_3d['num_glyphs']
     
     num_positions = positions.shape[0]
@@ -190,8 +190,8 @@ def squid_glyphs_3d_mesh(positions, stats_3d, point_values=None, scale=0.5, reso
     
     # Call existing implementation
     points, polygons, points_values = squid_glyphs_meshing_3D(
-        directional_variations, positions, vectors, min_vectors, median_vectors,
-        max_vectors, scaler_values, glyph_markers, scale, resolution, num_of_glyphs
+        pca_components, positions, vectors, spread_min_vectors, median_vectors,
+        spread_max_vectors, scaler_values, glyph_types, scale, resolution, num_of_glyphs
     )
     
     return {
@@ -201,16 +201,16 @@ def squid_glyphs_3d_mesh(positions, stats_3d, point_values=None, scale=0.5, reso
     }
 
 
-def _compute_ellipse_scale_and_angle(directional_variations, i_p):
+def _compute_ellipse_scale_and_angle(pca_components, i_p):
     """Compute ellipse scale factor and rotation angle from PCA components."""
-    v0_scale = directional_variations[i_p][0][0]
-    v1_scale = directional_variations[i_p][0][1]
+    v0_scale = pca_components[i_p][0][0]
+    v1_scale = pca_components[i_p][0][1]
     
     if np.absolute(v0_scale) < 1.e-20:
         return 1.0, 0.001
     
     elipse_scale = np.maximum(v1_scale / v0_scale, 0.01)
-    v0 = directional_variations[i_p][1]
+    v0 = pca_components[i_p][1]
     
     if np.absolute(v0[0]) < 1.e-16 and np.absolute(v0[1]) < 1.e-16:
         angle = 0.0
@@ -298,8 +298,8 @@ def _triangulate_cylinder(polygons, polygons_id, bottom_ring_id, top_ring_id, re
     return polygons_id
 
 
-def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vectors, 
-                                    median_vectors, max_vectors, scaler_values, glyph_markers, scale, resolution, num_of_glyphs):
+def squid_glyphs_meshing_3D(pca_components, positions, vectors, spread_min_vectors, 
+                                    median_vectors, spread_max_vectors, scaler_values, glyph_types, scale, resolution, num_of_glyphs):
     """
     Build superelliptical squid glyphs for 3D visualization.
     
@@ -311,17 +311,17 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
     
     Parameters:
     -----------
-    directional_variations : numpy.ndarray
+    pca_components : numpy.ndarray
         PCA components for cross-section shape
     positions : numpy.ndarray
         Glyph center positions (n, 3)
     vectors : numpy.ndarray
         Ensemble vectors (unused, for compatibility)
-    min_vectors, median_vectors, max_vectors : numpy.ndarray
+    spread_min_vectors, median_vectors, spread_max_vectors : numpy.ndarray
         Vector statistics in spherical coordinates
     scaler_values : numpy.ndarray
         Scalar values for coloring
-    glyph_markers : numpy.ndarray
+    glyph_types : numpy.ndarray
         Glyph type flags (0=none, 1=full, 2=arrow only)
     scale : float
         Overall glyph scale
@@ -346,18 +346,18 @@ def squid_glyphs_meshing_3D(directional_variations, positions, vectors, min_vect
     polygons_id = 0
     
     for i_p in range(num_points):
-        if glyph_markers[i_p] != 1:  # Skip if not a full glyph
+        if glyph_types[i_p] != 1:  # Skip if not a full glyph
             continue
         
         # Extract parameters
         position = positions[i_p]
-        min_vector = min_vectors[i_p]
+        min_vector = spread_min_vectors[i_p]
         median_vector = median_vectors[i_p]
-        max_vector = max_vectors[i_p]
+        max_vector = spread_max_vectors[i_p]
         scaler_value = scaler_values[i_p]
         
         # Compute ellipse parameters
-        elipse_scale, angle = _compute_ellipse_scale_and_angle(directional_variations, i_p)
+        elipse_scale, angle = _compute_ellipse_scale_and_angle(pca_components, i_p)
         
         # Compute rotation matrix
         R = _create_rotation_matrix(median_vector)
