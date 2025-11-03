@@ -75,10 +75,10 @@ def squid_glyphs_2d_summary_statistics(ensemble_vectors, percentile, workers=Non
         'ensemble_polar_vectors': ensemble_polar_vectors,
         'depths': depths,
         'median_vectors': median_vectors,
-        'min_mag': min_mags,
-        'max_mag': max_mags,
-        'min_angle': min_angles,
-        'max_angle': max_angles
+        'magnitudes_min': min_mags,
+        'magnitudes_max': max_mags,
+        'angles_min': min_angles,
+        'angles_max': max_angles
     }
 
 
