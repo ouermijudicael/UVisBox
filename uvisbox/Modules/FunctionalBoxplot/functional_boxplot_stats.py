@@ -10,7 +10,7 @@ from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 #   - mfbd = modified_functional_banddepth
 #
 
-def band_depths(data, method='fbd'):
+def functional_boxplot_band_depths(data, method='fbd'):
     """
     Compute band depths for a set of functional curves.
 
@@ -31,7 +31,7 @@ def band_depths(data, method='fbd'):
         raise ValueError(f"Unknown method '{method}'. Choose 'fbd' or 'mfbd'.")
 
 
-def get_band(data, percentile, method='fbd'):
+def functional_boxplot_get_band(data, percentile, method='fbd'):
     """
     Compute the band envelope for a given percentile using functional band depth.
     
@@ -56,7 +56,7 @@ def get_band(data, percentile, method='fbd'):
     Examples:
     ---------
     >>> data = np.random.randn(100, 50)  # 100 curves, 50 points each
-    >>> bottom, top = get_band(data, 50, method='fbd')  # 50th percentile band
+    >>> bottom, top = functional_boxplot_get_band(data, 50, method='fbd')  # 50th percentile band
     """
     # Validate input
     if not isinstance(data, np.ndarray):
@@ -92,7 +92,7 @@ def get_band(data, percentile, method='fbd'):
     return bottom_curve, top_curve
 
 
-def summary_statistics(data, method='fbd', boxplot_style=None):
+def functional_boxplot_summary_statistics(data, method='fbd', boxplot_style=None):
     """
     Compute functional boxplot summary statistics without visualization.
     
@@ -132,7 +132,7 @@ def summary_statistics(data, method='fbd', boxplot_style=None):
     Examples:
     ---------
     >>> import numpy as np
-    >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_stats import summary_statistics
+    >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_stats import functional_boxplot_summary_statistics
     >>> from uvisbox.Core.CommonInterface import BoxplotStyleConfig
     >>> 
     >>> # Generate synthetic functional data
@@ -140,7 +140,7 @@ def summary_statistics(data, method='fbd', boxplot_style=None):
     >>> data = np.array([np.sin(2*np.pi*t) + 0.2*np.random.randn(100) for _ in range(50)])
     >>> 
     >>> # Basic usage with default settings
-    >>> stats = summary_statistics(data)
+    >>> stats = functional_boxplot_summary_statistics(data)
     >>> print(f"Median curve shape: {stats['median'].shape}")
     >>> print(f"Number of outliers: {stats['outliers'].shape[0]}")
     >>> print(f"Available percentile bands: {list(stats['percentile_bands'].keys())}")
@@ -151,7 +151,7 @@ def summary_statistics(data, method='fbd', boxplot_style=None):
     >>> 
     >>> # Custom percentiles
     >>> style = BoxplotStyleConfig(percentiles=[10, 50, 90], show_outliers=True)
-    >>> stats = summary_statistics(data, boxplot_style=style)
+    >>> stats = functional_boxplot_summary_statistics(data, boxplot_style=style)
     """
     # Use default config if none provided
     if boxplot_style is None:
@@ -168,7 +168,7 @@ def summary_statistics(data, method='fbd', boxplot_style=None):
     
     # Compute band depths
     if method == 'fbd' or method == 'mfbd':
-        depths = band_depths(data_copy, method=method)
+        depths = functional_boxplot_band_depths(data_copy, method=method)
     else:
         raise ValueError(f"Unknown method '{method}'. Choose 'fbd' or 'mfbd'.")
 
@@ -190,7 +190,7 @@ def summary_statistics(data, method='fbd', boxplot_style=None):
     
     # Compute percentile bands
     for percentile in boxplot_style.percentiles:
-        bottom, top = get_band(data_copy, percentile, method=method)
+        bottom, top = functional_boxplot_get_band(data_copy, percentile, method=method)
         band_key = f'{int(percentile)}_percentile_band'
         stats['percentile_bands'][band_key] = (bottom, top)
     

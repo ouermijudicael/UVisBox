@@ -8,7 +8,7 @@ def functional_boxplot_mesh(summary_stats):
     Parameters:
     -----------
     summary_stats : dict
-        Dictionary of summary statistics from summary_statistics() function.
+        Dictionary of summary statistics from functional_boxplot_summary_statistics() function.
         Expected to contain keys like 'depths', 'median', 'percentile_bands', 
         'outliers', 'sorted_curves', and 'sorted_indices'.
     
@@ -19,13 +19,13 @@ def functional_boxplot_mesh(summary_stats):
     
     Examples:
     ---------
-    >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_stats import summary_statistics
+    >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_stats import functional_boxplot_summary_statistics
     >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_mesh import functional_boxplot_mesh
     >>> 
     >>> # Generate data and compute statistics
     >>> import numpy as np
     >>> data = np.random.randn(100, 50)
-    >>> stats = summary_statistics(data)
+    >>> stats = functional_boxplot_summary_statistics(data)
     >>> 
     >>> # Pass through mesh stage (identity operation)
     >>> mesh_data = functional_boxplot_mesh(stats)

@@ -40,13 +40,13 @@ def plot_band(bottom_curve, top_curve, ax=None, color='red', alpha=1.0, scale=1.
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
     >>> from uvisbox.Modules.FunctionalBoxplot import plot_band
-    >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_stats import get_band
+    >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_stats import functional_boxplot_get_band
     >>> 
     >>> # Generate synthetic data
     >>> data = np.random.randn(100, 50).cumsum(axis=1)
     >>> 
     >>> # Get 50th percentile band
-    >>> bottom, top = get_band(data, 50, method='fbd')
+    >>> bottom, top = functional_boxplot_get_band(data, 50, method='fbd')
     >>> 
     >>> # Plot the band
     >>> fig, ax = plt.subplots()
@@ -114,7 +114,7 @@ def visualize_functional_boxplot(mesh_data, boxplot_style=None, ax=None):
     Examples:
     ---------
     >>> import numpy as np
-    >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_stats import summary_statistics
+    >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_stats import functional_boxplot_summary_statistics
     >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_mesh import functional_boxplot_mesh
     >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_vis import visualize_functional_boxplot
     >>> from uvisbox.Core.CommonInterface import BoxplotStyleConfig
@@ -124,7 +124,7 @@ def visualize_functional_boxplot(mesh_data, boxplot_style=None, ax=None):
     >>> data = np.array([np.sin(2*np.pi*t) + 0.2*np.random.randn(100) for _ in range(50)])
     >>> 
     >>> # Process through pipeline
-    >>> stats = summary_statistics(data)
+    >>> stats = functional_boxplot_summary_statistics(data)
     >>> mesh_data = functional_boxplot_mesh(stats)
     >>> 
     >>> # Visualize

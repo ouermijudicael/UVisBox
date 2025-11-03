@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from .functional_boxplot_stats import summary_statistics
+from .functional_boxplot_stats import functional_boxplot_summary_statistics
 from .functional_boxplot_mesh import functional_boxplot_mesh
 from .functional_boxplot_vis import visualize_functional_boxplot
 from uvisbox.Core.CommonInterface import BoxplotStyleConfig
@@ -86,7 +86,7 @@ def functional_boxplot(data, method='fbd', boxplot_style=None, ax=None):
     
     # Pipeline: Stats -> Mesh -> Vis
     # Step 1: Compute summary statistics
-    stats = summary_statistics(data, method=method, boxplot_style=boxplot_style)
+    stats = functional_boxplot_summary_statistics(data, method=method, boxplot_style=boxplot_style)
     
     # Step 2: Process through mesh (identity function for functional boxplot)
     mesh_data = functional_boxplot_mesh(stats)
