@@ -1,7 +1,7 @@
 from uvisbox.Core.CellsCrossingProb.crossing_probability_mc import crossing_probability_tetrahedra_monte_carlo
 
 
-def probabilistic_marching_tetrahedron_summary_statistics(ensemble_data, tetrahedral_mesh, isovalue):
+def probabilistic_marching_tetrahedra_summary_statistics(ensemble_data, tetrahedral_mesh, isovalue):
     """
     Compute level crossing probability for probabilistic marching tetrahedra.
     

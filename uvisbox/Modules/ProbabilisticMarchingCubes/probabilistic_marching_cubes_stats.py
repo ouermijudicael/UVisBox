@@ -1,7 +1,7 @@
 from uvisbox.Core.CellsCrossingProb.crossing_probability_mc import crossing_probability_cubes_monte_carlo
 
 
-def probabilistic_marching_cube_summary_statistics(ensemble_images, isovalue):
+def probabilistic_marching_cubes_summary_statistics(ensemble_images, isovalue):
     """
     Compute level crossing probability for probabilistic marching cubes.
     

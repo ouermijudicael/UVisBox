@@ -1,9 +1,9 @@
-from .probabilistic_marching_tetrahedra_stats import probabilistic_marching_tetrahedron_summary_statistics
-from .probabilistic_marching_tetrahedra_mesh import probabilistic_marching_tetrahedron_mesh
-from .probabilistic_marching_tetrahedra_vis import visualize_probabilistic_marching_tetrahedron
+from .probabilistic_marching_tetrahedra_stats import probabilistic_marching_tetrahedra_summary_statistics
+from .probabilistic_marching_tetrahedra_mesh import probabilistic_marching_tetrahedra_mesh
+from .probabilistic_marching_tetrahedra_vis import visualize_probabilistic_marching_tetrahedra
 
 
-def probabilistic_marching_tetrahedron(ensemble_data, tetrahedral_mesh, points, isovalue, plotter=None, opacity='linear', colormap='viridis'):
+def probabilistic_marching_tetrahedra(ensemble_data, tetrahedral_mesh, points, isovalue, plotter=None, opacity='linear', colormap='viridis'):
     """
     Compute and visualize probabilistic marching tetrahedra.
     
@@ -36,12 +36,12 @@ def probabilistic_marching_tetrahedron(ensemble_data, tetrahedral_mesh, points, 
             The pyvista plotter with the visualized probabilistic isosurface.
     """
     # Stats: compute level crossing probabilities
-    summary_statistics = probabilistic_marching_tetrahedron_summary_statistics(ensemble_data, tetrahedral_mesh, isovalue)
+    summary_statistics = probabilistic_marching_tetrahedra_summary_statistics(ensemble_data, tetrahedral_mesh, isovalue)
     
     # Mesh: identity function (no transformation needed)
-    mesh_data = probabilistic_marching_tetrahedron_mesh(summary_statistics)
+    mesh_data = probabilistic_marching_tetrahedra_mesh(summary_statistics)
     
     # Vis: create visualization
-    plotter = visualize_probabilistic_marching_tetrahedron(mesh_data, points, tetrahedral_mesh, plotter=plotter, opacity=opacity, colormap=colormap)
+    plotter = visualize_probabilistic_marching_tetrahedra(mesh_data, points, tetrahedral_mesh, plotter=plotter, opacity=opacity, colormap=colormap)
     
     return plotter

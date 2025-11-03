@@ -1,4 +1,4 @@
-def probabilistic_marching_tetrahedron_mesh(summary_statistics):
+def probabilistic_marching_tetrahedra_mesh(summary_statistics):
     """
     Identity function that passes through summary statistics.
     

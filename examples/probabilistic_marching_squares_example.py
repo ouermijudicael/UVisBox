@@ -1,5 +1,5 @@
 """
-This example demonstrates the use of the `probabilistic_marching_square` function from the `uvisbox` library to compute
+This example demonstrates the use of the `probabilistic_marching_squares` function from the `uvisbox` library to compute
 and visualize probabilistic isocontours from an ensemble of scalar fields defined on a regular grid
 using the marching squares algorithm.
 It visualizes the probability of the isocontour passing through each cell in the grid.
@@ -10,7 +10,7 @@ Import necessary libraries
 .. code-block:: python
 
     import numpy as np
-    from uvisbox.Modules.ProbabilisticMarchingSquares import probabilistic_marching_square
+    from uvisbox.Modules.ProbabilisticMarchingSquares import probabilistic_marching_squares
     import matplotlib.pyplot as plt
 
 Generate a regular grid over a 2D domain [0, 4π], use function f(x, y) = sin(x) * cos(y)
@@ -38,7 +38,7 @@ Set isovalue, run probabilistic marching squares, and visualize result
 
     # Run probabilistic marching squares
     fig, ax = plt.subplots(figsize=(8, 6))
-    ax = probabilistic_marching_square(F, isovalue, ax=ax)
+    ax = probabilistic_marching_squares(F, isovalue, ax=ax)
     plt.show()
 
 
@@ -50,7 +50,7 @@ Set isovalue, run probabilistic marching squares, and visualize result
 
 # Import necessary libraries
 import numpy as np
-from uvisbox.Modules.ProbabilisticMarchingSquares import probabilistic_marching_square
+from uvisbox.Modules.ProbabilisticMarchingSquares import probabilistic_marching_squares
 import matplotlib.pyplot as plt
 
 # Generate a regular grid over a 2D domain [0, 4π], use function f(x, y) = sin(x) * cos(y)
@@ -74,6 +74,6 @@ isovalue = 0.5
 
 # Run probabilistic marching squares
 fig, ax = plt.subplots(figsize=(8, 6))
-ax = probabilistic_marching_square(F, isovalue, ax=ax)
+ax = probabilistic_marching_squares(F, isovalue, ax=ax)
 # plt.savefig("probabilistic_marching_squares_example.png")
 plt.show()

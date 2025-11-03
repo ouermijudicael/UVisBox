@@ -1,9 +1,9 @@
-from .probabilistic_marching_cubes_stats import probabilistic_marching_cube_summary_statistics
-from .probabilistic_marching_cubes_mesh import probabilistic_marching_cube_mesh
-from .probabilistic_marching_cubes_vis import visualize_probabilistic_marching_cube
+from .probabilistic_marching_cubes_stats import probabilistic_marching_cubes_summary_statistics
+from .probabilistic_marching_cubes_mesh import probabilistic_marching_cubes_mesh
+from .probabilistic_marching_cubes_vis import visualize_probabilistic_marching_cubes
 
 
-def probabilistic_marching_cube(ensemble_images, isovalue, plotter=None, opacity='linear', colormap='viridis'):
+def probabilistic_marching_cubes(ensemble_images, isovalue, plotter=None, opacity='linear', colormap='viridis'):
     """
     Compute and visualize probabilistic marching cubes.
     
@@ -32,12 +32,12 @@ def probabilistic_marching_cube(ensemble_images, isovalue, plotter=None, opacity
             The pyvista plotter with the visualized probabilistic isosurface.
     """
     # Stats: compute level crossing probabilities
-    summary_statistics = probabilistic_marching_cube_summary_statistics(ensemble_images, isovalue)
+    summary_statistics = probabilistic_marching_cubes_summary_statistics(ensemble_images, isovalue)
     
     # Mesh: identity function (no transformation needed)
-    mesh_data = probabilistic_marching_cube_mesh(summary_statistics)
+    mesh_data = probabilistic_marching_cubes_mesh(summary_statistics)
     
     # Vis: create visualization
-    plotter = visualize_probabilistic_marching_cube(mesh_data, plotter=plotter, opacity=opacity, colormap=colormap)
+    plotter = visualize_probabilistic_marching_cubes(mesh_data, plotter=plotter, opacity=opacity, colormap=colormap)
     
     return plotter

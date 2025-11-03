@@ -1,9 +1,9 @@
-from .probabilistic_marching_squares_stats import probabilistic_marching_square_summary_statistics
-from .probabilistic_marching_squares_mesh import probabilistic_marching_square_mesh
-from .probabilistic_marching_squares_vis import visualize_probabilistic_marching_square
+from .probabilistic_marching_squares_stats import probabilistic_marching_squares_summary_statistics
+from .probabilistic_marching_squares_mesh import probabilistic_marching_squares_mesh
+from .probabilistic_marching_squares_vis import visualize_probabilistic_marching_squares
 
 
-def probabilistic_marching_square(ensemble_images, isovalue, ax=None, colormap='viridis'):
+def probabilistic_marching_squares(ensemble_images, isovalue, ax=None, colormap='viridis'):
     """
     Compute and visualize probabilistic marching squares.
     
@@ -29,12 +29,12 @@ def probabilistic_marching_square(ensemble_images, isovalue, ax=None, colormap='
             The axis with the visualized probabilistic isocontour.
     """
     # Stats: compute level crossing probabilities
-    summary_statistics = probabilistic_marching_square_summary_statistics(ensemble_images, isovalue)
+    summary_statistics = probabilistic_marching_squares_summary_statistics(ensemble_images, isovalue)
     
     # Mesh: identity function (no transformation needed)
-    mesh_data = probabilistic_marching_square_mesh(summary_statistics)
+    mesh_data = probabilistic_marching_squares_mesh(summary_statistics)
     
     # Vis: create visualization
-    ax = visualize_probabilistic_marching_square(mesh_data, ax=ax, colormap=colormap)
+    ax = visualize_probabilistic_marching_squares(mesh_data, ax=ax, colormap=colormap)
     
     return ax

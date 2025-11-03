@@ -1,7 +1,7 @@
 import pyvista as pv
 
 
-def visualize_probabilistic_marching_cube(mesh_data, plotter=None, opacity='linear', colormap='viridis'):
+def visualize_probabilistic_marching_cubes(mesh_data, plotter=None, opacity='linear', colormap='viridis'):
     """
     Visualize probabilistic marching cubes using PyVista volume rendering.
     

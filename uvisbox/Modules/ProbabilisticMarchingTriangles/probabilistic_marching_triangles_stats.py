@@ -1,7 +1,7 @@
 from uvisbox.Core.CellsCrossingProb.crossing_probability_mc import crossing_probability_triangles_monte_carlo
 
 
-def probabilistic_marching_triangle_summary_statistics(ensemble_data, triangle_mesh, isovalue):
+def probabilistic_marching_triangles_summary_statistics(ensemble_data, triangle_mesh, isovalue):
     """
     Compute level crossing probability for probabilistic marching triangles.
     

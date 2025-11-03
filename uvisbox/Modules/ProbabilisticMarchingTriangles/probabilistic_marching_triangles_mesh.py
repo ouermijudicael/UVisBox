@@ -1,4 +1,4 @@
-def probabilistic_marching_triangle_mesh(summary_statistics):
+def probabilistic_marching_triangles_mesh(summary_statistics):
     """
     Identity function that passes through summary statistics.
     

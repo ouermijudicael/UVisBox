@@ -7,21 +7,21 @@ triangle crossing probabilities and visualizing the results using matplotlib.
 """
 
 from .probabilistic_marching_triangles_stats import (
-    probabilistic_marching_triangle_summary_statistics,
+    probabilistic_marching_triangles_summary_statistics,
 )
 from .probabilistic_marching_triangles_mesh import (
-    probabilistic_marching_triangle_mesh,
+    probabilistic_marching_triangles_mesh,
 )
 from .probabilistic_marching_triangles_vis import (
-    visualize_probabilistic_marching_triangle,
+    visualize_probabilistic_marching_triangles,
 )
 from .probabilistic_marching_triangles import (
-    probabilistic_marching_triangle,
+    probabilistic_marching_triangles,
 )
 
 __all__ = [
-    'probabilistic_marching_triangle_summary_statistics',
-    'probabilistic_marching_triangle_mesh',
-    'visualize_probabilistic_marching_triangle',
-    'probabilistic_marching_triangle',
+    'probabilistic_marching_triangles_summary_statistics',
+    'probabilistic_marching_triangles_mesh',
+    'visualize_probabilistic_marching_triangles',
+    'probabilistic_marching_triangles',
 ]

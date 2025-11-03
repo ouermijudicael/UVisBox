@@ -3,7 +3,7 @@ import numpy as np
 from pyvista import CellType
 
 
-def visualize_probabilistic_marching_tetrahedron(mesh_data, points, tetrahedral_mesh, plotter=None, opacity='linear', colormap='viridis'):
+def visualize_probabilistic_marching_tetrahedra(mesh_data, points, tetrahedral_mesh, plotter=None, opacity='linear', colormap='viridis'):
     """
     Visualize probabilistic marching tetrahedra using PyVista volume rendering.
     

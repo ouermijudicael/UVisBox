@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 
-def visualize_probabilistic_marching_square(summary_statistics, ax=None, colormap='viridis'):
+def visualize_probabilistic_marching_squares(summary_statistics, ax=None, colormap='viridis'):
     """
     Visualize the probability map of isocontour presence using matplotlib.
 

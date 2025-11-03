@@ -1,4 +1,4 @@
-def probabilistic_marching_cube_mesh(summary_statistics):
+def probabilistic_marching_cubes_mesh(summary_statistics):
     """
     Identity function that passes through summary statistics.
     

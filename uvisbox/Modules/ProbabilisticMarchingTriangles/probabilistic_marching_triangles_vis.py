@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 
-def visualize_probabilistic_marching_triangle(mesh_data, points, triangle_mesh, ax=None, colormap='viridis'):
+def visualize_probabilistic_marching_triangles(mesh_data, points, triangle_mesh, ax=None, colormap='viridis'):
     """
     Visualize probabilistic marching triangles using matplotlib.
     

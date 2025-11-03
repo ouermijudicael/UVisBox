@@ -1,9 +1,9 @@
-from .probabilistic_marching_triangles_stats import probabilistic_marching_triangle_summary_statistics
-from .probabilistic_marching_triangles_mesh import probabilistic_marching_triangle_mesh
-from .probabilistic_marching_triangles_vis import visualize_probabilistic_marching_triangle
+from .probabilistic_marching_triangles_stats import probabilistic_marching_triangles_summary_statistics
+from .probabilistic_marching_triangles_mesh import probabilistic_marching_triangles_mesh
+from .probabilistic_marching_triangles_vis import visualize_probabilistic_marching_triangles
 
 
-def probabilistic_marching_triangle(ensemble_data, triangle_mesh, points, isovalue, ax=None, colormap='viridis'):
+def probabilistic_marching_triangles(ensemble_data, triangle_mesh, points, isovalue, ax=None, colormap='viridis'):
     """
     Compute and visualize probabilistic marching triangles.
     
@@ -33,12 +33,12 @@ def probabilistic_marching_triangle(ensemble_data, triangle_mesh, points, isoval
             The axis with the visualized probabilistic isocontour.
     """
     # Stats: compute level crossing probabilities
-    summary_statistics = probabilistic_marching_triangle_summary_statistics(ensemble_data, triangle_mesh, isovalue)
+    summary_statistics = probabilistic_marching_triangles_summary_statistics(ensemble_data, triangle_mesh, isovalue)
     
     # Mesh: identity function (no transformation needed)
-    mesh_data = probabilistic_marching_triangle_mesh(summary_statistics)
+    mesh_data = probabilistic_marching_triangles_mesh(summary_statistics)
     
     # Vis: create visualization
-    ax = visualize_probabilistic_marching_triangle(mesh_data, points, triangle_mesh, ax=ax, colormap=colormap)
+    ax = visualize_probabilistic_marching_triangles(mesh_data, points, triangle_mesh, ax=ax, colormap=colormap)
     
     return ax
