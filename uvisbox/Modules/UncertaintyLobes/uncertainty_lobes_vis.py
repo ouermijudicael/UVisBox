@@ -12,9 +12,9 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 
 
-def visualize_uncertainty_lobes(mesh_2d, show_median=True, ax=None):
+def visualize_uncertainty_lobes(mesh, show_median=True, ax=None):
     """
-    Render 2D uncertainty lobe mesh with matplotlib.
+    Render uncertainty lobe mesh with matplotlib.
     
     Draws wedge-shaped glyphs representing directional uncertainty with:
     - Outer wedges (light blue, semi-transparent) - larger angular spread
@@ -23,7 +23,7 @@ def visualize_uncertainty_lobes(mesh_2d, show_median=True, ax=None):
     
     Parameters:
     -----------
-    mesh_2d : dict
+    mesh : dict
         From uncertainty_lobes_mesh() containing:
         - 'wedges': outer lobe wedge data
         - 'inner_wedges': inner lobe wedge data (optional)
@@ -43,7 +43,7 @@ def visualize_uncertainty_lobes(mesh_2d, show_median=True, ax=None):
         fig, ax = plt.subplots(figsize=(12, 6))
     
     # Render outer wedges (percentile1)
-    for wedge_data in mesh_2d['wedges']:
+    for wedge_data in mesh['wedges']:
         vertices = wedge_data['vertices']
         
         # Create polygon patch for the wedge
@@ -57,8 +57,8 @@ def visualize_uncertainty_lobes(mesh_2d, show_median=True, ax=None):
         ax.add_patch(wedge_polygon)
     
     # Render inner wedges (percentile2) if present
-    if mesh_2d['inner_wedges'] is not None:
-        for wedge_data in mesh_2d['inner_wedges']:
+    if mesh['inner_wedges'] is not None:
+        for wedge_data in mesh['inner_wedges']:
             vertices = wedge_data['vertices']
             
             wedge_polygon = Polygon(
@@ -72,7 +72,7 @@ def visualize_uncertainty_lobes(mesh_2d, show_median=True, ax=None):
     
     # Render median arrows if requested
     if show_median:
-        arrows = mesh_2d['arrows']
+        arrows = mesh['arrows']
         positions = arrows['positions']
         directions = arrows['directions']
         lengths = arrows['lengths']

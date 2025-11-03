@@ -112,9 +112,9 @@ def _triangulate_wedge(num_points):
     return np.array(triangles, dtype=int)
 
 
-def uncertainty_lobes_mesh(positions, stats_2d, scale=0.2, arc_resolution=20):
+def uncertainty_lobes_mesh(positions, stats, scale=0.2, arc_resolution=20):
     """
-    Build 2D uncertainty lobe mesh from statistics.
+    Build uncertainty lobe mesh from statistics.
     
     Creates wedge-shaped glyphs with:
     1. Outer lobe (percentile1 - larger angular and magnitude spread)
@@ -125,7 +125,7 @@ def uncertainty_lobes_mesh(positions, stats_2d, scale=0.2, arc_resolution=20):
     -----------
     positions : numpy.ndarray
         Shape (n, 2) - lobe center positions
-    stats_2d : dict
+    stats : dict
         From uncertainty_lobes_summary_statistics()
     scale : float
         Glyph scale factor (default: 0.2)
@@ -134,7 +134,7 @@ def uncertainty_lobes_mesh(positions, stats_2d, scale=0.2, arc_resolution=20):
     
     Returns:
     --------
-    mesh_2d : dict
+    mesh : dict
         {
             'wedges': list of dicts - each containing 'vertices' and 'triangles' for outer lobe,
             'inner_wedges': list of dicts - each containing 'vertices' and 'triangles' for inner lobe (if percentile2 != None),
@@ -143,12 +143,12 @@ def uncertainty_lobes_mesh(positions, stats_2d, scale=0.2, arc_resolution=20):
     """
     num_positions = positions.shape[0]
     
-    outer_lobe_angles = stats_2d['outer_lobe_angles']  # (n, 2) - [min_angle, max_angle] for outer lobe
-    inner_lobe_angles = stats_2d['inner_lobe_angles']  # (n, 2) or None - for inner lobe
-    median_angles = stats_2d['median_angles']  # (n,) - median angles
-    outer_lobe_radii = stats_2d['outer_lobe_radii']  # (n,) - minimum magnitude (outer lobe)
-    inner_lobe_radii = stats_2d['inner_lobe_radii']  # (n,) - maximum magnitude (inner lobe)
-    median_magnitudes = stats_2d['median_magnitudes']  # (n,) - median magnitudes
+    outer_lobe_angles = stats['outer_lobe_angles']  # (n, 2) - [min_angle, max_angle] for outer lobe
+    inner_lobe_angles = stats['inner_lobe_angles']  # (n, 2) or None - for inner lobe
+    median_angles = stats['median_angles']  # (n,) - median angles
+    outer_lobe_radii = stats['outer_lobe_radii']  # (n,) - minimum magnitude (outer lobe)
+    inner_lobe_radii = stats['inner_lobe_radii']  # (n,) - maximum magnitude (inner lobe)
+    median_magnitudes = stats['median_magnitudes']  # (n,) - median magnitudes
     
     # Apply scale
     outer_lobe_radii_scaled = outer_lobe_radii * scale

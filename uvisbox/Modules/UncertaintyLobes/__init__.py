@@ -1,7 +1,7 @@
 """
 UncertaintyLobes Module
 
-This module provides functionality for visualizing uncertainty lobes in 2D vector field ensembles.
+This module provides functionality for visualizing uncertainty lobes in vector field ensembles.
 It follows a three-stage visualization pipeline:
     1. Compute statistics (vector depths, spreads, angular ranges)
     2. Build mesh geometry (wedge vertices, triangles)

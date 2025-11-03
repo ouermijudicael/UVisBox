@@ -61,7 +61,7 @@ def _process_position_stats(args):
 
 def uncertainty_lobes_summary_statistics(ensemble_vectors, percentile1=90, percentile2=50, workers=None):
     """
-    Compute vector depth statistics for 2D uncertainty lobes.
+    Compute vector depth statistics for uncertainty lobes.
     
     Parameters:
     -----------
@@ -79,7 +79,7 @@ def uncertainty_lobes_summary_statistics(ensemble_vectors, percentile1=90, perce
     
     Returns:
     --------
-    stats_2d : dict
+    stats : dict
         {
             'ensemble_polar_vectors': (n, m, 2) - polar coordinates [r, theta],
             'depths': (n, m) - vector depths,

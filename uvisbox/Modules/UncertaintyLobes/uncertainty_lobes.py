@@ -25,10 +25,12 @@ from .uncertainty_lobes_vis import visualize_uncertainty_lobes
 import matplotlib.pyplot as plt
 
 
-def uncertainty_lobes(positions, ensemble_vectors, percentile1=90, percentile2=50, 
-                      scale=0.2, ax=None, show_median=True, workers=None):
+def uncertainty_lobes(positions, ensemble_vectors,
+                      percentile1=90, percentile2=50, 
+                      scale=0.2, ax=None, show_median=True,
+                      workers=None):
     """
-    Visualize 2D uncertainty lobe glyphs.
+    Visualize uncertainty lobe glyphs.
     
     This function orchestrates the three-stage pipeline:
         1. Convert Cartesian → Polar, compute vector depths and spreads
