@@ -143,17 +143,17 @@ def uncertainty_lobes_mesh(positions, stats_2d, scale=0.2, arc_resolution=20):
     """
     num_positions = positions.shape[0]
     
-    theta1 = stats_2d['theta1']  # (n, 2) - [min_angle, max_angle] for outer lobe
-    theta2 = stats_2d['theta2']  # (n, 2) or None - for inner lobe
-    mid_angle = stats_2d['mid_angle']  # (n,) - median angles
-    r1 = stats_2d['r1']  # (n,) - minimum magnitude (outer lobe)
-    r2 = stats_2d['r2']  # (n,) - maximum magnitude (inner lobe)
-    r_arrow = stats_2d['r_arrow']  # (n,) - median magnitudes
+    outer_lobe_angles = stats_2d['outer_lobe_angles']  # (n, 2) - [min_angle, max_angle] for outer lobe
+    inner_lobe_angles = stats_2d['inner_lobe_angles']  # (n, 2) or None - for inner lobe
+    median_angles = stats_2d['median_angles']  # (n,) - median angles
+    outer_lobe_radii = stats_2d['outer_lobe_radii']  # (n,) - minimum magnitude (outer lobe)
+    inner_lobe_radii = stats_2d['inner_lobe_radii']  # (n,) - maximum magnitude (inner lobe)
+    median_magnitudes = stats_2d['median_magnitudes']  # (n,) - median magnitudes
     
     # Apply scale
-    r1_scaled = r1 * scale
-    r2_scaled = r2 * scale
-    r_arrow_scaled = r_arrow * scale
+    outer_lobe_radii_scaled = outer_lobe_radii * scale
+    inner_lobe_radii_scaled = inner_lobe_radii * scale
+    median_magnitudes_scaled = median_magnitudes * scale
     
     # Build wedges
     wedges = []  # Outer lobes
@@ -161,12 +161,12 @@ def uncertainty_lobes_mesh(positions, stats_2d, scale=0.2, arc_resolution=20):
     
     for i in range(num_positions):
         # Outer lobe (percentile1)
-        theta_start = theta1[i, 0]  # min_angle
-        theta_end = theta1[i, 1]    # max_angle
-        median = mid_angle[i]        # median angle
+        theta_start = outer_lobe_angles[i, 0]  # min_angle
+        theta_end = outer_lobe_angles[i, 1]    # max_angle
+        median = median_angles[i]        # median angle
         
         vertices = _create_wedge_vertices(
-            positions[i], r1_scaled[i], theta_start, theta_end, median, arc_resolution
+            positions[i], outer_lobe_radii_scaled[i], theta_start, theta_end, median, arc_resolution
         )
         triangles = _triangulate_wedge(arc_resolution)
         
@@ -177,12 +177,12 @@ def uncertainty_lobes_mesh(positions, stats_2d, scale=0.2, arc_resolution=20):
         })
         
         # Inner lobe (percentile2, if provided)
-        if theta2 is not None and r2_scaled[i] > 0.0:
-            theta_start2 = theta2[i, 0]
-            theta_end2 = theta2[i, 1]
+        if inner_lobe_angles is not None and inner_lobe_radii_scaled[i] > 0.0:
+            theta_start2 = inner_lobe_angles[i, 0]
+            theta_end2 = inner_lobe_angles[i, 1]
             
             vertices2 = _create_wedge_vertices(
-                positions[i], r2_scaled[i], theta_start2, theta_end2, median, arc_resolution
+                positions[i], inner_lobe_radii_scaled[i], theta_start2, theta_end2, median, arc_resolution
             )
             triangles2 = _triangulate_wedge(arc_resolution)
             
@@ -194,14 +194,14 @@ def uncertainty_lobes_mesh(positions, stats_2d, scale=0.2, arc_resolution=20):
     
     # Build arrow data
     arrow_directions = np.column_stack([
-        np.cos(mid_angle),
-        np.sin(mid_angle)
+        np.cos(median_angles),
+        np.sin(median_angles)
     ])
     
     arrows = {
         'positions': positions,
         'directions': arrow_directions,
-        'lengths': r_arrow_scaled
+        'lengths': median_magnitudes_scaled
     }
     
     return {

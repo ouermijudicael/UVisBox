@@ -84,12 +84,12 @@ def uncertainty_lobes_summary_statistics(ensemble_vectors, percentile1=90, perce
             'ensemble_polar_vectors': (n, m, 2) - polar coordinates [r, theta],
             'depths': (n, m) - vector depths,
             'median_vectors': (n, 2) - median vectors per position [r, theta],
-            'theta1': (n, 2) - angular spread for percentile1 [min_angle, max_angle],
-            'theta2': (n, 2) or None - angular spread for percentile2 (if provided),
-            'mid_angle': (n,) - median angles (radians),
-            'r1': (n,) - minimum magnitude for percentile1,
-            'r2': (n,) - maximum magnitude for percentile2 (or 0 if None),
-            'r_arrow': (n,) - median vector magnitudes
+            'outer_lobe_angles': (n, 2) - angular spread for percentile1 [min_angle, max_angle],
+            'inner_lobe_angles': (n, 2) or None - angular spread for percentile2 (if provided),
+            'median_angles': (n,) - median angles (radians),
+            'outer_lobe_radii': (n,) - minimum magnitude for percentile1,
+            'inner_lobe_radii': (n,) - maximum magnitude for percentile2 (or 0 if None),
+            'median_magnitudes': (n,) - median vector magnitudes
         }
     """
     num_positions, num_ens_members = ensemble_vectors.shape[0], ensemble_vectors.shape[1]
@@ -180,10 +180,10 @@ def uncertainty_lobes_summary_statistics(ensemble_vectors, percentile1=90, perce
         'ensemble_polar_vectors': ensemble_polar_vectors,
         'depths': depths,
         'median_vectors': median_vectors,
-        'theta1': theta1,
-        'theta2': theta2,
-        'mid_angle': mid_angle,
-        'r1': r1,
-        'r2': r2,
-        'r_arrow': r_arrow
+        'outer_lobe_angles': theta1,
+        'inner_lobe_angles': theta2,
+        'median_angles': mid_angle,
+        'outer_lobe_radii': r1,
+        'inner_lobe_radii': r2,
+        'median_magnitudes': r_arrow
     }
