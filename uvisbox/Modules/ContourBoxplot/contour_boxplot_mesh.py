@@ -1,55 +1,66 @@
 import numpy as np
 
-def get_band(ordered_binary_images, percentile):
+
+def contour_boxplot_mesh(summary_statistics):
     """
-    Compute the contour band envelope for a given percentile using contour band depth.
+    Process summary statistics to create mesh data for visualization.
+    
+    This function aggregates percentile bands by overwriting values in descending percentile order,
+    creating a single image that shows all bands with appropriate color values.
     
     Parameters:
     -----------
-    ordered_binary_images : np.ndarray
-        3D array of shape (N, H, W) where N is the number of binary images and H, W are the height and width of each image. 
-        The images should be ordered by their contour band depths in descending order (highest depth first).
-    percentile : float
-        Percentile value (0-100) for the band envelope. 
+    summary_statistics : dict
+        Dictionary from contour_boxplot_summary_statistics containing:
+        - 'median': Binary image for median contour
+        - 'percentile_bands': List of (percentile, band_image) tuples
+        - 'outliers': List of outlier binary images
+    
     Returns:
     --------
-    a binary image representing the band envelope.
+    dict
+        Dictionary containing:
+        - 'percentile_bands_image': 2D array where each pixel value represents the percentile/100
+                                   it belongs to. Lower percentiles overwrite higher ones.
+        - 'median': Binary image (unchanged from input)
+        - 'outliers': List of binary images (unchanged from input)
+    
+    Notes:
+    ------
+    The aggregation works by:
+    1. Starting with highest percentile band (e.g., 90th)
+    2. Painting pixels with value 0.90 where band is non-zero
+    3. Overwriting with lower percentile bands (e.g., 75th → 0.75)
+    4. Continuing until lowest percentile
+    This creates a layered visualization where inner bands overwrite outer bands.
+    
     Examples:
     ---------
-    1. Get the 50th percentile band envelope:
-       band_envelope = get_band(ordered_images, 50)
-    2. Get the 75th percentile band envelope:
-       band_envelope = get_band(ordered_images, 75)
+    >>> stats = contour_boxplot_summary_statistics(ensemble, isovalue=0.5)
+    >>> mesh_data = contour_boxplot_mesh(stats)
+    >>> print(mesh_data['percentile_bands_image'].shape)
+    (100, 100)
     """
-
-    # Validate input
-    if not isinstance(ordered_binary_images, np.ndarray):
-        ordered_binary_images = np.array(ordered_binary_images)
-    if ordered_binary_images.ndim != 3:
-        raise ValueError("Input ordered_images must be a 3D array of shape (N, H, W).")
-    if not 0 <= percentile <= 100:
-        raise ValueError("Percentile must be between 0 and 100.")
+    # Get image dimensions from median
+    median = summary_statistics['median']
+    height, width = median.shape
     
-    # ordered_binary_images are supposed to be np.bool type
-    if ordered_binary_images.dtype != np.bool_:
-        ordered_binary_images = ordered_binary_images.astype(np.bool_)
-
-    n_images = ordered_binary_images.shape[0]
-    index = int(np.ceil(n_images * (percentile / 100)))
+    # Initialize aggregated image with zeros
+    percentile_bands_image = np.zeros((height, width), dtype=np.float32)
     
-    # Get the top `index` images with highest depth
-    selected_images = ordered_binary_images[:index]
+    # Get percentile bands and sort by percentile in descending order
+    percentile_bands = summary_statistics['percentile_bands']
+    sorted_bands = sorted(percentile_bands, key=lambda x: x[0], reverse=True)
     
-    # Compute envelope by taking pixel-wise maximum
-    # handle case where no images are selected
-    if index == 0:
-        band_envelope = np.zeros(ordered_binary_images.shape[1:], dtype=ordered_binary_images.dtype)
-    else:
-        # union: pixel is True if any selected image has it
-        union = np.any(selected_images, axis=0)
-        # intersection: pixel is True if all selected images have it
-        intersection = np.all(selected_images, axis=0)
-        # envelope = union minus intersection (pixels present in some but not all)
-        band_envelope = (union & ~intersection).astype(ordered_binary_images.dtype)
+    # Apply bands in descending order (highest to lowest)
+    # Lower percentile values will overwrite higher ones
+    for percentile, band_image in sorted_bands:
+        # Where band is non-zero, overwrite with the band value
+        mask = band_image > 0
+        percentile_bands_image[mask] = band_image[mask]
     
-    return band_envelope
+    return {
+        'percentile_bands_image': percentile_bands_image,
+        'median': median,
+        'outliers': summary_statistics['outliers']
+    }

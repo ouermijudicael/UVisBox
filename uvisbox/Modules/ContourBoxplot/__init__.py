@@ -4,13 +4,14 @@ ContourBoxplot Module
 This module provides contour-based boxplot functionality for uncertainty visualization.
 """
 
-# Import visualization functionality
-try:
-    from .contour_boxplot_vis import *
-    from .contour_boxplot_mesh import *
-    from .contour_boxplot_stats import *
-    from uvisbox.Modules.ContourBoxplot.contour_boxplot import *
-except ImportError:
-    pass
+from .contour_boxplot import contour_boxplot
+from .contour_boxplot_stats import contour_boxplot_summary_statistics
+from .contour_boxplot_mesh import contour_boxplot_mesh
+from .contour_boxplot_vis import visualize_contour_boxplot
 
-# Mesh and Stats subdirectories are available for future expansion
+__all__ = [
+    'contour_boxplot',
+    'contour_boxplot_summary_statistics',
+    'contour_boxplot_mesh',
+    'visualize_contour_boxplot'
+]

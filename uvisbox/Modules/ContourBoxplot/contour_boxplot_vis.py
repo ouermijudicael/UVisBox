@@ -1,89 +1,116 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from .contour_boxplot_mesh import get_band
 from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 
-def matplotlib_contour_boxplot(ordered_binary_images, boxplot_style=None, ax=None):
+
+def visualize_contour_boxplot(mesh_data, boxplot_style=None, ax=None):
     """
-    Plot the contour boxplot bands by summing band envelopes for given percentiles.
+    Visualize contour boxplot using imshow for percentile bands and contour for median/outliers.
     
     Parameters:
     -----------
-    ordered_binary_images : np.ndarray
-        3D array of shape (N, H, W) where N is the number of binary images and H, W are the height and width of each image.
-        The images should be ordered by their contour band depths in descending order (highest depth first).
+    mesh_data : dict
+        Dictionary from contour_boxplot_mesh containing:
+        - 'percentile_bands_image': 2D array with aggregated percentile band values
+        - 'median': Binary image for median contour
+        - 'outliers': List of binary images for outlier contours
     boxplot_style : BoxplotStyleConfig, optional
-        Configuration for the boxplot visualization including percentiles,
-        and median/outlier styling. If None, uses default configuration.
-        The percentile_colormap is used for the band sum visualization.
+        Configuration for visualization including colormap, median/outlier styling.
+        If None, uses default configuration.
     ax : matplotlib.axes.Axes, optional
-        Matplotlib Axes object to plot on. If None, a new figure and axes will be created.
+        Matplotlib Axes object to plot on. If None, creates new figure and axes.
     
     Returns:
     --------
     ax : matplotlib.axes.Axes
-        Matplotlib Axes object with the plotted contour boxplot.
+        The Axes object with the contour boxplot visualization.
+    
+    Notes:
+    ------
+    - Uses ax.imshow() to display the aggregated percentile bands with colormap
+    - Uses ax.contour() at isovalue 0.5 to plot median and outlier contour lines
+    - Colorbar shows percentile values from 0-100
+    - Legend indicates median and outliers
+    
+    Examples:
+    ---------
+    >>> stats = contour_boxplot_summary_statistics(ensemble, isovalue=0.5)
+    >>> mesh_data = contour_boxplot_mesh(stats)
+    >>> ax = visualize_contour_boxplot(mesh_data)
     """
-
     # Use default config if none provided
     if boxplot_style is None:
         boxplot_style = BoxplotStyleConfig()
-
+    
     if ax is None:
         fig, ax = plt.subplots()
-
-    # Sort percentiles in descending order (highest to lowest)
-    sorted_percentiles = sorted(boxplot_style.percentiles, reverse=True)
     
-    # Initialize color value image with zeros
-    h, w = ordered_binary_images.shape[1], ordered_binary_images.shape[2]
-    color_array = np.zeros((h, w), dtype=np.float32)
+    # Get data
+    percentile_bands_image = mesh_data['percentile_bands_image']
+    median = mesh_data['median']
+    outliers = mesh_data['outliers']
     
-    # Apply bands in descending order of percentile
-    # Higher percentiles overwrite lower ones at non-zero pixels
-    for percentile in sorted_percentiles:
-        band = get_band(ordered_binary_images, percentile)
-        # Where band is non-zero, set color value to percentile/100
-        color_value = percentile / 100.0
-        mask = band > 0
-        color_array[mask] = color_value
+    # Plot percentile bands using imshow
+    # vmin=0, vmax=1 since values are percentile/100
+    im = ax.imshow(
+        percentile_bands_image,
+        cmap=boxplot_style.percentile_colormap,
+        origin='lower',
+        interpolation='nearest',
+        vmin=0,
+        vmax=1
+    )
     
-    # Display with origin='lower'
-    im = ax.imshow(color_array, cmap=boxplot_style.percentile_colormap, origin='lower', 
-                   interpolation='nearest', vmin=0, vmax=1)
-    plt.colorbar(im, ax=ax, label='Percentile')
-
-    # Track handles and labels for legend
+    # Add colorbar with percentile scale (0-100)
+    cbar = plt.colorbar(im, ax=ax, label='Percentile')
+    cbar.ax.set_ylabel('Percentile', rotation=270, labelpad=15)
+    # Set colorbar to show 0-100 scale
+    cbar.set_ticks([0, 0.25, 0.5, 0.75, 1.0])
+    cbar.set_ticklabels(['0', '25', '50', '75', '100'])
+    
+    # Track legend handles and labels
     legend_handles = []
     legend_labels = []
-
-    if boxplot_style.show_outliers:
-        start_idx = np.ceil(sorted_percentiles[0] / 100 * ordered_binary_images.shape[0]).astype(int)
-        for i, idx in enumerate(range(start_idx, ordered_binary_images.shape[0])):
-            contour_set = ax.contour(ordered_binary_images[idx], levels=[0.5], 
-                                   colors=boxplot_style.outliers_color, 
-                                   linewidths=boxplot_style.outliers_width, 
-                                   alpha=boxplot_style.outliers_alpha)
-            # Only add to legend once (first outlier)
-            if i == 0:
-                handles, _ = contour_set.legend_elements()
-                legend_handles.append(handles[0])
-                legend_labels.append('Outliers')
     
+    # Plot median contour at isovalue 0.5
     if boxplot_style.show_median:
-        median_idx = 0
-        contour_set = ax.contour(ordered_binary_images[median_idx], levels=[0.5], 
-                               colors=boxplot_style.median_color, 
-                               linewidths=boxplot_style.median_width,
-                               alpha=boxplot_style.median_alpha)
-        handles, _ = contour_set.legend_elements()
-        legend_handles.append(handles[0])
-        legend_labels.append('Median')
-
-    # Add legend only if there are items to show
+        contour_set = ax.contour(
+            median,
+            levels=[0.5],
+            colors=boxplot_style.median_color,
+            linewidths=boxplot_style.median_width,
+            alpha=boxplot_style.median_alpha
+        )
+        # contour() returns a QuadContourSet, check if it has any contours
+        if len(contour_set.allsegs[0]) > 0:
+            legend_handles.append(plt.Line2D([0], [0], color=boxplot_style.median_color, 
+                                            linewidth=boxplot_style.median_width,
+                                            alpha=boxplot_style.median_alpha))
+            legend_labels.append('Median')
+    
+    # Plot outlier contours at isovalue 0.5
+    if boxplot_style.show_outliers and len(outliers) > 0:
+        outlier_added = False
+        for outlier in outliers:
+            contour_set = ax.contour(
+                outlier,
+                levels=[0.5],
+                colors=boxplot_style.outliers_color,
+                linewidths=boxplot_style.outliers_width,
+                alpha=boxplot_style.outliers_alpha
+            )
+            # Add to legend only once (first outlier with actual contours)
+            if not outlier_added and len(contour_set.allsegs[0]) > 0:
+                legend_handles.append(plt.Line2D([0], [0], color=boxplot_style.outliers_color,
+                                                 linewidth=boxplot_style.outliers_width,
+                                                 alpha=boxplot_style.outliers_alpha))
+                legend_labels.append('Outliers')
+                outlier_added = True
+    
+    # Add legend if there are items to show
     if legend_handles:
         ax.legend(legend_handles, legend_labels)
-
+    
     return ax
 
 
