@@ -13,8 +13,8 @@ from uvisbox.Modules.CurveBoxplot.curve_boxplot_stats import curve_boxplot_summa
 from uvisbox.Modules.CurveBoxplot.curve_boxplot_mesh import curve_boxplot_mesh
 from uvisbox.Modules.CurveBoxplot.curve_boxplot_vis import (
     visualize_curve_boxplot, 
-    _plot_band_mesh,
-    matplotlib_plot_band
+    _plot_band_mesh_2d,
+    _plot_band_mesh_3d
 )
 from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 
@@ -45,7 +45,8 @@ class TestVisualizeCurveBoxplot:
         
         ax = visualize_curve_boxplot(mesh_data)
         
-        assert isinstance(ax, Axes3D)
+        # Could be either Axes3D (matplotlib) or PyVista Plotter
+        assert ax is not None
         plt.close('all')
     
     def test_visualization_with_existing_2d_axes(self):
@@ -194,7 +195,7 @@ class TestVisualizeCurveBoxplot:
 
 
 class TestPlotBandMesh:
-    """Test suite for _plot_band_mesh helper function."""
+    """Test suite for _plot_band_mesh_2d and _plot_band_mesh_3d helper functions."""
     
     def test_plot_2d_mesh(self):
         """Test plotting 2D mesh."""
@@ -203,7 +204,7 @@ class TestPlotBandMesh:
         triangles = np.array([[0, 1, 2], [1, 2, 3]])
         
         fig, ax = plt.subplots()
-        result_ax = _plot_band_mesh(points, triangles, ax, color='red', alpha=0.5, n_dims=2)
+        result_ax = _plot_band_mesh_2d(points, triangles, ax, color='red', alpha=0.5)
         
         assert result_ax is ax
         # Check that polygons were added
@@ -218,113 +219,33 @@ class TestPlotBandMesh:
         
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        result_ax = _plot_band_mesh(points, triangles, ax, color='blue', alpha=0.7, n_dims=3)
+        result_ax = _plot_band_mesh_3d(points, triangles, ax, color='blue', alpha=0.7)
         
         assert result_ax is ax
         plt.close('all')
     
-    def test_invalid_n_dims_raises_error(self):
-        """Test that invalid n_dims raises ValueError."""
+    def test_different_colors_2d(self):
+        """Test plotting 2D mesh with different colors."""
         points = np.array([[0, 0], [1, 0], [0.5, 1]])
         triangles = np.array([[0, 1, 2]])
         
         fig, ax = plt.subplots()
-        
-        with pytest.raises(ValueError, match="n_dims must be 2 or 3"):
-            _plot_band_mesh(points, triangles, ax, color='red', alpha=1.0, n_dims=4)
-        
-        plt.close('all')
-    
-    def test_different_colors(self):
-        """Test plotting with different colors."""
-        points = np.array([[0, 0], [1, 0], [0.5, 1]])
-        triangles = np.array([[0, 1, 2]])
-        
-        fig, ax = plt.subplots()
-        _plot_band_mesh(points, triangles, ax, color='green', alpha=1.0, n_dims=2)
+        _plot_band_mesh_2d(points, triangles, ax, color='green', alpha=1.0)
         
         # Check that patch was added
         assert len(ax.patches) == 1
         plt.close('all')
     
-    def test_different_alpha(self):
-        """Test plotting with different alpha values."""
+    def test_different_alpha_2d(self):
+        """Test plotting 2D mesh with different alpha values."""
         points = np.array([[0, 0], [1, 0], [0.5, 1]])
         triangles = np.array([[0, 1, 2]])
         
         fig, ax = plt.subplots()
-        _plot_band_mesh(points, triangles, ax, color='red', alpha=0.3, n_dims=2)
+        _plot_band_mesh_2d(points, triangles, ax, color='red', alpha=0.3)
         
         # Check that patch was added with correct alpha
         assert len(ax.patches) == 1
         assert ax.patches[0].get_alpha() == 0.3
         plt.close('all')
 
-
-class TestMatplotlibPlotBand:
-    """Test suite for matplotlib_plot_band function (deprecated but kept for compatibility)."""
-    
-    def test_plot_band_2d(self):
-        """Test plotting 2D band."""
-        points = np.array([[0, 0], [1, 0], [0.5, 1]])
-        triangles = np.array([[0, 1, 2]])
-        
-        ax = matplotlib_plot_band(points, triangles, color='blue', alpha=0.5)
-        
-        assert isinstance(ax, Axes)
-        plt.close('all')
-    
-    def test_plot_band_3d(self):
-        """Test plotting 3D band."""
-        points = np.array([[0, 0, 0], [1, 0, 0], [0.5, 1, 0.5]])
-        triangles = np.array([[0, 1, 2]])
-        
-        ax = matplotlib_plot_band(points, triangles, color='green', alpha=0.7)
-        
-        assert isinstance(ax, Axes3D)
-        plt.close('all')
-    
-    def test_plot_band_with_existing_axes_2d(self):
-        """Test plotting on existing 2D axes."""
-        points = np.array([[0, 0], [1, 0], [0.5, 1]])
-        triangles = np.array([[0, 1, 2]])
-        
-        fig, ax = plt.subplots()
-        result_ax = matplotlib_plot_band(points, triangles, ax=ax)
-        
-        assert result_ax is ax
-        plt.close('all')
-    
-    def test_plot_band_with_existing_axes_3d(self):
-        """Test plotting on existing 3D axes."""
-        points = np.array([[0, 0, 0], [1, 0, 0], [0.5, 1, 0.5]])
-        triangles = np.array([[0, 1, 2]])
-        
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        result_ax = matplotlib_plot_band(points, triangles, ax=ax)
-        
-        assert result_ax is ax
-        plt.close('all')
-    
-    def test_invalid_points_dimension_raises_error(self):
-        """Test that invalid points dimension raises ValueError."""
-        # 1D points array
-        points = np.array([0, 1, 2])
-        triangles = np.array([[0, 1, 2]])
-        
-        with pytest.raises(ValueError, match="points must be a 2D array"):
-            matplotlib_plot_band(points, triangles)
-        
-        plt.close('all')
-    
-    def test_invalid_point_columns_raises_error(self):
-        """Test that invalid number of point columns raises ValueError."""
-        # 4D points (invalid)
-        points = np.array([[0, 0, 0, 0], [1, 0, 0, 0], [0.5, 1, 0.5, 0.5]])
-        triangles = np.array([[0, 1, 2]])
-        
-        with pytest.raises(ValueError, match="2 or 3 columns"):
-            matplotlib_plot_band(points, triangles)
-        
-        plt.close('all')

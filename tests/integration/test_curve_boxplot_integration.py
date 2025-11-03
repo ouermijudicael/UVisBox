@@ -15,6 +15,12 @@ from uvisbox.Modules.CurveBoxplot.curve_boxplot_mesh import curve_boxplot_mesh
 from uvisbox.Modules.CurveBoxplot.curve_boxplot_vis import visualize_curve_boxplot
 from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 
+try:
+    import pyvista as pv
+    PYVISTA_AVAILABLE = True
+except ImportError:
+    PYVISTA_AVAILABLE = False
+
 
 class TestCurveBoxplotIntegration:
     """Integration tests for the complete curve boxplot pipeline."""
@@ -42,7 +48,11 @@ class TestCurveBoxplotIntegration:
         mesh_data = curve_boxplot_mesh(stats)
         ax = visualize_curve_boxplot(mesh_data)
         
-        assert isinstance(ax, Axes3D)
+        # Could be either Axes3D (matplotlib) or PyVista Plotter
+        if PYVISTA_AVAILABLE:
+            assert isinstance(ax, (Axes3D, pv.Plotter))
+        else:
+            assert isinstance(ax, Axes3D)
         plt.close('all')
     
     def test_main_curve_boxplot_function_2d(self):
@@ -62,7 +72,11 @@ class TestCurveBoxplotIntegration:
         
         ax = curve_boxplot(curves)
         
-        assert isinstance(ax, Axes3D)
+        # Could be either Axes3D (matplotlib) or PyVista Plotter
+        if PYVISTA_AVAILABLE:
+            assert isinstance(ax, (Axes3D, pv.Plotter))
+        else:
+            assert isinstance(ax, Axes3D)
         plt.close('all')
     
     def test_curve_boxplot_with_custom_style(self):
@@ -245,7 +259,11 @@ class TestCurveBoxplotIntegration:
         style = BoxplotStyleConfig(percentiles=[50], show_median=True)
         ax = curve_boxplot(curves, boxplot_style=style)
         
-        assert isinstance(ax, Axes3D)
+        # Could be either Axes3D (matplotlib) or PyVista Plotter
+        if PYVISTA_AVAILABLE:
+            assert isinstance(ax, (Axes3D, pv.Plotter))
+        else:
+            assert isinstance(ax, Axes3D)
         plt.close('all')
     
     def test_small_curve_set(self):

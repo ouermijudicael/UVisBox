@@ -11,7 +11,10 @@ def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     
     This function follows a 3-stage pipeline: statistics → mesh → visualization.
     It computes curve band depths, generates triangular meshes for percentile bands,
-    and creates a matplotlib visualization with median and outlier curves.
+    and creates a visualization with median and outlier curves.
+    
+    For 2D curves, uses matplotlib. For 3D curves, uses PyVista if available,
+    otherwise falls back to matplotlib.
 
     Parameters:
     -----------
@@ -21,17 +24,19 @@ def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     boxplot_style : BoxplotStyleConfig, optional
         Configuration for the boxplot visualization including percentiles, colors,
         and median/outlier styling. If None, uses default configuration.
-    ax : matplotlib.axes.Axes, optional
-        The axes to plot on. If None, creates a new figure.
-        For 3D curves, must be a 3D axes if provided.
+    ax : matplotlib.axes.Axes or pyvista.Plotter, optional
+        Axes or plotter to plot on. Can be either:
+        - matplotlib.axes.Axes for 2D or 3D matplotlib rendering
+        - pyvista.Plotter for 3D PyVista rendering
+        If None, creates appropriate visualization object automatically.
     workers : int, optional
         Number of worker processes for parallel computation of band depths. Default is 12.
         Set to 1 or None to use sequential processing (useful for debugging).
 
     Returns:
     --------
-    ax : matplotlib.axes.Axes
-        The axes with the plot.
+    ax : matplotlib.axes.Axes or pyvista.Plotter
+        The visualization object (matplotlib axes for 2D, PyVista plotter for 3D if available).
 
     Notes:
     ------
@@ -40,6 +45,7 @@ def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     - The median curve is the curve with the highest depth value
     - Outliers are curves beyond the largest percentile
     - Curve depths are always computed internally
+    - For 3D curves, PyVista provides better interactivity than matplotlib
     
     Examples:
     ---------
@@ -56,6 +62,12 @@ def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     ...     show_outliers=True
     ... )
     >>> ax = curve_boxplot(curves, boxplot_style=style)
+    
+    >>> # 3D curves with PyVista
+    >>> import pyvista as pv
+    >>> plotter = pv.Plotter()
+    >>> curve_boxplot(curves_3d, ax=plotter)
+    >>> plotter.show()
     
     >>> # Hide median and outliers
     >>> style = BoxplotStyleConfig(show_median=False, show_outliers=False)
@@ -80,6 +92,6 @@ def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     mesh_data = curve_boxplot_mesh(stats)
     
     # Step 3: Visualize
-    ax = visualize_curve_boxplot(mesh_data, boxplot_style=boxplot_style, ax=ax)
+    result = visualize_curve_boxplot(mesh_data, boxplot_style=boxplot_style, ax=ax)
     
-    return ax
+    return result
