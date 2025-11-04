@@ -21,7 +21,7 @@ to create an ensemble of scalar fields with some noise
         return 0.5*x**5 + 0.5*x**4 - y**2 - z**2
 
     # Generate synthetic 4D data (n_z, n_y, n_x, n_ens)
-    n_x, n_y, n_z, n_ens = 16, 16, 16, 10
+    n_x, n_y, n_z, n_ens = 30, 30, 30, 30
     x = np.linspace(-1, 1, n_x)
     y = np.linspace(-1, 1, n_y)
     z = np.linspace(-1, 1, n_z)
@@ -43,7 +43,7 @@ to create an ensemble of scalar fields with some noise
     # Plot deterministic isosurface
     plotter.subplot(0, 0)
     plotter.add_text("Deterministic Isosurface", font_size=12)
-    plotter.add_mesh(iso_surface, color='lightblue', opacity=0.5)
+    plotter.add_mesh(iso_surface, color='lightblue', opacity=1)
 
 Generate ensemble data with noise and calculate probabilistic isosurface 
 using probabilistic marching cubes
@@ -84,7 +84,7 @@ def tear_drop(x, y, z):
     return 0.5*x**5 + 0.5*x**4 - y**2 - z**2
 
 # Generate synthetic 4D data (n_z, n_y, n_x, n_ens)
-n_x, n_y, n_z, n_ens = 50, 50, 50, 30
+n_x, n_y, n_z, n_ens = 30, 30, 30, 30
 x = np.linspace(-1, 1, n_x)
 y = np.linspace(-1, 1, n_y)
 z = np.linspace(-1, 1, n_z)
