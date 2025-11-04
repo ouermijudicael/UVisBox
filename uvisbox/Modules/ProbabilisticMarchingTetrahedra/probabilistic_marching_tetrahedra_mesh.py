@@ -8,13 +8,15 @@ def probabilistic_marching_tetrahedra_mesh(summary_statistics):
     
     Parameters:
     -----------
-        summary_statistics : np.ndarray
-            1D array of shape (n_tetrahedra,) representing the probability of isosurface 
-            presence in each tetrahedron.
+        summary_statistics : dict
+            Dictionary containing:
+            - 'level_crossing_probability': np.ndarray
+                1D array of shape (n_tetrahedra,) representing the probability of isosurface 
+                presence in each tetrahedron.
     
     Returns:
     --------
-        summary_statistics : np.ndarray
-            The same array passed as input.
+        level_crossing_probability : np.ndarray
+            1D array of probabilities extracted from the input dictionary.
     """
-    return summary_statistics
+    return summary_statistics['level_crossing_probability']

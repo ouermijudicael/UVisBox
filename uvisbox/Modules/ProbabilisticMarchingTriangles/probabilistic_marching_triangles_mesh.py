@@ -8,13 +8,15 @@ def probabilistic_marching_triangles_mesh(summary_statistics):
     
     Parameters:
     -----------
-        summary_statistics : np.ndarray
-            1D array of shape (n_triangles,) representing the probability of contour 
-            presence in each triangle.
+        summary_statistics : dict
+            Dictionary containing:
+            - 'level_crossing_probability': np.ndarray
+                1D array of shape (n_triangles,) representing the probability of contour 
+                presence in each triangle.
     
     Returns:
     --------
-        summary_statistics : np.ndarray
-            The same array passed as input.
+        level_crossing_probability : np.ndarray
+            1D array of probabilities extracted from the input dictionary.
     """
-    return summary_statistics
+    return summary_statistics['level_crossing_probability']

@@ -8,13 +8,15 @@ def probabilistic_marching_squares_mesh(summary_statistics):
     
     Parameters:
     -----------
-        summary_statistics : np.ndarray
-            2D array of shape (y_dim-1, x_dim-1) representing the probability 
-            of contour presence in each cell.
+        summary_statistics : dict
+            Dictionary containing:
+            - 'level_crossing_probability': np.ndarray
+                2D array of shape (y_dim-1, x_dim-1) representing the probability 
+                of contour presence in each cell.
     
     Returns:
     --------
-        summary_statistics : np.ndarray
-            The same array passed as input.
+        level_crossing_probability : np.ndarray
+            2D array of probabilities extracted from the input dictionary.
     """
-    return summary_statistics
+    return summary_statistics['level_crossing_probability']

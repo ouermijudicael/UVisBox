@@ -18,8 +18,11 @@ def probabilistic_marching_cubes_summary_statistics(ensemble_images, isovalue):
     
     Returns:
     --------
-        probability_contour : np.ndarray
-            3D array of shape (n_z-1, n_y-1, n_x-1) with probabilities of isosurface 
-            presence in each cell. Values range from 0 to 1.
+        dict
+            Dictionary containing:
+            - 'level_crossing_probability': np.ndarray
+                3D array of shape (n_z-1, n_y-1, n_x-1) with probabilities of isosurface 
+                presence in each cell. Values range from 0 to 1.
     """
-    return crossing_probability_cubes_monte_carlo(ensemble_images, isovalue)
+    probability_contour = crossing_probability_cubes_monte_carlo(ensemble_images, isovalue)
+    return {'level_crossing_probability': probability_contour}

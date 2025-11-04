@@ -21,8 +21,11 @@ def probabilistic_marching_triangles_summary_statistics(ensemble_data, triangle_
     
     Returns:
     --------
-        probability_contour : np.ndarray
-            1D array of shape (n_triangles,) with probabilities of contour presence 
-            in each triangle. Values range from 0 to 1.
+        dict
+            Dictionary containing:
+            - 'level_crossing_probability': np.ndarray
+                1D array of shape (n_triangles,) with probabilities of contour presence 
+                in each triangle. Values range from 0 to 1.
     """
-    return crossing_probability_triangles_monte_carlo(ensemble_data, triangle_mesh, isovalue)
+    probability_contour = crossing_probability_triangles_monte_carlo(ensemble_data, triangle_mesh, isovalue)
+    return {'level_crossing_probability': probability_contour}

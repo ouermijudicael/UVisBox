@@ -21,8 +21,11 @@ def probabilistic_marching_tetrahedra_summary_statistics(ensemble_data, tetrahed
     
     Returns:
     --------
-        probability_contour : np.ndarray
-            1D array of shape (n_tetrahedra,) with probabilities of isosurface presence 
-            in each tetrahedron. Values range from 0 to 1.
+        dict
+            Dictionary containing:
+            - 'level_crossing_probability': np.ndarray
+                1D array of shape (n_tetrahedra,) with probabilities of isosurface presence 
+                in each tetrahedron. Values range from 0 to 1.
     """
-    return crossing_probability_tetrahedra_monte_carlo(ensemble_data, tetrahedral_mesh, isovalue)
+    probability_contour = crossing_probability_tetrahedra_monte_carlo(ensemble_data, tetrahedral_mesh, isovalue)
+    return {'level_crossing_probability': probability_contour}

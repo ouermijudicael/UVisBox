@@ -18,8 +18,11 @@ def probabilistic_marching_squares_summary_statistics(ensemble_images, isovalue)
     
     Returns:
     --------
-        prob_contour : np.ndarray
-            2D array of shape (y_dim-1, x_dim-1) with probabilities of contour 
-            presence in each cell. Values range from 0 to 1.
+        dict
+            Dictionary containing:
+            - 'level_crossing_probability': np.ndarray
+                2D array of shape (y_dim-1, x_dim-1) with probabilities of contour 
+                presence in each cell. Values range from 0 to 1.
     """
-    return crossing_probability_squares_monte_carlo(ensemble_images, isovalue)
+    prob_contour = crossing_probability_squares_monte_carlo(ensemble_images, isovalue)
+    return {'level_crossing_probability': prob_contour}

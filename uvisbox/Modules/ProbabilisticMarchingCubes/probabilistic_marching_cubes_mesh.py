@@ -8,13 +8,15 @@ def probabilistic_marching_cubes_mesh(summary_statistics):
     
     Parameters:
     -----------
-        summary_statistics : np.ndarray
-            3D array of shape (n_z-1, n_y-1, n_x-1) representing the probability 
-            of isosurface presence in each cell.
+        summary_statistics : dict
+            Dictionary containing:
+            - 'level_crossing_probability': np.ndarray
+                3D array of shape (n_z-1, n_y-1, n_x-1) representing the probability 
+                of isosurface presence in each cell.
     
     Returns:
     --------
-        summary_statistics : np.ndarray
-            The same array passed as input.
+        level_crossing_probability : np.ndarray
+            3D array of probabilities extracted from the input dictionary.
     """
-    return summary_statistics
+    return summary_statistics['level_crossing_probability']
