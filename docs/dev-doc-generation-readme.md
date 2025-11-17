@@ -75,6 +75,12 @@ sphinx-build -b html source/ build/html/
 
 After running the `sphinx-apidoc` commands above, you can build the complete documentation:
 
+## Rename modules.rst to api.rst
+
+```bash
+mv modules.rst api.rst
+```
+
 ### Build HTML Documentation
 
 ```bash
