@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 import pyvista as pv
 
 
-def render_squid_glyph_2d(mesh_2d, ax=None):
+def visualize_squid_glyphs_2d(mesh_2d, ax=None):
     """
     Render 2D squid glyph mesh with matplotlib.
     
     Parameters:
     -----------
     mesh_2d : dict
-        From build_squid_glyph_mesh_2d()
+        From squid_glyphs_2d_mesh()
     ax : matplotlib.Axes, optional
         Existing axis to draw on
     
@@ -32,7 +32,7 @@ def render_squid_glyph_2d(mesh_2d, ax=None):
     return ax
 
 
-def render_squid_glyph_3d(mesh_3d, point_values=None, show_edges=True, 
+def visualize_squid_glyphs_3d(mesh_3d, point_values=None, show_edges=True, 
                           glyph_color='lightblue', cmap='RdBu_r', ax=None):
     """
     Render 3D squid glyph mesh with pyvista.
@@ -40,7 +40,7 @@ def render_squid_glyph_3d(mesh_3d, point_values=None, show_edges=True,
     Parameters:
     -----------
     mesh_3d : dict
-        From build_squid_glyph_mesh_3d()
+        From squid_glyphs_3d_mesh()
     point_values : numpy.ndarray, optional
         Override mesh point_values for coloring
     show_edges : bool

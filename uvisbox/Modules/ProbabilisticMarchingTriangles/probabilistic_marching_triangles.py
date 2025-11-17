@@ -1,34 +1,44 @@
-import numpy as np
-from .probabilistic_marching_triangles_stats import crossing_prob_triangles_mc
-from .probabilistic_marching_triangles_vis import matplotlib_probabilistic_marching_triangles_vis
+from .probabilistic_marching_triangles_stats import probabilistic_marching_triangles_summary_statistics
+from .probabilistic_marching_triangles_mesh import probabilistic_marching_triangles_mesh
+from .probabilistic_marching_triangles_vis import visualize_probabilistic_marching_triangles
 
-def probabilistic_marching_triangles(F, points, triangles, isovalue, prob_contour=None, cmap='viridis', ax=None):
+
+def probabilistic_marching_triangles(ensemble_data, triangle_mesh, points, isovalue, ax=None, colormap='viridis'):
     """
-    Visualize the probabilistic marching triangles result using matplotlib.
+    Compute and visualize probabilistic marching triangles.
+    
+    This function implements the complete stats->mesh->vis pipeline for probabilistic
+    marching triangles visualization. It calculates the probability of isocontour 
+    presence in each triangle and creates a matplotlib visualization.
 
     Parameters:
     -----------
-        F : np.ndarray
-            2D array of shape (n_points, n_ens) representing the scalar field with ensemble members.
+        ensemble_data : np.ndarray
+            2D array of shape (n_points, n_ensemble) where each column is a realization 
+            and each row corresponds to a vertex in the triangular mesh.
+        triangle_mesh : np.ndarray
+            2D array of shape (n_triangles, 3) with triangle indices.
         points : np.ndarray
             2D array of shape (n_points, 2) with point coordinates.
-        triangles : np.ndarray
-            2D array of shape (n_triangles, 3) with triangle indices.
         isovalue : float
             The isovalue for which to compute the isocontour.
-        prob_contour : np.ndarray, optional
-            1D array with probabilities of contour presence in each triangle.
-            If None, it will be computed using probabilistic_marching_triangles function.
-        cmap : str, optional
-            Colormap for the probability map. Default is 'viridis'.
-        ax : matplotlib axis, optional
+        ax : matplotlib.axes.Axes, optional
             The axis to draw on. If None, a new figure and axis will be created.
+        colormap : str, optional
+            Colormap for the visualization. Default is 'viridis'.
+    
     Returns:
     --------
-        ax : matplotlib axis
+        ax : matplotlib.axes.Axes
             The axis with the visualized probabilistic isocontour.
     """
-    if prob_contour is None:
-        prob_contour = crossing_prob_triangles_mc(F, triangles, isovalue)
-    ax = matplotlib_probabilistic_marching_triangles_vis(points,triangles, prob_contour, cmap, ax)
+    # Stats: compute level crossing probabilities
+    summary_statistics = probabilistic_marching_triangles_summary_statistics(ensemble_data, triangle_mesh, isovalue)
+    
+    # Mesh: identity function (no transformation needed)
+    mesh_data = probabilistic_marching_triangles_mesh(summary_statistics)
+    
+    # Vis: create visualization
+    ax = visualize_probabilistic_marching_triangles(mesh_data, points, triangle_mesh, ax=ax, colormap=colormap)
+    
     return ax

@@ -36,9 +36,7 @@ Set isovalue, run probabilistic marching squares, and visualize result
     # Set isovalue
     isovalue = 0.5
 
-    # # Run probabilistic marching squares
-    # prob_contour = probabilistic_marching_squares(F, isovalue)
-
+    # Run probabilistic marching squares
     fig, ax = plt.subplots(figsize=(8, 6))
     ax = probabilistic_marching_squares(F, isovalue, ax=ax)
     plt.show()
@@ -74,9 +72,7 @@ F = np.transpose(F, (1, 2, 0))  # Shape (n, m, n_ens)
 # Set isovalue
 isovalue = 0.5
 
-# # Run probabilistic marching squares
-# prob_contour = probabilistic_marching_squares(F, isovalue)
-
+# Run probabilistic marching squares
 fig, ax = plt.subplots(figsize=(8, 6))
 ax = probabilistic_marching_squares(F, isovalue, ax=ax)
 # plt.savefig("probabilistic_marching_squares_example.png")

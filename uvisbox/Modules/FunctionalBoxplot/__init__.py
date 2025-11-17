@@ -4,13 +4,17 @@ FunctionalBoxplot Module
 This module provides functional boxplot functionality for uncertainty visualization.
 """
 
-# Import meshing and visualization functionality
-try:
-    from .functional_boxplot_mesh import *
-    from .functional_boxplot_stats import *
-    from .functional_boxplot_vis import *
-    from uvisbox.Modules.FunctionalBoxplot.functional_boxplot import *
-except ImportError:
-    pass
+# Import main function
+from .functional_boxplot import functional_boxplot
 
-# Stats subdirectory is available for future expansion
+# Import individual pipeline components
+from .functional_boxplot_stats import functional_boxplot_summary_statistics
+from .functional_boxplot_mesh import functional_boxplot_mesh
+from .functional_boxplot_vis import visualize_functional_boxplot
+
+__all__ = [
+    'functional_boxplot',
+    'functional_boxplot_summary_statistics',
+    'functional_boxplot_mesh',
+    'visualize_functional_boxplot'
+]

@@ -1,37 +1,43 @@
-from .probabilistic_marching_cubes_stats import crossing_prob_cubes_mc
-from .probabilistic_marching_cubes_vis import pyvista_probabilistic_marching_cubes_vis
+from .probabilistic_marching_cubes_stats import probabilistic_marching_cubes_summary_statistics
+from .probabilistic_marching_cubes_mesh import probabilistic_marching_cubes_mesh
+from .probabilistic_marching_cubes_vis import visualize_probabilistic_marching_cubes
 
-def probabilistic_marching_cubes(F, isovalue, cross_prob=None, opacity='linear', cmap='viridis',   
-                                      plotter=None):
+
+def probabilistic_marching_cubes(ensemble_images, isovalue, plotter=None, opacity='linear', colormap='viridis'):
     """
-    Visualize the probabilistic marching cubes result using PyVista.
+    Compute and visualize probabilistic marching cubes.
+    
+    This function implements the complete stats->mesh->vis pipeline for probabilistic
+    marching cubes visualization. It calculates the probability of isosurface 
+    presence in each cell and creates a PyVista volume rendering visualization.
 
     Parameters:
     -----------
-        F : np.ndarray
-            4D array of shape (n_x, n_y, n_z, n_ens) representing the scalar field with ensemble members.
+        ensemble_images : np.ndarray
+            4D array of shape (n_z, n_y, n_x, n_ensemble) representing the scalar 
+            field with ensemble members.
         isovalue : float
             The isovalue for which to compute the isosurface.
-        cross_prob : np.ndarray, optional
-            3D array of shape (n_x-1, n_y-1, n_z-1) with probabilities of isosurface presence in each cell.
-            If None, it will be computed using probabilistic_marching_cubes function.
+        plotter : pyvista.Plotter, optional
+            An existing PyVista plotter to add the volume rendering to. If None, 
+            a new plotter is created.
         opacity : str or list, optional
             Opacity mapping for the volume rendering. Default is 'linear'.  
-        cmap : str, optional
+        colormap : str, optional
             Colormap for the volume rendering. Default is 'viridis'.
-        plotter : pyvista.Plotter, optional
-            An existing PyVista plotter to add the volume rendering to. If None, a new plotter is created.
             
     Returns:
     --------
         plotter : pyvista.Plotter
             The pyvista plotter with the visualized probabilistic isosurface.
     """
-
-    if cross_prob is None:
-        cross_prob = crossing_prob_cubes_mc(F, isovalue)
-
-    plotter = pyvista_probabilistic_marching_cubes_vis(cross_prob, opacity, cmap, plotter)
-   
-
+    # Stats: compute level crossing probabilities
+    summary_statistics = probabilistic_marching_cubes_summary_statistics(ensemble_images, isovalue)
+    
+    # Mesh: identity function (no transformation needed)
+    mesh_data = probabilistic_marching_cubes_mesh(summary_statistics)
+    
+    # Vis: create visualization
+    plotter = visualize_probabilistic_marching_cubes(mesh_data, plotter=plotter, opacity=opacity, colormap=colormap)
+    
     return plotter

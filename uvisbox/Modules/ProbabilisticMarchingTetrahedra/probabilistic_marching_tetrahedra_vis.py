@@ -2,23 +2,29 @@ import pyvista as pv
 import numpy as np
 from pyvista import CellType
 
-def pyvista_probabilistic_marching_tetrahedra_vis(points, tetrahedra, isovalue, cross_prob=None, 
-                                           opacity='linear', cmap='viridis', plotter=None):
+
+def visualize_probabilistic_marching_tetrahedra(mesh_data, points, tetrahedral_mesh, plotter=None, opacity='linear', colormap='viridis'):
     """
-    Visualize the probabilistic marching tetrahedra result using PyVista.
+    Visualize probabilistic marching tetrahedra using PyVista volume rendering.
+    
+    This function creates a 3D visualization of the crossing probabilities using
+    PyVista's volume rendering capabilities for tetrahedral meshes.
 
     Parameters:
     -----------
-        tetrahedra : np.ndarray
-            2D array of shape (n_tetrahedra, 4) representing the tetrahedralization of the points.  
-        isovalue : float
-            The isovalue for which to compute the isosurface.
-        cross_prob : np.ndarray, optional
-            3D array of shape (n_x-1, n_y-1, n_z-1) with probabilities of isosurface presence in each cell.
-            If None, it will be computed using probabilistic_marching_tetrahedra function.
+        mesh_data : np.ndarray
+            1D array of shape (n_tetrahedra,) with probabilities of isosurface presence 
+            in each tetrahedron.
+        points : np.ndarray
+            2D array of shape (n_points, 3) representing the coordinates of the points.
+        tetrahedral_mesh : np.ndarray
+            2D array of shape (n_tetrahedra, 4) representing the tetrahedralization of the points.
+        plotter : pyvista.Plotter, optional
+            An existing PyVista plotter to add the volume rendering to. If None, 
+            a new plotter is created.
         opacity : str or list, optional
             Opacity mapping for the volume rendering. Default is 'linear'.
-        cmap : str, optional
+        colormap : str, optional
             Colormap for the volume rendering. Default is 'viridis'.
             
     Returns:
@@ -26,17 +32,15 @@ def pyvista_probabilistic_marching_tetrahedra_vis(points, tetrahedra, isovalue, 
         plotter : pyvista.Plotter
             The pyvista plotter with the visualized probabilistic isosurface.
     """
-
-
-    n_cells = cross_prob.shape[0]
+    n_cells = mesh_data.shape[0]
     celltypes = np.full(n_cells, fill_value=CellType.TETRA, dtype=np.uint32)  
 
     if plotter is None:
         plotter = pv.Plotter()
             
-    grid = pv.UnstructuredGrid(tetrahedra, celltypes, points)
-    grid.cell_data["crossing_probability"] = cross_prob.flatten(order='F')
+    grid = pv.UnstructuredGrid(tetrahedral_mesh, celltypes, points)
+    grid.cell_data["crossing_probability"] = mesh_data.flatten(order='F')
 
-    plotter.add_volume(grid, scalars="crossing_probability", opacity=opacity, cmap=cmap)
+    plotter.add_volume(grid, scalars="crossing_probability", opacity=opacity, cmap=colormap)
 
     return plotter

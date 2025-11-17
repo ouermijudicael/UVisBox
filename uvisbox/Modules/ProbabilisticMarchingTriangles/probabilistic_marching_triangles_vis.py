@@ -1,31 +1,36 @@
 import matplotlib.pyplot as plt
 
-def matplotlib_probabilistic_marching_triangles_vis(points, triangles, prob_contour, cmap='viridis', ax=None):
+
+def visualize_probabilistic_marching_triangles(mesh_data, points, triangle_mesh, ax=None, colormap='viridis'):
     """
-    Visualize the probability map of isocontour presence using matplotlib.
+    Visualize probabilistic marching triangles using matplotlib.
+    
+    This function creates a 2D visualization of the crossing probabilities using
+    matplotlib's tripcolor for triangular meshes.
 
     Parameters:
     -----------
+        mesh_data : np.ndarray
+            1D array of shape (n_triangles,) with probabilities of contour presence 
+            in each triangle.
         points : np.ndarray
             2D array of shape (n_points, 2) representing the coordinates of the points.
-        triangles : np.ndarray
+        triangle_mesh : np.ndarray
             2D array of shape (n_triangles, 3) representing the triangulation of the points.
-        prob_contour : np.ndarray
-            1D array of shape (n_triangles,) with probabilities of contour presence in each triangle.
-        cmap : str, optional
-            Colormap for the probability map. Default is 'viridis'.
-        ax : matplotlib axis, optional
+        ax : matplotlib.axes.Axes, optional
             The axis to draw on. If None, a new figure and axis will be created.
+        colormap : str, optional
+            Colormap for the probability map. Default is 'viridis'.
 
     Returns:    
     --------
-        ax : matplotlib axis
+        ax : matplotlib.axes.Axes
             The axis with the visualized probabilistic isocontour.
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(8, 6))
         
-    tpc = ax.tripcolor(points[:, 0], points[:, 1], triangles, prob_contour, shading='flat', cmap=cmap)
+    tpc = ax.tripcolor(points[:, 0], points[:, 1], triangle_mesh, mesh_data, shading='flat', cmap=colormap)
     plt.colorbar(tpc, ax=ax, label='Probability of Isocontour')
     ax.set_title('Probabilistic Marching Triangles')
     ax.set_xlabel('x')

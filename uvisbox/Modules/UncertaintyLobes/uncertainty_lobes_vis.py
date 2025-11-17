@@ -1,47 +1,102 @@
+"""
+Visualization rendering for uncertainty lobes.
+
+This module renders uncertainty lobe meshes using matplotlib:
+    - Draw outer lobes (wedges)
+    - Draw inner lobes (wedges)
+    - Draw median direction arrows
+"""
+
 import numpy as np
-from matplotlib.patches import Wedge
+import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
 
 
-def matplotlib_uncertainty_lobes_vis(ax, centers, theta1, theta2, mid_angle, r1, r2, r_arrow, show_median):
+def visualize_uncertainty_lobes(mesh, show_median=True, ax=None):
     """
-    Draws multiple wedges with arrows.
+    Render uncertainty lobe mesh with matplotlib.
+    
+    Draws wedge-shaped glyphs representing directional uncertainty with:
+    - Outer wedges (light blue, semi-transparent) - larger angular spread
+    - Inner wedges (light blue, opaque) - smaller angular spread
+    - Median arrows (blue) - showing the most probable direction
+    
     Parameters:
     -----------
-    centers : numpy.ndarray
-        Array of shape (n, 2) representing the center positions of the wedges.
-    theta1 : numpy.ndarray
-        Array of shape (n, 2), each row [theta1_start, theta1_end] for the first wedge.
-    theta2 : numpy.ndarray
-        Array of shape (n, 2), each row [theta2_start, theta2_end] for the second wedge (arrowhead).
-    mid_angle : iterable
-        Iterable of length n, mid angle for arrow direction.
-    r1 : float or iterable
-        Radius for the first wedge.
-    r2 : float or iterable of length n
-        Radius for the second wedge.
-    r_arrow : float or iterable of length n
-        Length of the arrow.
+    mesh : dict
+        From uncertainty_lobes_mesh() containing:
+        - 'wedges': outer lobe wedge data
+        - 'inner_wedges': inner lobe wedge data (optional)
+        - 'arrows': median direction arrow data
     show_median : bool
-        Whether to show the median arrow.
+        Whether to show median direction arrows (default: True)
+    ax : matplotlib.Axes, optional
+        Existing axis to draw on. If None, creates new figure and axis.
+    
+    Returns:
+    --------
+    ax : matplotlib.Axes
+        The axis with drawn lobe glyphs
     """
-    n = centers.shape[0]
-    # Support scalar or iterable for r1 and r2
-    for i in range(n):
-        center = centers[i]
-        t1_start, t1_end = theta1[i]
-        wedge = Wedge(center=center, r=r1[i], theta1=t1_start, theta2=t1_end, facecolor='skyblue', edgecolor='skyblue', alpha=0.3)
-        if r2[i] > 0.0:
-            t2_start, t2_end = theta2[i]
-            wedge2 = Wedge(center=center, r=r2[i], theta1=t2_start, theta2=t2_end, facecolor='skyblue', edgecolor='skyblue', alpha=1.0)
-        if show_median:
+    # Create figure and axis if not provided
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(12, 6))
+    
+    # Render outer wedges (percentile1)
+    for wedge_data in mesh['wedges']:
+        vertices = wedge_data['vertices']
+        
+        # Create polygon patch for the wedge
+        wedge_polygon = Polygon(
+            vertices, 
+            closed=True, 
+            facecolor='skyblue', 
+            edgecolor='skyblue', 
+            alpha=0.3
+        )
+        ax.add_patch(wedge_polygon)
+    
+    # Render inner wedges (percentile2) if present
+    if mesh['inner_wedges'] is not None:
+        for wedge_data in mesh['inner_wedges']:
+            vertices = wedge_data['vertices']
+            
+            wedge_polygon = Polygon(
+                vertices, 
+                closed=True, 
+                facecolor='skyblue', 
+                edgecolor='skyblue', 
+                alpha=1.0
+            )
+            ax.add_patch(wedge_polygon)
+    
+    # Render median arrows if requested
+    if show_median:
+        arrows = mesh['arrows']
+        positions = arrows['positions']
+        directions = arrows['directions']
+        lengths = arrows['lengths']
+        
+        for i in range(positions.shape[0]):
+            center = positions[i]
+            direction = directions[i]
+            length = lengths[i]
+            
+            # Arrow endpoint
+            arrow_end = center + direction * length
+            
             ax.annotate(
                 '',
-                xy=(center[0] + r_arrow[i] * np.cos(np.deg2rad(mid_angle[i])), center[1] + r_arrow[i] * np.sin(np.deg2rad(mid_angle[i]))),
+                xy=arrow_end,
                 xytext=center,
-                arrowprops=dict(facecolor='blue', edgecolor='blue', arrowstyle='->', lw=3, mutation_scale=20, alpha=1.0)
+                arrowprops=dict(
+                    facecolor='blue', 
+                    edgecolor='blue', 
+                    arrowstyle='->', 
+                    lw=3, 
+                    mutation_scale=20, 
+                    alpha=1.0
+                )
             )
-        ax.add_patch(wedge)
-        if r2[i] > 0.0:
-            ax.add_patch(wedge2)
-
+    
     return ax

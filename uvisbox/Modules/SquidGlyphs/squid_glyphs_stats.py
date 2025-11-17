@@ -6,7 +6,7 @@ from uvisbox.Core.BandDepths.vector_depths import calculate_spread_3D, compute_v
 from uvisbox.Core.BandDepths.vector_depths import cartesian_to_polar, cartesian_to_spherical
 
 
-def compute_squid_glyph_stats_2d(ensemble_vectors, percentile, workers=None):
+def squid_glyphs_2d_summary_statistics(ensemble_vectors, percentile, workers=None):
     """
     Compute vector depth statistics for 2D squid glyphs.
     
@@ -30,10 +30,10 @@ def compute_squid_glyph_stats_2d(ensemble_vectors, percentile, workers=None):
             'ensemble_polar_vectors': (n, m, 2) - polar coordinates,
             'depths': (n, m) - vector depths,
             'median_vectors': (n, 2) - median vectors per position,
-            'min_mag': (n,) - min magnitude per position,
-            'max_mag': (n,) - max magnitude per position,
-            'min_angle': (n,) - min angle per position,
-            'max_angle': (n,) - max angle per position
+            'magnitudes_min': (n,) - min magnitude per position,
+            'magnitudes_max': (n,) - max magnitude per position,
+            'angles_min': (n,) - min angle per position,
+            'angles_max': (n,) - max angle per position
         }
     """
     num_positions, num_ensemble = ensemble_vectors.shape[0], ensemble_vectors.shape[1]
@@ -75,14 +75,14 @@ def compute_squid_glyph_stats_2d(ensemble_vectors, percentile, workers=None):
         'ensemble_polar_vectors': ensemble_polar_vectors,
         'depths': depths,
         'median_vectors': median_vectors,
-        'min_mag': min_mags,
-        'max_mag': max_mags,
-        'min_angle': min_angles,
-        'max_angle': max_angles
+        'magnitudes_min': min_mags,
+        'magnitudes_max': max_mags,
+        'angles_min': min_angles,
+        'angles_max': max_angles
     }
 
 
-def compute_squid_glyph_stats_3d(ensemble_vectors, percentile):
+def squid_glyphs_3d_summary_statistics(ensemble_vectors, percentile):
     """
     Compute vector depth statistics for 3D squid glyphs.
     
@@ -104,10 +104,10 @@ def compute_squid_glyph_stats_3d(ensemble_vectors, percentile):
             'ensemble_spherical_vectors': (n, m, 3) - spherical coordinates,
             'depths': (n, m) - vector depths,
             'median_vectors': (n, 3) - median vectors,
-            'min_vectors': (n, 3) - min spread vectors,
-            'max_vectors': (n, 3) - max spread vectors,
-            'glyph_markers': (n,) - glyph type markers,
-            'directional_variations': (n, 3, 2) - PCA components,
+            'spread_min_vectors': (n, 3) - min spread vectors,
+            'spread_max_vectors': (n, 3) - max spread vectors,
+            'glyph_types': (n,) - glyph type markers,
+            'pca_components': (n, 3, 2) - PCA components,
             'num_glyphs': int - count of full glyphs
         }
     """
@@ -124,10 +124,10 @@ def compute_squid_glyph_stats_3d(ensemble_vectors, percentile):
         depths[i] = compute_vector_depths_3D(ensemble_spherical_vectors[i])
     
     # Calculate spreads and build min/max/median vectors
-    min_vectors = np.zeros((num_positions, 3))
-    max_vectors = np.zeros((num_positions, 3))
+    spread_min_vectors = np.zeros((num_positions, 3))
+    spread_max_vectors = np.zeros((num_positions, 3))
     median_vectors = np.zeros((num_positions, 3))
-    glyph_markers = np.zeros(num_positions, dtype=int)
+    glyph_types = np.zeros(num_positions, dtype=int)
     num_glyphs = 0
     
     for i in range(num_positions):
@@ -145,33 +145,33 @@ def compute_squid_glyph_stats_3d(ensemble_vectors, percentile):
         min_theta = ensemble_spherical_vectors[i][min_theta_idx][1] if min_theta_idx is not None else 0
         max_theta = ensemble_spherical_vectors[i][max_theta_idx][1] if max_theta_idx is not None else 0
         
-        min_vectors[i] = [min_mag_vec[0], min_theta, min_phi]
-        max_vectors[i] = [max_mag_vec[0], max_theta, max_phi]
+        spread_min_vectors[i] = [min_mag_vec[0], min_theta, min_phi]
+        spread_max_vectors[i] = [max_mag_vec[0], max_theta, max_phi]
         
         # Classify glyph type
-        if (np.abs(max_vectors[i][0] - min_vectors[i][0]) > 1e-5) and \
-           (np.abs(max_vectors[i][1] - min_vectors[i][1]) > 1e-5) and \
-           (np.abs(max_vectors[i][2] - min_vectors[i][2]) > 1e-5):
-            glyph_markers[i] = 1  # Full glyph
+        if (np.abs(spread_max_vectors[i][0] - spread_min_vectors[i][0]) > 1e-5) and \
+           (np.abs(spread_max_vectors[i][1] - spread_min_vectors[i][1]) > 1e-5) and \
+           (np.abs(spread_max_vectors[i][2] - spread_min_vectors[i][2]) > 1e-5):
+            glyph_types[i] = 1  # Full glyph
             num_glyphs += 1
-        elif max_vectors[i][0] > 1e-3:
-            glyph_markers[i] = 2  # Arrow only
+        elif spread_max_vectors[i][0] > 1e-3:
+            glyph_types[i] = 2  # Arrow only
     
     # Compute directional variations (PCA)
     # FIXED: Pass percentile directly - getDirectionalVariations will handle threshold
-    directional_variations = getDirectionalVariations(
+    pca_components = getDirectionalVariations(
         ensemble_spherical_vectors, depths, percentile, 
-        min_vectors, median_vectors, max_vectors
+        spread_min_vectors, median_vectors, spread_max_vectors
     )
     
     return {
         'ensemble_spherical_vectors': ensemble_spherical_vectors,
         'depths': depths,
         'median_vectors': median_vectors,
-        'min_vectors': min_vectors,
-        'max_vectors': max_vectors,
-        'glyph_markers': glyph_markers,
-        'directional_variations': directional_variations,
+        'spread_min_vectors': spread_min_vectors,
+        'spread_max_vectors': spread_max_vectors,
+        'glyph_types': glyph_types,
+        'pca_components': pca_components,
         'num_glyphs': num_glyphs
     }
 

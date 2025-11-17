@@ -166,7 +166,7 @@ positions = np.vstack((X_flat, Y_flat)).T
 
 # Set up the plot for both original vector field and uncertainty squid glyphs
 
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10))
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10), sharex=True, sharey=True)
 # Plot original vector field with arrows
 for i in range(n_points):
     for j in range(n_ensemble):

@@ -1,6 +1,6 @@
-from .curve_boxplot_stats import curve_banddepths
-from .curve_boxplot_mesh import curves_band_mesh
-from .curve_boxplot_vis import matplotlib_curve_boxplot_vis, matplotlib_plot_band
+from .curve_boxplot_stats import curve_boxplot_summary_statistics
+from .curve_boxplot_mesh import curve_boxplot_mesh
+from .curve_boxplot_vis import visualize_curve_boxplot
 from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,6 +8,13 @@ import matplotlib.pyplot as plt
 def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     """
     Create a curve band depth plot with multiple percentile bands.
+    
+    This function follows a 3-stage pipeline: statistics → mesh → visualization.
+    It computes curve band depths, generates triangular meshes for percentile bands,
+    and creates a visualization with median and outlier curves.
+    
+    For 2D curves, uses matplotlib. For 3D curves, uses PyVista if available,
+    otherwise falls back to matplotlib.
 
     Parameters:
     -----------
@@ -17,17 +24,19 @@ def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     boxplot_style : BoxplotStyleConfig, optional
         Configuration for the boxplot visualization including percentiles, colors,
         and median/outlier styling. If None, uses default configuration.
-    ax : matplotlib.axes.Axes, optional
-        The axes to plot on. If None, creates a new figure.
-        For 3D curves, must be a 3D axes if provided.
+    ax : matplotlib.axes.Axes or pyvista.Plotter, optional
+        Axes or plotter to plot on. Can be either:
+        - matplotlib.axes.Axes for 2D or 3D matplotlib rendering
+        - pyvista.Plotter for 3D PyVista rendering
+        If None, creates appropriate visualization object automatically.
     workers : int, optional
         Number of worker processes for parallel computation of band depths. Default is 12.
         Set to 1 or None to use sequential processing (useful for debugging).
 
     Returns:
     --------
-    ax : matplotlib.axes.Axes
-        The axes with the plot.
+    ax : matplotlib.axes.Axes or pyvista.Plotter
+        The visualization object (matplotlib axes for 2D, PyVista plotter for 3D if available).
 
     Notes:
     ------
@@ -36,6 +45,7 @@ def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     - The median curve is the curve with the highest depth value
     - Outliers are curves beyond the largest percentile
     - Curve depths are always computed internally
+    - For 3D curves, PyVista provides better interactivity than matplotlib
     
     Examples:
     ---------
@@ -53,6 +63,12 @@ def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     ... )
     >>> ax = curve_boxplot(curves, boxplot_style=style)
     
+    >>> # 3D curves with PyVista
+    >>> import pyvista as pv
+    >>> plotter = pv.Plotter()
+    >>> curve_boxplot(curves_3d, ax=plotter)
+    >>> plotter.show()
+    
     >>> # Hide median and outliers
     >>> style = BoxplotStyleConfig(show_median=False, show_outliers=False)
     >>> ax = curve_boxplot(curves, boxplot_style=style)
@@ -62,81 +78,20 @@ def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     if boxplot_style is None:
         boxplot_style = BoxplotStyleConfig()
     
-    # Work on a copy to avoid modifying input data
-    curves_copy = curves.copy()
+    # Validate input data
+    if not isinstance(curves, np.ndarray):
+        curves = np.array(curves)
+    if curves.ndim != 3:
+        raise ValueError(f"Input curves must be a 3D array of shape (n_curves, n_steps, n_dims). Got {curves.ndim}D array.")
     
-    # Always compute depths internally
-    curve_depths = curve_banddepths(curves_copy, workers=workers)
-
-    # Sort the curves by depth from deepest to shallowest
-    sorted_indices = np.argsort(curve_depths)[::-1]
-    sorted_curves = curves_copy[sorted_indices]
+    # Pipeline: Stats -> Mesh -> Vis
+    # Step 1: Compute summary statistics
+    stats = curve_boxplot_summary_statistics(curves, boxplot_style=boxplot_style, workers=workers)
     
-    # Determine curve dimensionality
-    curve_dim = curves.shape[2]
+    # Step 2: Build triangular mesh
+    mesh_data = curve_boxplot_mesh(stats)
     
-    # Create figure/axes if not provided
-    if ax is None:
-        if curve_dim == 2:
-            fig, ax = plt.subplots(figsize=(10, 8))
-        elif curve_dim == 3:
-            fig = plt.figure(figsize=(10, 8))
-            ax = fig.add_subplot(111, projection='3d')
-        else:
-            raise ValueError(f"Unsupported curve dimension: {curve_dim}. Must be 2 or 3.")
+    # Step 3: Visualize
+    result = visualize_curve_boxplot(mesh_data, boxplot_style=boxplot_style, ax=ax)
     
-    # Get colors from colormap
-    colors = boxplot_style.get_percentile_colors()
-    percentiles = boxplot_style.percentiles
-    
-    # Sort percentiles in descending order for proper plotting (largest first)
-    sorted_percentile_indices = np.argsort(percentiles)[::-1]
-    sorted_percentiles = [percentiles[i] for i in sorted_percentile_indices]
-    sorted_colors = [colors[i] for i in sorted_percentile_indices]
-    
-    # Plot each percentile band from largest to smallest
-    for percentile, color in zip(sorted_percentiles, sorted_colors):
-        points, triangles = curves_band_mesh(sorted_curves, percentile=percentile)
-        ax = matplotlib_plot_band(points, triangles, ax=ax, color=color, alpha=1.0)
-    
-    # Plot outliers (curves beyond the largest percentile)
-    if boxplot_style.show_outliers:
-        largest_percentile = max(percentiles)
-        outlier_start_idx = int(np.ceil(len(sorted_curves) * largest_percentile / 100))
-        
-        for idx in range(outlier_start_idx, len(sorted_curves)):
-            outlier_curve = sorted_curves[idx]
-            # Add label only for the first outlier to avoid duplicate legend entries
-            label = 'Outliers' if idx == outlier_start_idx else None
-            if curve_dim == 2:
-                ax.plot(outlier_curve[:, 0], outlier_curve[:, 1], 
-                       color=boxplot_style.outliers_color, 
-                       linewidth=boxplot_style.outliers_width, 
-                       alpha=boxplot_style.outliers_alpha,
-                       label=label,
-                       zorder=5)
-            elif curve_dim == 3:
-                ax.plot(outlier_curve[:, 0], outlier_curve[:, 1], outlier_curve[:, 2],
-                       color=boxplot_style.outliers_color, 
-                       linewidth=boxplot_style.outliers_width, 
-                       alpha=boxplot_style.outliers_alpha,
-                       label=label,
-                       zorder=5)
-    
-    # Plot the median curve (curve with maximum depth)
-    if boxplot_style.show_median:
-        median_curve = sorted_curves[0]
-        if curve_dim == 2:
-            ax.plot(median_curve[:, 0], median_curve[:, 1], 
-                   color=boxplot_style.median_color, 
-                   linewidth=boxplot_style.median_width, 
-                   alpha=boxplot_style.median_alpha, 
-                   label='Median Curve', zorder=10)
-        elif curve_dim == 3:
-            ax.plot(median_curve[:, 0], median_curve[:, 1], median_curve[:, 2],
-                   color=boxplot_style.median_color, 
-                   linewidth=boxplot_style.median_width, 
-                   alpha=boxplot_style.median_alpha, 
-                   label='Median Curve', zorder=10)
-    
-    return ax
+    return result
