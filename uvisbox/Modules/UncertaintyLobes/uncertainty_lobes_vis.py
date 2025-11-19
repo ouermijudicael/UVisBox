@@ -93,8 +93,8 @@ def visualize_uncertainty_lobes(mesh, show_median=True, ax=None):
                     facecolor='blue', 
                     edgecolor='blue', 
                     arrowstyle='->', 
-                    lw=3, 
-                    mutation_scale=20, 
+                    lw=2, 
+                    mutation_scale=10, 
                     alpha=1.0
                 )
             )
