@@ -32,7 +32,7 @@ def gen_sine_curves(n, steps, noise_scale=0.2, seed=None):
     x = np.linspace(-np.pi, np.pi, steps)
     base = np.sin(x)
     # Noise level increases as |sin(x)| approaches zero
-    noise_levels = noise_scale * (1 - np.abs(base)) ** 0.5 + 0.01
+    noise_levels = noise_scale * (np.abs(base)) ** 0.9 + 0.01
     curves = np.zeros((n, steps))
     noise_points = 10  # Number of anchor points for smooth noise
     anchor_x = np.linspace(-np.pi, np.pi, noise_points)
@@ -44,13 +44,15 @@ def gen_sine_curves(n, steps, noise_scale=0.2, seed=None):
     return curves, x
 
 if __name__ == "__main__":
-    data = gen_sine_curves(n=500, steps=256, noise_scale=0.4, seed=42)[0]
+    data = gen_sine_curves(n=100, steps=256, noise_scale=0.4, seed=42)[0]
+    np.save("sine.npy", data)
     fig, ax = plt.subplots(1, 2, figsize=(10, 6))
     ax0,ax1 = ax
 
     ax0.set_title("Noisy Sine Curves")
     for curve in data:
         ax0.plot(curve, color='black', alpha=0.1)
+    ax0.grid(True)
 
     boxplot_style = BoxplotStyleConfig(
         percentiles=[10, 25, 50, 75],
