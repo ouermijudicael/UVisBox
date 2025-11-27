@@ -29,7 +29,7 @@ def apply_circular_alignment(points, best_shift, best_is_reversed):
     shift and orientation.
     
     Parameters:
-    -----------
+    ----------- 
     points (np.ndarray): 
         Points to transform (shape: n_points × num_dims)
     best_shift (int): 
@@ -63,7 +63,7 @@ def circular_align_min_twist(points_ref, points_target, stride=1):
     Aligns two sets of points forming closed loops with minimal twist.
     
     Parameters:
-    -----------
+    ----------- 
     points_ref (np.ndarray): 
         Reference point set (shape: n_points × num_dims)
     points_target (np.ndarray): 
@@ -72,7 +72,7 @@ def circular_align_min_twist(points_ref, points_target, stride=1):
         Stride for sampling subset of points (for efficiency)
         
     Returns:
-    -------
+    ------- 
     aligned_points (np.ndarray): 
         Aligned target points
     correspondence_map (np.ndarray): 
@@ -123,23 +123,26 @@ def calculate_mesh_dimensions(n_steps, n_seeds, resolution):
 def align_cross_sections(ellipsoids, seed_idx, n_steps, resolution):
     """Align cross-sections to minimize twisting for a given seed."""
     seed_ellipsoids = np.empty((n_steps, resolution, 3))
-    seed_ellipsoids[0] = ellipsoids[0, seed_idx, :, :]  # First ellipsoid (no alignment needed)
+    correspondence_maps = np.empty((n_steps, resolution), dtype=int)
     
-    # Align subsequent cross-sections
+    seed_ellipsoids[0] = ellipsoids[0, seed_idx, :, :]
+    correspondence_maps[0] = np.arange(resolution)
+
     for j in range(1, n_steps):
-        points0 = seed_ellipsoids[j-1]  # Use previously aligned ellipsoid as reference
+        points0 = seed_ellipsoids[j-1]
         points1 = ellipsoids[j, seed_idx, :, :]
-        points1_aligned, _ = circular_align_min_twist(points0, points1)
+        points1_aligned, correspondence_map = circular_align_min_twist(points0, points1)
         seed_ellipsoids[j] = points1_aligned
+        correspondence_maps[j] = correspondence_map
     
-    return seed_ellipsoids
+    return seed_ellipsoids, correspondence_maps
 
 def _build_cross_section_3d(mean_point, eigvals, eigvecs, resolution=20, e_proj=1, sym=False):
     """
     Helper function to build the 3D superellipse for a single cross-section.
     
     Parameters:
-    -----------
+    ----------- 
     mean_point (np.ndarray): The 3D center point for the cross-section.
     eigvals (np.ndarray): The two largest eigenvalues (2,).
     eigvecs (np.ndarray): The corresponding two eigenvectors (3, 2).
@@ -170,21 +173,24 @@ def _build_cross_section_3d(mean_point, eigvals, eigvecs, resolution=20, e_proj=
                        
     return cross_section_3d
 
-def _add_seed_vertices_and_uvs(seed_ellipsoids, n_steps, resolution):
+def _add_seed_vertices_and_uvs(seed_ellipsoids, correspondence_maps, n_steps, resolution):
     """
     Adds vertices and UVs for a single seed to the main arrays and returns them.
     This is for sequential processing.
     """
-    current_seed_vertices = np.empty((n_steps * resolution, 3))
+    current_seed_vertices = seed_ellipsoids.reshape(-1, 3)
     current_seed_uvs = np.empty((n_steps * resolution, 2))
 
     for step_idx in range(n_steps):
         v_start = step_idx * resolution
         v_end = (step_idx + 1) * resolution
-        current_seed_vertices[v_start:v_end] = seed_ellipsoids[step_idx]
         
-        # Generate UVs for current cross-section
-        current_seed_uvs[v_start:v_end, 0] = np.linspace(0, 1, resolution, endpoint=False)
+        # Generate U-coordinates in the original order
+        u_coords = np.linspace(0, 1, resolution, endpoint=False)
+        # Reorder U-coordinates using the correspondence map
+        reordered_u_coords = u_coords[correspondence_maps[step_idx]]
+        
+        current_seed_uvs[v_start:v_end, 0] = reordered_u_coords
         current_seed_uvs[v_start:v_end, 1] = step_idx / (n_steps - 1) if n_steps > 1 else 0
 
     return current_seed_vertices, current_seed_uvs
@@ -233,10 +239,10 @@ def _process_single_seed_mesh(cross_sections_3d_all_seeds, seed_idx, n_steps, re
     Helper function for parallel mesh generation for a single seed.
     Returns vertices, faces, and uv_coords for this seed, with local indexing for faces.
     """
-    seed_ellipsoids = align_cross_sections(cross_sections_3d_all_seeds, seed_idx, n_steps, resolution)
+    seed_ellipsoids, correspondence_maps = align_cross_sections(cross_sections_3d_all_seeds, seed_idx, n_steps, resolution)
     
     # Generate vertices and UVs for this seed
-    seed_vertices, seed_uv_coords = _add_seed_vertices_and_uvs(seed_ellipsoids, n_steps, resolution)
+    seed_vertices, seed_uv_coords = _add_seed_vertices_and_uvs(seed_ellipsoids, correspondence_maps, n_steps, resolution)
 
     # Generate faces for this seed
     seed_faces = _generate_seed_faces_logic(n_steps, resolution) # Local indexing (start_vertex_idx=0)
@@ -249,7 +255,7 @@ def uncertainty_tube_mesh(summary_statistics, resolution=20, e_proj=1, sym=False
     Generate the 3D mesh for uncertainty tubes.
     
     Parameters:
-    -----------
+    ----------- 
     summary_statistics (dict): 
         Dictionary containing "mean_trajectory", "eigen_values", and "eigen_vectors".
     resolution (int, optional): 
@@ -365,13 +371,13 @@ def _generate_tube_mesh_from_cross_sections(mean_trajectories, cross_sections_3d
             seed_vertex_start = vertex_idx
             
             # Align and store all cross-sections for current seed
-            seed_ellipsoids = align_cross_sections(cross_sections_3d, seed_idx, n_steps, resolution)
+            seed_ellipsoids, correspondence_maps = align_cross_sections(cross_sections_3d, seed_idx, n_steps, resolution)
             
             # Add vertices and UVs for this seed
-            current_seed_vertices, current_seed_uvs = _add_seed_vertices_and_uvs(seed_ellipsoids, n_steps, resolution)
+            current_seed_vertices, current_seed_uvs = _add_seed_vertices_and_uvs(seed_ellipsoids, correspondence_maps, n_steps, resolution)
             
             # Generate faces between consecutive cross-sections
-            current_seed_faces = _generate_seed_faces_logic(n_steps, resolution)
+            current_seed_faces = _generate_seed_faces_logic(n_steps, resolution) + seed_vertex_start
 
             vertices[vertex_idx : vertex_idx + current_seed_vertices.shape[0]] = current_seed_vertices
             uv_coords[vertex_idx : vertex_idx + current_seed_uvs.shape[0]] = current_seed_uvs
