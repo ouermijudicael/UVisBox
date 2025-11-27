@@ -1,11 +1,11 @@
 from scipy.__config__ import show
-from .uncertainty_tubes_stats import uncertainty_tube_summary_statistics
-from .uncertainty_tubes_mesh import uncertainty_tube_mesh
-from .uncertainty_tubes_vis import visualize_uncertainty_tube
+from .uncertainty_tubes_stats import uncertainty_tubes_summary_statistics
+from .uncertainty_tubes_mesh import uncertainty_tubes_mesh
+from .uncertainty_tubes_vis import visualize_uncertainty_tubes
 import numpy as np
 
 
-def uncertainty_tube(trajectories, colormap="viridis", plotter=None, resolution=20, e_proj=1, sym=False, clim=None, n_jobs=1):
+def uncertainty_tubes(trajectories, colormap="viridis", plotter=None, resolution=20, e_proj=1, sym=False, clim=None, n_jobs=1):
     """
     Generate and visualize 3D uncertainty tubes from trajectories.
 
@@ -33,10 +33,10 @@ def uncertainty_tube(trajectories, colormap="viridis", plotter=None, resolution=
     matplotlib.axes.Axes or pyvista.Plotter: The plotting object with the visualization.
     """
     # Stage 1: Statistics
-    summary_statistics = uncertainty_tube_summary_statistics(trajectories, n_jobs=n_jobs)
+    summary_statistics = uncertainty_tubes_summary_statistics(trajectories, n_jobs=n_jobs)
 
     # Stage 2: Mesh Generation
-    mesh_data = uncertainty_tube_mesh(
+    mesh_data = uncertainty_tubes_mesh(
         summary_statistics,
         resolution=resolution,
         e_proj=e_proj,
@@ -45,6 +45,6 @@ def uncertainty_tube(trajectories, colormap="viridis", plotter=None, resolution=
     )
 
     # Stage 3: Visualization
-    plotter = visualize_uncertainty_tube(mesh_data, colormap=colormap, clim=clim, plotter=plotter)
+    plotter = visualize_uncertainty_tubes(mesh_data, colormap=colormap, clim=clim, plotter=plotter)
 
     return plotter

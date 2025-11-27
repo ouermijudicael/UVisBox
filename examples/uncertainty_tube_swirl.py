@@ -3,7 +3,7 @@ import pyvista as pv
 
 from uvisbox.Datasets import create_swirl_ensemble
 from uvisbox.Core.Interpolations import linear_interpolate
-from uvisbox.Modules.UncertaintyTube.uncertainty_tubes import uncertainty_tube  # New import
+from uvisbox.Modules.UncertaintyTube.uncertainty_tubes import uncertainty_tubes  # New import
 
 
 # Define a straight line from (0,0,0) to (10,10,10)
@@ -38,7 +38,7 @@ plotter = pv.Plotter(shape=(2, 2))
 
 # Left subplot: e_proj = 0.5 (tau = 2.0)
 plotter.subplot(0, 0)
-plotter = uncertainty_tube(trajectories, colormap='coolwarm',
+plotter = uncertainty_tubes(trajectories, colormap='coolwarm',
                  plotter=plotter, resolution=mesh_resolution, e_proj=0.5, n_jobs=2)
 plotter.remove_scalar_bar()
 plotter.add_scalar_bar("Uncertainty Scale", vertical=False, title_font_size=font_size, label_font_size=font_size)
@@ -46,7 +46,7 @@ plotter.add_text("Tau=2.0", font_size=font_size)
 
 
 plotter.subplot(0, 1)
-plotter = uncertainty_tube(trajectories, colormap='coolwarm',
+plotter = uncertainty_tubes(trajectories, colormap='coolwarm',
                  plotter=plotter, resolution=mesh_resolution, e_proj=1.0, n_jobs=2)
 
 plotter.add_text("Tau=1.0", font_size=font_size)
@@ -57,13 +57,13 @@ plotter.add_text("Tau=1.0", font_size=font_size)
 
 plotter.subplot(1, 0)
 
-plotter = uncertainty_tube(trajectories, colormap='coolwarm',
+plotter = uncertainty_tubes(trajectories, colormap='coolwarm',
                  plotter=plotter, resolution=mesh_resolution, e_proj=0.5, clim=[0,0.5], n_jobs=2)
 plotter.add_text("Color Range (0,0.5)", font_size=font_size)
 
 
 plotter.subplot(1, 1)
-plotter = uncertainty_tube(trajectories, colormap='coolwarm',
+plotter = uncertainty_tubes(trajectories, colormap='coolwarm',
                  plotter=plotter, resolution=mesh_resolution, e_proj=0.5, clim=[0.5,1.0], n_jobs=2)
 plotter.add_text("Color Range (0.5,1.0)", font_size=font_size)
 

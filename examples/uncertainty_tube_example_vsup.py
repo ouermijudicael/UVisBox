@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from uvisbox.Datasets import flowmap_3d
 from uvisbox.Core.Interpolations import linear_interpolate
-from uvisbox.Modules.UncertaintyTube.uncertainty_tubes import uncertainty_tube # New import
+from uvisbox.Modules.UncertaintyTube.uncertainty_tubes import uncertainty_tubes # New import
 
 # Generate random seed points and compute their trajectories in a 3D flow field
 t0 = 4
@@ -38,7 +38,7 @@ ax1.grid(False)
 # Subplot 2: Uncertainty tubes with ColorTree coloring using the new function
 ax2 = fig.add_subplot(122, projection='3d')
 
-uncertainty_tube(trajectories, colormap="viridis", plotter=ax2, e_proj=0.5, n_jobs=2)
+uncertainty_tubes(trajectories, colormap="viridis", plotter=ax2, e_proj=0.5, n_jobs=2)
 
 ax2.set_title("Uncertainty Tubes (viridis colormap)")
 ax2.set_xlabel('X')

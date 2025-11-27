@@ -243,7 +243,7 @@ def _process_single_seed_mesh(cross_sections_3d_all_seeds, eigen_values_all_seed
     
     return seed_vertices, seed_faces, seed_uv_coords, seed_vertices.shape[0]
 
-def uncertainty_tube_mesh(summary_statistics, resolution=20, e_proj=1, sym=False, n_jobs=1):
+def uncertainty_tubes_mesh(summary_statistics, resolution=20, e_proj=1, sym=False, n_jobs=1):
     """
     Generate the 3D mesh for uncertainty tubes.
     

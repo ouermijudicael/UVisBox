@@ -4,7 +4,7 @@ import pyvista as pv
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from uvisbox.Core.Colors.colortree import ColorTree # Assuming this is available and needed
 
-def visualize_uncertainty_tube(mesh_data, colormap="viridis", clim=None, plotter=None):
+def visualize_uncertainty_tubes(mesh_data, colormap="viridis", clim=None, plotter=None):
     """
     Visualize 3D uncertainty tubes using either Matplotlib or PyVista.
 
@@ -84,4 +84,4 @@ def visualize_uncertainty_tube(mesh_data, colormap="viridis", clim=None, plotter
         fig = plt.figure(figsize=(10, 10))
         ax = fig.add_subplot(111, projection='3d')
         # Call self recursively with the newly created ax
-        return visualize_uncertainty_tube(mesh_data, colormap=colormap, plotter=ax)
+        return visualize_uncertainty_tubes(mesh_data, colormap=colormap, plotter=ax)
