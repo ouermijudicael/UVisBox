@@ -2,8 +2,7 @@ import numpy as np
 import pyvista as pv
 
 from uvisbox.Datasets import create_swirl_ensemble
-from uvisbox.Core.Interpolations import linear_interpolate
-from uvisbox.Modules.UncertaintyTube.uncertainty_tubes import uncertainty_tubes  # New import
+from uvisbox import uncertainty_tubes  # New import
 
 
 # Define a straight line from (0,0,0) to (10,10,10)
