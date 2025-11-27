@@ -4,7 +4,7 @@ import pyvista as pv
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from uvisbox.Core.Colors.colortree import ColorTree # Assuming this is available and needed
 
-def visualize_uncertainty_tube(mesh_data, colormap="viridis", plotter=None):
+def visualize_uncertainty_tube(mesh_data, colormap="viridis", clim=None, plotter=None):
     """
     Visualize 3D uncertainty tubes using either Matplotlib or PyVista.
 
@@ -71,9 +71,12 @@ def visualize_uncertainty_tube(mesh_data, colormap="viridis", plotter=None):
 
         # Apply colormap based on UVs
         # We can map the 'v' component of UV to scalar for coloring along the tube.
-        tube_mesh.point_data["scalar_color"] = uv_coords[:, 1] # Use v-component for coloring
-
-        plotter.add_mesh(tube_mesh, scalars="scalar_color", cmap=colormap, show_edges=False)
+        scalars = uv_coords[:, 0]
+        if clim is not None:
+            scalars = np.clip(scalars, clim[0], clim[1])
+        tube_mesh.point_data["Uncertainty Scale"] = scalars # Use v-component for coloring
+        
+        plotter.add_mesh(tube_mesh, scalars="Uncertainty Scale", cmap=colormap, clim=clim, show_edges=False)
         return plotter
 
     else:
