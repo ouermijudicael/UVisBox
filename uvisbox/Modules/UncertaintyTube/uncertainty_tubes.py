@@ -1,53 +1,49 @@
-
-from .uncertainty_tubes_stats import generate_cross_sections_2D
-from .uncertainty_tubes_mesh import generate_uncertainty_tube_mesh_2D
-from .uncertainty_tubes_vis import matplotlib_uncertainty_tube_2D_vis
-from .uncertainty_tubes_stats import generate_cross_sections
-from .uncertainty_tubes_mesh import generate_tube_mesh
-from .uncertainty_tubes_vis import matplotlib_uncertainty_tube_vis
+from .uncertainty_tubes_stats import uncertainty_tube_summary_statistics
+from .uncertainty_tubes_mesh import uncertainty_tube_mesh
+from .uncertainty_tubes_vis import visualize_uncertainty_tube
+import numpy as np
 
 
-def uncertainty_tubes_2D(trajectories, axis=None):
+def uncertainty_tube(trajectories, colormap="viridis", plotter=None, resolution=20, e_proj=1, sym=False, n_jobs=1):
     """
-    Generate and plot 2D uncertainty tubes from trajectories.
-
-    Parameters:
-    -----------
-    trajectories : np.ndarray
-        Array of shape (n_trajectories, n_time_steps, n_ensemble_members, 2) representing the 2D trajectories.
-    axis : matplotlib.axes.Axes, optional
-        Axis to plot on. If None, creates a new figure and axis.
-
-    Returns:
-    --------
-    axis : matplotlib.axes.Axes
-        Axis with the plotted uncertainty tubes.
-    """
-    mean_trajectories, cross_sections = generate_cross_sections_2D(trajectories)
-    points, tube_mesh = generate_uncertainty_tube_mesh_2D(mean_trajectories, cross_sections)
-    axis = matplotlib_uncertainty_tube_2D_vis(points, tube_mesh, mean_trajectories, axis=axis)
-
-    return axis
-
-def uncertainty_tubes_3D(trajectories, axis=None):
-    """
-    Generate and plot 3D uncertainty tubes from trajectories.
+    Generate and visualize 3D uncertainty tubes from trajectories.
 
     Parameters
     ----------
     trajectories : np.ndarray
-        Array of shape (n_trajectories, n_time_steps, n_ensemble_members, 3) representing the 3D trajectories.
-    axis : matplotlib.axes.Axes, optional
-        Axis to plot on. If None, creates a new figure and axis.
+        Array of shape (n_steps, n_starting_locations, n_ensemble_members, 3) representing the 3D trajectories.
+    colormap (str, optional):
+        Colormap to use for rendering the tube. Defaults to "viridis".
+    plotter (matplotlib.axes.Axes or pyvista.Plotter, optional):
+        The plotting object to use. If None, a new Matplotlib figure/axis is created.
+    resolution (int, optional):
+        Number of points to sample on each cross-section boundary. Defaults to 20.
+    e_proj (float, optional):
+        Exponent controlling the superellipse shape. e_proj=1 creates a standard ellipse.
+        Defaults to 1.
+    sym (bool, optional):
+        If True, forces the superellipse to be symmetric. Defaults to False.
+    n_jobs (int, optional):
+        Number of parallel jobs to use. If n_jobs=1, uses sequential processing.
+        Defaults to 1.
 
     Returns
     -------
-    axis : matplotlib.axes.Axes
-        Axis with the plotted uncertainty tubes.
+    matplotlib.axes.Axes or pyvista.Plotter: The plotting object with the visualization.
     """
-    mean_trajectories, cross_sections = generate_cross_sections(trajectories)
-    vertices, faces, uv_coords = generate_tube_mesh(mean_trajectories, cross_sections)
-    axis = matplotlib_uncertainty_tube_vis(vertices, faces, mean_trajectories, uv_coords, axis=axis)
+    # Stage 1: Statistics
+    summary_statistics = uncertainty_tube_summary_statistics(trajectories, n_jobs=n_jobs)
 
-    return axis
+    # Stage 2: Mesh Generation
+    mesh_data = uncertainty_tube_mesh(
+        summary_statistics,
+        resolution=resolution,
+        e_proj=e_proj,
+        sym=sym,
+        n_jobs=n_jobs
+    )
 
+    # Stage 3: Visualization
+    plotter = visualize_uncertainty_tube(mesh_data, colormap=colormap, plotter=plotter)
+
+    return plotter
