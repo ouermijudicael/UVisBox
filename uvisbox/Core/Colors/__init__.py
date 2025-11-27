@@ -5,5 +5,10 @@ This module contains core color functionality including color interpolation and 
 These are fundamental color operations used across the UVisBox package.
 """
 
-from .color_interpolator import *
-from .colortree import *
+from .color_interpolator import interpolate_lab
+from .colortree import ColorTree
+
+__all__ = [
+    "interpolate_lab",
+    "ColorTree",
+]

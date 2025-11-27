@@ -204,3 +204,6 @@ __marimo__/
 
 # for mac
 .DS_Store
+# AI-generated files
+GEMINI.md
+CLAUDE.md

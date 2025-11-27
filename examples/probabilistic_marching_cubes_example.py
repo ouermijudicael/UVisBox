@@ -84,7 +84,7 @@ def tear_drop(x, y, z):
     return 0.5*x**5 + 0.5*x**4 - y**2 - z**2
 
 # Generate synthetic 4D data (n_z, n_y, n_x, n_ens)
-n_x, n_y, n_z, n_ens = 30, 30, 30, 30
+n_x, n_y, n_z, n_ens = 100, 100, 100, 30
 x = np.linspace(-1, 1, n_x)
 y = np.linspace(-1, 1, n_y)
 z = np.linspace(-1, 1, n_z)
@@ -114,7 +114,7 @@ plotter.add_mesh(iso_surface, color='lightblue', opacity=1)
 # Generate ensemble data with noise
 F = np.zeros((n_z, n_y, n_x, n_ens))
 for e in range(n_ens):
-    noise = np.random.normal(0, 0.01, (n_z, n_y, n_x))
+    noise = np.random.normal(0, 0.001, (n_z, n_y, n_x))
     F[:, :, :, e] = noise_less_F + noise
 
 # Compute probabilistic marching cubes
@@ -125,4 +125,4 @@ plotter.add_text("Probabilistic Isosurface", font_size=12)
 # Link the views so camera movements are synchronized
 plotter.link_views()
 plotter.show()
-# plotter.screenshot("probabilistic_marching_cubes_example.png")
+plotter.screenshot("probabilistic_marching_cubes_example.png")

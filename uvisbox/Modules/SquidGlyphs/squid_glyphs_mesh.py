@@ -335,6 +335,8 @@ def squid_glyphs_meshing_3D(pca_components, positions, vectors, spread_min_vecto
     points, polygons, points_values : tuple
         Mesh geometry and scalar values
     """
+    body_ratio = 0.7
+    ibody_ratio = 1.0 - body_ratio
     num_points = positions.shape[0]
     
     # Pre-allocate arrays
@@ -398,24 +400,24 @@ def squid_glyphs_meshing_3D(pca_components, positions, vectors, spread_min_vecto
         points_id = _add_circle_ring(points, points_values, points_id, x_shaft_base, y_shaft_base, body_height,
                                      R, position, scale, scaler_value, resolution)
         
-        # 4. SHAFT TOP (at 0.8 * max_mag)
-        shaft_top_r0 = np.maximum(0.2 * max_vector[0] * np.tan(np.absolute(max_vector[1]) * 0.5), 0.01 * 0.2 * max_vector[0])
+        # 4. SHAFT TOP (at body_ratio * max_mag)
+        shaft_top_r0 = np.maximum(ibody_ratio * max_vector[0] * np.tan(np.absolute(max_vector[1]) * 0.5), 0.01 * ibody_ratio * max_vector[0])
         shaft_top_r1 = shaft_top_r0 * elipse_scale
         x_shaft_top, y_shaft_top = _compute_superellipse_profile(shaft_top_r0, shaft_top_r1, angle, resolution)
         
         shaft_top_ring_id = points_id
-        points_id = _add_circle_ring(points, points_values, points_id, x_shaft_top, y_shaft_top, 0.8 * max_vector[0],
+        points_id = _add_circle_ring(points, points_values, points_id, x_shaft_top, y_shaft_top, body_ratio * max_vector[0],
                                      R, position, scale, scaler_value, resolution)
         
         # Triangulate shaft
         polygons_id = _triangulate_cylinder(polygons, polygons_id, shaft_bottom_ring_id, shaft_top_ring_id, resolution)
         
-        # 5. HEAD BASE (wide ring at 0.8 * max_mag)
+        # 5. HEAD BASE (wide ring at body_ratio * max_mag)
         head_base_ring_id = points_id
-        points_id = _add_circle_ring(points, points_values, points_id, x_base, y_base, 0.8 * max_vector[0],
+        points_id = _add_circle_ring(points, points_values, points_id, x_base, y_base, body_ratio * max_vector[0],
                                      R, position, scale, scaler_value, resolution)
         head_base_center_id = points_id
-        points_id = _add_center_point(points, points_values, points_id, 0.8 * max_vector[0],
+        points_id = _add_center_point(points, points_values, points_id, body_ratio * max_vector[0],
                                        R, position, scale, scaler_value)
         polygons_id = _triangulate_disk(polygons, polygons_id, head_base_center_id, head_base_ring_id, resolution)
         
