@@ -17,5 +17,5 @@ The Core module is organized into the following submodules:
 from .BandDepths import *
 from .CellsCrossingProb import *
 from .Colors import *
-from .CommonInterface import *
-from .Interpolations import *
+from .CommonInterface import BoxplotStyleConfig
+from .Interpolations import linear_interpolate

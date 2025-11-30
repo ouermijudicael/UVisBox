@@ -1,114 +1,84 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
+import pyvista as pv
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from uvisbox.Core.Colors.colortree import ColorTree
+from uvisbox.Core.Colors.colortree import ColorTree # Assuming this is available and needed
 
-def matplotlib_uncertainty_tube_vis(vertices, faces, mean_trajectories, uv_coords, axis=None):
+def visualize_uncertainty_tube(mesh_data, colormap="viridis", plotter=None):
     """
-    Plot 3D uncertainty tubes from pre-generated mesh data.
+    Visualize 3D uncertainty tubes using either Matplotlib or PyVista.
 
     Parameters:
     -----------
-    vertices (np.ndarray): 
-        Global vertex array with shape (total_vertices, 3)
-    faces (np.ndarray): 
-        Triangle face indices with shape (n_seeds, triangles_per_seed, 3)
-    mean_trajectories (np.ndarray): 
-        Mean trajectory positions with shape (n_steps+1, n_seeds, 3)
-    uv_coords (np.ndarray): 
-        UV coordinates for coloring, shape matching vertices.
-    axis (matplotlib.axes.Axes, optional): 
-        3D axis to plot on. If None, creates a new figure and axis.
+    mesh_data (dict):
+        Dictionary containing "vertices", "faces", and "uv_coords" from uncertainty_tube_mesh.
+    colormap (str, optional):
+        Colormap to use for rendering the tube. Defaults to "viridis".
+    plotter (matplotlib.axes.Axes or pyvista.Plotter, optional):
+        The plotting object to use. If None, a new Matplotlib figure/axis is created.
+        If a Matplotlib Axes3D object, it plots on that.
+        If a PyVista Plotter object, it adds the mesh to it.
 
     Returns:
     --------
-    None
+    matplotlib.axes.Axes or pyvista.Plotter: The plotting object with the visualization.
     """
-    if axis is None:
+    vertices = mesh_data["vertices"]
+    faces = mesh_data["faces"]
+    uv_coords = mesh_data["uv_coords"]
+
+    if isinstance(plotter, plt.Axes):
+        ax = plotter
+        # Matplotlib specific rendering
+        color_tree = ColorTree(invert_u=True, depth=4, cmap=colormap)
+        
+        # Each "face" in the input is a list of vertex indices. We need to get the actual vertex coordinates.
+        triangle_vertices_for_mpl = vertices[faces] # (num_triangles, 3, 3)
+        
+        # Calculate face colors from uv_coords
+        # Each face has 3 vertices, so take the mean UV of the face for coloring
+        face_uv_coords = uv_coords[faces] # (num_triangles, 3, 2)
+        face_colors = color_tree(face_uv_coords.mean(axis=1), discrete=True)
+
+        tube_collection = Poly3DCollection(triangle_vertices_for_mpl, facecolors=face_colors)
+        ax.add_collection3d(tube_collection)
+
+        # Set labels and title if it's the main plotting call
+        if ax.get_xlabel() == '': ax.set_xlabel('X-axis')
+        if ax.get_ylabel() == '': ax.set_ylabel('Y-axis')
+        if ax.get_zlabel() == '': ax.set_zlabel('Z-axis')
+        if ax.get_title() == '': ax.set_title('3D Trajectories with Uncertainty')
+        
+        # Need to ensure the view is 3D if not already. This is usually handled by `fig.add_subplot(projection='3d')`
+        if not hasattr(ax, 'get_proj') or ax.get_proj().shape != (4, 4): # Check if it's a 3D axis
+            # This indicates the axis was not created as a 3D axis.
+            # Matplotlib requires 'projection='3d' at subplot creation.
+            # We can't change it here, so we will just warn.
+            print("Warning: Provided Matplotlib Axes object is not 3D. Please create it with `fig.add_subplot(projection='3d')`.")
+            # Adjust aspect ratio for potentially better view in non-3D mode, though it won't be true 3D.
+            ax.set_box_aspect([np.ptp(c) for c in ax.get_xyz_limits()]) 
+            ax.autoscale_view()
+
+        return ax
+
+    elif isinstance(plotter, pv.Plotter):
+        # PyVista specific rendering
+        n_faces = len(faces)
+        # Add the number of points for each face (3 for triangles)
+        faces_with_count = np.hstack((np.full((n_faces, 1), 3), faces)).flatten()
+        tube_mesh = pv.PolyData(vertices, faces_with_count)
+        tube_mesh.point_data["uv"] = uv_coords # Store UVs as point data
+
+        # Apply colormap based on UVs
+        # We can map the 'v' component of UV to scalar for coloring along the tube.
+        tube_mesh.point_data["scalar_color"] = uv_coords[:, 1] # Use v-component for coloring
+
+        plotter.add_mesh(tube_mesh, scalars="scalar_color", cmap=colormap, show_edges=False)
+        return plotter
+
+    else:
+        # Default to new Matplotlib plot if no valid plotter provided
         fig = plt.figure(figsize=(10, 10))
         ax = fig.add_subplot(111, projection='3d')
-        show_plot = True
-    else:
-        ax = axis
-        if not hasattr(ax, 'get_proj') or ax.get_proj().shape != (4, 4):
-            raise ValueError("The provided axis must be a 3D axis (projection='3d').")
-        show_plot = False
-
-    color_tree = ColorTree(invert_u=True, depth=4, cmap="viridis")
-    n_steps, n_seeds = mean_trajectories.shape[:2]
-
-    # Plot mean trajectory lines
-    for i in range(n_seeds):
-        for j in range(1, n_steps):
-            segment = mean_trajectories[j-1:j+1, i, :]
-            ax.plot(segment[:, 0], segment[:, 1], segment[:, 2],
-                    color='black', alpha=1.0, linewidth=2)
-
-    # Plot uncertainty tubes using triangular faces
-    all_tube_faces = []
-    all_face_color = []
-    # Process faces for each seed
-    for i in range(n_seeds):
-        seed_faces = faces[i]  # Shape: (triangles_per_seed, 3)
-        # Convert face indices to vertex coordinates
-        triangle_vertices = vertices[seed_faces]  # Shape: (triangles_per_seed, 3, 3)
-        color_values = uv_coords[seed_faces]
-        face_colors = color_tree(color_values.mean(axis=1), discrete=True)
-        all_tube_faces.extend(triangle_vertices)
-        all_face_color.extend(face_colors)
-
-    all_tube_faces = np.array(all_tube_faces)
-    all_face_color = np.array(all_face_color)
-    tube_collection = Poly3DCollection(all_tube_faces,
-                                        facecolors=all_face_color)
-    ax.add_collection3d(tube_collection)
-    ax.set_xlabel('X-axis')
-    ax.set_ylabel('Y-axis')
-    ax.set_zlabel('Z-axis')
-    ax.set_title('3D Trajectories with Uncertainty')
-    
-    return ax
-
-
-def matplotlib_uncertainty_tube_2D_vis(points, tube_mesh, mean_trajectories, axis=None):
-    """
-    Plot 2D uncertainty tubes from pre-generated mesh data.
-
-    Parameters:
-    -----------
-    points : np.ndarray
-        Array of shape (n_points, 2) representing the tube mesh vertices.
-    tube_mesh : np.ndarray
-        Array of shape (n_faces, 3) representing the tube mesh faces.
-    mean_trajectories : np.ndarray
-        Array of shape (n_trajectories, n_time_steps, 2) representing the mean trajectory.
-    axis : matplotlib.axes.Axes, optional
-        Axis to plot on. If None, creates a new figure and axis.
-
-    Returns:
-    --------
-    None
-    """
-
-    if axis is None:
-        fig, ax = plt.subplots(figsize=(10, 10))
-    else:
-        ax = axis
-
-    # Plot mean trajectory lines
-    n_trajectories, n_time_steps = mean_trajectories.shape[:2]
-    for i in range(n_trajectories):
-        ax.plot(mean_trajectories[i, :, 0], mean_trajectories[i, :, 1],
-                color='black', alpha=1.0, linewidth=2)
-
-    # Plot uncertainty tubes using triangular faces
-    tri_colors = np.ones((tube_mesh.shape[0]))*0.8
-    ax.tripcolor(points[:, 0], points[:, 1], tube_mesh, facecolors=tri_colors, edgecolors='gray', alpha=0.5)
-    ax.set_xlabel('X-axis')
-    ax.set_ylabel('Y-axis')
-    ax.set_title('2D Trajectories with Uncertainty')
-    plt.grid()
-
-    return ax
-
+        # Call self recursively with the newly created ax
+        return visualize_uncertainty_tube(mesh_data, colormap=colormap, plotter=ax)

@@ -1,52 +1,8 @@
 import numpy as np
 
+def expcos(x, e): return np.sign(np.cos(x)) * np.abs(np.cos(x))**e
 
-
-def generate_uncertainty_tube_mesh_2D(mean_trajectories, cross_sections):
-    """
-    Generate uncertainty tube mesh from mean trajectories and cross-sections.
-
-    Parameters
-    ----------
-    mean_trajectories : np.ndarray
-        Array of shape (n_trajectories, n_time_steps, 2) representing the mean trajectory.
-    cross_sections : np.ndarray
-        Array of shape (n_trajectories, n_time_steps, 2, 2) representing the cross-sections.
-
-    Returns
-    -------
-    points: np.ndarray
-        Array of shape (n_trajectories*n_time_steps*2, 2) representing the tube mesh vertices.
-    tube_mesh : np.ndarray
-        Array of shape (n_trajectories*n_time_steps*2, 3) representing the tube mesh faces.
-    """
-    n_trajectories, n_time_steps, _ = mean_trajectories.shape
-    points = np.zeros((n_trajectories * n_time_steps * 2, 2))
-    tube_mesh = np.zeros((n_trajectories * n_time_steps * 2, 3), dtype=int)
-    i_point = 0
-    i_face = 0
-    for i_traj in range(n_trajectories):    
-        for i_t in range(n_time_steps):
-            if i_t == 0:
-                points[i_point] = mean_trajectories[i_traj, i_t] + cross_sections[i_traj, i_t, 0]
-                points[i_point + 1] = mean_trajectories[i_traj, i_t] - cross_sections[i_traj, i_t, 0]
-                i_point += 2
-            else:
-                line_dir = mean_trajectories[i_traj, i_t] - mean_trajectories[i_traj, i_t - 1]
-                line_dir = line_dir / np.linalg.norm(line_dir)  # Normalize direction
-                perp_line_dir = np.array([-line_dir[1], line_dir[0]])  # Perpendicular direction
-                # add point onto perp_line_dir direction passing through mean_trajectories[i_traj, i_t] 
-                # with distance cross_sections[i_traj, i_t, 0] from mean_trajectories[i_traj, i_t]
-                points[i_point] = mean_trajectories[i_traj, i_t] + cross_sections[i_traj, i_t, 0] * perp_line_dir
-                points[i_point + 1] = mean_trajectories[i_traj, i_t] - cross_sections[i_traj, i_t, 0] * perp_line_dir
-                # create faces
-                tube_mesh[i_face] = [i_point - 2, i_point - 1, i_point]
-                tube_mesh[i_face + 1] = [i_point - 1, i_point + 1, i_point]
-                i_point += 2
-                i_face += 2
-
-    return points, tube_mesh
-
+def expsin(x, e): return np.sign(np.sin(x)) * np.abs(np.sin(x))**e
 
 def compute_alignment_scores(reference, target, shifts):
     """
@@ -73,7 +29,7 @@ def apply_circular_alignment(points, best_shift, best_is_reversed):
     shift and orientation.
     
     Parameters:
-    -----------
+    ----------- 
     points (np.ndarray): 
         Points to transform (shape: n_points × num_dims)
     best_shift (int): 
@@ -107,7 +63,7 @@ def circular_align_min_twist(points_ref, points_target, stride=1):
     Aligns two sets of points forming closed loops with minimal twist.
     
     Parameters:
-    -----------
+    ----------- 
     points_ref (np.ndarray): 
         Reference point set (shape: n_points × num_dims)
     points_target (np.ndarray): 
@@ -116,7 +72,7 @@ def circular_align_min_twist(points_ref, points_target, stride=1):
         Stride for sampling subset of points (for efficiency)
         
     Returns:
-    -------
+    ------- 
     aligned_points (np.ndarray): 
         Aligned target points
     correspondence_map (np.ndarray): 
@@ -157,119 +113,6 @@ def circular_align_min_twist(points_ref, points_target, stride=1):
     # Apply the alignment using the helper function
     return apply_circular_alignment(points_target, best_shift_full, best_is_reversed)
 
-
-def generate_tube_mesh(trajectories, ellipsoids, n_jobs=1):
-    """
-    Generate triangle mesh for uncertainty tubes with sequential or parallel alignment.
-    
-    Parameters:
-    -----------
-    trajectories (np.ndarray): 
-        Ensemble trajectories with shape (n_steps, n_seeds, n_samples, num_dims)
-    ellipsoids (np.ndarray): 
-        Cross-section boundary points with shape (n_steps, n_seeds, resolution, num_dims)
-    n_jobs (int, optional): 
-        Number of parallel jobs to use. If n_jobs=1, uses sequential processing.
-        If joblib is not available, falls back to sequential processing. Defaults to 1.
-        
-    Returns:
-    --------
-    vertices (np.ndarray): 
-        Tube mesh vertices with shape (total_vertices, num_dims)
-    faces (np.ndarray): 
-        Triangle indices with shape (n_seeds, triangles_per_seed, 3)
-    mean_trajectories (np.ndarray): 
-        Mean trajectory paths
-    """
-    mean_trajectories = np.mean(trajectories, axis=2)
-    n_steps, n_seeds, resolution, num_dims = ellipsoids.shape
-    
-    # Pre-allocate arrays based on mesh dimensions
-    total_vertices, triangles_per_seed = calculate_mesh_dimensions(n_steps, n_seeds, resolution)
-    vertices = np.empty((total_vertices, num_dims))
-    faces = np.empty((n_seeds, triangles_per_seed, 3), dtype=np.int32)
-    
-    # Check if parallel processing is requested and available
-    use_parallel = n_jobs != 1
-    if use_parallel:
-        try:
-            import multiprocessing as mp
-            # Ensure 'fork' context is available
-            mp.get_context('fork')
-        except (ImportError, ValueError):
-            use_parallel = False
-            print("Warning: multiprocessing with 'fork' context not available. Using sequential processing instead.")
-    
-    if use_parallel:
-        # Process tubes in parallel using multiprocessing with 'fork' context
-        pool_context = mp.get_context('fork')
-        with pool_context.Pool(processes=n_jobs) as pool:
-            results = pool.starmap(
-                _process_single_seed,
-                [(ellipsoids, seed_idx, n_steps, resolution) for seed_idx in range(n_seeds)]
-            )
-        
-        # Combine results
-        vertex_idx = 0
-        for seed_idx, (seed_ellipsoids, seed_vertex_count) in enumerate(results):
-            seed_vertex_start = vertex_idx
-            
-            # Add vertices
-            vertices[vertex_idx:vertex_idx + seed_vertex_count] = seed_ellipsoids.reshape(-1, num_dims)
-            
-            # Generate faces
-            generate_seed_faces(faces, seed_idx, seed_vertex_start, n_steps, resolution)
-            
-            # Update vertex index
-            vertex_idx += seed_vertex_count
-    else:
-        # Sequential processing (original code)
-        vertex_idx = 0
-        for seed_idx in range(n_seeds):
-            seed_vertex_start = vertex_idx
-            
-            # Align and store all cross-sections for current seed
-            seed_ellipsoids = align_cross_sections(ellipsoids, seed_idx, n_steps, resolution)
-            
-            # Add vertices for this seed
-            vertex_idx = add_seed_vertices(vertices, seed_ellipsoids, vertex_idx, n_steps, resolution)
-            
-            # Generate faces between consecutive cross-sections
-            generate_seed_faces(faces, seed_idx, seed_vertex_start, n_steps, resolution)
-    
-    return vertices, faces, mean_trajectories
-
-
-
-def _process_single_seed(ellipsoids, seed_idx, n_steps, resolution):
-    """
-    Process a single seed's tube for parallel mesh generation.
-
-    Parameters:
-    -----------
-    ellipsoids : np.ndarray
-        All cross-section boundary points.
-    seed_idx : int
-        Index of the current seed.
-    n_steps : int
-        Number of time steps.
-    resolution : int
-        Number of points per cross-section.
-
-    Returns:
-    --------
-    seed_ellipsoids : np.ndarray
-        Aligned cross-sections for this seed.
-    vertex_count : int
-        Number of vertices for this seed.
-    """
-    # Align cross-sections
-    seed_ellipsoids = align_cross_sections(ellipsoids, seed_idx, n_steps, resolution)
-    vertex_count = n_steps * resolution
-    
-    return seed_ellipsoids, vertex_count
-
-
 def calculate_mesh_dimensions(n_steps, n_seeds, resolution):
     """Calculate dimensions needed for mesh arrays."""
     vertices_per_seed = n_steps * resolution
@@ -277,73 +120,249 @@ def calculate_mesh_dimensions(n_steps, n_seeds, resolution):
     triangles_per_seed = (n_steps - 1) * 2 * resolution
     return total_vertices, triangles_per_seed
 
-
 def align_cross_sections(ellipsoids, seed_idx, n_steps, resolution):
     """Align cross-sections to minimize twisting for a given seed."""
     seed_ellipsoids = np.empty((n_steps, resolution, 3))
-    seed_ellipsoids[0] = ellipsoids[0, seed_idx, :, :]  # First ellipsoid (no alignment needed)
     
-    # Align subsequent cross-sections
+    seed_ellipsoids[0] = ellipsoids[0, seed_idx, :, :]
+
     for j in range(1, n_steps):
-        points0 = seed_ellipsoids[j-1]  # Use previously aligned ellipsoid as reference
+        points0 = seed_ellipsoids[j-1]
         points1 = ellipsoids[j, seed_idx, :, :]
         points1_aligned, _ = circular_align_min_twist(points0, points1)
         seed_ellipsoids[j] = points1_aligned
     
     return seed_ellipsoids
 
-
-def add_seed_vertices(vertices, seed_ellipsoids, vertex_idx, n_steps, resolution):
-    """Add all vertices for a seed to the vertices array."""
-    for step_idx in range(n_steps):
-        vertices[vertex_idx:vertex_idx + resolution] = seed_ellipsoids[step_idx]
-        vertex_idx += resolution
-    return vertex_idx
-
-
-def generate_seed_faces(faces, seed_idx, seed_vertex_start, n_steps, resolution):
-    """Generate triangle faces between consecutive cross-sections."""
-    # Use a clearer variable name
-    face_offset = 0  # Offset within this seed's section of the faces array
+def _build_cross_section_3d(mean_point, eigvals, eigvecs, resolution=20, e_proj=1, sym=False):
+    """
+    Helper function to build the 3D superellipse for a single cross-section.
     
-    for step_idx in range(1, n_steps):
-        # Vertex indices for ellipsoids at j-1 and j
-        ellipsoid0_start = seed_vertex_start + (step_idx-1) * resolution
-        ellipsoid1_start = seed_vertex_start + step_idx * resolution
+    Parameters:
+    ----------- 
+    mean_point (np.ndarray): The 3D center point for the cross-section.
+    eigvals (np.ndarray): The two largest eigenvalues (2,).
+    eigvecs (np.ndarray): The corresponding two eigenvectors (3, 2).
+    resolution (int): Number of points for the superellipse.
+    e_proj (float): Superellipse exponent.
+    sym (bool): Symmetric flag for superellipse.
+    
+    Returns:
+    --------
+    np.ndarray: The 3D points of the superellipse cross-section (resolution, 3).
+    """
+    # Build 2D superellipse in its local coordinate system
+    radii = 2.0 * np.sqrt(eigvals[:2])  # 2-sigma ellipse
+    if sym:
+        radii[1] = radii[0]  # Force symmetric shape if requested
+
+    theta = np.linspace(0, 2 * np.pi, resolution+1)
+    x = radii[0] * expcos(theta, e_proj)
+    y = radii[1] * expsin(theta, e_proj)
+    superellipse_2d = np.stack([x[:-1], y[:-1]], axis=1) # (resolution, 2)
+
+    # Transform 2D superellipse to 3D space using eigenvectors and mean point
+    primary_axis = eigvecs[:, 0]
+    secondary_axis = eigvecs[:, 1]
+    
+    cross_section_3d = mean_point + superellipse_2d[:, 0, np.newaxis] * primary_axis + \
+                       superellipse_2d[:, 1, np.newaxis] * secondary_axis
+                       
+    return cross_section_3d
+
+def _add_seed_vertices_and_uvs(seed_ellipsoids, eigen_values_for_seed, n_steps, resolution, global_max_eigval):
+    """
+    Adds vertices and UVs for a single seed to the main arrays and returns them.
+    U coordinate is the normalized magnitude of the max eigen value.
+    V coordinate is the ratio of small eigen values to larger eigen values.
+    """
+    current_seed_vertices = seed_ellipsoids.reshape(-1, 3)
+    current_seed_uvs = np.empty((n_steps * resolution, 2))
+
+    for step_idx in range(n_steps):
+        v_start = step_idx * resolution
+        v_end = (step_idx + 1) * resolution
+
+        max_eigval = np.max(eigen_values_for_seed[step_idx])
+        min_eigval = np.min(eigen_values_for_seed[step_idx])
         
-        # Generate triangle indices
+        u_coord = max_eigval / global_max_eigval if global_max_eigval > 0 else 0
+        v_coord = min_eigval / max_eigval if max_eigval > 0 else 0
+
+        current_seed_uvs[v_start:v_end, 0] = u_coord
+        current_seed_uvs[v_start:v_end, 1] = v_coord
+
+    return current_seed_vertices, current_seed_uvs
+
+def _generate_seed_faces_logic(n_steps, resolution):
+    """
+    Generates triangle faces for a single seed, with local indexing.
+    Adapted from original generate_seed_faces and add_segment_triangles.
+    """
+    total_segment_triangles = (n_steps - 1) * 2 * resolution
+    seed_faces = np.empty((total_segment_triangles, 3), dtype=np.int32)
+    face_offset = 0
+
+    for step_idx in range(1, n_steps):
+        ellipsoid0_start = (step_idx-1) * resolution
+        ellipsoid1_start = step_idx * resolution
+        
         res_indices = np.arange(resolution)
         
-        # Generate and store triangles
-        face_offset = add_segment_triangles(
-            faces, seed_idx, face_offset,
-            ellipsoid0_start, ellipsoid1_start,
-            res_indices, resolution
-        )
+        tri1_v0 = ellipsoid0_start + res_indices
+        tri1_v1 = ellipsoid0_start + ((res_indices + 1) % resolution)
+        tri1_v2 = ellipsoid1_start + ((res_indices + 1) % resolution)
+        
+        tri2_v0 = ellipsoid0_start + res_indices
+        tri2_v1 = ellipsoid1_start + ((res_indices + 1) % resolution)
+        tri2_v2 = ellipsoid1_start + res_indices
+        
+        seed_faces[face_offset:face_offset + resolution, 0] = tri1_v0
+        seed_faces[face_offset:face_offset + resolution, 1] = tri1_v1
+        seed_faces[face_offset:face_offset + resolution, 2] = tri1_v2
+        face_offset += resolution
+        
+        seed_faces[face_offset:face_offset + resolution, 0] = tri2_v0
+        seed_faces[face_offset:face_offset + resolution, 1] = tri2_v1
+        seed_faces[face_offset:face_offset + resolution, 2] = tri2_v2
+        face_offset += resolution
+            
+    return seed_faces
 
+def _process_single_seed_mesh(cross_sections_3d_all_seeds, eigen_values_all_seeds, seed_idx, n_steps, resolution, global_max_eigval):
+    """
+    Helper function for parallel mesh generation for a single seed.
+    Returns vertices, faces, and uv_coords for this seed, with local indexing for faces.
+    """
+    seed_ellipsoids = align_cross_sections(cross_sections_3d_all_seeds, seed_idx, n_steps, resolution)
+    eigen_values_for_seed = eigen_values_all_seeds[:, seed_idx, :]
+    
+    seed_vertices, seed_uv_coords = _add_seed_vertices_and_uvs(seed_ellipsoids, eigen_values_for_seed, n_steps, resolution, global_max_eigval)
 
-def add_segment_triangles(faces, seed_idx, face_offset, first_cross_section_start, second_cross_section_start, res_indices, resolution):
-    """Add triangles connecting two consecutive cross-sections."""
-    # Triangle 1 indices (connecting current point to next point and corresponding point on next cross-section)
-    tri1_v0 = first_cross_section_start + res_indices
-    tri1_v1 = first_cross_section_start + ((res_indices + 1) % resolution)
-    tri1_v2 = second_cross_section_start + ((res_indices + 1) % resolution)
+    seed_faces = _generate_seed_faces_logic(n_steps, resolution)
     
-    # Triangle 2 indices (connecting current point to corresponding point on next cross-section and next point on next cross-section)
-    tri2_v0 = first_cross_section_start + res_indices
-    tri2_v1 = second_cross_section_start + ((res_indices + 1) % resolution)
-    tri2_v2 = second_cross_section_start + res_indices
-    
-    # Store triangles in faces array
-    n_triangles_segment = 2 * resolution
-    
-    faces[seed_idx, face_offset:face_offset + resolution, 0] = tri1_v0
-    faces[seed_idx, face_offset:face_offset + resolution, 1] = tri1_v1
-    faces[seed_idx, face_offset:face_offset + resolution, 2] = tri1_v2
-    
-    faces[seed_idx, face_offset + resolution:face_offset + n_triangles_segment, 0] = tri2_v0
-    faces[seed_idx, face_offset + resolution:face_offset + n_triangles_segment, 1] = tri2_v1
-    faces[seed_idx, face_offset + resolution:face_offset + n_triangles_segment, 2] = tri2_v2
-    
-    return face_offset + n_triangles_segment
+    return seed_vertices, seed_faces, seed_uv_coords, seed_vertices.shape[0]
 
+def uncertainty_tube_mesh(summary_statistics, resolution=20, e_proj=1, sym=False, n_jobs=1):
+    """
+    Generate the 3D mesh for uncertainty tubes.
+    
+    Parameters:
+    ----------- 
+    summary_statistics (dict): 
+        Dictionary containing "mean_trajectory", "eigen_values", and "eigen_vectors".
+    resolution (int, optional): 
+        Number of points to sample on each cross-section boundary. Defaults to 20.
+    e_proj (float, optional): 
+        Exponent controlling the superellipse shape. e_proj=1 creates a standard ellipse.
+        Defaults to 1.
+    sym (bool, optional): 
+        If True, forces the superellipse to be symmetric. Defaults to False.
+    n_jobs (int, optional): 
+        Number of parallel jobs to use. If n_jobs=1, uses sequential processing.
+        Defaults to 1.
+        
+    Returns:
+    --------
+    dict:
+        - "vertices" (np.ndarray): Tube mesh vertices.
+        - "faces" (np.ndarray): Triangle indices.
+        - "uv_coords" (np.ndarray): UV coordinates for texture mapping.
+    """
+    mean_trajectory = summary_statistics["mean_trajectory"]
+    eigen_values = summary_statistics["eigen_values"]
+    eigen_vectors = summary_statistics["eigen_vectors"]
+
+    n_steps, n_starting_locations, _ = mean_trajectory.shape
+    num_dims = mean_trajectory.shape[-1]
+
+    cross_sections_3d = np.zeros((n_steps, n_starting_locations, resolution, num_dims))
+
+    for location_index in range(n_starting_locations):
+        cross_sections_3d[0, location_index, :, :] = mean_trajectory[0, location_index, :]
+
+    for step_index in range(1, n_steps):
+        for location_index in range(n_starting_locations):
+            cross_sections_3d[step_index, location_index, :, :] = _build_cross_section_3d(
+                mean_trajectory[step_index, location_index, :],
+                eigen_values[step_index, location_index, :],
+                eigen_vectors[step_index, location_index, :, :],
+                resolution=resolution,
+                e_proj=e_proj,
+                sym=sym
+            )
+            
+    vertices, faces, uv_coords = _generate_tube_mesh_from_cross_sections(cross_sections_3d, eigen_values, n_jobs)
+
+    return {
+        "vertices": vertices,
+        "faces": faces,
+        "uv_coords": uv_coords
+    }
+
+def _generate_tube_mesh_from_cross_sections(cross_sections_3d, eigen_values, n_jobs):
+    """
+    Generates the actual tube mesh (vertices, faces, uv_coords) from the 3D cross-sections.
+    """
+    n_steps, n_seeds, resolution, num_dims = cross_sections_3d.shape
+    
+    total_vertices, triangles_per_seed = calculate_mesh_dimensions(n_steps, n_seeds, resolution)
+    total_faces = n_seeds * triangles_per_seed
+    
+    vertices = np.empty((total_vertices, num_dims))
+    faces_combined = np.empty((total_faces, 3), dtype=np.int32)
+    uv_coords = np.empty((total_vertices, 2))
+    
+    global_max_eigval = np.max(eigen_values) if eigen_values.size > 0 else 1
+
+    use_parallel = n_jobs != 1
+    if use_parallel:
+        try:
+            import multiprocessing as mp
+            ctx = mp.get_context('fork')
+            Pool = ctx.Pool
+        except (ImportError, ValueError, NotImplementedError):
+            use_parallel = False
+            print("Warning: multiprocessing with 'fork' context not available. Using sequential processing instead.")
+
+    if use_parallel:
+        with Pool(processes=n_jobs) as pool:
+            results = pool.starmap(
+                _process_single_seed_mesh,
+                [(cross_sections_3d, eigen_values, seed_idx, n_steps, resolution, global_max_eigval) for seed_idx in range(n_seeds)]
+            )
+        
+        vertex_idx = 0
+        face_idx = 0
+        for seed_idx, (seed_vertices, seed_faces, seed_uv_coords, seed_vertex_count) in enumerate(results):
+            seed_vertex_start = vertex_idx
+            
+            vertices[vertex_idx:vertex_idx + seed_vertex_count] = seed_vertices
+            uv_coords[vertex_idx:vertex_idx + seed_vertex_count] = seed_uv_coords
+            
+            faces_combined[face_idx:face_idx + seed_faces.shape[0]] = seed_faces + seed_vertex_start
+            
+            vertex_idx += seed_vertex_count
+            face_idx += seed_faces.shape[0]
+
+    else: # Sequential processing
+        vertex_idx = 0
+        face_idx = 0
+        for seed_idx in range(n_seeds):
+            seed_vertex_start = vertex_idx
+            
+            seed_ellipsoids = align_cross_sections(cross_sections_3d, seed_idx, n_steps, resolution)
+            eigen_values_for_seed = eigen_values[:, seed_idx, :]
+
+            current_seed_vertices, current_seed_uvs = _add_seed_vertices_and_uvs(seed_ellipsoids, eigen_values_for_seed, n_steps, resolution, global_max_eigval)
+            
+            current_seed_faces = _generate_seed_faces_logic(n_steps, resolution) + seed_vertex_start
+
+            vertices[vertex_idx : vertex_idx + current_seed_vertices.shape[0]] = current_seed_vertices
+            uv_coords[vertex_idx : vertex_idx + current_seed_uvs.shape[0]] = current_seed_uvs
+            faces_combined[face_idx : face_idx + current_seed_faces.shape[0]] = current_seed_faces
+
+            vertex_idx += current_seed_vertices.shape[0]
+            face_idx += current_seed_faces.shape[0]
+            
+    return vertices, faces_combined, uv_coords
