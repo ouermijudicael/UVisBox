@@ -71,7 +71,7 @@ def squid_glyph_3D(positions, ensemble_vectors, point_values=None, percentile=95
     mesh = squid_glyphs_3d_mesh(positions, stats, point_values, scale, resolution=10)
     
     # Stage 3: Render
-    plotter = visualize_squid_glyphs_3d(mesh, point_values, show_edges, glyph_color, ax=ax)
+    plotter = visualize_squid_glyphs_3d(mesh, show_edges=show_edges, glyph_color=glyph_color, ax=ax)
     
     return plotter, mesh['points'], mesh['polygons']
 

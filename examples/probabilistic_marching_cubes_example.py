@@ -114,7 +114,7 @@ plotter.add_mesh(iso_surface, color='lightblue', opacity=1)
 # Generate ensemble data with noise
 F = np.zeros((n_z, n_y, n_x, n_ens))
 for e in range(n_ens):
-    noise = np.random.normal(0, 0.01, (n_z, n_y, n_x))
+    noise = np.random.normal(0, 0.001, (n_z, n_y, n_x))
     F[:, :, :, e] = noise_less_F + noise
 
 # Compute probabilistic marching cubes
