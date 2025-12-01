@@ -3,44 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pyvista as pv
 
-
-def visualize_squid_glyphs_2d(mesh_2d, ax=None):
-    """
-    Render 2D squid glyph mesh with matplotlib.
-    
-    Parameters:
-    -----------
-    mesh_2d : dict
-        From squid_glyphs_2d_mesh()
-    ax : matplotlib.Axes, optional
-        Existing axis to draw on
-    
-    Returns:
-    --------
-    ax : matplotlib.Axes
-        The axis with drawn glyphs
-    """
-    points = mesh_2d['points']
-    polygons = mesh_2d['polygons']
-    
-    if ax is None:
-        fig, ax = plt.subplots(figsize=(10, 8))
-
-    tri_colors = np.ones((polygons.shape[0])) * 0.8
-    ax.tripcolor(points[:, 0], points[:, 1], polygons, facecolors=tri_colors, cmap='RdBu_r')
-   
-    return ax
-
-
-def visualize_squid_glyphs_3d(mesh_3d, point_values=None, show_edges=True, 
+def visualize_cone_glyphs(mesh_3d, point_values=None, show_edges=True, 
                           glyph_color='lightblue', cmap='RdBu_r', ax=None):
     """
-    Render 3D squid glyph mesh with pyvista.
+    Render 3D cone glyph mesh with pyvista.
     
     Parameters:
     -----------
     mesh_3d : dict
-        From squid_glyphs_3d_mesh()
+        From cone_glyphs_mesh()
     point_values : numpy.ndarray, optional
         Override mesh point_values for coloring
     show_edges : bool

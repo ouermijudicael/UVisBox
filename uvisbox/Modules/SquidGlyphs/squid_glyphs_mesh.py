@@ -193,7 +193,7 @@ def squid_glyphs_3d_mesh(positions, stats_3d, point_values=None, scale=0.5, reso
         pca_components, positions, vectors, spread_min_vectors, median_vectors,
         spread_max_vectors, scaler_values, glyph_types, scale, resolution, num_of_glyphs
     )
-    
+    print(f'Generated squid glyph mesh with {points.shape[0]} points and {polygons.shape[0]} polygons scalar values shape: {points_values.shape}')
     return {
         'points': points,
         'polygons': polygons,
