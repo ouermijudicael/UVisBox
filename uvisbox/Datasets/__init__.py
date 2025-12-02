@@ -1,6 +1,6 @@
 # Flow datasets
 from .flow2d import double_gyre
-from .flow3d import flowmap_3d
+from .flow3d import flowmap_3d, create_swirl_ensemble
 
 # Ensemble and uncertainty datasets
 from .ens_uv import load_data as load_uv_ensemble
@@ -20,5 +20,6 @@ __all__ = [
     'load_darcy_nn',
     'load_irma_tracks',
     'load_sst_data',
-    'load_era5_data'
+    'load_era5_data',
+    'create_swirl_ensemble'
 ]

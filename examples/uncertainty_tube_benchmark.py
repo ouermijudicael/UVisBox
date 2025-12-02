@@ -5,7 +5,7 @@ import multiprocessing
 
 from uvisbox.Datasets import flowmap_3d
 from uvisbox.Core.Interpolations import linear_interpolate
-from uvisbox.Modules.UncertaintyTube.uncertainty_tubes import uncertainty_tube_summary_statistics, uncertainty_tube_mesh # Updated imports
+from uvisbox.Modules.UncertaintyTube.uncertainty_tubes import uncertainty_tubes_summary_statistics, uncertainty_tubes_mesh # Updated imports
 
 def benchmark_uncertainty_tube(n_seeds=100, n_steps=100, n_jobs_list=[1, 4, 12], repeats=3):
     """
@@ -44,9 +44,9 @@ def benchmark_uncertainty_tube(n_seeds=100, n_steps=100, n_jobs_list=[1, 4, 12],
             
             start_time = time.perf_counter_ns()
             # Stage 1: Statistics
-            summary_statistics = uncertainty_tube_summary_statistics(trajectories, n_jobs=n_jobs)
+            summary_statistics = uncertainty_tubes_summary_statistics(trajectories, n_jobs=n_jobs)
             # Stage 2: Mesh Generation
-            mesh_data = uncertainty_tube_mesh(summary_statistics, n_jobs=n_jobs)
+            mesh_data = uncertainty_tubes_mesh(summary_statistics, n_jobs=n_jobs)
             end_time = time.perf_counter_ns()
             
             elapsed = (end_time - start_time)/1e9  # Convert to seconds

@@ -49,7 +49,7 @@ def _compute_eigen_info(point0, point1, points):
 
     return eigvals_proj[:2], eigvecs_proj[:, :2] # Return only the top 2 eigvals and their vectors
 
-def uncertainty_tube_summary_statistics(trajectories, n_jobs=1):
+def uncertainty_tubes_summary_statistics(trajectories, n_jobs=1):
     """
     Compute 3D uncertainty summary statistics along trajectory paths.
 
