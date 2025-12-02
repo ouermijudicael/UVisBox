@@ -79,7 +79,7 @@ def cone_glyphs_mesh(positions, stats_3d, point_values=None, scale=0.5, resoluti
             Rz[1][0] = np.sin(phi)
             Rz[1][1] = np.cos(phi)
             Rz[2][2] = 1
-            R = Rz @ Rx 
+            R = Rz @ Ry 
             ## mappoints to the position
             for i in range(resolution):
                 pt = np.dot(R, np.array([x[i], y[i], 0.0]))
