@@ -1,0 +1,174 @@
+{
+  "timestamp": "2026-01-02T00:20:04.823605+00:00",
+  "date": "2026-01-02",
+  "repository": "ouermijudicael/UVisBox",
+  "data": {
+    "views": {
+      "count": 1,
+      "uniques": 1,
+      "views": [
+        {
+          "timestamp": "2025-12-18T00:00:00+00:00",
+          "count": 1,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2025-12-19T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2025-12-20T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2025-12-21T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2025-12-22T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2025-12-23T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2025-12-24T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2025-12-25T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2025-12-26T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2025-12-27T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2025-12-28T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2025-12-29T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2025-12-30T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2025-12-31T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        }
+      ]
+    },
+    "clones": {
+      "count": 86,
+      "uniques": 47,
+      "clones": [
+        {
+          "timestamp": "2025-12-18T00:00:00+00:00",
+          "count": 4,
+          "uniques": 3
+        },
+        {
+          "timestamp": "2025-12-19T00:00:00+00:00",
+          "count": 9,
+          "uniques": 7
+        },
+        {
+          "timestamp": "2025-12-20T00:00:00+00:00",
+          "count": 6,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2025-12-21T00:00:00+00:00",
+          "count": 6,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2025-12-22T00:00:00+00:00",
+          "count": 4,
+          "uniques": 3
+        },
+        {
+          "timestamp": "2025-12-23T00:00:00+00:00",
+          "count": 7,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2025-12-24T00:00:00+00:00",
+          "count": 6,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2025-12-25T00:00:00+00:00",
+          "count": 6,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2025-12-26T00:00:00+00:00",
+          "count": 7,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2025-12-27T00:00:00+00:00",
+          "count": 5,
+          "uniques": 3
+        },
+        {
+          "timestamp": "2025-12-28T00:00:00+00:00",
+          "count": 9,
+          "uniques": 7
+        },
+        {
+          "timestamp": "2025-12-29T00:00:00+00:00",
+          "count": 6,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2025-12-30T00:00:00+00:00",
+          "count": 7,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2025-12-31T00:00:00+00:00",
+          "count": 4,
+          "uniques": 3
+        }
+      ]
+    },
+    "referrers": [
+      {
+        "referrer": "github.com",
+        "count": 1,
+        "uniques": 1
+      }
+    ],
+    "popular_paths": [
+      {
+        "path": "/ouermijudicael/UVisBox",
+        "title": "ouermijudicael/UVisBox: UVisBox",
+        "count": 1,
+        "uniques": 1
+      }
+    ]
+  }
+}
