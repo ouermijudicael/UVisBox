@@ -1,0 +1,186 @@
+{
+  "timestamp": "2026-02-09T00:26:00.641727+00:00",
+  "date": "2026-02-09",
+  "repository": "ouermijudicael/UVisBox",
+  "data": {
+    "views": {
+      "count": 5,
+      "uniques": 3,
+      "views": [
+        {
+          "timestamp": "2026-01-25T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-01-26T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-01-27T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-01-28T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-01-29T00:00:00+00:00",
+          "count": 1,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2026-01-30T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-01-31T00:00:00+00:00",
+          "count": 1,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2026-02-01T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-02-02T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-02-03T00:00:00+00:00",
+          "count": 3,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2026-02-04T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-02-05T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-02-06T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-02-07T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        }
+      ]
+    },
+    "clones": {
+      "count": 108,
+      "uniques": 69,
+      "clones": [
+        {
+          "timestamp": "2026-01-25T00:00:00+00:00",
+          "count": 7,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-01-26T00:00:00+00:00",
+          "count": 10,
+          "uniques": 8
+        },
+        {
+          "timestamp": "2026-01-27T00:00:00+00:00",
+          "count": 9,
+          "uniques": 6
+        },
+        {
+          "timestamp": "2026-01-28T00:00:00+00:00",
+          "count": 6,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-01-29T00:00:00+00:00",
+          "count": 5,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2026-01-30T00:00:00+00:00",
+          "count": 8,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-01-31T00:00:00+00:00",
+          "count": 8,
+          "uniques": 6
+        },
+        {
+          "timestamp": "2026-02-01T00:00:00+00:00",
+          "count": 8,
+          "uniques": 6
+        },
+        {
+          "timestamp": "2026-02-02T00:00:00+00:00",
+          "count": 6,
+          "uniques": 6
+        },
+        {
+          "timestamp": "2026-02-03T00:00:00+00:00",
+          "count": 6,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2026-02-04T00:00:00+00:00",
+          "count": 10,
+          "uniques": 8
+        },
+        {
+          "timestamp": "2026-02-05T00:00:00+00:00",
+          "count": 9,
+          "uniques": 7
+        },
+        {
+          "timestamp": "2026-02-06T00:00:00+00:00",
+          "count": 7,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-02-07T00:00:00+00:00",
+          "count": 9,
+          "uniques": 7
+        }
+      ]
+    },
+    "referrers": [
+      {
+        "referrer": "github.com",
+        "count": 1,
+        "uniques": 1
+      }
+    ],
+    "popular_paths": [
+      {
+        "path": "/ouermijudicael/UVisBox",
+        "title": "GitHub - ouermijudicael/UVisBox: UVisBox",
+        "count": 3,
+        "uniques": 3
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/docs",
+        "title": "UVisBox/docs at main \u00b7 ouermijudicael/UVisBox \u00b7 GitHub",
+        "count": 1,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/uvisbox/Modules/ConeGlyphs",
+        "title": "UVisBox/uvisbox/Modules/ConeGlyphs at main \u00b7 ouermijudicael/UVisBox \u00b7 GitHub",
+        "count": 1,
+        "uniques": 1
+      }
+    ]
+  }
+}
