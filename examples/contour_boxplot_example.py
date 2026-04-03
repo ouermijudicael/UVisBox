@@ -91,7 +91,6 @@ Calculate and plot the contour boxplot using the new interface
 """
 
 # import necessary libraries
-from flask.config import T
 import numpy as np
 import matplotlib.pyplot as plt
 from uvisbox.Modules.ContourBoxplot import contour_boxplot
