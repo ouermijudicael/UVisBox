@@ -36,25 +36,25 @@ class TestProbabilisticMarchingSquaresPipeline:
         y_dim, x_dim, n_ensemble = 20, 30, 50
         ensemble = np.random.randn(y_dim, x_dim, n_ensemble)
         isovalue = 0.0
-        
+
         stats = probabilistic_marching_squares_summary_statistics(ensemble, isovalue)
         mesh_data = probabilistic_marching_squares_mesh(stats)
-        
-        assert mesh_data.shape == (y_dim - 1, x_dim - 1)
+
+        assert mesh_data['level_crossing_probability'].shape == (y_dim - 1, x_dim - 1)
         plt.close('all')
-    
+
     def test_pipeline_preserves_data_integrity(self):
         """Test that data is preserved through the pipeline."""
         ensemble = np.random.randn(20, 30, 50)
         isovalue = 0.0
-        
+
         stats = probabilistic_marching_squares_summary_statistics(ensemble, isovalue)
         prob_from_stats = stats['level_crossing_probability']
-        
+
         mesh_data = probabilistic_marching_squares_mesh(stats)
-        
+
         # Verify data integrity
-        np.testing.assert_array_equal(mesh_data, prob_from_stats)
+        np.testing.assert_array_equal(mesh_data['level_crossing_probability'], prob_from_stats)
         plt.close('all')
     
     def test_pipeline_with_different_isovalues(self):
@@ -80,7 +80,7 @@ class TestProbabilisticMarchingSquaresPipeline:
             ax = visualize_probabilistic_marching_squares(mesh_data)
             
             assert isinstance(ax, Axes)
-            assert mesh_data.shape == (y_dim - 1, x_dim - 1)
+            assert mesh_data['level_crossing_probability'].shape == (y_dim - 1, x_dim - 1)
             plt.close('all')
 
 
