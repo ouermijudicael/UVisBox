@@ -130,13 +130,9 @@ def _compute_depth_for_image_optimized(args):
             else:
                 depth += _portion_subset(intersection, target, cardA_intersection) + _portion_subset(target, union, cardA_target)
         else:
-            # Early termination: skip if intersection is empty
-            if not np.any(intersection):
-                continue
-            
             if _epsilon_subset(intersection, target, eps) and _epsilon_subset(target, union, eps, cardA_target):
                 depth += 1
-    
+
     return (tdx, depth)
 
 def _compute_depth_for_image(args):
@@ -167,13 +163,9 @@ def _compute_depth_for_image(args):
             else:
                 depth += _portion_subset(intersection, target, cardA_intersection) + _portion_subset(target, union, cardA_target)
         else:
-            # Early termination: skip if intersection is empty
-            if not np.any(intersection):
-                continue
-            
             if _epsilon_subset(intersection, target, eps) and _epsilon_subset(target, union, eps, cardA_target):
                 depth += 1
-    
+
     return (tdx, depth)
 
 def contour_banddepth(data, combination = None, allow_portion=False, eps = 0, workers=12):
@@ -263,10 +255,6 @@ def contour_banddepth(data, combination = None, allow_portion=False, eps = 0, wo
                     else:
                         depths[tdx] += _portion_subset(intersection, target, cardA_intersection) + _portion_subset(target, union, cardA_target)
                 else:
-                    # Early termination: skip if intersection is empty
-                    if not np.any(intersection):
-                        continue
-                    
                     if _epsilon_subset(intersection, target, eps) and _epsilon_subset(target, union, eps, cardA_target):
                         depths[tdx] += 1
     else:
