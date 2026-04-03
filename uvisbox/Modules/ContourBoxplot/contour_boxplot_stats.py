@@ -3,7 +3,7 @@ from uvisbox.Core.BandDepths.contour_banddepth import contour_banddepth
 from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 
 
-def contour_boxplot_summary_statistics(ensemble_images, isovalue, boxplot_style=None, workers=11):
+def contour_boxplot_summary_statistics(ensemble_images, isovalue, boxplot_style=None, eps=0, workers=11):
     """
     Compute summary statistics for contour boxplot from ensemble scalar fields.
     
@@ -19,6 +19,10 @@ def contour_boxplot_summary_statistics(ensemble_images, isovalue, boxplot_style=
         values >= isovalue are set to 0 (outside).
     boxplot_style : BoxplotStyleConfig, optional
         Configuration for percentiles and outlier detection. If None, uses default configuration.
+    eps : float, optional
+        Epsilon tolerance for subset checks in band depth computation. With eps=0 (default),
+        exact pixel-level containment is required, which can be too strict for continuously-varying
+        rasterized contours. Values like 0.01-0.05 allow approximate containment.
     workers : int, optional
         Number of parallel workers for band depth computation. Default is 11.
     
@@ -60,7 +64,7 @@ def contour_boxplot_summary_statistics(ensemble_images, isovalue, boxplot_style=
     binary_images = (ensemble_images < isovalue).astype(np.bool_)
     
     # Compute band depths
-    depths = contour_banddepth(binary_images, workers=workers)
+    depths = contour_banddepth(binary_images, eps=eps, workers=workers)
     
     # Sort by depth in descending order (highest depth first = median)
     sorted_indices = np.argsort(depths)[::-1]

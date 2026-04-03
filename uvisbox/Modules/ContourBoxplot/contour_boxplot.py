@@ -6,7 +6,7 @@ from .contour_boxplot_vis import visualize_contour_boxplot
 from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 
 
-def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, workers=11,
+def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, eps=0, workers=11,
                     x_coords=None, y_coords=None):
     """
     Create a contour boxplot visualization from an ensemble of scalar fields.
@@ -26,6 +26,10 @@ def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, work
         The percentile_colormap is used for the band sum visualization.
     ax : matplotlib.axes.Axes, optional
         Matplotlib Axes object to plot on. If None, a new figure and axes will be created.
+    eps : float, optional
+        Epsilon tolerance for subset checks in band depth computation. With eps=0 (default),
+        exact pixel-level containment is required, which can be too strict for continuously-varying
+        rasterized contours. Values like 0.01-0.05 allow approximate containment.
     workers : int, optional
         Number of parallel workers for band depth computation. Default is 11.
     x_coords : np.ndarray, optional
@@ -72,6 +76,7 @@ def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, work
         ensemble_copy,
         isovalue,
         boxplot_style=boxplot_style,
+        eps=eps,
         workers=workers
     )
     
