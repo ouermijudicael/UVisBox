@@ -119,14 +119,15 @@ def _visualize_curve_boxplot_2d_matplotlib(mesh_data, boxplot_style, ax=None):
     sorted_percentile_indices = np.argsort(percentiles)[::-1]
     sorted_percentiles = [percentiles[i] for i in sorted_percentile_indices]
     sorted_colors = [colors[i] for i in sorted_percentile_indices]
-    
+
     # Plot each percentile band from largest to smallest
-    for percentile, color in zip(sorted_percentiles, sorted_colors):
-        mesh_key = f'{int(percentile)}_percentile_mesh'
-        if mesh_key in mesh_data['percentile_meshes']:
-            points, triangles = mesh_data['percentile_meshes'][mesh_key]
-            _plot_band_mesh_2d(points, triangles, ax=ax, color=color, alpha=1.0)
-    
+    if boxplot_style.show_bands:
+        for percentile, color in zip(sorted_percentiles, sorted_colors):
+            mesh_key = f'{int(percentile)}_percentile_mesh'
+            if mesh_key in mesh_data['percentile_meshes']:
+                points, triangles = mesh_data['percentile_meshes'][mesh_key]
+                _plot_band_mesh_2d(points, triangles, ax=ax, color=color, alpha=1.0)
+
     # Plot outliers
     if boxplot_style.show_outliers and mesh_data['outliers'].shape[0] > 0:
         outliers = mesh_data['outliers']
@@ -186,12 +187,13 @@ def _visualize_curve_boxplot_3d_matplotlib(mesh_data, boxplot_style, ax=None):
     sorted_colors = [colors[i] for i in sorted_percentile_indices]
     
     # Plot each percentile band
-    for percentile, color in zip(sorted_percentiles, sorted_colors):
-        mesh_key = f'{int(percentile)}_percentile_mesh'
-        if mesh_key in mesh_data['percentile_meshes']:
-            points, triangles = mesh_data['percentile_meshes'][mesh_key]
-            _plot_band_mesh_3d(points, triangles, ax=ax, color=color, alpha=1.0)
-    
+    if boxplot_style.show_bands:
+        for percentile, color in zip(sorted_percentiles, sorted_colors):
+            mesh_key = f'{int(percentile)}_percentile_mesh'
+            if mesh_key in mesh_data['percentile_meshes']:
+                points, triangles = mesh_data['percentile_meshes'][mesh_key]
+                _plot_band_mesh_3d(points, triangles, ax=ax, color=color, alpha=1.0)
+
     # Plot outliers
     if boxplot_style.show_outliers and mesh_data['outliers'].shape[0] > 0:
         outliers = mesh_data['outliers']
@@ -250,23 +252,24 @@ def _visualize_curve_boxplot_3d_pyvista(mesh_data, boxplot_style, ax):
     sorted_colors = [colors[i] for i in sorted_percentile_indices]
     
     # Plot each percentile band with opacity based on percentile
-    for percentile, color in zip(sorted_percentiles, sorted_colors):
-        mesh_key = f'{int(percentile)}_percentile_mesh'
-        if mesh_key in mesh_data['percentile_meshes']:
-            points, triangles = mesh_data['percentile_meshes'][mesh_key]
-            
-            # Calculate opacity: (1 - (percentile / 100))^2
-            opacity = (1 - (percentile / 100)) ** 2
-            
-            # Create PyVista mesh
-            faces = np.hstack([np.full((triangles.shape[0], 1), 3), triangles]).astype(int)
-            poly_mesh = pv.PolyData(points, faces)
-            
-            # Add mesh to plotter with label
-            ax.add_mesh(poly_mesh, color=color, opacity=opacity, 
-                           smooth_shading=True, show_edges=False,
-                           label=f'{int(percentile)}th percentile')
-    
+    if boxplot_style.show_bands:
+        for percentile, color in zip(sorted_percentiles, sorted_colors):
+            mesh_key = f'{int(percentile)}_percentile_mesh'
+            if mesh_key in mesh_data['percentile_meshes']:
+                points, triangles = mesh_data['percentile_meshes'][mesh_key]
+
+                # Calculate opacity: (1 - (percentile / 100))^2
+                opacity = (1 - (percentile / 100)) ** 2
+
+                # Create PyVista mesh
+                faces = np.hstack([np.full((triangles.shape[0], 1), 3), triangles]).astype(int)
+                poly_mesh = pv.PolyData(points, faces)
+
+                # Add mesh to plotter with label
+                ax.add_mesh(poly_mesh, color=color, opacity=opacity,
+                               smooth_shading=True, show_edges=False,
+                               label=f'{int(percentile)}th percentile')
+
     # Plot outliers
     if boxplot_style.show_outliers and mesh_data['outliers'].shape[0] > 0:
         outliers = mesh_data['outliers']

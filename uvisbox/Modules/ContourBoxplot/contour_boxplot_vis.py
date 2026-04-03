@@ -49,32 +49,42 @@ def visualize_contour_boxplot(mesh_data, boxplot_style=None, ax=None):
     percentile_bands_image = mesh_data['percentile_bands_image']
     median = mesh_data['median']
     outliers = mesh_data['outliers']
-    
+    extent = mesh_data.get('extent')
+    x_coords = mesh_data.get('x_coords')
+    y_coords = mesh_data.get('y_coords')
+
     # Plot percentile bands using imshow
-    # vmin=0, vmax=1 since values are percentile/100
-    im = ax.imshow(
-        percentile_bands_image,
-        cmap=boxplot_style.percentile_colormap,
-        origin='lower',
-        interpolation='nearest',
-        vmin=0,
-        vmax=1
-    )
-    
-    # Add colorbar with percentile scale (0-100)
-    cbar = plt.colorbar(im, ax=ax, label='Percentile')
-    cbar.ax.set_ylabel('Percentile', rotation=270, labelpad=15)
-    # Set colorbar to show 0-100 scale
-    cbar.set_ticks([0, 0.25, 0.5, 0.75, 1.0])
-    cbar.set_ticklabels(['0', '25', '50', '75', '100'])
+    if boxplot_style.show_bands:
+        # vmin=0, vmax=1 since values are percentile/100
+        imshow_kwargs = dict(
+            cmap=boxplot_style.percentile_colormap,
+            origin='lower',
+            interpolation='nearest',
+            vmin=0,
+            vmax=1,
+        )
+        if extent is not None:
+            imshow_kwargs['extent'] = extent
+        im = ax.imshow(percentile_bands_image, **imshow_kwargs)
+
+        # Add colorbar with percentile scale (0-100)
+        cbar = plt.colorbar(im, ax=ax, label='Percentile')
+        cbar.ax.set_ylabel('Percentile', rotation=270, labelpad=15)
+        # Set colorbar to show 0-100 scale
+        cbar.set_ticks([0, 0.25, 0.5, 0.75, 1.0])
+        cbar.set_ticklabels(['0', '25', '50', '75', '100'])
     
     # Track legend handles and labels
     legend_handles = []
     legend_labels = []
     
+    # Build positional args for contour: (X, Y, Z) if coordinates provided, else (Z,)
+    contour_pos_args = (x_coords, y_coords) if (x_coords is not None and y_coords is not None) else ()
+
     # Plot median contour at isovalue 0.5
     if boxplot_style.show_median:
         contour_set = ax.contour(
+            *contour_pos_args,
             median,
             levels=[0.5],
             colors=boxplot_style.median_color,
@@ -93,6 +103,7 @@ def visualize_contour_boxplot(mesh_data, boxplot_style=None, ax=None):
         outlier_added = False
         for outlier in outliers:
             contour_set = ax.contour(
+                *contour_pos_args,
                 outlier,
                 levels=[0.5],
                 colors=boxplot_style.outliers_color,

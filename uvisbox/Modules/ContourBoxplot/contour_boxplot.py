@@ -6,7 +6,8 @@ from .contour_boxplot_vis import visualize_contour_boxplot
 from uvisbox.Core.CommonInterface import BoxplotStyleConfig
 
 
-def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, workers=11):
+def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, workers=11,
+                    x_coords=None, y_coords=None):
     """
     Create a contour boxplot visualization from an ensemble of scalar fields.
     
@@ -16,8 +17,7 @@ def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, work
     Parameters:
     -----------
     ensemble_images : np.ndarray
-        3D or 4D array containing the ensemble scalar fields. 
-        Can be shape (n_ensemble, y_dim, x_dim) or will be rearranged to this format.
+        3D array of shape (n_ensemble, y_dim, x_dim) containing the ensemble scalar fields.
     isovalue : float
         Threshold value for creating binary images. Pixels with values < isovalue are set to 1.
     boxplot_style : BoxplotStyleConfig, optional
@@ -27,8 +27,14 @@ def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, work
     ax : matplotlib.axes.Axes, optional
         Matplotlib Axes object to plot on. If None, a new figure and axes will be created.
     workers : int, optional
-        Number of parallel workers for band depth computation. Default is 12.
-    
+        Number of parallel workers for band depth computation. Default is 11.
+    x_coords : np.ndarray, optional
+        1D array of x-axis coordinates defining the spatial domain.
+        Length must match the image width. If None, pixel indices are used.
+    y_coords : np.ndarray, optional
+        1D array of y-axis coordinates defining the spatial domain.
+        Length must match the image height. If None, pixel indices are used.
+
     Returns:
     --------
     ax : matplotlib.axes.Axes
@@ -56,17 +62,9 @@ def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, work
     
     # Make a copy and ensure correct shape (n_ensemble, y_dim, x_dim)
     ensemble_copy = np.array(ensemble_images, copy=True)
-    
-    # Rearrange to (n_ensemble, y_dim, x_dim) if needed
-    if ensemble_copy.ndim == 3:
-        # Assume input is already (n_ensemble, y, x) or needs rearranging
-        # Check if first dimension is likely the ensemble dimension
-        if ensemble_copy.shape[0] > ensemble_copy.shape[2]:
-            # Likely (y, x, n_ensemble) -> transpose to (n_ensemble, y, x)
-            ensemble_copy = np.transpose(ensemble_copy, (2, 0, 1))
-    elif ensemble_copy.ndim == 4:
-        # Handle 4D case if needed (e.g., time, ensemble, y, x)
-        raise ValueError("4D arrays not yet supported. Please provide 3D array of shape (n_ensemble, y, x)")
+
+    if ensemble_copy.ndim != 3:
+        raise ValueError(f"ensemble_images must be a 3D array of shape (n_ensemble, y, x). Got {ensemble_copy.ndim}D")
     
     # Pipeline: Stats -> Mesh -> Vis
     # Step 1: Compute summary statistics
@@ -78,7 +76,7 @@ def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, work
     )
     
     # Step 2: Process through mesh (aggregate bands)
-    mesh_data = contour_boxplot_mesh(stats)
+    mesh_data = contour_boxplot_mesh(stats, x_coords=x_coords, y_coords=y_coords)
     
     # Step 3: Visualize
     ax = visualize_contour_boxplot(

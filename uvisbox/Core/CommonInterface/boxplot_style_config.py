@@ -22,6 +22,9 @@ class BoxplotStyleConfig:
         or a matplotlib Colormap object. Percentiles are mapped to [0, 1] range
         (percentile/100) to sample colors from the colormap (default: 'viridis').
     
+    show_bands : bool
+        Whether to display the percentile bands (default: True).
+
     show_median : bool
         Whether to display the median curve/contour (default: True).
     median_color : str
@@ -85,6 +88,9 @@ class BoxplotStyleConfig:
     percentiles: list = field(default_factory=lambda: [25, 50, 75, 90])
     percentile_colormap: str = 'viridis'
     
+    # Band configuration
+    show_bands: bool = True
+
     # Median configuration
     show_median: bool = True
     median_color: str = 'red'

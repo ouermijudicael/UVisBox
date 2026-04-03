@@ -165,11 +165,12 @@ def visualize_functional_boxplot(mesh_data, vmin=0, vmax=1, boxplot_style=None, 
     sorted_colors = [colors[i] for i in sorted_percentile_indices]
 
     # Plot each percentile band from largest to smallest
-    for percentile, color in zip(sorted_percentiles, sorted_colors):
-        band_key = f'{int(percentile)}_percentile_band'
-        if band_key in mesh_data['percentile_bands']:
-            bottom, top = mesh_data['percentile_bands'][band_key]
-            plot_band(bottom, top, vmin=vmin, vmax=vmax, ax=ax, color=color, alpha=1.0)
+    if boxplot_style.show_bands:
+        for percentile, color in zip(sorted_percentiles, sorted_colors):
+            band_key = f'{int(percentile)}_percentile_band'
+            if band_key in mesh_data['percentile_bands']:
+                bottom, top = mesh_data['percentile_bands'][band_key]
+                plot_band(bottom, top, vmin=vmin, vmax=vmax, ax=ax, color=color, alpha=1.0)
 
     # Setup x-axis for curve plotting
     n_points = mesh_data['median'].shape[0]
