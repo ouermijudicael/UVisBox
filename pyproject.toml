@@ -18,7 +18,8 @@ dependencies = [
     "pyvista (>=0.46.3,<0.47.0)",
     "basemap (>=2.0.0,<2.1.0)",
     "xarray (>=2026.2.0,<2027.0.0)",
-    "dsapi (>=0.6b0,<0.7)"
+    "dsapi (>=0.6b0,<0.7)",
+    "cartopy (>=0.25.0,<0.26.0)"
 ]
 
 [build-system]
