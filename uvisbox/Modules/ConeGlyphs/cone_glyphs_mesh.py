@@ -1,6 +1,25 @@
 import numpy as np
 
 
+def _angular_distance_spherical(vect1, vect2):
+    """Compute angular distance between two spherical vectors."""
+    theta1 = vect1[1]
+    phi1 = vect1[2]
+    theta2 = vect2[1]
+    phi2 = vect2[2]
+    dphi = phi1 - phi2
+
+    cos_a = (np.sin(theta1)*np.sin(theta2)*np.cos(dphi)
+             + np.cos(theta1)*np.cos(theta2))
+
+    sin2_a = ((np.sin(theta1)*np.sin(theta2)*np.sin(dphi))**2
+              + (np.sin(theta1)*np.cos(theta2)
+                 - np.cos(theta1)*np.sin(theta2)*np.cos(dphi))**2)
+
+    sin_a = np.sqrt(sin2_a)
+
+    return np.arctan2(sin_a, cos_a)
+
 def cone_glyphs_mesh(positions, stats_3d, point_values=None, scale=0.5, resolution=10):
     """
     Build 3D cone glyph mesh from statistics.
@@ -49,8 +68,8 @@ def cone_glyphs_mesh(positions, stats_3d, point_values=None, scale=0.5, resoluti
             median_vector = median_vectors[i_p]
             max_vector = max_vectors[i_p]
 
-            
-            r0 = median_vector[0]*np.tan(max_vector[1]*0.5)
+            angle_min_max_vecs = np.absolute(_angular_distance_spherical(min_vector, max_vector))
+            r0 = median_vector[0]*np.tan(angle_min_max_vecs*0.5)
             r0 = np.maximum(r0, 0.01*max_vector[0])
             phi_vals = np.linspace(0, 2*np.pi, resolution)
             x = np.cos(phi_vals)* r0

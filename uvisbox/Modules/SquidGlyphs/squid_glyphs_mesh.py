@@ -3,6 +3,25 @@
 import numpy as np
 
 
+def _angular_distance_spherical(vect1, vect2):
+    """Compute angular distance between two spherical vectors."""
+    theta1 = vect1[1]
+    phi1 = vect1[2]
+    theta2 = vect2[1]
+    phi2 = vect2[2]
+    dphi = phi1 - phi2
+
+    cos_a = (np.sin(theta1)*np.sin(theta2)*np.cos(dphi)
+             + np.cos(theta1)*np.cos(theta2))
+
+    sin2_a = ((np.sin(theta1)*np.sin(theta2)*np.sin(dphi))**2
+              + (np.sin(theta1)*np.cos(theta2)
+                 - np.cos(theta1)*np.sin(theta2)*np.cos(dphi))**2)
+
+    sin_a = np.sqrt(sin2_a)
+
+    return np.arctan2(sin_a, cos_a)
+
 def _rotate_point_2d(pt, angle):
     """Rotate a 2D point by given angle."""
     return np.array([
@@ -365,7 +384,13 @@ def squid_glyphs_meshing_3D(pca_components, positions, vectors, spread_min_vecto
         R = _create_rotation_matrix(median_vector)
         
         # Base radius (at max_vector magnitude)
-        r0_base = np.maximum(max_vector[0] * np.tan(max_vector[1] * 0.5), 0.01 * max_vector[0])
+        angle_min_max_vecs = np.absolute(_angular_distance_spherical(min_vector, max_vector))
+        print(f"Glyph {i_p}: delta_theta = {angle_min_max_vecs} max_vector[1]={max_vector[1]}, min_vector[1]={min_vector[1]}")
+        print(f'min_vector={min_vector}')
+        print(f'median_vector={median_vector}')
+        print(f'max_vector={max_vector}')
+              
+        r0_base = np.maximum(max_vector[0] * np.tan(angle_min_max_vecs * 0.5), 0.001 * max_vector[0])
         r1_base = r0_base * elipse_scale
         x_base, y_base = _compute_superellipse_profile(r0_base, r1_base, angle, resolution)
         
@@ -392,7 +417,7 @@ def squid_glyphs_meshing_3D(pca_components, positions, vectors, spread_min_vecto
         polygons_id = _triangulate_disk(polygons, polygons_id, body_top_center_id, body_top_ring_id, resolution)
         
         # 3. SHAFT BOTTOM (narrow at shoulder)
-        shaft_base_r0 = np.maximum(min_vector[0] * np.tan(np.absolute(max_vector[1]) * 0.5), 0.01 * min_vector[0])
+        shaft_base_r0 = np.maximum(min_vector[0] * np.tan(np.absolute(angle_min_max_vecs) * 0.5), 0.001 * min_vector[0])
         shaft_base_r1 = shaft_base_r0 * elipse_scale
         x_shaft_base, y_shaft_base = _compute_superellipse_profile(shaft_base_r0, shaft_base_r1, angle, resolution)
         
@@ -401,7 +426,7 @@ def squid_glyphs_meshing_3D(pca_components, positions, vectors, spread_min_vecto
                                      R, position, scale, scaler_value, resolution)
         
         # 4. SHAFT TOP (at body_ratio * max_mag)
-        shaft_top_r0 = np.maximum(ibody_ratio * max_vector[0] * np.tan(np.absolute(max_vector[1]) * 0.5), 0.01 * ibody_ratio * max_vector[0])
+        shaft_top_r0 = np.maximum(ibody_ratio * max_vector[0] * np.tan(np.absolute(angle_min_max_vecs) * 0.5), 0.001 * ibody_ratio * max_vector[0])
         shaft_top_r1 = shaft_top_r0 * elipse_scale
         x_shaft_top, y_shaft_top = _compute_superellipse_profile(shaft_top_r0, shaft_top_r1, angle, resolution)
         
