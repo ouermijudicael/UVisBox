@@ -1,4 +1,4 @@
-name: uvisbox
+name: tmp5_uvisbox
 channels:
   - conda-forge
   - defaults
@@ -19,9 +19,9 @@ dependencies:
   - jupyterlab
   - jupyter-server-proxy
   - nest-asyncio2
-  # - basemap >=2.0.0,<2.1.0
+  - basemap >=2.0.0,<2.1.0
   - xarray >=2026.2.0,<2027.0.0
-  - cartopy >=0.25.0,<0.26.0
+  # - cartopy >=0.25.0,<0.26.0
   - numba >=0.62.1
   - joblib >=1.5.2
   - pip
