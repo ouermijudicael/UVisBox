@@ -1,0 +1,248 @@
+{
+  "timestamp": "2026-04-24T00:35:42.492605+00:00",
+  "date": "2026-04-24",
+  "repository": "ouermijudicael/UVisBox",
+  "data": {
+    "views": {
+      "count": 65,
+      "uniques": 20,
+      "views": [
+        {
+          "timestamp": "2026-04-09T00:00:00+00:00",
+          "count": 2,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2026-04-10T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-04-11T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-04-12T00:00:00+00:00",
+          "count": 6,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2026-04-13T00:00:00+00:00",
+          "count": 2,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2026-04-14T00:00:00+00:00",
+          "count": 1,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2026-04-15T00:00:00+00:00",
+          "count": 5,
+          "uniques": 2
+        },
+        {
+          "timestamp": "2026-04-16T00:00:00+00:00",
+          "count": 13,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2026-04-17T00:00:00+00:00",
+          "count": 4,
+          "uniques": 3
+        },
+        {
+          "timestamp": "2026-04-18T00:00:00+00:00",
+          "count": 6,
+          "uniques": 3
+        },
+        {
+          "timestamp": "2026-04-19T00:00:00+00:00",
+          "count": 5,
+          "uniques": 2
+        },
+        {
+          "timestamp": "2026-04-20T00:00:00+00:00",
+          "count": 14,
+          "uniques": 8
+        },
+        {
+          "timestamp": "2026-04-21T00:00:00+00:00",
+          "count": 5,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-04-22T00:00:00+00:00",
+          "count": 2,
+          "uniques": 2
+        }
+      ]
+    },
+    "clones": {
+      "count": 328,
+      "uniques": 180,
+      "clones": [
+        {
+          "timestamp": "2026-04-09T00:00:00+00:00",
+          "count": 13,
+          "uniques": 8
+        },
+        {
+          "timestamp": "2026-04-10T00:00:00+00:00",
+          "count": 19,
+          "uniques": 10
+        },
+        {
+          "timestamp": "2026-04-11T00:00:00+00:00",
+          "count": 14,
+          "uniques": 10
+        },
+        {
+          "timestamp": "2026-04-12T00:00:00+00:00",
+          "count": 6,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-04-13T00:00:00+00:00",
+          "count": 10,
+          "uniques": 7
+        },
+        {
+          "timestamp": "2026-04-14T00:00:00+00:00",
+          "count": 19,
+          "uniques": 12
+        },
+        {
+          "timestamp": "2026-04-15T00:00:00+00:00",
+          "count": 8,
+          "uniques": 6
+        },
+        {
+          "timestamp": "2026-04-16T00:00:00+00:00",
+          "count": 14,
+          "uniques": 8
+        },
+        {
+          "timestamp": "2026-04-17T00:00:00+00:00",
+          "count": 17,
+          "uniques": 10
+        },
+        {
+          "timestamp": "2026-04-18T00:00:00+00:00",
+          "count": 15,
+          "uniques": 8
+        },
+        {
+          "timestamp": "2026-04-19T00:00:00+00:00",
+          "count": 39,
+          "uniques": 17
+        },
+        {
+          "timestamp": "2026-04-20T00:00:00+00:00",
+          "count": 65,
+          "uniques": 35
+        },
+        {
+          "timestamp": "2026-04-21T00:00:00+00:00",
+          "count": 41,
+          "uniques": 36
+        },
+        {
+          "timestamp": "2026-04-22T00:00:00+00:00",
+          "count": 48,
+          "uniques": 32
+        }
+      ]
+    },
+    "referrers": [
+      {
+        "referrer": "github.com",
+        "count": 8,
+        "uniques": 2
+      },
+      {
+        "referrer": "my.eng.utah.edu",
+        "count": 2,
+        "uniques": 2
+      },
+      {
+        "referrer": "ouermijudicael.github.io",
+        "count": 2,
+        "uniques": 2
+      },
+      {
+        "referrer": "Google",
+        "count": 1,
+        "uniques": 1
+      },
+      {
+        "referrer": "statics.teams.cdn.office.net",
+        "count": 1,
+        "uniques": 1
+      }
+    ],
+    "popular_paths": [
+      {
+        "path": "/ouermijudicael/UVisBox",
+        "title": "Overview",
+        "count": 35,
+        "uniques": 20
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main",
+        "title": "/tree/main",
+        "count": 4,
+        "uniques": 3
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/examples",
+        "title": "/tree/main/examples",
+        "count": 4,
+        "uniques": 2
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/probabilistic_marching_cubes_example.py",
+        "title": "/blob/main/examples/probabilistic_marching_cubes_example.py",
+        "count": 4,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/uvisbox",
+        "title": "/tree/main/uvisbox",
+        "count": 3,
+        "uniques": 2
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/curve_boxplot_example.py",
+        "title": "/blob/main/examples/curve_boxplot_example.py",
+        "count": 3,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/commits",
+        "title": "/commits",
+        "count": 3,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/probabilistic_marching_cubes_example.ipynb",
+        "title": "/blob/main/examples/probabilistic_marching_cubes_example.ipynb",
+        "count": 2,
+        "uniques": 2
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/contour_boxplot_example.py",
+        "title": "/blob/main/examples/contour_boxplot_example.py",
+        "count": 2,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/traffic_data",
+        "title": "/tree/traffic_data",
+        "count": 2,
+        "uniques": 1
+      }
+    ]
+  }
+}
