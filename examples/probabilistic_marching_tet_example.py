@@ -105,12 +105,12 @@ points = np.c_[X.ravel(), Y.ravel(), Z.ravel()]
 pv_points= pv.PolyData(points)
 grid = pv_points.delaunay_3d(offset=0.1)
 # extract the tetrahedra
-tetrahedra = grid.cells.reshape(-1, 5)[:, 1:]   
+tetrahedra_reshaped = grid.cells.reshape(-1, 5)[:, 1:]   
 edges = grid.extract_all_edges()
 # edges.plot(line_width=1, color='k')
-cell_types = np.full(tetrahedra.shape[0], pv.CellType.TETRA)
-tetrahedra = np.hstack((np.full((tetrahedra.shape[0], 1), 4), tetrahedra))
-
+cell_types = np.full(tetrahedra_reshaped.shape[0], pv.CellType.TETRA)
+# append a column of 4s to the tetrahedral mesh to indicate that each cell is a tetrahedron
+tetrahedra = np.hstack((np.full((tetrahedra_reshaped.shape[0], 1), 4), tetrahedra_reshaped))
 new_grid = pv.UnstructuredGrid(tetrahedra, cell_types, points)  
 new_grid.point_data["values"] = noise_less_F.flatten(order='F')
 isovalue = 0.0
@@ -124,11 +124,10 @@ plotter.subplot(0, 0)
 plotter.add_text("Deterministic Isosurface", font_size=12)
 plotter.add_mesh(iso_surface, color='lightblue', opacity=1)
 
-
 F_reshaped = F.reshape(-1, n_ens)   
 # Compute probabilistic marching tetrahedra
 plotter.subplot(0, 1)
-plotter = probabilistic_marching_tetrahedra(F_reshaped, tetrahedra, points, isovalue, plotter=plotter)
+plotter = probabilistic_marching_tetrahedra(F_reshaped, tetrahedra_reshaped, points, isovalue, plotter=plotter)
 plotter.add_text("Probabilistic Isosurface", font_size=12)
 plotter.link_views()
 plotter.show()

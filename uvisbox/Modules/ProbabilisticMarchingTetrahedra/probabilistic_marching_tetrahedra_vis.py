@@ -35,10 +35,14 @@ def visualize_probabilistic_marching_tetrahedra(mesh_data, points, tetrahedral_m
     n_cells = mesh_data.shape[0]
     celltypes = np.full(n_cells, fill_value=CellType.TETRA, dtype=np.uint32)  
 
+    # append a column of 4s to the tetrahedral mesh to indicate that each cell is a tetrahedron
+    tetrahedra = np.hstack((np.full((tetrahedral_mesh.shape[0], 1), 4), tetrahedral_mesh))
+
+
     if plotter is None:
         plotter = pv.Plotter()
             
-    grid = pv.UnstructuredGrid(tetrahedral_mesh, celltypes, points)
+    grid = pv.UnstructuredGrid(tetrahedra, celltypes, points)
     grid.cell_data["crossing_probability"] = mesh_data.flatten(order='F')
 
     plotter.add_volume(grid, scalars="crossing_probability", opacity=opacity, cmap=colormap)
