@@ -1,0 +1,233 @@
+{
+  "timestamp": "2026-05-14T00:43:45.361791+00:00",
+  "date": "2026-05-14",
+  "repository": "ouermijudicael/UVisBox",
+  "data": {
+    "views": {
+      "count": 65,
+      "uniques": 6,
+      "views": [
+        {
+          "timestamp": "2026-04-29T00:00:00+00:00",
+          "count": 63,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2026-04-30T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-01T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-02T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-03T00:00:00+00:00",
+          "count": 1,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2026-05-04T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-05T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-06T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-07T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-08T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-09T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-10T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-11T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-12T00:00:00+00:00",
+          "count": 1,
+          "uniques": 1
+        }
+      ]
+    },
+    "clones": {
+      "count": 229,
+      "uniques": 96,
+      "clones": [
+        {
+          "timestamp": "2026-04-29T00:00:00+00:00",
+          "count": 29,
+          "uniques": 14
+        },
+        {
+          "timestamp": "2026-04-30T00:00:00+00:00",
+          "count": 18,
+          "uniques": 6
+        },
+        {
+          "timestamp": "2026-05-01T00:00:00+00:00",
+          "count": 28,
+          "uniques": 10
+        },
+        {
+          "timestamp": "2026-05-02T00:00:00+00:00",
+          "count": 32,
+          "uniques": 15
+        },
+        {
+          "timestamp": "2026-05-03T00:00:00+00:00",
+          "count": 23,
+          "uniques": 14
+        },
+        {
+          "timestamp": "2026-05-04T00:00:00+00:00",
+          "count": 21,
+          "uniques": 11
+        },
+        {
+          "timestamp": "2026-05-05T00:00:00+00:00",
+          "count": 18,
+          "uniques": 6
+        },
+        {
+          "timestamp": "2026-05-06T00:00:00+00:00",
+          "count": 7,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2026-05-07T00:00:00+00:00",
+          "count": 8,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2026-05-08T00:00:00+00:00",
+          "count": 11,
+          "uniques": 7
+        },
+        {
+          "timestamp": "2026-05-09T00:00:00+00:00",
+          "count": 15,
+          "uniques": 8
+        },
+        {
+          "timestamp": "2026-05-10T00:00:00+00:00",
+          "count": 9,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-05-11T00:00:00+00:00",
+          "count": 8,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2026-05-12T00:00:00+00:00",
+          "count": 2,
+          "uniques": 2
+        }
+      ]
+    },
+    "referrers": [
+      {
+        "referrer": "github.com",
+        "count": 61,
+        "uniques": 2
+      },
+      {
+        "referrer": "Bing",
+        "count": 1,
+        "uniques": 1
+      }
+    ],
+    "popular_paths": [
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main",
+        "title": "/tree/main",
+        "count": 12,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/examples",
+        "title": "/tree/main/examples",
+        "count": 9,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/uvisbox",
+        "title": "/tree/main/uvisbox",
+        "count": 8,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/uvisbox/Modules/ProbabilisticMarchingTetrahedra",
+        "title": "/tree/main/uvisbox/Modules/ProbabilisticMarchingTetrahedra",
+        "count": 7,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox",
+        "title": "Overview",
+        "count": 5,
+        "uniques": 5
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/probabilistic_marching_tet_example.py",
+        "title": "/blob/main/examples/probabilistic_marching_tet_example.py",
+        "count": 5,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/uvisbox/Modules",
+        "title": "/tree/main/uvisbox/Modules",
+        "count": 5,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/uvisbox/Modules/ProbabilisticMarchingTetrahedra/probabilistic_marching_tetrahedra.py",
+        "title": "/blob/main/uvisbox/Modules/ProbabilisticMarchingTetrahedra/probabilistic_marching_tetrahedra.py",
+        "count": 4,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/probabilistic_marching_triangles_example.py",
+        "title": "/blob/main/examples/probabilistic_marching_triangles_example.py",
+        "count": 3,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/uvisbox/Modules/ProbabilisticMarchingTetrahedra/probabilistic_marching_tetrahedra_vis.py",
+        "title": "/blob/main/uvisbox/Modules/ProbabilisticMarchingTetrahedra/probabilistic_marching_tetrahedra_vis.py",
+        "count": 3,
+        "uniques": 1
+      }
+    ]
+  }
+}
