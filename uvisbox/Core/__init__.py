@@ -10,6 +10,7 @@ The Core module is organized into the following submodules:
 - CellCrossingProb: Cell crossing probability algorithms  
 - Colors: Core color interpolation and tree data structures
 - CommonInterface: Shared interfaces and configurations across modules
+- MapSetup: Cartopy-based map helpers
 - Interpolations: Core interpolation algorithms
 """
 
@@ -18,4 +19,5 @@ from .BandDepths import *
 from .CellsCrossingProb import *
 from .Colors import *
 from .CommonInterface import BoxplotStyleConfig
+from .MapSetup import map_setup
 from .Interpolations import linear_interpolate
