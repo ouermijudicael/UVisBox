@@ -1,0 +1,221 @@
+{
+  "timestamp": "2026-06-07T00:49:33.883793+00:00",
+  "date": "2026-06-07",
+  "repository": "ouermijudicael/UVisBox",
+  "data": {
+    "views": {
+      "count": 11,
+      "uniques": 1,
+      "views": [
+        {
+          "timestamp": "2026-05-23T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-24T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-25T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-26T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-27T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-28T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-29T00:00:00+00:00",
+          "count": 11,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2026-05-30T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-31T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-01T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-02T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-03T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-04T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-05T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        }
+      ]
+    },
+    "clones": {
+      "count": 151,
+      "uniques": 76,
+      "clones": [
+        {
+          "timestamp": "2026-05-23T00:00:00+00:00",
+          "count": 6,
+          "uniques": 3
+        },
+        {
+          "timestamp": "2026-05-24T00:00:00+00:00",
+          "count": 11,
+          "uniques": 7
+        },
+        {
+          "timestamp": "2026-05-25T00:00:00+00:00",
+          "count": 11,
+          "uniques": 7
+        },
+        {
+          "timestamp": "2026-05-26T00:00:00+00:00",
+          "count": 11,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-05-27T00:00:00+00:00",
+          "count": 12,
+          "uniques": 8
+        },
+        {
+          "timestamp": "2026-05-28T00:00:00+00:00",
+          "count": 9,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-05-29T00:00:00+00:00",
+          "count": 9,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-05-30T00:00:00+00:00",
+          "count": 27,
+          "uniques": 16
+        },
+        {
+          "timestamp": "2026-05-31T00:00:00+00:00",
+          "count": 16,
+          "uniques": 11
+        },
+        {
+          "timestamp": "2026-06-01T00:00:00+00:00",
+          "count": 11,
+          "uniques": 7
+        },
+        {
+          "timestamp": "2026-06-02T00:00:00+00:00",
+          "count": 10,
+          "uniques": 6
+        },
+        {
+          "timestamp": "2026-06-03T00:00:00+00:00",
+          "count": 7,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2026-06-04T00:00:00+00:00",
+          "count": 9,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-06-05T00:00:00+00:00",
+          "count": 2,
+          "uniques": 2
+        }
+      ]
+    },
+    "referrers": [
+      {
+        "referrer": "github.com",
+        "count": 8,
+        "uniques": 1
+      },
+      {
+        "referrer": "overleaf.com",
+        "count": 3,
+        "uniques": 1
+      }
+    ],
+    "popular_paths": [
+      {
+        "path": "/ouermijudicael/UVisBox",
+        "title": "Overview",
+        "count": 2,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/hurricane_irma_example.ipynb",
+        "title": "/blob/main/examples/hurricane_irma_example.ipynb",
+        "count": 2,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/uvisbox",
+        "title": "/tree/main/uvisbox",
+        "count": 2,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/uvisbox/Core/Colors/colortree.py",
+        "title": "/blob/main/uvisbox/Core/Colors/colortree.py",
+        "count": 1,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/examples",
+        "title": "/tree/main/examples",
+        "count": 1,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/uvisbox/Core",
+        "title": "/tree/main/uvisbox/Core",
+        "count": 1,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/uvisbox/Core/Colors",
+        "title": "/tree/main/uvisbox/Core/Colors",
+        "count": 1,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/uvisbox/Modules",
+        "title": "/tree/main/uvisbox/Modules",
+        "count": 1,
+        "uniques": 1
+      }
+    ]
+  }
+}
