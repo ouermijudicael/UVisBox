@@ -1,0 +1,233 @@
+{
+  "timestamp": "2026-06-12T00:52:41.616221+00:00",
+  "date": "2026-06-12",
+  "repository": "ouermijudicael/UVisBox",
+  "data": {
+    "views": {
+      "count": 19,
+      "uniques": 2,
+      "views": [
+        {
+          "timestamp": "2026-05-28T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-29T00:00:00+00:00",
+          "count": 11,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2026-05-30T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-05-31T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-01T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-02T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-03T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-04T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-05T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-06T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-07T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-08T00:00:00+00:00",
+          "count": 8,
+          "uniques": 1
+        },
+        {
+          "timestamp": "2026-06-09T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        },
+        {
+          "timestamp": "2026-06-10T00:00:00+00:00",
+          "count": 0,
+          "uniques": 0
+        }
+      ]
+    },
+    "clones": {
+      "count": 154,
+      "uniques": 80,
+      "clones": [
+        {
+          "timestamp": "2026-05-28T00:00:00+00:00",
+          "count": 9,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-05-29T00:00:00+00:00",
+          "count": 9,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-05-30T00:00:00+00:00",
+          "count": 27,
+          "uniques": 16
+        },
+        {
+          "timestamp": "2026-05-31T00:00:00+00:00",
+          "count": 16,
+          "uniques": 11
+        },
+        {
+          "timestamp": "2026-06-01T00:00:00+00:00",
+          "count": 11,
+          "uniques": 7
+        },
+        {
+          "timestamp": "2026-06-02T00:00:00+00:00",
+          "count": 10,
+          "uniques": 6
+        },
+        {
+          "timestamp": "2026-06-03T00:00:00+00:00",
+          "count": 7,
+          "uniques": 4
+        },
+        {
+          "timestamp": "2026-06-04T00:00:00+00:00",
+          "count": 9,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-06-05T00:00:00+00:00",
+          "count": 2,
+          "uniques": 2
+        },
+        {
+          "timestamp": "2026-06-06T00:00:00+00:00",
+          "count": 12,
+          "uniques": 8
+        },
+        {
+          "timestamp": "2026-06-07T00:00:00+00:00",
+          "count": 10,
+          "uniques": 6
+        },
+        {
+          "timestamp": "2026-06-08T00:00:00+00:00",
+          "count": 12,
+          "uniques": 7
+        },
+        {
+          "timestamp": "2026-06-09T00:00:00+00:00",
+          "count": 8,
+          "uniques": 5
+        },
+        {
+          "timestamp": "2026-06-10T00:00:00+00:00",
+          "count": 12,
+          "uniques": 7
+        }
+      ]
+    },
+    "referrers": [
+      {
+        "referrer": "github.com",
+        "count": 16,
+        "uniques": 2
+      },
+      {
+        "referrer": "overleaf.com",
+        "count": 3,
+        "uniques": 1
+      }
+    ],
+    "popular_paths": [
+      {
+        "path": "/ouermijudicael/UVisBox",
+        "title": "Overview",
+        "count": 3,
+        "uniques": 2
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/uvisbox",
+        "title": "/tree/main/uvisbox",
+        "count": 3,
+        "uniques": 2
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/tree/main/examples",
+        "title": "/tree/main/examples",
+        "count": 2,
+        "uniques": 2
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/hurricane_irma_example.ipynb",
+        "title": "/blob/main/examples/hurricane_irma_example.ipynb",
+        "count": 2,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/curve_boxplot_benchmark_results.png",
+        "title": "/blob/main/examples/curve_boxplot_benchmark_results.png",
+        "count": 1,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/curve_boxplot_shared_memory_test.py",
+        "title": "/blob/main/examples/curve_boxplot_shared_memory_test.py",
+        "count": 1,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/probabilistic_marching_cubes_example.py",
+        "title": "/blob/main/examples/probabilistic_marching_cubes_example.py",
+        "count": 1,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/probabilistic_marching_squares_example.py",
+        "title": "/blob/main/examples/probabilistic_marching_squares_example.py",
+        "count": 1,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/examples/probabilistic_marching_tet_example.py",
+        "title": "/blob/main/examples/probabilistic_marching_tet_example.py",
+        "count": 1,
+        "uniques": 1
+      },
+      {
+        "path": "/ouermijudicael/UVisBox/blob/main/uvisbox/Core/Colors/colortree.py",
+        "title": "/blob/main/uvisbox/Core/Colors/colortree.py",
+        "count": 1,
+        "uniques": 1
+      }
+    ]
+  }
+}
