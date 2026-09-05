@@ -1,4 +1,4 @@
-name: tmp5_uvisbox
+name: uvisbox
 channels:
   - conda-forge
   - defaults
