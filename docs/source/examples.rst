@@ -1,100 +1,154 @@
 Examples
-=========
+========
 
+The examples below are runnable scripts from the repository. Their descriptions
+and layout are maintained manually, while each commented source listing,
+download, and result image is included directly from version-controlled files.
+Sphinx does not import or execute these scripts during a documentation build.
 
-contour\_boxplot\_example
------------------------------------------
+Run an example from the repository root in the ``uvisbox`` Conda environment:
 
-.. automodule:: examples.contour_boxplot_example
-   :undoc-members:
+.. code-block:: console
 
-curve\_boxplot\_example 
------------------------------------------
+   conda run -n uvisbox python examples/contour_boxplot_example.py
 
-.. automodule:: examples.curve_boxplot_example
-   :undoc-members:
+Contour boxplot
+---------------
 
-functional\_boxplot\_example
---------------------------------------------
+Summarize an ensemble of two-dimensional scalar fields with representative,
+central, and outlying contours.
 
-.. automodule:: examples.functional_boxplot_example
-   :undoc-members:
+:download:`Download the contour boxplot example <../../examples/contour_boxplot_example.py>`
 
-.. neural\_UQ\_example
-.. -----------------------------------
+.. include:: ../../examples/contour_boxplot_example.py
+   :start-after: """
+   :end-before: """
 
-.. .. automodule:: examples.neural_UQ_example
-..    :undoc-members:
+Curve boxplot
+-------------
 
-probabilistic\_marching\_cubes\_example 
--------------------------------------------------------
+Create a curve ensemble and visualize its central regions using curve band depth.
 
-.. automodule:: examples.probabilistic_marching_cubes_example
-   :undoc-members:
+:download:`Download the curve boxplot example <../../examples/curve_boxplot_example.py>`
 
-probabilistic\_marching\_squares\_example
----------------------------------------------------------
+.. include:: ../../examples/curve_boxplot_example.py
+   :start-after: """
+   :end-before: """
 
-.. automodule:: examples.probabilistic_marching_squares_example
-   :undoc-members:
+Functional boxplot
+------------------
 
-probabilistic\_marching\_tet\_example
------------------------------------------------------
+Compare functional and modified functional band depth using the bundled sea
+surface temperature data.
 
-.. automodule:: examples.probabilistic_marching_tet_example
-   :undoc-members:
+:download:`Download the functional boxplot example <../../examples/functional_boxplot_example.py>`
 
-probabilistic\_marching\_triangles\_example
------------------------------------------------------------
+.. include:: ../../examples/functional_boxplot_example.py
+   :start-after: """
+   :end-before: """
 
-.. automodule:: examples.probabilistic_marching_triangles_example
-   :undoc-members:
+Probabilistic marching cubes
+----------------------------
 
-.. squid\_glyph\_temp\_wind\_example module  
-.. -------------------------------------------------
+Visualize isosurface-crossing probabilities for an ensemble on a regular
+three-dimensional grid.
 
-.. .. automodule:: examples.squid_glyph_temp_wind_example
-..    :undoc-members:
+:download:`Download the marching cubes example <../../examples/probabilistic_marching_cubes_example.py>`
 
-squid\_glyphs\_2D\_example    
------------------------------
+.. include:: ../../examples/probabilistic_marching_cubes_example.py
+   :start-after: """
+   :end-before: """
 
-.. automodule:: examples.squid_glyphs_2D_example
-   :undoc-members:
+Probabilistic marching squares
+------------------------------
 
-squid\_glyphs\_3D\_example
-------------------------------------------
+Visualize isocontour-crossing probabilities on a regular two-dimensional grid.
 
-.. automodule:: examples.squid_glyphs_3D_example
-   :undoc-members:
+:download:`Download the marching squares example <../../examples/probabilistic_marching_squares_example.py>`
 
-uncertainty\_lobes\_2D\_example
------------------------------------------------
+.. include:: ../../examples/probabilistic_marching_squares_example.py
+   :start-after: """
+   :end-before: """
 
-.. automodule:: examples.uncertainty_lobes_2D_example
-   :undoc-members:
+Probabilistic marching tetrahedra
+---------------------------------
 
-.. uncertainty\_tube\_benchmark 
-.. --------------------------------------------
+Visualize isosurface-crossing probabilities on a tetrahedral mesh.
 
-.. .. automodule:: examples.uncertainty_tube_benchmark
-..    :undoc-members:
+:download:`Download the marching tetrahedra example <../../examples/probabilistic_marching_tet_example.py>`
 
-uncertainty\_tube\_example
-------------------------------------------
+.. include:: ../../examples/probabilistic_marching_tet_example.py
+   :start-after: """
+   :end-before: """
 
-.. automodule:: examples.uncertainty_tube_example
-   :undoc-members:
+Probabilistic marching triangles
+--------------------------------
 
-vsup\_example
------------------------------
+Visualize isocontour-crossing probabilities on a triangular mesh.
 
-.. automodule:: examples.vsup_example
-   :undoc-members:
+:download:`Download the marching triangles example <../../examples/probabilistic_marching_triangles_example.py>`
 
-.. wind\_ensemble\_example
-.. ---------------------------------------
+.. include:: ../../examples/probabilistic_marching_triangles_example.py
+   :start-after: """
+   :end-before: """
 
-.. .. automodule:: examples.wind_ensemble_example
-..    :undoc-members:
+Two-dimensional squid glyphs
+----------------------------
 
+Represent directional and magnitude uncertainty in an ensemble of planar vector
+fields.
+
+:download:`Download the 2D squid glyph example <../../examples/squid_glyphs_2D_example.py>`
+
+.. include:: ../../examples/squid_glyphs_2D_example.py
+   :start-after: """
+   :end-before: """
+
+Three-dimensional squid glyphs
+------------------------------
+
+Represent uncertainty in an ensemble of three-dimensional vectors with PyVista.
+
+:download:`Download the 3D squid glyph example <../../examples/squid_glyphs_3D_example.py>`
+
+.. include:: ../../examples/squid_glyphs_3D_example.py
+   :start-after: """
+   :end-before: """
+
+Uncertainty lobes
+-----------------
+
+Visualize directional uncertainty in a two-dimensional vector field.
+
+:download:`Download the uncertainty lobes example <../../examples/uncertainty_lobes_2D_example.py>`
+
+.. include:: ../../examples/uncertainty_lobes_2D_example.py
+   :start-after: """
+   :end-before: """
+
+Uncertainty tube
+----------------
+
+Construct a three-dimensional tube around an ensemble of trajectories.
+
+:download:`Download the uncertainty tube example <../../examples/uncertainty_tube_example.py>`
+
+.. include:: ../../examples/uncertainty_tube_example.py
+   :start-after: """
+   :end-before: """
+
+.. image:: _static/uncertainty_tube.png
+   :alt: Uncertainty tube example output
+   :width: 80%
+
+Value-suppressing uncertainty palette
+-------------------------------------
+
+Compare discrete and continuous modes of the :class:`uvisbox.Core.Colors.ColorTree`
+value-suppressing uncertainty palette.
+
+:download:`Download the VSUP example <../../examples/vsup_example.py>`
+
+.. include:: ../../examples/vsup_example.py
+   :start-after: """
+   :end-before: """

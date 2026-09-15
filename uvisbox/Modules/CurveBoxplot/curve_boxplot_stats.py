@@ -10,7 +10,7 @@ def curve_boxplot_summary_statistics(curves, boxplot_style=None, workers=12):
     This function computes curve band depths, sorts curves, and identifies percentile bands
     and outliers based on the configuration.
     
-    Parameters:
+    Parameters
     -----------
     curves : numpy.ndarray
         3D array of shape (n_curves, n_steps, n_dims) containing curve data.
@@ -22,7 +22,7 @@ def curve_boxplot_summary_statistics(curves, boxplot_style=None, workers=12):
         Number of worker processes for parallel computation of band depths. Default is 12.
         Set to 1 or None to use sequential processing (useful for debugging).
     
-    Returns:
+    Returns
     --------
     stats : dict
         Dictionary containing the following keys:
@@ -34,12 +34,12 @@ def curve_boxplot_summary_statistics(curves, boxplot_style=None, workers=12):
         - 'outliers': np.ndarray of shape (n_outliers, n_steps, n_dims) - outlier curves beyond largest percentile
         - 'n_dims': int - dimensionality of curves (2 or 3)
     
-    Raises:
+    Raises
     -------
     ValueError
         If curves is not a 3D array or if n_dims is not 2 or 3.
     
-    Examples:
+    Examples
     ---------
     >>> import numpy as np
     >>> from uvisbox.Modules.CurveBoxplot.curve_boxplot_stats import curve_boxplot_summary_statistics

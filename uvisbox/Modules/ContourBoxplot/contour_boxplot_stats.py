@@ -10,7 +10,7 @@ def contour_boxplot_summary_statistics(ensemble_images, isovalue, boxplot_style=
     This function extracts binary contours at the given isovalue, computes their band depths,
     and generates percentile bands, median, and outlier information.
     
-    Parameters:
+    Parameters
     -----------
     ensemble_images : np.ndarray
         3D array of shape (n_ensemble, height, width) containing ensemble scalar fields.
@@ -26,21 +26,16 @@ def contour_boxplot_summary_statistics(ensemble_images, isovalue, boxplot_style=
     workers : int, optional
         Number of parallel workers for band depth computation. Default is 11.
     
-    Returns:
+    Returns
     --------
     dict
-        Dictionary containing:
-        - 'median': Binary image (np.ndarray) representing the median contour sublevel set.
-                   1 = inside contour (value < isovalue), 0 = outside contour (value >= isovalue).
-        - 'percentile_bands': List of tuples (percentile, band_image) where band_image is a 2D array
-                             with values in [0, percentile/100]. percentile/100 means inside the band,
-                             0 means outside the band.
-        - 'outliers': List of binary images representing outlier contours (same format as median).
-        - 'sorted_contours': 3D array (n_ensemble, height, width) of binary images sorted by depth.
-        - 'sorted_indices': Array of indices showing the original order of sorted contours.
-        - 'depths': Array of computed band depth values for each contour.
+        Contains ``median``, ``percentile_bands``, ``outliers``,
+        ``sorted_contours``, ``sorted_indices``, and ``depths``. The median and
+        outliers are binary images. Each percentile-band tuple contains a
+        percentile and a 2D image whose nonzero value is that percentile
+        divided by 100.
     
-    Examples:
+    Examples
     ---------
     >>> ensemble = np.random.randn(50, 100, 100)
     >>> stats = contour_boxplot_summary_statistics(ensemble, isovalue=0.5)

@@ -8,13 +8,11 @@ def contour_boxplot_mesh(summary_statistics, x_coords=None, y_coords=None):
     This function aggregates percentile bands by overwriting values in descending percentile order,
     creating a single image that shows all bands with appropriate color values.
 
-    Parameters:
+    Parameters
     -----------
     summary_statistics : dict
-        Dictionary from contour_boxplot_summary_statistics containing:
-        - 'median': Binary image for median contour
-        - 'percentile_bands': List of (percentile, band_image) tuples
-        - 'outliers': List of outlier binary images
+        Output from ``contour_boxplot_summary_statistics``. It contains the
+        median image, percentile bands, and outlier images.
     x_coords : np.ndarray, optional
         1D array of x-axis coordinates defining the spatial domain.
         Length must match the image width. If None, pixel indices are used.
@@ -22,20 +20,16 @@ def contour_boxplot_mesh(summary_statistics, x_coords=None, y_coords=None):
         1D array of y-axis coordinates defining the spatial domain.
         Length must match the image height. If None, pixel indices are used.
 
-    Returns:
+    Returns
     --------
     dict
-        Dictionary containing:
-        - 'percentile_bands_image': 2D array where each pixel value represents the percentile/100
-                                   it belongs to. Lower percentiles overwrite higher ones.
-        - 'median': Binary image (unchanged from input)
-        - 'outliers': List of binary images (unchanged from input)
-        - 'extent': Tuple (x_min, x_max, y_min, y_max) defining the spatial domain,
-                    or None if no coordinates were provided.
-        - 'x_coords': 1D array of x-axis coordinates, or None.
-        - 'y_coords': 1D array of y-axis coordinates, or None.
+        Contains ``percentile_bands_image``, ``median``, ``outliers``,
+        ``extent``, ``x_coords``, and ``y_coords``. The band image stores each
+        pixel's percentile divided by 100; lower percentiles overwrite higher
+        ones. ``extent`` is ``(x_min, x_max, y_min, y_max)`` when coordinates
+        are supplied and ``None`` otherwise.
 
-    Notes:
+    Notes
     ------
     The aggregation works by:
     1. Starting with highest percentile band (e.g., 90th)
@@ -44,7 +38,7 @@ def contour_boxplot_mesh(summary_statistics, x_coords=None, y_coords=None):
     4. Continuing until lowest percentile
     This creates a layered visualization where inner bands overwrite outer bands.
 
-    Examples:
+    Examples
     ---------
     >>> stats = contour_boxplot_summary_statistics(ensemble, isovalue=0.5)
     >>> mesh_data = contour_boxplot_mesh(stats)

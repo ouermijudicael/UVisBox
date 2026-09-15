@@ -14,14 +14,13 @@ def functional_boxplot_band_depths(data, method='fbd'):
     """
     Compute band depths for a set of functional curves.
 
-    Parameters:
+    Parameters
     -----------
     curves : np.ndarray
         2D array of shape (N, D) where N is the number of curves and D is the number of points per curve.
     method : str, optional
-        Method for computing band depth. Options are:
-        - 'fbd': Functional band depth (default)
-        - 'mfbd': Modified functional band depth
+        Band-depth method: ``"fbd"`` for functional band depth (default) or
+        ``"mfbd"`` for modified functional band depth.
     """
     if method == 'fbd':
         return functional_banddepth(data)
@@ -35,25 +34,24 @@ def functional_boxplot_get_band(data, percentile, method='fbd'):
     """
     Compute the band envelope for a given percentile using functional band depth.
     
-    Parameters:
+    Parameters
     -----------
     data : np.ndarray
         2D array of shape (N, D) where N is the number of curves and D is the number of points per curve.
     percentile : float
         Percentile value (0-100) for the band envelope.
     method : str, optional
-        Method for computing band depth. Options are:
-        - 'fbd': functional band depth (default)
-        - 'mfbd': modified functional band depth
+        Band-depth method: ``"fbd"`` for functional band depth (default) or
+        ``"mfbd"`` for modified functional band depth.
     
-    Returns:
+    Returns
     --------
     bottom_curve : np.ndarray
         1D array representing the bottom envelope of the band.
     top_curve : np.ndarray
         1D array representing the top envelope of the band.
     
-    Examples:
+    Examples
     ---------
     >>> data = np.random.randn(100, 50)  # 100 curves, 50 points each
     >>> bottom, top = functional_boxplot_get_band(data, 50, method='fbd')  # 50th percentile band
@@ -99,37 +97,31 @@ def functional_boxplot_summary_statistics(data, method='fbd', boxplot_style=None
     This function computes the same statistics as functional_boxplot but returns
     them as numpy arrays in a dictionary instead of creating a plot.
     
-    Parameters:
+    Parameters
     -----------
     data : np.ndarray
         2D array of shape (N, D) where N is the number of curves and D is the number 
         of points per curve.
     method : str, optional
-        Method for computing band depth. Options are:
-        - 'fbd': functional band depth (default)
-        - 'mfbd': modified functional band depth
+        Band-depth method: ``"fbd"`` for functional band depth (default) or
+        ``"mfbd"`` for modified functional band depth.
     boxplot_style : BoxplotStyleConfig, optional
         Configuration for the boxplot including percentiles and outlier settings.
         If None, uses default configuration.
     
-    Returns:
+    Returns
     --------
     stats : dict
-        Dictionary containing the following keys:
-        - 'depths': np.ndarray of shape (N,) - band depths for each curve
-        - 'median': np.ndarray of shape (D,) - median curve (highest depth)
-        - 'percentile_bands': dict - percentile bands with keys like '25_percentile_band'
-          containing tuples (bottom_curve, top_curve) of shape (D,) each
-        - 'outliers': np.ndarray of shape (n_outliers, D) - outlier curves beyond largest percentile
-        - 'sorted_curves': np.ndarray of shape (N, D) - curves sorted by depth (descending)
-        - 'sorted_indices': np.ndarray of shape (N,) - original indices sorted by depth
-    
-    Raises:
+        Contains ``depths``, ``median``, ``percentile_bands``, ``outliers``,
+        ``sorted_curves``, and ``sorted_indices``. Each percentile band is a
+        ``(bottom_curve, top_curve)`` tuple; both curves have shape ``(D,)``.
+
+    Raises
     -------
     ValueError
         If data is not 2D or if method is invalid.
     
-    Examples:
+    Examples
     ---------
     >>> import numpy as np
     >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_stats import functional_boxplot_summary_statistics

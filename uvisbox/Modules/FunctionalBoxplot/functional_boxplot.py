@@ -13,7 +13,7 @@ def functional_boxplot(data, method='fbd', vmin=0, vmax=1, boxplot_style=None, a
     This function computes functional band depths, plots bands in descending percentile 
     order (largest to smallest for proper layering), and highlights the median curve.
 
-    Parameters:
+    Parameters
     -----------
     data : np.ndarray
         2D array of shape (N, D) where N is the number of curves and D is the number 
@@ -28,17 +28,17 @@ def functional_boxplot(data, method='fbd', vmin=0, vmax=1, boxplot_style=None, a
     ax : matplotlib.axes.Axes, optional
         Matplotlib axes to plot on. If None, creates a new figure.
 
-    Returns:
+    Returns
     --------
     ax : matplotlib.axes.Axes
         The matplotlib axes object with the plot.
 
-    Raises:
+    Raises
     -------
     ValueError
         If data is not 2D or if method is invalid.
 
-    Notes:
+    Notes
     ------
     - Input data is not modified (computation happens on a copy)
     - Bands are plotted from largest to smallest percentile for proper visual layering
@@ -46,7 +46,7 @@ def functional_boxplot(data, method='fbd', vmin=0, vmax=1, boxplot_style=None, a
     - Outliers are curves beyond the largest percentile
     - Curve depths are always computed internally
 
-    Examples:
+    Examples
     ---------
     >>> import numpy as np
     >>> from uvisbox.Modules.FunctionalBoxplot import functional_boxplot

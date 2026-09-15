@@ -9,6 +9,12 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=source
 set BUILDDIR=build
+if "%PYTHON%" == "" set PYTHON=python
+
+if /I "%1" == "html" (
+	%PYTHON% build_docs.py
+	goto end
+)
 
 %SPHINXBUILD% >NUL 2>NUL
 if errorlevel 9009 (

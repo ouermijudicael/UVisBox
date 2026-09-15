@@ -18,7 +18,7 @@ def visualize_curve_boxplot(mesh_data, boxplot_style=None, ax=None):
     output from the mesh pipeline. For 2D curves, it uses matplotlib. For 3D curves, 
     it uses PyVista if available, otherwise falls back to matplotlib.
     
-    Parameters:
+    Parameters
     -----------
     mesh_data : dict
         Dictionary containing mesh data with the following keys:
@@ -35,12 +35,12 @@ def visualize_curve_boxplot(mesh_data, boxplot_style=None, ax=None):
         - pyvista.Plotter for 3D PyVista rendering
         - None: creates appropriate visualization object automatically
     
-    Returns:
+    Returns
     --------
     ax : matplotlib.axes.Axes or pyvista.Plotter
         The visualization object (matplotlib axes for 2D, PyVista plotter for 3D).
     
-    Examples:
+    Examples
     ---------
     >>> import numpy as np
     >>> from uvisbox.Modules.CurveBoxplot.curve_boxplot_stats import curve_boxplot_summary_statistics
@@ -93,7 +93,7 @@ def _visualize_curve_boxplot_2d_matplotlib(mesh_data, boxplot_style, ax=None):
     
     Internal helper function for 2D matplotlib rendering.
     
-    Parameters:
+    Parameters
     -----------
     mesh_data : dict
         Mesh data from curve_boxplot_mesh
@@ -102,7 +102,7 @@ def _visualize_curve_boxplot_2d_matplotlib(mesh_data, boxplot_style, ax=None):
     ax : matplotlib.axes.Axes, optional
         Matplotlib axes to plot on
     
-    Returns:
+    Returns
     --------
     ax : matplotlib.axes.Axes
         The matplotlib axes object with the plot
@@ -158,7 +158,7 @@ def _visualize_curve_boxplot_3d_matplotlib(mesh_data, boxplot_style, ax=None):
     
     Internal helper function for 3D matplotlib rendering.
     
-    Parameters:
+    Parameters
     -----------
     mesh_data : dict
         Mesh data from curve_boxplot_mesh
@@ -167,7 +167,7 @@ def _visualize_curve_boxplot_3d_matplotlib(mesh_data, boxplot_style, ax=None):
     ax : matplotlib.axes.Axes, optional
         Matplotlib 3D axes to plot on
     
-    Returns:
+    Returns
     --------
     ax : matplotlib.axes.Axes
         The matplotlib 3D axes object with the plot
@@ -224,7 +224,7 @@ def _visualize_curve_boxplot_3d_pyvista(mesh_data, boxplot_style, ax):
     
     Internal helper function for 3D PyVista rendering with opacity based on percentile.
     
-    Parameters:
+    Parameters
     -----------
     mesh_data : dict
         Mesh data from curve_boxplot_mesh
@@ -233,7 +233,7 @@ def _visualize_curve_boxplot_3d_pyvista(mesh_data, boxplot_style, ax):
     ax : pyvista.Plotter
         PyVista plotter to use
     
-    Returns:
+    Returns
     --------
     ax : pyvista.Plotter
         The PyVista plotter object with the visualization
@@ -303,7 +303,7 @@ def _plot_band_mesh_2d(points, triangles, ax, color, alpha):
     
     Internal helper function for rendering 2D triangular meshes.
     
-    Parameters:
+    Parameters
     -----------
     points : np.ndarray
         Vertex coordinates of the mesh. Shape: (n_points, 2)
@@ -316,7 +316,7 @@ def _plot_band_mesh_2d(points, triangles, ax, color, alpha):
     alpha : float
         Transparency of the mesh (0=transparent, 1=opaque)
     
-    Returns:
+    Returns
     --------
     ax : matplotlib.axes.Axes
         The matplotlib axes object used for plotting
@@ -333,7 +333,7 @@ def _plot_band_mesh_3d(points, triangles, ax, color, alpha):
     
     Internal helper function for rendering 3D triangular meshes.
     
-    Parameters:
+    Parameters
     -----------
     points : np.ndarray
         Vertex coordinates of the mesh. Shape: (n_points, 3)
@@ -346,7 +346,7 @@ def _plot_band_mesh_3d(points, triangles, ax, color, alpha):
     alpha : float
         Transparency of the mesh (0=transparent, 1=opaque)
     
-    Returns:
+    Returns
     --------
     ax : matplotlib.axes.Axes
         The matplotlib 3D axes object used for plotting

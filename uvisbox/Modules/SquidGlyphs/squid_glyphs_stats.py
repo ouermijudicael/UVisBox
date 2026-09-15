@@ -10,31 +10,24 @@ def squid_glyphs_2d_summary_statistics(ensemble_vectors, percentile, workers=Non
     """
     Compute vector depth statistics for 2D squid glyphs.
     
-    Parameters:
+    Parameters
     -----------
     ensemble_vectors : numpy.ndarray
         Shape (n, m, 2) - Cartesian ensemble vectors
     percentile : float
         Percentile of ensemble members to include based on depth ranking (0-100).
         Higher values include more vectors (larger glyphs showing more variation).
-        - percentile=50: Include top 50% deepest vectors
-        - percentile=95: Include top 95% deepest vectors (typical)
-        - percentile=100: Include ALL vectors (maximum variation)
+        For example, 50 includes the deepest 50%, 95 includes the deepest 95%,
+        and 100 includes all vectors.
     workers : int, optional
         Number of parallel workers for depth computation. Default is None (sequential)
     
-    Returns:
+    Returns
     --------
     stats_2d : dict
-        {
-            'ensemble_polar_vectors': (n, m, 2) - polar coordinates,
-            'depths': (n, m) - vector depths,
-            'median_vectors': (n, 2) - median vectors per position,
-            'magnitudes_min': (n,) - min magnitude per position,
-            'magnitudes_max': (n,) - max magnitude per position,
-            'angles_min': (n,) - min angle per position,
-            'angles_max': (n,) - max angle per position
-        }
+        Contains ``ensemble_polar_vectors``, ``depths``, ``median_vectors``,
+        ``magnitudes_min``, ``magnitudes_max``, ``angles_min``, and
+        ``angles_max``.
     """
     num_positions, num_ensemble = ensemble_vectors.shape[0], ensemble_vectors.shape[1]
     
@@ -86,30 +79,22 @@ def squid_glyphs_3d_summary_statistics(ensemble_vectors, percentile):
     """
     Compute vector depth statistics for 3D squid glyphs.
     
-    Parameters:
+    Parameters
     -----------
     ensemble_vectors : numpy.ndarray
         Shape (n, m, 3) - Cartesian ensemble vectors
     percentile : float
         Percentile of ensemble members to include based on depth ranking (0-100).
         Higher values include more vectors (larger glyphs showing more variation).
-        - percentile=50: Include top 50% deepest vectors
-        - percentile=95: Include top 95% deepest vectors (typical)
-        - percentile=100: Include ALL vectors (maximum variation)
+        For example, 50 includes the deepest 50%, 95 includes the deepest 95%,
+        and 100 includes all vectors.
     
-    Returns:
+    Returns
     --------
     stats_3d : dict
-        {
-            'ensemble_spherical_vectors': (n, m, 3) - spherical coordinates,
-            'depths': (n, m) - vector depths,
-            'median_vectors': (n, 3) - median vectors,
-            'spread_min_vectors': (n, 3) - min spread vectors,
-            'spread_max_vectors': (n, 3) - max spread vectors,
-            'glyph_types': (n,) - glyph type markers,
-            'pca_components': (n, 3, 2) - PCA components,
-            'num_glyphs': int - count of full glyphs
-        }
+        Contains ``ensemble_spherical_vectors``, ``depths``, ``median_vectors``,
+        ``spread_min_vectors``, ``spread_max_vectors``, ``glyph_types``,
+        ``pca_components``, and ``num_glyphs``.
     """
     num_positions, num_ensemble = ensemble_vectors.shape[0], ensemble_vectors.shape[1]
     
@@ -181,7 +166,7 @@ def getDirectionalVariations(vectors, depths, percentile, min_vectors, median_ve
     """
     Compute the directional variation of the vectors.
     
-    Parameters:
+    Parameters
     ----------
     vectors : numpy.ndarray
         Array of shape (num_points, num_ensemble_members, 3) where the last dimension contains the vector components.
@@ -196,7 +181,7 @@ def getDirectionalVariations(vectors, depths, percentile, min_vectors, median_ve
     max_vectors : numpy.ndarray
         Array of shape (num_points, 3) where the last dimension contains the max vector components.
     
-    Returns:
+    Returns
     -------
     directional_variation : numpy.ndarray
         Array of shape (num_points, 3, 2) where the 3 represents the

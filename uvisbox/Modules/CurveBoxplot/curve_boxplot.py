@@ -16,7 +16,7 @@ def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     For 2D curves, uses matplotlib. For 3D curves, uses PyVista if available,
     otherwise falls back to matplotlib.
 
-    Parameters:
+    Parameters
     -----------
     curves : numpy.ndarray
         3D array of shape (n_curves, n_steps, n_dims) containing curve data.
@@ -33,12 +33,12 @@ def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
         Number of worker processes for parallel computation of band depths. Default is 12.
         Set to 1 or None to use sequential processing (useful for debugging).
 
-    Returns:
+    Returns
     --------
     ax : matplotlib.axes.Axes or pyvista.Plotter
         The visualization object (matplotlib axes for 2D, PyVista plotter for 3D if available).
 
-    Notes:
+    Notes
     ------
     - The function does not modify the input curves array
     - Bands are plotted from largest to smallest percentile for proper layering
@@ -47,7 +47,7 @@ def curve_boxplot(curves, boxplot_style=None, ax=None, workers=12):
     - Curve depths are always computed internally
     - For 3D curves, PyVista provides better interactivity than matplotlib
     
-    Examples:
+    Examples
     ---------
     >>> # Basic usage with defaults
     >>> ax = curve_boxplot(curves)

@@ -11,27 +11,21 @@ def curve_boxplot_mesh(summary_stats):
     ConvexHull and Delaunay triangulation with a center point. For 3D curves,
     it uses the ConvexHull faces directly.
     
-    Parameters:
+    Parameters
     -----------
     summary_stats : dict
-        Dictionary from curve_boxplot_summary_statistics() containing:
-        - 'sorted_curves': curves sorted by depth (descending)
-        - 'percentiles': list of percentile values
-        - 'n_dims': dimensionality (2 or 3)
+        Output from ``curve_boxplot_summary_statistics`` containing sorted
+        curves, percentile values, and dimensionality.
     
-    Returns:
+    Returns
     --------
     mesh_data : dict
-        Dictionary containing the following keys:
-        - 'percentile_meshes': dict with keys like '50_percentile_mesh' containing
-          tuples (points, triangles) where:
-          * points: np.ndarray of shape (n_points, n_dims)
-          * triangles: np.ndarray of shape (n_triangles, 3)
-        - 'median_curve': median curve from summary_stats
-        - 'outliers': outlier curves from summary_stats
-        - 'n_dims': dimensionality
-    
-    Examples:
+        Contains ``percentile_meshes``, ``median_curve``, ``outliers``, and
+        ``n_dims``. Each percentile mesh is a ``(points, triangles)`` tuple;
+        points have shape ``(n_points, n_dims)`` and triangles have shape
+        ``(n_triangles, 3)``.
+
+    Examples
     ---------
     >>> import numpy as np
     >>> from uvisbox.Modules.CurveBoxplot.curve_boxplot_stats import curve_boxplot_summary_statistics
@@ -79,7 +73,7 @@ def _build_percentile_mesh(sorted_curves, percentile, n_dims):
     triangular mesh representing the band envelope. It samples the curves
     at regular intervals to build the mesh efficiently.
     
-    Parameters:
+    Parameters
     -----------
     sorted_curves : np.ndarray
         3D array of shape (n_curves, n_steps, n_dims) sorted by depth (descending)
@@ -88,7 +82,7 @@ def _build_percentile_mesh(sorted_curves, percentile, n_dims):
     n_dims : int
         Dimensionality (2 or 3)
     
-    Returns:
+    Returns
     --------
     points : np.ndarray
         2D array of shape (n_points, n_dims) containing mesh vertices
@@ -164,5 +158,3 @@ def _build_percentile_mesh(sorted_curves, percentile, n_dims):
         final_triangles = np.array([]).reshape(0, 3)
     
     return final_points, final_triangles
-
-    

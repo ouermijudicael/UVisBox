@@ -14,7 +14,7 @@ class ColorTree:
     inspired by VSUP (Value-Suppressing Uncertainty Palettes). It generates colors based on value
     and uncertainty levels using a colormap and uncertainty color, supporting both continuous and discrete modes.
 
-    Parameters:
+    Parameters
     -----------
         depth (int): The depth of the color tree.
         color_u (np.ndarray): RGB color for uncertainty.
@@ -82,7 +82,7 @@ class ColorTree:
         """
         Generates colors for an image array based on uncertainty (first channel) and value (second channel).
 
-        Parameters:
+        Parameters
         -----------
         image (np.ndarray): 
             Input array with shape (..., 2), where last dim is [uncertainty, value].
@@ -93,7 +93,7 @@ class ColorTree:
         continuous_leaves (bool): 
             If True and discrete=True, uses colormap interpolation at leaf level instead of tree nodes.
 
-        Returns:
+        Returns
         --------
         np.ndarray: 
             RGB color array with shape (..., 3).
@@ -183,13 +183,13 @@ class ColorTree:
         """
         Retrieve the color for a given value and uncertainty based on the color tree.
 
-        Parameters:
+        Parameters
         -----------
             value (float): The primary value (e.g., data point value).
             uncertainty (float): The uncertainty level.
             debug_print (bool): If True, print debug information.
 
-        Returns:
+        Returns
         --------
         np.ndarray: 
             RGB color array.

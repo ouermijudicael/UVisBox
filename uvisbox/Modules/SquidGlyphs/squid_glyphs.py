@@ -31,7 +31,7 @@ def squid_glyph_3D(positions, ensemble_vectors, point_values=None, percentile=95
     Based on: T. A. J. Ouermi et al., "Glyph-Based Uncertainty Visualization
     and Analysis of Time-Varying Vector Fields," IEEE UncertaintyVis 2024.
 
-    Parameters:
+    Parameters
     -----------
     positions : numpy.ndarray
         Array of shape (n, 3) The positions of the squid glyphs.
@@ -54,7 +54,7 @@ def squid_glyph_3D(positions, ensemble_vectors, point_values=None, percentile=95
     ax : pyvista.Plotter, optional
         The pyvista plotter to use. If None, a new plotter will be created.
 
-    Returns:
+    Returns
     --------
     plotter : pyvista.Plotter
         The pyvista plotter with the drawn squid glyphs.
@@ -88,7 +88,7 @@ def squid_glyph_2D(positions, ensemble_vectors, percentile=95, scale=0.2, ax=Non
     Based on: T. A. J. Ouermi et al., "Glyph-Based Uncertainty Visualization
     and Analysis of Time-Varying Vector Fields," IEEE UncertaintyVis 2024.
 
-    Parameters:
+    Parameters
     -----------
     positions : numpy.ndarray
         Array of shape (n, 2) representing the positions of the squid glyphs.
@@ -107,7 +107,7 @@ def squid_glyph_2D(positions, ensemble_vectors, percentile=95, scale=0.2, ax=Non
     workers : int, optional
         Number of parallel workers for computation. Default is None (sequential).
 
-    Returns:
+    Returns
     --------
     ax : matplotlib axis
         The axis with the drawn squid glyphs.

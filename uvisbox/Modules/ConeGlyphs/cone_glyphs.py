@@ -19,7 +19,7 @@ def cone_glyph(positions, ensemble_vectors, point_values=None, percentile=95, sc
         3. Render with pyvista
 
 
-    Parameters:
+    Parameters
     -----------
     positions : numpy.ndarray
         Array of shape (n, 3) The positions of the squid glyphs.
@@ -42,7 +42,7 @@ def cone_glyph(positions, ensemble_vectors, point_values=None, percentile=95, sc
     ax : pyvista.Plotter, optional
         The pyvista plotter to use. If None, a new plotter will be created.
 
-    Returns:
+    Returns
     --------
     plotter : pyvista.Plotter
         The pyvista plotter with the drawn squid glyphs.
@@ -69,13 +69,12 @@ def cone_glyph_old(positions, ensemble_vectors, point_values=None, percentil=0.9
                                 show_edges=True, glyph_color='lightblue', ax=None):
     """
     Draws uncertainty squid glyphs for the given positions and ensemble vectors in 3D. 
-    Parameters:
+    Parameters
     -----------
     positions : numpy.ndarray
         Array of shape (n, 3) The positions of the squid glyphs.
     ensemble_vectors : numpy.ndarray
-        Array of shape (n, m, 3) The ensemble vectors in spherical coordinates.
-        The ensemble vectors for each position in Cartesian coordinates.
+        Array of shape (n, m, 3) containing Cartesian ensemble vectors for each position.
     point_values : numpy.ndarray, optional
         Array of shape (n,) The values associated with each position for coloring.
     percentil : float
@@ -89,7 +88,7 @@ def cone_glyph_old(positions, ensemble_vectors, point_values=None, percentil=0.9
     ax : pyvista.Plotter, optional
         The pyvista plotter to use. If None, a new plotter will be created.
 
-    Returns:
+    Returns
     --------
     plotter : pyvista.Plotter
         The pyvista plotter with the drawn squid glyphs.

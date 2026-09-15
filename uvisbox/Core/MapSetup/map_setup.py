@@ -36,7 +36,7 @@ def map_setup(
     """
     Create a Cartopy map figure and axis from lon/lat data.
 
-    Parameters:
+    Parameters
     -----------
     data : array-like
         Array containing longitude and latitude in the last dimension.
@@ -75,7 +75,7 @@ def map_setup(
     figure_facecolor : str or None, optional
         Background color for the figure.
 
-    Returns:
+    Returns
     --------
     fig : matplotlib.figure.Figure
     ax : cartopy.mpl.geoaxes.GeoAxesSubplot

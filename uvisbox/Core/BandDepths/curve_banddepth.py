@@ -9,7 +9,7 @@ def point_in_hull(point, hull_or_vertices, eps=1e-6):
     """
     Check if a point is inside a convex hull.
     
-    Parameters:
+    Parameters
     ----------
     point : array-like
         The coordinates of the point to check. Should be a 1D array or list of length equal to the dimension of the hull.
@@ -19,7 +19,7 @@ def point_in_hull(point, hull_or_vertices, eps=1e-6):
     eps : float, optional
         Tolerance for numerical precision when checking if the point is inside the hull. Default is 1e-6.
     
-    Returns:
+    Returns
     -------
     bool
         True if the point is inside the convex hull (within the specified tolerance), False otherwise.
@@ -57,7 +57,7 @@ def points_in_hull(points, hull, eps=1e-6):
     against a convex hull simultaneously, providing significant performance improvements
     over calling point_in_hull repeatedly.
     
-    Parameters:
+    Parameters
     ----------
     points : numpy.ndarray
         Array of points to check, shape (n_points, n_dims).
@@ -68,7 +68,7 @@ def points_in_hull(points, hull, eps=1e-6):
         Tolerance for numerical precision when checking if points are inside the hull. 
         Default is 1e-6.
     
-    Returns:
+    Returns
     -------
     numpy.ndarray
         Boolean array of shape (n_points,) where True indicates the point is inside 
@@ -116,12 +116,12 @@ def _process_time_step(args):
     """
     Worker function to process a single time step for parallel computation.
     
-    Parameters:
+    Parameters
     ----------
     args : tuple
         Tuple containing (step_idx, curves, n_curves, indices, n_dims)
     
-    Returns:
+    Returns
     -------
     numpy.ndarray
         Depth increments for each curve at this time step
@@ -167,7 +167,7 @@ def curve_banddepths(curves, indices=None, workers=12):
     Generalization of Boxplot for Ensembles of Curves," in IEEE Transactions on Visualization and 
     Computer Graphics, vol. 20, no. 12, pp. 2654-2663, 31 Dec. 2014, doi: 10.1109/TVCG.2014.2346455.
     
-    Parameters:
+    Parameters
     ----------
     curves : numpy.ndarray
         3D array of shape (n_curves, n_steps, n_dims) containing curve data
@@ -180,7 +180,7 @@ def curve_banddepths(curves, indices=None, workers=12):
         Set to 1 or None to use sequential processing (useful for debugging).
         Uses fork context for macOS compatibility.
     
-    Returns:
+    Returns
     -------
     numpy.ndarray
         1D array of normalized depth scores for each curve

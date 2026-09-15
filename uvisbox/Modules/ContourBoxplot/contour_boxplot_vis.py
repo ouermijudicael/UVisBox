@@ -7,7 +7,7 @@ def visualize_contour_boxplot(mesh_data, boxplot_style=None, ax=None):
     """
     Visualize contour boxplot using imshow for percentile bands and contour for median/outliers.
     
-    Parameters:
+    Parameters
     -----------
     mesh_data : dict
         Dictionary from contour_boxplot_mesh containing:
@@ -20,19 +20,19 @@ def visualize_contour_boxplot(mesh_data, boxplot_style=None, ax=None):
     ax : matplotlib.axes.Axes, optional
         Matplotlib Axes object to plot on. If None, creates new figure and axes.
     
-    Returns:
+    Returns
     --------
     ax : matplotlib.axes.Axes
         The Axes object with the contour boxplot visualization.
     
-    Notes:
+    Notes
     ------
     - Uses ax.imshow() to display the aggregated percentile bands with colormap
     - Uses ax.contour() at isovalue 0.5 to plot median and outlier contour lines
     - Colorbar shows percentile values from 0-100
     - Legend indicates median and outliers
     
-    Examples:
+    Examples
     ---------
     >>> stats = contour_boxplot_summary_statistics(ensemble, isovalue=0.5)
     >>> mesh_data = contour_boxplot_mesh(stats)

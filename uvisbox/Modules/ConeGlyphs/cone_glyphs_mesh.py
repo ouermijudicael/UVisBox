@@ -24,7 +24,7 @@ def cone_glyphs_mesh(positions, stats_3d, point_values=None, scale=0.5, resoluti
     """
     Build 3D cone glyph mesh from statistics.
     
-    Parameters:
+    Parameters
     -----------
     positions : numpy.ndarray
         Shape (n, 3) - glyph positions
@@ -37,14 +37,11 @@ def cone_glyphs_mesh(positions, stats_3d, point_values=None, scale=0.5, resoluti
     resolution : int
         Circle resolution (default: 10)
     
-    Returns:
+    Returns
     --------
     mesh_3d : dict
-        {
-            'points': (k, 3) - vertex positions,
-            'polygons': (m, 3) - triangle connectivity,
-            'point_values': (k,) - scalar values for coloring
-        }
+        Contains ``points`` with shape (k, 3), ``polygons`` with shape (m, 3),
+        and ``point_values`` with shape (k,).
     """
     if point_values is None:
         point_values = np.zeros(positions.shape[0])
@@ -151,7 +148,7 @@ def cone_glyphs_meshing(positions, min_vectors,
     """
     Build superelliptical squid glyphs for 3D visualization. Assumes vectors are in spherical coordinates (magnitude, theta, phi).
 
-    Parameters:
+    Parameters
     -----------
     positions : numpy.ndarray
         Array of shape (n, 3) The positions of the squid glyphs.
@@ -172,7 +169,7 @@ def cone_glyphs_meshing(positions, min_vectors,
     num_of_glyphs : int
         The number of glyphs to be created.
 
-    Returns:
+    Returns
     --------
     points : numpy.ndarray
         Array of shape (m, 3) The points of the squid glyphs.

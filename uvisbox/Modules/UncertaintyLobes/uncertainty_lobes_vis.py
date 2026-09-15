@@ -21,7 +21,7 @@ def visualize_uncertainty_lobes(mesh, show_median=True, ax=None):
     - Inner wedges (light blue, opaque) - smaller angular spread
     - Median arrows (blue) - showing the most probable direction
     
-    Parameters:
+    Parameters
     -----------
     mesh : dict
         From uncertainty_lobes_mesh() containing:
@@ -33,7 +33,7 @@ def visualize_uncertainty_lobes(mesh, show_median=True, ax=None):
     ax : matplotlib.Axes, optional
         Existing axis to draw on. If None, creates new figure and axis.
     
-    Returns:
+    Returns
     --------
     ax : matplotlib.Axes
         The axis with drawn lobe glyphs

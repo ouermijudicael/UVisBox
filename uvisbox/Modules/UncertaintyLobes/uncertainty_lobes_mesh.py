@@ -2,9 +2,10 @@
 Mesh generation for uncertainty lobes.
 
 This module builds wedge-shaped mesh geometry for uncertainty lobe visualization:
-    - Create wedge vertices for each lobe
-    - Triangulate wedge faces
-    - Support dual-lobe rendering (inner + outer)
+
+- Create wedge vertices for each lobe.
+- Triangulate wedge faces.
+- Support dual-lobe rendering (inner and outer).
 """
 
 import numpy as np
@@ -17,7 +18,7 @@ def _create_wedge_vertices(center, r, theta_start, theta_end, median_angle, num_
     The arc is always drawn in the direction that includes the median angle,
     ensuring the wedge represents the correct angular spread.
     
-    Parameters:
+    Parameters
     -----------
     center : numpy.ndarray
         Shape (2,) - center position [x, y]
@@ -32,7 +33,7 @@ def _create_wedge_vertices(center, r, theta_start, theta_end, median_angle, num_
     num_points : int
         Number of points along the arc (default: 20)
     
-    Returns:
+    Returns
     --------
     vertices : numpy.ndarray
         Shape (num_points + 1, 2) - vertices [center, arc_point_1, ..., arc_point_n]
@@ -94,12 +95,12 @@ def _triangulate_wedge(num_points):
     """
     Create triangle indices for a wedge.
     
-    Parameters:
+    Parameters
     -----------
     num_points : int
         Number of points along the arc
     
-    Returns:
+    Returns
     --------
     triangles : numpy.ndarray
         Shape (num_points - 1, 3) - triangle indices
@@ -121,7 +122,7 @@ def uncertainty_lobes_mesh(positions, stats, scale=0.2, arc_resolution=20):
     2. Inner lobe (percentile2 - smaller spread, optional)
     3. Median arrow direction
     
-    Parameters:
+    Parameters
     -----------
     positions : numpy.ndarray
         Shape (n, 2) - lobe center positions
@@ -132,14 +133,11 @@ def uncertainty_lobes_mesh(positions, stats, scale=0.2, arc_resolution=20):
     arc_resolution : int
         Number of points per wedge arc (default: 20)
     
-    Returns:
+    Returns
     --------
     mesh : dict
-        {
-            'wedges': list of dicts - each containing 'vertices' and 'triangles' for outer lobe,
-            'inner_wedges': list of dicts - each containing 'vertices' and 'triangles' for inner lobe (if percentile2 != None),
-            'arrows': dict - {'positions': (n, 2), 'directions': (n, 2), 'lengths': (n,)}
-        }
+        Contains ``wedges`` for outer lobes, ``inner_wedges`` for optional inner
+        lobes, and ``arrows`` with position, direction, and length arrays.
     """
     num_positions = positions.shape[0]
     

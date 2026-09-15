@@ -8,7 +8,7 @@ def visualize_probabilistic_marching_triangles(mesh_data, points, triangle_mesh,
     This function creates a 2D visualization of the crossing probabilities using
     matplotlib's tripcolor for triangular meshes.
 
-    Parameters:
+    Parameters
     -----------
         mesh_data : np.ndarray
             1D array of shape (n_triangles,) with probabilities of contour presence 

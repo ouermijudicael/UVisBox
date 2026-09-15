@@ -12,7 +12,7 @@ def probabilistic_marching_squares(ensemble_images, isovalue, ax=None, colormap=
     marching squares visualization. It calculates the probability of isocontour
     presence in each cell and creates a matplotlib visualization.
 
-    Parameters:
+    Parameters
     -----------
         ensemble_images : np.ndarray
             3D array of shape (y_dim, x_dim, n_ensemble) representing the scalar
@@ -30,7 +30,7 @@ def probabilistic_marching_squares(ensemble_images, isovalue, ax=None, colormap=
             1D array of y-axis coordinates defining the spatial domain.
             Length must match y_dim. If None, pixel indices are used.
 
-    Returns:
+    Returns
     --------
         ax : matplotlib.axes.Axes
             The axis with the visualized probabilistic isocontour.

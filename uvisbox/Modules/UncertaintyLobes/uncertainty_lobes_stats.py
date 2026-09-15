@@ -20,12 +20,12 @@ def _process_position_stats(args):
     """
     Worker function to process depths and spread for a single position (for parallelization).
     
-    Parameters:
+    Parameters
     -----------
     args : tuple
         (position_idx, ensemble_spherical, percentile1, percentile2)
     
-    Returns:
+    Returns
     --------
     tuple : (position_idx, depths, theta1, theta2, mid_angle, r1, r2, r_arrow)
     """
@@ -63,7 +63,7 @@ def uncertainty_lobes_summary_statistics(ensemble_vectors, percentile1=90, perce
     """
     Compute vector depth statistics for uncertainty lobes.
     
-    Parameters:
+    Parameters
     -----------
     ensemble_vectors : numpy.ndarray
         Shape (n, m, 2) - Cartesian ensemble vectors at n positions with m members
@@ -77,20 +77,11 @@ def uncertainty_lobes_summary_statistics(ensemble_vectors, percentile1=90, perce
         Number of parallel workers for computation. Default is None (sequential).
         For ensemble size >= 30, parallelization can provide speedup.
     
-    Returns:
+    Returns
     --------
     stats : dict
-        {
-            'ensemble_polar_vectors': (n, m, 2) - polar coordinates [r, theta],
-            'depths': (n, m) - vector depths,
-            'median_vectors': (n, 2) - median vectors per position [r, theta],
-            'outer_lobe_angles': (n, 2) - angular spread for percentile1 [min_angle, max_angle],
-            'inner_lobe_angles': (n, 2) or None - angular spread for percentile2 (if provided),
-            'median_angles': (n,) - median angles (radians),
-            'outer_lobe_radii': (n,) - minimum magnitude for percentile1,
-            'inner_lobe_radii': (n,) - maximum magnitude for percentile2 (or 0 if None),
-            'median_magnitudes': (n,) - median vector magnitudes
-        }
+        Contains polar ensemble vectors, depths, median vectors, inner and outer
+        lobe angles and radii, and median angles and magnitudes.
     """
     num_positions, num_ens_members = ensemble_vectors.shape[0], ensemble_vectors.shape[1]
     

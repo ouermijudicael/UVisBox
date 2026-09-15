@@ -11,7 +11,7 @@ def probabilistic_marching_tetrahedra(ensemble_data, tetrahedral_mesh, points, i
     marching tetrahedra visualization. It calculates the probability of isosurface 
     presence in each tetrahedron and creates a PyVista volume rendering visualization.
 
-    Parameters:
+    Parameters
     -----------
         ensemble_data : np.ndarray
             2D array of shape (n_points, n_ensemble) where each column is a realization 
@@ -30,7 +30,7 @@ def probabilistic_marching_tetrahedra(ensemble_data, tetrahedral_mesh, points, i
         colormap : str, optional
             Colormap for the volume rendering. Default is 'viridis'.
             
-    Returns:
+    Returns
     --------
         plotter : pyvista.Plotter
             The pyvista plotter with the visualized probabilistic isosurface.

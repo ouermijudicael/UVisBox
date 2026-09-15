@@ -43,7 +43,7 @@ def uncertainty_lobes(positions, ensemble_vectors,
     - Inner lobe (percentile2, opaque): smaller spread showing most probable region
     - Median arrow: most probable direction based on vector depth
     
-    Parameters:
+    Parameters
     -----------
     positions : numpy.ndarray
         Array of shape (n, 2) representing the positions of the lobe glyphs.
@@ -69,7 +69,7 @@ def uncertainty_lobes(positions, ensemble_vectors,
         parallelization can provide significant speedup.
         Default: None
 
-    Returns:
+    Returns
     --------
     ax : matplotlib.Axes
         The axis with the drawn lobe glyphs.

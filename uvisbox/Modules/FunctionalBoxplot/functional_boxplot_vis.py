@@ -9,7 +9,7 @@ def plot_band(bottom_curve, top_curve, vmin=0, vmax=1, ax=None, color='red', alp
 
     This function creates a filled area between the curves using matplotlib's fill_between.
 
-    Parameters:
+    Parameters
     -----------
     bottom_curve : np.ndarray
         1D array representing the bottom boundary of the band.
@@ -25,17 +25,17 @@ def plot_band(bottom_curve, top_curve, vmin=0, vmax=1, ax=None, color='red', alp
     scale : float, optional
         Scale factor for the curves. Default is 1.0.
 
-    Returns:
+    Returns
     --------
     ax : matplotlib.axes.Axes
         The matplotlib axes object used for plotting.
 
-    Raises:
+    Raises
     -------
     ValueError
         If bottom_curve and top_curve have different shapes.
 
-    Examples:
+    Examples
     ---------
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
@@ -96,7 +96,7 @@ def visualize_functional_boxplot(mesh_data, vmin=0, vmax=1, boxplot_style=None, 
     This function creates a matplotlib visualization of the functional boxplot using
     the summary statistics output from the stats/mesh pipeline.
 
-    Parameters:
+    Parameters
     -----------
     mesh_data : dict
         Dictionary containing summary statistics with the following keys:
@@ -110,12 +110,12 @@ def visualize_functional_boxplot(mesh_data, vmin=0, vmax=1, boxplot_style=None, 
     ax : matplotlib.axes.Axes, optional
         Matplotlib axes to plot on. If None, creates a new figure.
 
-    Returns:
+    Returns
     --------
     ax : matplotlib.axes.Axes
         The matplotlib axes object with the plot.
 
-    Examples:
+    Examples
     ---------
     >>> import numpy as np
     >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_stats import functional_boxplot_summary_statistics

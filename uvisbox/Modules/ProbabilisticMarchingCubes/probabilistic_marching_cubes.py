@@ -11,7 +11,7 @@ def probabilistic_marching_cubes(ensemble_images, isovalue, plotter=None, opacit
     marching cubes visualization. It calculates the probability of isosurface 
     presence in each cell and creates a PyVista volume rendering visualization.
 
-    Parameters:
+    Parameters
     -----------
         ensemble_images : np.ndarray
             4D array of shape (n_z, n_y, n_x, n_ensemble) representing the scalar 
@@ -26,7 +26,7 @@ def probabilistic_marching_cubes(ensemble_images, isovalue, plotter=None, opacit
         colormap : str, optional
             Colormap for the volume rendering. Default is 'viridis'.
             
-    Returns:
+    Returns
     --------
         plotter : pyvista.Plotter
             The pyvista plotter with the visualized probabilistic isosurface.

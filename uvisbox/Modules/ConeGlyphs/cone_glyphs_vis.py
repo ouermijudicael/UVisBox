@@ -8,7 +8,7 @@ def visualize_cone_glyphs(mesh_3d, point_values=None, show_edges=True,
     """
     Render 3D cone glyph mesh with pyvista.
     
-    Parameters:
+    Parameters
     -----------
     mesh_3d : dict
         From cone_glyphs_mesh()
@@ -23,7 +23,7 @@ def visualize_cone_glyphs(mesh_3d, point_values=None, show_edges=True,
     ax : pyvista.Plotter, optional
         Existing plotter to use
     
-    Returns:
+    Returns
     --------
     plotter : pyvista.Plotter
         The plotter with drawn glyphs

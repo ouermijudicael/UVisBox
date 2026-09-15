@@ -1,170 +1,88 @@
 # Documentation Generation Guide
 
-This document describes how to generate the API documentation for UVisBox using Sphinx.
+UVisBox uses Sphinx for its hand-written documentation and Sphinx AutoAPI for
+the API reference. AutoAPI parses Python source without importing or executing
+UVisBox. The two kinds of source are deliberately separated:
 
-## Prerequisites
+- Edit narrative pages directly in `docs/source/`, including `examples.rst`.
+- Never edit `docs/source/_generated/`; it is recreated from `uvisbox/` on
+  every build and is ignored by Git.
 
-Make sure you have Sphinx installed in your environment:
+## Environment
 
-```bash
-pip install sphinx
-# or
-conda install sphinx
-```
-
-## Generating Documentation
-
-The UVisBox documentation is generated using `sphinx-apidoc` to automatically create API documentation from the source code. Run the following commands from the `docs/` directory:
-
-### 1. Generate Module Documentation
+The repository's `environment.yml` includes UVisBox and the documentation
+dependencies. Create the environment only if it does not already exist:
 
 ```bash
-sphinx-apidoc -o source/ ../uvisbox/Modules/
+conda env create -f environment.yml
 ```
 
-This command generates documentation for all visualization modules including:
-- ContourBoxplot
-- CurveBoxplot
-- FunctionalBoxplot
-- SquidGlyphs
-- UncertaintyLobes
-- UncertaintyTube
-- ProbabilisticMarchingSquares
-- ProbabilisticMarchingTriangles
-- ProbabilisticMarchingCubes
-- ProbabilisticMarchingTetrahedra
-
-### 2. Generate Core Documentation
+Update an existing environment after dependency changes:
 
 ```bash
-sphinx-apidoc -o source/ ../uvisbox/Core
+conda env update -n uvisbox -f environment.yml --prune
 ```
 
-This command generates documentation for core functionality including:
-- BandDepths
-- CellsCrossingProb
-- Colors
-- Interpolations
+## Build the documentation
 
-### 3. Generate Datasets Documentation
+From the repository root, run:
 
 ```bash
-sphinx-apidoc -o source/ ../uvisbox/Datasets
+conda run -n uvisbox python docs/build_docs.py
 ```
 
-This command generates documentation for the datasets module including:
-- Sample scientific datasets
-- Data loading utilities
-- Preprocessing functions
+The build helper performs two operations:
 
-## Complete Documentation Generation Workflow
+1. Removes stale API pages; Sphinx AutoAPI then recreates canonical
+   `uvisbox.*` pages in `docs/source/_generated/api/` without importing UVisBox.
+2. Builds HTML with warnings treated as errors and writes it to
+   `docs/build/html/`.
 
-From the `docs/` directory, run the following commands in sequence:
+Warnings are also recorded in `docs/build/html-warnings.log` to make strict
+build failures easier to review.
+
+The resulting site starts at `docs/build/html/index.html`.
+
+To inspect incomplete documentation while resolving warnings, strict mode may
+be disabled locally:
 
 ```bash
-# Generate API documentation from source code
-sphinx-apidoc -o source/ ../uvisbox/Modules/
-sphinx-apidoc -o source/ ../uvisbox/Core
-sphinx-apidoc -o source/ ../uvisbox/Datasets
-
-# Build HTML documentation
-sphinx-build -b html source/ build/html/
+conda run -n uvisbox python docs/build_docs.py --no-strict
 ```
 
-## Complete Documentation Build Process
+Do not use `--no-strict` in CI or for deployment.
 
-After running the `sphinx-apidoc` commands above, you can build the complete documentation:
+## Editing examples
 
-## Rename modules.rst to api.rst
+`docs/source/examples.rst` is a hand-written gallery. It uses a Sphinx
+`include` directive to render the reStructuredText narrative inside each
+script's leading module docstring, plus download and image directives. This
+keeps the prose and sectioned code blocks synchronized without executing the
+example scripts. When adding an example:
 
-```bash
-mv modules.rst api.rst
-```
+1. Add the runnable script under `examples/`.
+2. Put the narrative and its `code-block` sections in a leading triple-quoted
+   module docstring.
+3. Add or update its section in `docs/source/examples.rst`.
+4. Add an `include` bounded by the triple quotes and a download directive
+   pointing to the same script.
+5. Add a representative result image under `docs/source/_static/` when useful.
+6. Run the strict documentation build.
 
-### Build HTML Documentation
+Keep expensive computation and plotting in a `main()` function protected by
+`if __name__ == "__main__":` so examples can also be inspected safely by other
+tools.
 
-```bash
-sphinx-build -b html source/ build/html/
-```
+## Adding or removing Python modules
 
-Alternative methods (if Makefile is available):
+No API stub needs to be created or deleted manually. Update the source package
+and run the build helper. If a public module is missing from the resulting API,
+check its package structure and Sphinx warnings rather than editing generated
+files.
 
-```bash
-make html
-```
+## CI behavior
 
-or on Windows:
-
-```bash
-make.bat html
-```
-
-### View Documentation
-
-The generated HTML documentation will be available in the `build/html/` directory. Open `build/html/index.html` in your web browser to view the documentation.
-
-## File Structure
-
-After running the generation commands, your documentation structure should look like:
-
-```
-docs/
-├── source/
-│   ├── conf.py                    # Sphinx configuration
-│   ├── index.rst                  # Main documentation index
-│   ├── Core.rst                   # Core module documentation
-│   ├── Core.*.rst                 # Individual core submodules
-│   ├── Modules.rst                # Modules documentation
-│   ├── Modules.*.rst              # Individual module documentation
-│   ├── Datasets.rst               # Datasets documentation
-│   └── ...
-├── build/
-│   └── html/                      # Generated HTML documentation
-├── Makefile                       # Unix build commands
-└── make.bat                       # Windows build commands
-```
-
-## Updating Documentation
-
-When you add new modules, classes, or functions to UVisBox:
-
-1. Re-run the appropriate `sphinx-apidoc` command(s) above
-2. Rebuild the documentation with `sphinx-build -b html source/ build/html/`
-3. Review the generated documentation to ensure it looks correct
-
-## Notes
-
-- The `-o source/` flag specifies the output directory for the generated `.rst` files
-- The `sphinx-apidoc` command automatically discovers Python modules and creates corresponding documentation files
-- Make sure to run these commands from the `docs/` directory so the relative paths work correctly
-- If you encounter import errors during documentation generation, ensure that UVisBox and all its dependencies are properly installed in your environment
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Import Errors**: Make sure UVisBox is installed in your current environment
-2. **Missing Dependencies**: Install all required packages listed in `pyproject.toml`
-3. **Path Issues**: Ensure you're running commands from the `docs/` directory
-4. **Outdated Files**: Delete old `.rst` files in `source/` if you're restructuring modules
-
-### Clean Build
-
-To perform a clean build:
-
-```bash
-# Remove previous build
-rm -rf build/html/
-
-# Rebuild documentation
-sphinx-build -b html source/ build/html/
-```
-
-Alternative with Makefile (if available):
-
-```bash
-make clean
-make html
-```
-
-This removes all previously generated files and rebuilds the documentation from scratch.
+Pull requests and pushes to `main` run the same strict build. GitHub Pages is
+deployed only for successful builds from `main`. An import failure, malformed
+reference, or other Sphinx warning therefore prevents publication of a partial
+site.

@@ -7,7 +7,7 @@ def _process_square_cell(cell_coords, ensemble_images, isovalue, num_samples):
     """
     Process a single square cell for Monte Carlo crossing probability calculation.
     
-    Parameters:
+    Parameters
     -----------
     cell_coords : tuple
         Coordinates (i, j) of the cell to process
@@ -18,7 +18,7 @@ def _process_square_cell(cell_coords, ensemble_images, isovalue, num_samples):
     num_samples : int
         Number of Monte Carlo samples
         
-    Returns:
+    Returns
     --------
     tuple : (cell_coords, probability)
         Cell coordinates and computed crossing probability
@@ -55,7 +55,7 @@ def crossing_probability_squares_monte_carlo(ensemble_images, isovalue, num_samp
     
     This parallelized version processes cells concurrently using multiprocessing for improved performance.
 
-    Parameters:
+    Parameters
     -----------
         ensemble_images : np.ndarray
             3D array of shape [y, x, n_ensemble] representing the scalar field with ensemble members.
@@ -67,7 +67,7 @@ def crossing_probability_squares_monte_carlo(ensemble_images, isovalue, num_samp
             Number of parallel processes to use. If None, uses all available CPU cores.
             Set to 1 for serial execution (useful for debugging).
             
-    Returns:
+    Returns
     --------
         probability_contour : np.ndarray
             2D array of shape (y-1, x-1) with probabilities of contour presence in each cell.
@@ -126,7 +126,7 @@ def _process_triangle_cell(triangle_idx, ensemble_data, triangle_mesh, isovalue,
     """
     Process a single triangle for Monte Carlo crossing probability calculation.
     
-    Parameters:
+    Parameters
     -----------
     triangle_idx : int
         Index of the triangle to process
@@ -139,7 +139,7 @@ def _process_triangle_cell(triangle_idx, ensemble_data, triangle_mesh, isovalue,
     num_samples : int
         Number of Monte Carlo samples
         
-    Returns:
+    Returns
     --------
     tuple : (triangle_idx, probability)
         Triangle index and computed crossing probability
@@ -179,7 +179,7 @@ def crossing_probability_triangles_monte_carlo(ensemble_data, triangle_mesh, iso
     
     This parallelized version processes triangles concurrently using multiprocessing for improved performance.
 
-    Parameters:
+    Parameters
     -----------
         ensemble_data : np.ndarray
             2D array of shape (n_points, n_ensemble) representing the scalar field with ensemble members.
@@ -193,7 +193,7 @@ def crossing_probability_triangles_monte_carlo(ensemble_data, triangle_mesh, iso
             Number of parallel processes to use. If None, uses all available CPU cores.
             Set to 1 for serial execution (useful for debugging).
     
-    Returns:
+    Returns
     --------
         probability_contour : np.ndarray
             1D array of shape (n_triangles,) with probabilities of contour presence in each triangle.
@@ -255,7 +255,7 @@ def _process_cube_cell(cell_coords, ensemble_images, isovalue, num_samples):
     """
     Process a single cube cell for Monte Carlo crossing probability calculation.
     
-    Parameters:
+    Parameters
     -----------
     cell_coords : tuple
         Coordinates (k, j, i) of the cell to process
@@ -266,7 +266,7 @@ def _process_cube_cell(cell_coords, ensemble_images, isovalue, num_samples):
     num_samples : int
         Number of Monte Carlo samples
         
-    Returns:
+    Returns
     --------
     tuple : (cell_coords, probability)
         Cell coordinates and computed crossing probability
@@ -302,7 +302,7 @@ def crossing_probability_cubes_monte_carlo(ensemble_images, isovalue, num_sample
     
     This parallelized version processes cells concurrently using multiprocessing for improved performance.
     
-    Parameters:
+    Parameters
     -----------
         ensemble_images : np.ndarray
             4D array of shape (n_z, n_y, n_x, n_ensemble) representing the scalar field with ensemble members.
@@ -314,7 +314,7 @@ def crossing_probability_cubes_monte_carlo(ensemble_images, isovalue, num_sample
             Number of parallel processes to use. If None, uses all available CPU cores.
             Set to 1 for serial execution (useful for debugging).
     
-    Returns:
+    Returns
     --------
         probability_contour : np.ndarray
             3D array of shape (n_z-1, n_y-1, n_x-1) with probabilities of contour presence in each cell.
@@ -375,7 +375,7 @@ def _process_tetrahedron_cell(tet_idx, ensemble_data, tetrahedral_mesh, isovalue
     """
     Process a single tetrahedron for Monte Carlo crossing probability calculation.
     
-    Parameters:
+    Parameters
     -----------
     tet_idx : int
         Index of the tetrahedron to process
@@ -388,7 +388,7 @@ def _process_tetrahedron_cell(tet_idx, ensemble_data, tetrahedral_mesh, isovalue
     num_samples : int
         Number of Monte Carlo samples
         
-    Returns:
+    Returns
     --------
     tuple : (tet_idx, probability)
         Tetrahedron index and computed crossing probability
@@ -422,7 +422,7 @@ def crossing_probability_tetrahedra_monte_carlo(ensemble_data, tetrahedral_mesh,
     
     This parallelized version processes tetrahedra concurrently using multiprocessing for improved performance.
     
-    Parameters:
+    Parameters
     -----------
         ensemble_data : np.ndarray
             2D array of shape (num_points, n_ensemble) where each column is a realization and each row corresponds 
@@ -438,7 +438,7 @@ def crossing_probability_tetrahedra_monte_carlo(ensemble_data, tetrahedral_mesh,
             Number of parallel processes to use. If None, uses all available CPU cores.
             Set to 1 for serial execution (useful for debugging).
     
-    Returns:
+    Returns
     --------
         probability_contour : np.ndarray
             1D array of shape (num_tetrahedra,) with probabilities of contour presence in each tetrahedron.

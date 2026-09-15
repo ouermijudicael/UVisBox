@@ -8,7 +8,7 @@ def visualize_probabilistic_marching_cubes(mesh_data, plotter=None, opacity='lin
     This function creates a 3D visualization of the crossing probabilities using
     PyVista's volume rendering capabilities.
     
-    Parameters:
+    Parameters
     -----------
         mesh_data : np.ndarray
             3D array of shape (n_z-1, n_y-1, n_x-1) with probabilities of isosurface 
@@ -21,7 +21,7 @@ def visualize_probabilistic_marching_cubes(mesh_data, plotter=None, opacity='lin
         colormap : str, optional
             Colormap for the volume rendering. Default is 'viridis'.
             
-    Returns:
+    Returns
     --------
         plotter : pyvista.Plotter
             The pyvista plotter with the visualized probabilistic isosurface.

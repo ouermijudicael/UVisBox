@@ -10,7 +10,7 @@ def visualize_probabilistic_marching_tetrahedra(mesh_data, points, tetrahedral_m
     This function creates a 3D visualization of the crossing probabilities using
     PyVista's volume rendering capabilities for tetrahedral meshes.
 
-    Parameters:
+    Parameters
     -----------
         mesh_data : np.ndarray
             1D array of shape (n_tetrahedra,) with probabilities of isosurface presence 
@@ -27,7 +27,7 @@ def visualize_probabilistic_marching_tetrahedra(mesh_data, points, tetrahedral_m
         colormap : str, optional
             Colormap for the volume rendering. Default is 'viridis'.
             
-    Returns:
+    Returns
     --------
         plotter : pyvista.Plotter
             The pyvista plotter with the visualized probabilistic isosurface.

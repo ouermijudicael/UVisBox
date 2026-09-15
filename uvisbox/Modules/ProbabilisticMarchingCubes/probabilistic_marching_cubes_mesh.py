@@ -6,17 +6,16 @@ def probabilistic_marching_cubes_mesh(summary_statistics):
     architecture used in other modules, even though no mesh transformation is needed
     for probabilistic marching cubes.
     
-    Parameters:
+    Parameters
     -----------
-        summary_statistics : dict
-            Dictionary containing:
-            - 'level_crossing_probability': np.ndarray
-                3D array of shape (n_z-1, n_y-1, n_x-1) representing the probability 
-                of isosurface presence in each cell.
+    summary_statistics : dict
+        Contains ``level_crossing_probability``, a 3D array of shape
+        ``(n_z - 1, n_y - 1, n_x - 1)`` representing the probability of
+        isosurface presence in each cell.
     
-    Returns:
+    Returns
     --------
-        level_crossing_probability : np.ndarray
-            3D array of probabilities extracted from the input dictionary.
+    level_crossing_probability : np.ndarray
+        3D array of probabilities extracted from the input dictionary.
     """
     return summary_statistics['level_crossing_probability']

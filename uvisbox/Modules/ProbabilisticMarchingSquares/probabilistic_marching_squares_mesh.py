@@ -9,30 +9,23 @@ def probabilistic_marching_squares_mesh(summary_statistics, x_coords=None, y_coo
     architecture used in other modules, even though no mesh transformation is needed
     for probabilistic marching squares.
 
-    Parameters:
+    Parameters
     -----------
-        summary_statistics : dict
-            Dictionary containing:
-            - 'level_crossing_probability': np.ndarray
-                2D array of shape (y_dim-1, x_dim-1) representing the probability
-                of contour presence in each cell.
-        x_coords : np.ndarray, optional
-            1D array of x-axis coordinates defining the spatial domain.
-            Length must match x_dim (the number of grid vertices, which is
-            one more than the probability image width). If None, pixel indices are used.
-        y_coords : np.ndarray, optional
-            1D array of y-axis coordinates defining the spatial domain.
-            Length must match y_dim (the number of grid vertices, which is
-            one more than the probability image height). If None, pixel indices are used.
+    summary_statistics : dict
+        Contains ``level_crossing_probability``, a 2D array of shape
+        ``(y_dim - 1, x_dim - 1)`` representing contour probability per cell.
+    x_coords : np.ndarray, optional
+        1D x-axis coordinates. Length must match ``x_dim``. If None, pixel
+        indices are used.
+    y_coords : np.ndarray, optional
+        1D y-axis coordinates. Length must match ``y_dim``. If None, pixel
+        indices are used.
 
-    Returns:
+    Returns
     --------
-        dict
-            Dictionary containing:
-            - 'level_crossing_probability': np.ndarray
-            - 'extent': tuple (x_min, x_max, y_min, y_max) or None
-            - 'x_coords': np.ndarray or None
-            - 'y_coords': np.ndarray or None
+    dict
+        Contains ``level_crossing_probability``, ``extent``, ``x_coords``, and
+        ``y_coords``.
     """
     prob = summary_statistics['level_crossing_probability']
     height, width = prob.shape  # (y_dim-1, x_dim-1)

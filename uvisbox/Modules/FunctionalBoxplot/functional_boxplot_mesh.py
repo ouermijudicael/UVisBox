@@ -5,19 +5,19 @@ def functional_boxplot_mesh(summary_stats):
     This function passes through the summary statistics unchanged, maintaining
     compatibility with the standard data processing pipeline (stats -> mesh -> vis).
     
-    Parameters:
+    Parameters
     -----------
     summary_stats : dict
         Dictionary of summary statistics from functional_boxplot_summary_statistics() function.
         Expected to contain keys like 'depths', 'median', 'percentile_bands', 
         'outliers', 'sorted_curves', and 'sorted_indices'.
     
-    Returns:
+    Returns
     --------
     summary_stats : dict
         The same dictionary passed as input, unchanged.
     
-    Examples:
+    Examples
     ---------
     >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_stats import functional_boxplot_summary_statistics
     >>> from uvisbox.Modules.FunctionalBoxplot.functional_boxplot_mesh import functional_boxplot_mesh

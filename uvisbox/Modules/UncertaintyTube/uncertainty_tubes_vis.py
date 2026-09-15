@@ -8,7 +8,7 @@ def visualize_uncertainty_tubes(mesh_data, colormap="viridis", clim=None, plotte
     """
     Visualize 3D uncertainty tubes using either Matplotlib or PyVista.
 
-    Parameters:
+    Parameters
     -----------
     mesh_data (dict):
         Dictionary containing "vertices", "faces", and "uv_coords" from uncertainty_tube_mesh.
@@ -19,7 +19,7 @@ def visualize_uncertainty_tubes(mesh_data, colormap="viridis", clim=None, plotte
         If a Matplotlib Axes3D object, it plots on that.
         If a PyVista Plotter object, it adds the mesh to it.
 
-    Returns:
+    Returns
     --------
     matplotlib.axes.Axes or pyvista.Plotter: The plotting object with the visualization.
     """

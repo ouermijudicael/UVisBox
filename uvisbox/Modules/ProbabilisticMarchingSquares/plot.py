@@ -4,7 +4,7 @@ def plot(ensemble_images, isovalue, prob_contour=None, cmap='viridis', ax=None):
     """
     Visualize the probabilistic marching squares result using matplotlib.
 
-    Parameters:
+    Parameters
     -----------
         ensemble_images : np.ndarray
             3D array of shape [y, x, n_ens] representing the scalar field with ensemble members.
@@ -17,7 +17,7 @@ def plot(ensemble_images, isovalue, prob_contour=None, cmap='viridis', ax=None):
             Colormap for the probability map. Default is 'viridis'.
         ax : matplotlib axis, optional
             The axis to draw on. If None, a new figure and axis will be created.
-    Returns:
+    Returns
     --------
         ax : matplotlib axis
             The axis with the visualized probabilistic isocontour.

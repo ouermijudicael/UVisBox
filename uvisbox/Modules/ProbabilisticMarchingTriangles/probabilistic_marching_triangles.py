@@ -11,7 +11,7 @@ def probabilistic_marching_triangles(ensemble_data, triangle_mesh, points, isova
     marching triangles visualization. It calculates the probability of isocontour 
     presence in each triangle and creates a matplotlib visualization.
 
-    Parameters:
+    Parameters
     -----------
         ensemble_data : np.ndarray
             2D array of shape (n_points, n_ensemble) where each column is a realization 
@@ -27,7 +27,7 @@ def probabilistic_marching_triangles(ensemble_data, triangle_mesh, points, isova
         colormap : str, optional
             Colormap for the visualization. Default is 'viridis'.
     
-    Returns:
+    Returns
     --------
         ax : matplotlib.axes.Axes
             The axis with the visualized probabilistic isocontour.

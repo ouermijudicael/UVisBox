@@ -8,14 +8,14 @@ def visualize_squid_glyphs_2d(mesh_2d, ax=None):
     """
     Render 2D squid glyph mesh with matplotlib.
     
-    Parameters:
+    Parameters
     -----------
     mesh_2d : dict
         From squid_glyphs_2d_mesh()
     ax : matplotlib.Axes, optional
         Existing axis to draw on
     
-    Returns:
+    Returns
     --------
     ax : matplotlib.Axes
         The axis with drawn glyphs
@@ -37,7 +37,7 @@ def visualize_squid_glyphs_3d(mesh_3d, point_values=None, show_edges=True,
     """
     Render 3D squid glyph mesh with pyvista.
     
-    Parameters:
+    Parameters
     -----------
     mesh_3d : dict
         From squid_glyphs_3d_mesh()
@@ -52,7 +52,7 @@ def visualize_squid_glyphs_3d(mesh_3d, point_values=None, show_edges=True,
     ax : pyvista.Plotter, optional
         Existing plotter to use
     
-    Returns:
+    Returns
     --------
     plotter : pyvista.Plotter
         The plotter with drawn glyphs

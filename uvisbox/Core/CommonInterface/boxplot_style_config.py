@@ -13,7 +13,7 @@ class BoxplotStyleConfig:
     This configuration is shared across CurveBoxplot, ContourBoxplot, and 
     FunctionalBoxplot modules to ensure consistent styling.
     
-    Attributes:
+    Attributes
     -----------
     percentiles : list of float
         Percentiles for the bands to be plotted (default: [25, 50, 75, 90]).
@@ -43,7 +43,7 @@ class BoxplotStyleConfig:
     outliers_alpha : float
         Transparency level for outliers, 0.0 to 1.0 (default: 0.5).
     
-    Examples:
+    Examples
     ---------
     >>> # Use defaults (viridis colormap)
     >>> config = BoxplotStyleConfig()
@@ -141,11 +141,11 @@ class BoxplotStyleConfig:
         Percentiles are mapped to [0, 1] range using percentile/100, then
         colors are sampled from the colormap at those positions.
         
-        Returns:
+        Returns
         --------
         list : List of RGBA tuples (one per percentile)
         
-        Examples:
+        Examples
         ---------
         >>> config = BoxplotStyleConfig(percentiles=[0, 50, 100])
         >>> colors = config.get_percentile_colors()

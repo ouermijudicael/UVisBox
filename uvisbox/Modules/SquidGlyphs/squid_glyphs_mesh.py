@@ -80,7 +80,7 @@ def squid_glyphs_2d_mesh(positions, stats_2d, scale=0.2):
     2. Shaft rectangle (tapered middle section)
     3. Head triangle (arrow tip)
     
-    Parameters:
+    Parameters
     -----------
     positions : numpy.ndarray
         Shape (n, 2) - glyph positions
@@ -89,13 +89,11 @@ def squid_glyphs_2d_mesh(positions, stats_2d, scale=0.2):
     scale : float
         Glyph scale factor (default: 0.2)
     
-    Returns:
+    Returns
     --------
     mesh_2d : dict
-        {
-            'points': (k, 2) - vertex positions,
-            'polygons': (m, 3) - triangle connectivity
-        }
+        Contains ``points`` with shape (k, 2) and ``polygons`` with shape
+        (m, 3).
     """
     median_vectors = stats_2d['median_vectors']
     magnitudes_min = stats_2d['magnitudes_min']
@@ -170,7 +168,7 @@ def squid_glyphs_3d_mesh(positions, stats_3d, point_values=None, scale=0.5, reso
     """
     Build 3D squid glyph mesh from statistics.
     
-    Parameters:
+    Parameters
     -----------
     positions : numpy.ndarray
         Shape (n, 3) - glyph positions
@@ -183,14 +181,11 @@ def squid_glyphs_3d_mesh(positions, stats_3d, point_values=None, scale=0.5, reso
     resolution : int
         Circle resolution (default: 10)
     
-    Returns:
+    Returns
     --------
     mesh_3d : dict
-        {
-            'points': (k, 3) - vertex positions,
-            'polygons': (m, 3) - triangle connectivity,
-            'point_values': (k,) - scalar values for coloring
-        }
+        Contains ``points`` with shape (k, 3), ``polygons`` with shape (m, 3),
+        and ``point_values`` with shape (k,).
     """
     pca_components = stats_3d['pca_components']
     vectors = stats_3d['ensemble_spherical_vectors']
@@ -328,7 +323,7 @@ def squid_glyphs_meshing_3D(pca_components, positions, vectors, spread_min_vecto
     3. Shaft (tapered section)
     4. Head cone (arrow tip)
     
-    Parameters:
+    Parameters
     -----------
     pca_components : numpy.ndarray
         PCA components for cross-section shape
@@ -349,7 +344,7 @@ def squid_glyphs_meshing_3D(pca_components, positions, vectors, spread_min_vecto
     num_of_glyphs : int
         Number of full glyphs to create
     
-    Returns:
+    Returns
     --------
     points, polygons, points_values : tuple
         Mesh geometry and scalar values

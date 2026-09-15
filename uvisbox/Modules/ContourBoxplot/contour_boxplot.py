@@ -14,7 +14,7 @@ def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, eps=
     This function processes ensemble images by extracting binary contours at a given isovalue,
     computing their band depths, and visualizing the uncertainty using band envelopes.
     
-    Parameters:
+    Parameters
     -----------
     ensemble_images : np.ndarray
         3D array of shape (n_ensemble, y_dim, x_dim) containing the ensemble scalar fields.
@@ -39,12 +39,12 @@ def contour_boxplot(ensemble_images, isovalue, boxplot_style=None, ax=None, eps=
         1D array of y-axis coordinates defining the spatial domain.
         Length must match the image height. If None, pixel indices are used.
 
-    Returns:
+    Returns
     --------
     ax : matplotlib.axes.Axes
         The Axes object with the contour boxplot visualization.
     
-    Examples:
+    Examples
     ---------
     >>> # Basic usage with defaults
     >>> ensemble = np.random.randn(50, 100, 100)  # 50 ensemble members

@@ -40,7 +40,7 @@ def create_swirl_ensemble(center_line_start, center_line_end, num_curves=10, num
     """
     Create an ensemble of curves that form elliptical cross-sections that swirl around a straight line in 3D.
     
-    Parameters:
+    Parameters
     -----------
     center_line_start : array-like, shape (3,)
         Starting point of the central straight line [x, y, z]
@@ -67,7 +67,7 @@ def create_swirl_ensemble(center_line_start, center_line_end, num_curves=10, num
     expansion_factor : float
         Controls how much the ellipse expands. 0=no expansion, 1=linear expansion
     
-    Returns:
+    Returns
     --------
     curves : list
         List of curves, each curve is an array of shape (num_points, 3)

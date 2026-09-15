@@ -17,13 +17,13 @@ def functional_banddepth(data, dtype=np.float64):
     This implements Sun, Y., Genton, M.G. and Nychka, D.W. (2012), Exact fast computation of band depth for large functional datasets: How quickly can one million curves be ranked?. Stat, 1: 68-74. https://doi.org/10.1002/sta4.8
     Data is a 2D array of shape (N, D)
 
-    Parameters:
+    Parameters
     -----------
     data : np.ndarray 
         2D array of shape (N, D) where N is the number of samples and D is the number of features
     dtype : data-type, optional
         Desired data-type for the computation (default is np.float64)
-    Returns:
+    Returns
     -----------
     band_depths : np.ndarray
         1D array of band depths of shape (N,)
@@ -48,13 +48,13 @@ def modified_functional_banddepth(data, dtype=np.float64):
     The band is assumed to be formed by 2-subsets
     This implements Sun, Y., Genton, M.G. and Nychka, D.W. (2012), Exact fast computation of band depth for large functional datasets: How quickly can one million curves be ranked?. Stat, 1: 68-74. https://doi.org/10.1002/sta4.8
     Data is a 2D array of shape (N, D)
-    Parameters:
+    Parameters
     -----------
     data : np.ndarray 
         2D array of shape (N, D) where N is the number of samples and D is the number of features
     dtype : data-type, optional
         Desired data-type for the computation (default is np.float64)
-    Returns:
+    Returns
     -----------
     band_depths : np.ndarray
         1D array of band depths of shape (N,)

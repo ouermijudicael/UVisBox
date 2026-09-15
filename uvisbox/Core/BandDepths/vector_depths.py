@@ -7,12 +7,12 @@ def _compute_depth_for_vector(args):
     """
     Worker function to compute depth for a single vector (for parallelization).
     
-    Parameters:
+    Parameters
     -----------
     args : tuple
         (vector_idx, angles, magnitudes, pairs)
     
-    Returns:
+    Returns
     --------
     int : depth count for this vector
     """
@@ -36,22 +36,19 @@ def _compute_depth_for_vector(args):
 def calculate_spread_2D(vectors, depths, percentile):
     """
     Calculate the spread in 2D polar coordinates.
-    Parameters:
+    Parameters
     -----------
-        vectors : numpy.ndarray
-            Array of shape (n, 2) in polar coordinates (magnitude, angle)
-        depths : numpy.ndarray
-            Array of shape (n,) representing the depth of each vector
-        percentile : float
-            Percentile of vectors to include based on depth ranking (0-100).
-            Higher values include more vectors.
-            - percentile=50: Include top 50% deepest vectors
-            - percentile=95: Include top 95% deepest vectors (typical)
-            - percentile=100: Include ALL vectors
-    Returns:
+    vectors : numpy.ndarray
+        Array of shape (n, 2) in polar coordinates (magnitude, angle)
+    depths : numpy.ndarray
+        Array of shape (n,) representing the depth of each vector
+    percentile : float
+        Percentage of the deepest vectors to include (0-100).
+    Returns
     --------
-        tuple
-            Indices of vectors with min/max magnitude, angle among those passing depth threshold
+    tuple
+        Indices of vectors with min/max magnitude and angle among those passing
+        the depth threshold.
     """
     # FIXED: Use proper percentile semantics
     # percentile=95 means keep top 95% by depth = depth >= 5th percentile
@@ -94,23 +91,20 @@ def calculate_spread_3D(vectors, depths, percentile):
     """
     Calculate the spread in 3D spherical coordinates.
 
-    Parameters:
+    Parameters
     -----------
-        vectors : numpy.ndarray
-            Array of shape (n, 3) in spherical coordinates (magnitude, theta, phi)
-        depths : numpy.ndarray
-            Array of shape (n,) representing the depth of each vector
-        percentile : float
-            Percentile of vectors to include based on depth ranking (0-100).
-            Higher values include more vectors.
-            - percentile=50: Include top 50% deepest vectors
-            - percentile=95: Include top 95% deepest vectors (typical)
-            - percentile=100: Include ALL vectors
+    vectors : numpy.ndarray
+        Array of shape (n, 3) in spherical coordinates (magnitude, theta, phi)
+    depths : numpy.ndarray
+        Array of shape (n,) representing the depth of each vector
+    percentile : float
+        Percentage of the deepest vectors to include (0-100).
 
-    Returns:
+    Returns
     --------
-        tuple
-            Indices of vectors with min/max magnitude, theta, phi among those passing depth threshold
+    tuple
+        Indices of vectors with min/max magnitude, theta, and phi among those
+        passing the depth threshold.
     """
     # FIXED: Use proper percentile semantics
     # percentile=95 means keep top 95% by depth = depth >= 5th percentile
@@ -137,12 +131,12 @@ def cartesian_to_polar(vectors):
     """
     Convert 2D Cartesian vectors to polar coordinates (magnitude, angle).
 
-    Parameters:
+    Parameters
     -----------
     vectors : numpy.ndarray
         Array of shape (n, 2) representing 2D Cartesian vectors.
 
-    Returns:
+    Returns
     --------
     polar_coords : numpy.ndarray
         Array of shape (n, 2) with columns [magnitude, angle in radians].
@@ -161,12 +155,12 @@ def cartesian_to_spherical(vectors):
     """
     Convert 3D Cartesian vectors to spherical coordinates (magnitude, theta, phi).
 
-    Parameters:
+    Parameters
     -----------
         vectors : numpy.ndarray
             Array of shape (n, 3) representing 3D Cartesian vectors.
     
-    Returns:
+    Returns
     --------
         spherical_coords : numpy.ndarray
             Array of shape (n, 3) with columns [magnitude, theta, phi].
@@ -250,7 +244,7 @@ def compute_vector_depths_2D(vectors, workers=None):
     St Pete Beach, FL, USA, 2024, pp. 73-77, 
     doi: 10.1109/UncertaintyVisualization63963.2024.00014.
 
-    Parameters:
+    Parameters
     -----------
         vectors : numpy.ndarray
             Array of shape (n, 2) representing 2D Cartesian vectors.
@@ -258,12 +252,12 @@ def compute_vector_depths_2D(vectors, workers=None):
             Number of worker processes for parallel computation. Default is None (sequential).
             Set to a positive integer to enable multiprocessing.
 
-    Returns:
+    Returns
     --------
         depths : numpy.ndarray
             Array of shape (n,) with the depth of each vector.
     
-    Notes:
+    Notes
     ------
         Optimized version using:
         1. Vectorized angle/magnitude computation (precomputed once)
@@ -346,12 +340,12 @@ def _compute_depth_for_vector_3D(args):
     """
     Worker function to compute depth for a single 3D vector (for parallelization).
     
-    Parameters:
+    Parameters
     -----------
     args : tuple
         (vector_idx, magnitudes, thetas, phis, pairs)
     
-    Returns:
+    Returns
     --------
     int : depth count for this vector
     """
@@ -385,7 +379,7 @@ def compute_vector_depths_3D(vectors, workers=None):
     and Decision Frameworks, St Pete Beach, FL, USA, 2024, pp. 73-77, 
     doi: 10.1109/UncertaintyVisualization63963.2024.00014.
 
-    Parameters:
+    Parameters
     -----------
         vectors : numpy.ndarray
             Array of shape (n, 3) representing 3D spherical coordinates (magnitude, theta, phi).
@@ -393,12 +387,12 @@ def compute_vector_depths_3D(vectors, workers=None):
             Number of worker processes for parallel computation. Default is None (sequential).
             Set to a positive integer to enable multiprocessing.
 
-    Returns:
+    Returns
     --------
         depths : numpy.ndarray
             Array of shape (n,) with the depth of each vector.
     
-    Notes:
+    Notes
     ------
         Optimized version using:
         1. Vectorized magnitude/angle computation (precomputed once)

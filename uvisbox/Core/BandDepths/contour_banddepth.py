@@ -6,12 +6,12 @@ def choose2(x):
     """
     Helper function to compute x choose 2
 
-    Parameters:
+    Parameters
     -----------
     x : int
         number of elements
     
-    Returns:
+    Returns
     --------
     [] : int
         x choose 2  
@@ -23,12 +23,12 @@ def get_combinations(n):
     """
     returns (n_combination, 2) as list of pair of indices for n elements, get all 2-subsets
 
-    Parameters:
+    Parameters
     -----------
     n : int
         number of elements
     
-    Returns:
+    Returns
     -----------
     combinations : np.ndarray
         array of shape (n_choose_2, 2)
@@ -47,7 +47,7 @@ def _epsilon_subset(A, B, eps, cardA=None):
     """ 
     determine if two sets are epsilon-close (Order matters!)
 
-    Parameters:
+    Parameters
     -----------
     A : np.ndarray
         binary array representing set A
@@ -58,7 +58,7 @@ def _epsilon_subset(A, B, eps, cardA=None):
     cardA : int, optional
         Pre-computed cardinality of A (for optimization)
 
-    Returns:
+    Returns
     -----------
     bool : True if A is an epsilon-subset of B, False otherwise
     """
@@ -80,7 +80,7 @@ def _portion_subset(A, B, cardA=None):
     """
     determine if two sets are partial-overlapping (Order matters!)
 
-    Parameters:
+    Parameters
     -----------
     A : np.ndarray
         binary array representing set A
@@ -89,7 +89,7 @@ def _portion_subset(A, B, cardA=None):
     cardA : int, optional
         Pre-computed cardinality of A (for optimization)
     
-    Returns:
+    Returns
     -----------
     float : portion of A not in B
     """
@@ -106,12 +106,12 @@ def _compute_depth_for_image_optimized(args):
     Helper function to compute depth for a single image (for multiprocessing).
     Optimized to avoid passing large arrays - uses indices instead.
     
-    Parameters:
+    Parameters
     -----------
     args : tuple
         (tdx, target, cardA_target, binary_data, combination, allow_portion, eps)
     
-    Returns:
+    Returns
     --------
     tuple : (tdx, depth_value)
     """
@@ -139,12 +139,12 @@ def _compute_depth_for_image(args):
     """
     Helper function to compute depth for a single image (for multiprocessing).
     
-    Parameters:
+    Parameters
     -----------
     args : tuple
         (tdx, target, cardA_target, intersections, unions, combination, allow_portion, eps)
     
-    Returns:
+    Returns
     --------
     tuple : (tdx, depth_value)
     """
@@ -175,7 +175,7 @@ def contour_banddepth(data, combination = None, allow_portion=False, eps = 0, wo
     Characterizing Uncertainty in Feature Sets from Simulation Ensembles," in IEEE Transactions 
     on Visualization and Computer Graphics, vol. 19, no. 12, pp. 2713-2722, Dec. 2013, doi: 10.1109/TVCG.2013.143
     
-    Parameters:
+    Parameters
     -----------
     data : np.ndarray
         Input data representing binary contours. Should be convertible to a boolean NumPy array.
@@ -188,7 +188,7 @@ def contour_banddepth(data, combination = None, allow_portion=False, eps = 0, wo
     workers : int, default 12
         Number of parallel workers for multiprocessing. Set to 1 to disable parallel processing.
 
-    Returns:
+    Returns
     --------
     depths : np.ndarray
         Array of band depth values for each image in the input data.

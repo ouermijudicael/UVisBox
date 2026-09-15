@@ -1,7 +1,6 @@
 name: uvisbox
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - python >=3.11,<3.14
   - numpy >=2.0,<3.0.0
@@ -21,9 +20,13 @@ dependencies:
   - nest-asyncio2
   - basemap >=2.0.0,<2.1.0
   - xarray >=2026.2.0,<2027.0.0
-  # - cartopy >=0.25.0,<0.26.0
+  - cartopy >=0.25.0,<0.26.0
   - numba >=0.62.1
   - joblib >=1.5.2
+  - sphinx >=8.2,<9.0
+  - sphinx-rtd-theme >=3.0,<4.0
   - pip
   - pip:
     - dsapi >=0.6b0,<0.7
+    - sphinx-autoapi >=3.8,<4.0
+    - -e .

@@ -28,7 +28,7 @@ def apply_circular_alignment(points, best_shift, best_is_reversed):
     Apply circular alignment transformation to a set of points based on the calculated 
     shift and orientation.
     
-    Parameters:
+    Parameters
     ----------- 
     points (np.ndarray): 
         Points to transform (shape: n_points × num_dims)
@@ -37,7 +37,7 @@ def apply_circular_alignment(points, best_shift, best_is_reversed):
     best_is_reversed (bool): 
         Whether to reverse point order
     
-    Returns:
+    Returns
     --------
     aligned (np.ndarray): 
         Transformed points
@@ -62,7 +62,7 @@ def circular_align_min_twist(points_ref, points_target, stride=1):
     """
     Aligns two sets of points forming closed loops with minimal twist.
     
-    Parameters:
+    Parameters
     ----------- 
     points_ref (np.ndarray): 
         Reference point set (shape: n_points × num_dims)
@@ -71,7 +71,7 @@ def circular_align_min_twist(points_ref, points_target, stride=1):
     stride (int): 
         Stride for sampling subset of points (for efficiency)
         
-    Returns:
+    Returns
     ------- 
     aligned_points (np.ndarray): 
         Aligned target points
@@ -138,7 +138,7 @@ def _build_cross_section_3d(mean_point, eigvals, eigvecs, resolution=20, e_proj=
     """
     Helper function to build the 3D superellipse for a single cross-section.
     
-    Parameters:
+    Parameters
     ----------- 
     mean_point (np.ndarray): The 3D center point for the cross-section.
     eigvals (np.ndarray): The two largest eigenvalues (2,).
@@ -147,7 +147,7 @@ def _build_cross_section_3d(mean_point, eigvals, eigvecs, resolution=20, e_proj=
     e_proj (float): Superellipse exponent.
     sym (bool): Symmetric flag for superellipse.
     
-    Returns:
+    Returns
     --------
     np.ndarray: The 3D points of the superellipse cross-section (resolution, 3).
     """
@@ -247,7 +247,7 @@ def uncertainty_tubes_mesh(summary_statistics, resolution=20, e_proj=1, sym=Fals
     """
     Generate the 3D mesh for uncertainty tubes.
     
-    Parameters:
+    Parameters
     ----------- 
     summary_statistics (dict): 
         Dictionary containing "mean_trajectory", "eigen_values", and "eigen_vectors".
@@ -262,7 +262,7 @@ def uncertainty_tubes_mesh(summary_statistics, resolution=20, e_proj=1, sym=Fals
         Number of parallel jobs to use. If n_jobs=1, uses sequential processing.
         Defaults to 1.
         
-    Returns:
+    Returns
     --------
     dict:
         - "vertices" (np.ndarray): Tube mesh vertices.
