@@ -315,7 +315,7 @@ def compute_vector_depths_2D(vectors, workers=None):
     
     else:
         # OPTIMIZATION 3: Parallel computation for large ensembles
-        ctx = mp.get_context('fork')
+        ctx = mp.get_context()
         pool = ctx.Pool(processes=workers)
         
         try:
@@ -457,7 +457,7 @@ def compute_vector_depths_3D(vectors, workers=None):
     
     else:
         # OPTIMIZATION 3: Parallel computation for large ensembles
-        ctx = mp.get_context('fork')
+        ctx = mp.get_context()
         pool = ctx.Pool(processes=workers)
         
         try:

@@ -319,11 +319,11 @@ def _generate_tube_mesh_from_cross_sections(cross_sections_3d, eigen_values, n_j
     if use_parallel:
         try:
             import multiprocessing as mp
-            ctx = mp.get_context('fork')
+            ctx = mp.get_context()
             Pool = ctx.Pool
         except (ImportError, ValueError, NotImplementedError):
             use_parallel = False
-            print("Warning: multiprocessing with 'fork' context not available. Using sequential processing instead.")
+            print("Warning: multiprocessing is not available. Using sequential processing instead.")
 
     if use_parallel:
         with Pool(processes=n_jobs) as pool:

@@ -97,7 +97,7 @@ def uncertainty_lobes_summary_statistics(ensemble_vectors, percentile1=90, perce
     
     if use_parallel:
         # Parallel processing across positions
-        ctx = mp.get_context('fork')
+        ctx = mp.get_context()
         pool = ctx.Pool(processes=workers)
         
         try:

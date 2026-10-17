@@ -203,7 +203,7 @@ def contour_banddepth(data, combination = None, allow_portion=False, eps = 0, wo
     - The function expects binary contour data, where each image is represented as a boolean array.
     - Depth is computed by evaluating how each image fits within the intersection and union of pairs of images.
     - Helper functions `_portion_subset` and `_epsilon_subset` are used for subset checks.
-    - Uses fork context for multiprocessing to ensure compatibility with macOS.
+    - Uses the operating system's default multiprocessing context.
     """
    
     
@@ -260,7 +260,7 @@ def contour_banddepth(data, combination = None, allow_portion=False, eps = 0, wo
     else:
         # Parallel processing - compute intersections on-the-fly in each worker to avoid memory overhead
         # This trades some redundant computation for better parallelization
-        ctx = get_context('fork')
+        ctx = get_context()
         with ctx.Pool(processes=workers) as pool:
             # Prepare arguments for each image
             args_list = [

@@ -78,12 +78,11 @@ def uncertainty_tubes_summary_statistics(trajectories, n_jobs=1):
     if use_parallel:
         try:
             import multiprocessing as mp
-            # Use 'fork' context if available, otherwise fallback
-            ctx = mp.get_context('fork')
+            ctx = mp.get_context()
             Pool = ctx.Pool
         except (ImportError, ValueError, NotImplementedError):
             use_parallel = False
-            print("Warning: multiprocessing with 'fork' context not available. Using sequential processing instead.")
+            print("Warning: multiprocessing is not available. Using sequential processing instead.")
 
     # Calculate uncertainty cross-sections for each time step and starting location
     for step_index in range(1, n_steps):

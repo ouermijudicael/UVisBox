@@ -178,7 +178,7 @@ def curve_banddepths(curves, indices=None, workers=12):
     workers : int, optional
         Number of worker processes for parallel computation. Default is 12.
         Set to 1 or None to use sequential processing (useful for debugging).
-        Uses fork context for macOS compatibility.
+        Uses the operating system's default multiprocessing context.
     
     Returns
     -------
@@ -201,15 +201,14 @@ def curve_banddepths(curves, indices=None, workers=12):
     use_parallel = workers is not None and workers > 1
     
     if use_parallel:
-        # Parallel processing using multiprocessing with fork context
+        # Parallel processing using the platform's default multiprocessing context
         # Prepare arguments for each time step
         step_args = [
             (step_idx, curves, n_curves, indices, n_dims)
             for step_idx in range(1, n_steps)
         ]
         
-        # Create a multiprocessing pool using fork context for macOS compatibility
-        ctx = mp.get_context('fork')
+        ctx = mp.get_context()
         pool = ctx.Pool(processes=workers)
         
         try:

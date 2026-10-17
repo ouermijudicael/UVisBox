@@ -89,8 +89,12 @@ Set up the plot for both original vector field and uncertainty squid glyphs
     # Plot uncertainty lobes
     # positions is the first parameter, ensemble_vectors is the second
     # percentile1 defaults to 90, percentile2 defaults to 50
-    ax2 = uncertainty_lobes(positions, ensemble_vectors, 
-                           percentile1=50, percentile2=75, scale=0.4, ax=ax2)
+    ax2 = uncertainty_lobes(positions, ensemble_vectors,
+                           percentile1=50, percentile2=75, scale=0.4, ax=ax2,
+                           outer_lobe_edge_color="navy", outer_lobe_face_color="cornflowerblue",
+                           inner_lobe_edge_color="midnightblue", inner_lobe_face_color="lightsteelblue",
+                           median_arrow_color="darkred", outer_lobe_alpha=0.25,
+                           inner_lobe_alpha=0.8, median_arrow_alpha=0.9)
     ax2.set_title("Uncertainty Lobes for Double Gyre Flow")
     ax2.set_xlim(-0.25, 2.25)
     ax2.set_ylim(-0.25, 1.25)
@@ -185,7 +189,11 @@ ax1.grid()
 # positions is the first parameter, ensemble_vectors is the second
 # percentile1 defaults to 90, percentile2 defaults to 50
 ax2 = uncertainty_lobes(positions, ensemble_vectors, 
-                       percentile1=90, percentile2=50, scale=0.4, ax=ax2)
+                       percentile1=90, percentile2=50, scale=0.4, ax=ax2,
+                       outer_lobe_edge_color="navy", outer_lobe_face_color="cornflowerblue",
+                       inner_lobe_edge_color="midnightblue", inner_lobe_face_color="lightsteelblue",
+                       median_arrow_color="darkred", outer_lobe_alpha=0.25,
+                       inner_lobe_alpha=0.8, median_arrow_alpha=0.9)
 ax2.set_title("Uncertainty Lobes for Double Gyre Flow")
 ax2.set_xlim(-0.25, 2.25)
 ax2.set_ylim(-0.25, 1.25)

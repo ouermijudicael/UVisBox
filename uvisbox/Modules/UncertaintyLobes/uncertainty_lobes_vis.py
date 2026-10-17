@@ -9,10 +9,32 @@ This module renders uncertainty lobe meshes using matplotlib:
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import colors as mcolors
 from matplotlib.patches import Polygon
 
 
-def visualize_uncertainty_lobes(mesh, show_median=True, ax=None):
+def _validate_alpha(name, value):
+    """Validate an opacity value and return it as a float."""
+    if not isinstance(value, (int, float, np.number)):
+        raise TypeError(f"{name} must be a number between 0 and 1.")
+    if not 0 <= value <= 1:
+        raise ValueError(f"{name} must be between 0 and 1.")
+    return float(value)
+
+
+def visualize_uncertainty_lobes(
+    mesh,
+    show_median=True,
+    ax=None,
+    outer_lobe_edge_color='skyblue',
+    outer_lobe_face_color='skyblue',
+    inner_lobe_edge_color='skyblue',
+    inner_lobe_face_color='skyblue',
+    median_arrow_color='blue',
+    outer_lobe_alpha=0.3,
+    inner_lobe_alpha=1.0,
+    median_arrow_alpha=1.0,
+):
     """
     Render uncertainty lobe mesh with matplotlib.
     
@@ -32,12 +54,35 @@ def visualize_uncertainty_lobes(mesh, show_median=True, ax=None):
         Whether to show median direction arrows (default: True)
     ax : matplotlib.Axes, optional
         Existing axis to draw on. If None, creates new figure and axis.
+    outer_lobe_edge_color : color, optional
+        Matplotlib color for outer lobe edges. Default is ``'skyblue'``.
+    outer_lobe_face_color : color, optional
+        Matplotlib color for outer lobe faces. Default is ``'skyblue'``.
+    inner_lobe_edge_color : color, optional
+        Matplotlib color for inner lobe edges. Default is ``'skyblue'``.
+    inner_lobe_face_color : color, optional
+        Matplotlib color for inner lobe faces. Default is ``'skyblue'``.
+    median_arrow_color : color, optional
+        Matplotlib color for median direction arrows. Default is ``'blue'``.
+    outer_lobe_alpha : float, optional
+        Opacity for outer lobe wedges, including their edges. Must be in
+        ``[0, 1]``. Default is ``0.3``.
+    inner_lobe_alpha : float, optional
+        Opacity for inner lobe wedges, including their edges. Must be in
+        ``[0, 1]``. Default is ``1.0``.
+    median_arrow_alpha : float, optional
+        Opacity for median direction arrows. Must be in ``[0, 1]``. Default
+        is ``1.0``.
     
     Returns
     --------
     ax : matplotlib.Axes
         The axis with drawn lobe glyphs
     """
+    outer_lobe_alpha = _validate_alpha('outer_lobe_alpha', outer_lobe_alpha)
+    inner_lobe_alpha = _validate_alpha('inner_lobe_alpha', inner_lobe_alpha)
+    median_arrow_alpha = _validate_alpha('median_arrow_alpha', median_arrow_alpha)
+
     # Create figure and axis if not provided
     if ax is None:
         fig, ax = plt.subplots(figsize=(12, 6))
@@ -50,9 +95,8 @@ def visualize_uncertainty_lobes(mesh, show_median=True, ax=None):
         wedge_polygon = Polygon(
             vertices, 
             closed=True, 
-            facecolor='skyblue', 
-            edgecolor='skyblue', 
-            alpha=0.3
+            facecolor=mcolors.to_rgba(outer_lobe_face_color, outer_lobe_alpha),
+            edgecolor=mcolors.to_rgba(outer_lobe_edge_color, outer_lobe_alpha),
         )
         ax.add_patch(wedge_polygon)
     
@@ -64,9 +108,8 @@ def visualize_uncertainty_lobes(mesh, show_median=True, ax=None):
             wedge_polygon = Polygon(
                 vertices, 
                 closed=True, 
-                facecolor='skyblue', 
-                edgecolor='skyblue', 
-                alpha=1.0
+                facecolor=mcolors.to_rgba(inner_lobe_face_color, inner_lobe_alpha),
+                edgecolor=mcolors.to_rgba(inner_lobe_edge_color, inner_lobe_alpha),
             )
             ax.add_patch(wedge_polygon)
     
@@ -90,12 +133,12 @@ def visualize_uncertainty_lobes(mesh, show_median=True, ax=None):
                 xy=arrow_end,
                 xytext=center,
                 arrowprops=dict(
-                    facecolor='blue', 
-                    edgecolor='blue', 
+                    facecolor=median_arrow_color,
+                    edgecolor=median_arrow_color,
                     arrowstyle='->', 
                     lw=2, 
                     mutation_scale=10, 
-                    alpha=1.0
+                    alpha=median_arrow_alpha
                 )
             )
     

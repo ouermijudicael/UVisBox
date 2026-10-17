@@ -28,7 +28,13 @@ import matplotlib.pyplot as plt
 def uncertainty_lobes(positions, ensemble_vectors,
                       percentile1=90, percentile2=50, 
                       scale=0.2, ax=None, show_median=True,
-                      workers=None):
+                      workers=None, outer_lobe_edge_color='skyblue',
+                      outer_lobe_face_color='skyblue',
+                      inner_lobe_edge_color='skyblue',
+                      inner_lobe_face_color='skyblue',
+                      median_arrow_color='blue',
+                      outer_lobe_alpha=0.3, inner_lobe_alpha=1.0,
+                      median_arrow_alpha=1.0):
     """
     Visualize uncertainty lobe glyphs.
     
@@ -68,6 +74,24 @@ def uncertainty_lobes(positions, ensemble_vectors,
         If None or <= 1, uses sequential computation. For ensemble size >= 30,
         parallelization can provide significant speedup.
         Default: None
+    outer_lobe_edge_color : color, optional
+        Matplotlib color for outer lobe edges. Default: ``'skyblue'``.
+    outer_lobe_face_color : color, optional
+        Matplotlib color for outer lobe faces. Default: ``'skyblue'``.
+    inner_lobe_edge_color : color, optional
+        Matplotlib color for inner lobe edges. Default: ``'skyblue'``.
+    inner_lobe_face_color : color, optional
+        Matplotlib color for inner lobe faces. Default: ``'skyblue'``.
+    median_arrow_color : color, optional
+        Matplotlib color for median arrows. Default: ``'blue'``.
+    outer_lobe_alpha : float, optional
+        Opacity for outer lobe wedges and their edges. Must be in ``[0, 1]``.
+        Default: ``0.3``.
+    inner_lobe_alpha : float, optional
+        Opacity for inner lobe wedges and their edges. Must be in ``[0, 1]``.
+        Default: ``1.0``.
+    median_arrow_alpha : float, optional
+        Opacity for median arrows. Must be in ``[0, 1]``. Default: ``1.0``.
 
     Returns
     --------
@@ -86,6 +110,18 @@ def uncertainty_lobes(positions, ensemble_vectors,
     mesh = uncertainty_lobes_mesh(positions, stats, scale=scale)
     
     # Stage 3: Render
-    ax = visualize_uncertainty_lobes(mesh, show_median=show_median, ax=ax)
+    ax = visualize_uncertainty_lobes(
+        mesh,
+        show_median=show_median,
+        ax=ax,
+        outer_lobe_edge_color=outer_lobe_edge_color,
+        outer_lobe_face_color=outer_lobe_face_color,
+        inner_lobe_edge_color=inner_lobe_edge_color,
+        inner_lobe_face_color=inner_lobe_face_color,
+        median_arrow_color=median_arrow_color,
+        outer_lobe_alpha=outer_lobe_alpha,
+        inner_lobe_alpha=inner_lobe_alpha,
+        median_arrow_alpha=median_arrow_alpha,
+    )
     
     return ax
